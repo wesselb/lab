@@ -1,4 +1,5 @@
-# Read Me
+# LAB: Linear Algebra Backend
+A generic interface for linear algebra backends
 
 [![Build](https://travis-ci.org/wesselb/lab.svg?branch=master)](https://travis-ci.org/wesselb/lab)
 [![Coverage Status](https://coveralls.io/repos/github/wesselb/lab/badge.svg?branch=master)](https://coveralls.io/github/wesselb/lab?branch=master)
