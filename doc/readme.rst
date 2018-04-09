@@ -1,5 +1,7 @@
-Read Me
-=======
+LAB: Linear Algebra Backend
+===========================
+
+A generic interface for linear algebra backends
 
 |Build| |Coverage Status| |Latest Docs|
 
