@@ -16,7 +16,7 @@ init:
 	pip install -r requirements.txt
 
 test:
-	nosetests tests --with-coverage --cover-html --cover-package=lab
+	python /usr/local/bin/nosetests tests --with-coverage --cover-html --cover-package=lab
 
 clean:
 	rm -rf .coverage cover
