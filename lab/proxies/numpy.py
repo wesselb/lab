@@ -4,7 +4,7 @@ from __future__ import absolute_import, division, print_function
 
 import numpy as np_
 import autograd.numpy as np
-import scipy.linalg as sla
+import autograd.scipy.linalg as sla
 # noinspection PyUnresolvedReferences
 from autograd.numpy import *
 
