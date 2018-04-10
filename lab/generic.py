@@ -60,9 +60,9 @@ def pw_dists2(a, b=None):
             design matrix.
     """
     if b is None:
-        norms = B.sum(a ** 2, axis=0)
-        return norms[:, None] + norms[None, :] - 2 * B.dot(a, a, tr_a=True)
+        norms = B.sum(a ** 2, axis=1)
+        return norms[:, None] + norms[None, :] - 2 * B.dot(a, a, tr_b=True)
     else:
-        norms_a = B.sum(a ** 2, axis=0)[:, None]
-        norms_b = B.sum(b ** 2, axis=0)[None, :]
-        return norms_a + norms_b - 2 * B.dot(a, b, tr_a=True)
+        norms_a = B.sum(a ** 2, axis=1)[:, None]
+        norms_b = B.sum(b ** 2, axis=1)[None, :]
+        return norms_a + norms_b - 2 * B.dot(a, b, tr_b=True)
