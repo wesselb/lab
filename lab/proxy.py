@@ -23,10 +23,10 @@ def default_args(f, **def_args):
     try:
         try:
             # Python 3:
-            f_args = inspect.signature(f).parameters
+            f_args = list(inspect.signature(f).parameters.keys())
         except AttributeError:
             # Python 2:
-            f_args, _, _, _ = inspect.getargspec(f)
+            f_args = inspect.getargspec(f).args
     except TypeError:
         return f
 
@@ -38,8 +38,7 @@ def default_args(f, **def_args):
             # Only set the default argument if
             #   (1) it is not set in `*args`, and
             #   (2) it is not set in `**kw_args`, or set to `None`.
-            set_in_args = k in f_args and \
-                          len(args) > list(f_args.keys()).index(k)
+            set_in_args = k in f_args and len(args) > f_args.index(k)
             set_in_kw_args = k in kw_args and kw_args[k] is not None
             if not set_in_args and not set_in_kw_args:
                 kw_args[k] = v
