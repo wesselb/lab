@@ -50,6 +50,16 @@ def randn(shape, dtype=None):
     return cast(np.random.randn(*shape), dtype=dtype)
 
 
+def rand(shape, dtype=None):
+    """Generate standard uniform normal numbers.
+
+    Args:
+        shape (shape): Shape of output.
+        dtype (data type, optional): Data type of output.
+    """
+    return cast(np.random.rand(*shape), dtype=dtype)
+
+
 def cast(a, dtype=None):
     """Cast an object to a data type.
 
@@ -59,6 +69,16 @@ def cast(a, dtype=None):
 
     """
     return np.array(a) if dtype is None else np.array(a).astype(dtype)
+
+
+def logsumexp(a, dtype=None):
+    """Exponentiate, sum, and compute the logarithm of the result.
+
+    Args:
+        a (tensor): Array to perform computation on.
+        dtype (data type, optional): Data type to cast to.
+    """
+    raise NotImplementedError()
 
 
 cholesky = np.linalg.cholesky  #: Compute the Cholesky decomposition.

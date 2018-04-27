@@ -56,6 +56,10 @@ def randn(shape, dtype=None):
     return tf.random_normal(shape, dtype=_default32(dtype))
 
 
+def rand(shape, dtype=None):
+    return tf.random_uniform(shape, dtype=_default32(dtype))
+
+
 def zeros(shape, dtype=None):
     return tf.zeros(shape, dtype=_default32(dtype))
 
@@ -78,6 +82,7 @@ def kron(a, b):
                       a_shape[:-2] + (a_shape[-2] * b_shape[-2],
                                       a_shape[-1] * b_shape[-1]))
 
+
 def cast(a, dtype=None):
     return a if dtype is None else tf.cast(a, dtype)
 
@@ -89,8 +94,11 @@ linalg.cholesky = cholesky
 
 dot = matmul
 sum = tf.reduce_sum
+mean = tf.reduce_mean
+logsumexp = tf.reduce_logsumexp
 concatenate = tf.concat
 concat = concatenate
+stack = tf.stack
 transpose = tf.transpose
 sign = tf.sign
 trace = tf.trace
@@ -106,7 +114,11 @@ cos = tf.cos
 random = Namespace()
 # Call through proxy to coop with changed defaults.
 random.randn = lambda *args: B.randn(args)
+random.rand = lambda *args: B.rand(args)
 
 ones = tf.ones
 minimum = tf.minimum
 maximum = tf.maximum
+
+Variable = tf.Variable
+reshape = tf.reshape
