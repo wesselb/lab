@@ -23,19 +23,25 @@ def default_args(f, **def_args):
     try:
         try:
             # Python 3:
-            args = inspect.signature(f).parameters
+            f_args = inspect.signature(f).parameters
         except AttributeError:
             # Python 2:
-            args, _, _, _ = inspect.getargspec(f)
+            f_args, _, _, _ = inspect.getargspec(f)
     except TypeError:
         return f
 
     # Filter any default arguments that not apply to `f`.
-    def_args = {k: def_args[k] for k in set(args) & set(def_args.keys())}
+    def_args = {k: def_args[k] for k in set(f_args) & set(def_args.keys())}
 
     def wrapped_f(*args, **kw_args):
         for k, v in def_args.items():
-            if k not in kw_args or kw_args[k] is None:
+            # Only set the default argument if
+            #   (1) it is not set in `*args`, and
+            #   (2) it is not set in `**kw_args`, or set to `None`.
+            set_in_args = k in f_args and \
+                          len(args) > list(f_args.keys()).index(k)
+            set_in_kw_args = k in kw_args and kw_args[k] is not None
+            if not set_in_args and not set_in_kw_args:
                 kw_args[k] = v
         return f(*args, **kw_args)
 
