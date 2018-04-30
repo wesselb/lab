@@ -99,6 +99,7 @@ logsumexp = tf.reduce_logsumexp
 concatenate = tf.concat
 concat = concatenate
 stack = tf.stack
+tile = tf.tile
 transpose = tf.transpose
 sign = tf.sign
 trace = tf.trace
