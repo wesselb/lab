@@ -40,14 +40,12 @@ def matmul(a, b, tr_a=False, tr_b=False):
 
 
 def diag(a):
-    if B.rank(a) == 0:
-        return a
-    elif B.rank(a) == 1:
+    if B.rank(a) == 1:
         return tf.diag(a)
     elif B.rank(a) == 2:
         return tf.diag_part(a)
     else:
-        raise ValueError('Argument must have rank 0, 1 or 2.')
+        raise ValueError('Argument must have rank 1 or 2.')
 
 
 def eye(n, M=None, dtype=None):
