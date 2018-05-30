@@ -9,25 +9,26 @@ __all__ = ['B']
 
 
 def default_args(f, **def_args):
-    """Change default values for keyword arguments of a function.
+    """Change default values for arguments of a function.
 
-    Omitting the argument or setting the keyword to `None` will yield the
+    Omitting the argument or setting the value to `None` will yield the
     newly-specified default.
 
     Args:
         f (function): Function under consideration.
-        **def_args: Keys correspond to names of keyword arguments, and values
+        **def_args: Keys correspond to names of arguments, and values
             correspond to new default values.
     """
     # Get the names of all the arguments of `f`.
     try:
         try:
             # Python 3:
-            f_args = list(inspect.signature(f).parameters.keys())
+            f_args = inspect.getfullargspec(f).args
         except AttributeError:
             # Python 2:
             f_args = inspect.getargspec(f).args
     except TypeError:
+        # Method cannot be inspected.
         return f
 
     # Filter any default arguments that not apply to `f`.
@@ -35,7 +36,7 @@ def default_args(f, **def_args):
 
     def wrapped_f(*args, **kw_args):
         for k, v in def_args.items():
-            # Only set the default argument if
+            # Only set to default argument if
             #   (1) it is not set in `*args`, and
             #   (2) it is not set in `**kw_args`, or set to `None`.
             set_in_args = k in f_args and len(args) > f_args.index(k)
@@ -85,7 +86,7 @@ class Proxy(object):
         for namespace in self.namespaces:
             if hasattr(namespace, name):
                 return namespace, getattr(namespace, name)
-        raise AttributeError('reference to \'{}\' not found.'.format(name))
+        raise AttributeError('Reference to \'{}\' not found.'.format(name))
 
     def __getattr__(self, name):
         _, attr = self._resolve_attr(name)
@@ -100,23 +101,32 @@ class Proxy(object):
         namespace, _ = self._resolve_attr(name)
         setattr(namespace, name, value)
 
+    def __dir__(self):
+        cur_dir = set(object.__dir__(self))
+        for namespace in self._namespaces:
+            cur_dir |= set(dir(namespace))
+        return sorted(cur_dir)
+
     def backend_to_tf(self):
         """Switch the backend to TensorFlow."""
         from . import generic as gen
-        from .proxies import tensorflow as tf
-        self.set_namespaces([gen, tf])
+        from .proxies import tensorflow as tf_proxy
+        import tensorflow as tf
+        self.set_namespaces([gen, tf_proxy, tf])
 
     def backend_to_np(self):
         """Switch the backend to NumPy."""
         from . import generic as gen
-        from .proxies import numpy as np
-        self.set_namespaces([gen, np])
+        from .proxies import numpy as np_proxy
+        import autograd.numpy as np
+        self.set_namespaces([gen, np_proxy, np])
 
     def backend_to_torch(self):
         """Switch the backend to PyTorch."""
         from . import generic as gen
-        from .proxies import pytorch as torch
-        self.set_namespaces([gen, torch])
+        from .proxies import torch as torch_proxy
+        import torch
+        self.set_namespaces([gen, torch_proxy, torch])
 
     def set_default_dtype(self, dtype):
         """Set the default data type.
