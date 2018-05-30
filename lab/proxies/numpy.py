@@ -2,13 +2,8 @@
 
 from __future__ import absolute_import, division, print_function
 
-import numpy as np_
 import autograd.numpy as np
 import autograd.scipy.linalg as sla
-# noinspection PyUnresolvedReferences
-from autograd.numpy import *
-
-__all__ = np_.__all__ + ['trisolve', 'randn', 'cholesky', 'concat']
 
 
 def matmul(a, b, tr_a=False, tr_b=False):
@@ -68,7 +63,7 @@ def cast(a, dtype=None):
         dtype (data type, optional): Data type to cast to.
 
     """
-    return np.array(a) if dtype is None else np.array(a).astype(dtype)
+    return a if dtype is None else np.array(a).astype(dtype)
 
 
 def logsumexp(a, dtype=None):
@@ -78,7 +73,8 @@ def logsumexp(a, dtype=None):
         a (tensor): Array to perform computation on.
         dtype (data type, optional): Data type to cast to.
     """
-    raise NotImplementedError()
+    m = np.max(a)
+    return cast(np.log(np.sum(np.exp(a - m))) + m, dtype=dtype)
 
 
 cholesky = np.linalg.cholesky  #: Compute the Cholesky decomposition.

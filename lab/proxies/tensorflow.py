@@ -3,36 +3,12 @@
 from __future__ import absolute_import, division, print_function
 
 import tensorflow as tf
-import numpy as np
 
 from .. import B
-from ..util import Namespace
-
-__all__ = ['array', 'shape', 'matmul', 'diag', 'eye', 'randn', 'zeros',
-           'trisolve', 'kron', 'concatenate', 'log', 'linalg', 'cholesky',
-           'minimum', 'concat', 'cast', 'conj', 'cos', 'dot', 'exp', 'maximum',
-           'random', 'sin', 'sum']
 
 
-def _default32(dtype):
-    return tf.float32 if dtype is None else dtype
-
-
-def array(a, dtype=None):
-    if isinstance(a, tf.Tensor) or isinstance(a, tf.Variable):
-        if dtype is not None and dtype is not a.dtype:
-            return B.cast(a, dtype=dtype)
-        else:
-            return a
-    else:
-        return tf.constant(a, dtype=dtype)
-
-
-def shape(a):
-    if isinstance(a, tf.Tensor) or isinstance(a, tf.Variable):
-        return tuple(int(x) for x in a.get_shape())
-    else:
-        return np.shape(a)
+def rank(a):
+    return B.shape(a).get_shape()[0].value
 
 
 def matmul(a, b, tr_a=False, tr_b=False):
@@ -46,22 +22,6 @@ def diag(a):
         return tf.diag_part(a)
     else:
         raise ValueError('Argument must have rank 1 or 2.')
-
-
-def eye(n, M=None, dtype=None):
-    return tf.eye(n, num_columns=M, dtype=_default32(dtype))
-
-
-def randn(shape, dtype=None):
-    return tf.random_normal(shape, dtype=_default32(dtype))
-
-
-def rand(shape, dtype=None):
-    return tf.random_uniform(shape, dtype=_default32(dtype))
-
-
-def zeros(shape, dtype=None):
-    return tf.zeros(shape, dtype=_default32(dtype))
 
 
 def trisolve(a, b, tr_a=False, lower=True):
@@ -83,43 +43,18 @@ def kron(a, b):
                                       a_shape[-1] * b_shape[-1]))
 
 
-def cast(a, dtype=None):
-    return a if dtype is None else tf.cast(a, dtype)
-
-
-cholesky = tf.cholesky
-cholesky_solve = tf.cholesky_solve
-linalg = Namespace()
-linalg.cholesky = cholesky
-
 dot = matmul
+
 sum = tf.reduce_sum
 mean = tf.reduce_mean
+prod = tf.reduce_prod
 logsumexp = tf.reduce_logsumexp
-concatenate = tf.concat
-concat = concatenate
-stack = tf.stack
-tile = tf.tile
-transpose = tf.transpose
-sign = tf.sign
-trace = tf.trace
+min = tf.reduce_min
+max = tf.reduce_max
+all = tf.reduce_all
+any = tf.reduce_any
+
+array = tf.constant
 eig = tf.self_adjoint_eig
-abs = tf.abs
-
-conj = tf.conj
-log = tf.log
-exp = tf.exp
-sin = tf.sin
-cos = tf.cos
-
-random = Namespace()
-# Call through proxy to coop with changed defaults.
-random.randn = lambda *args: B.randn(args)
-random.rand = lambda *args: B.rand(args)
-
-ones = tf.ones
-minimum = tf.minimum
-maximum = tf.maximum
-
-Variable = tf.Variable
-reshape = tf.reshape
+randn = tf.random_normal
+rand = tf.random_uniform
