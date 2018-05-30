@@ -17,7 +17,7 @@ def rank(a):
     Args:
         a (tensor): Tensor to get the rank of.
     """
-    return len(B.shape(a))
+    return B.shape(B.shape(a))[0]
 
 
 def reg(a, diag=None, clip=True):
@@ -34,8 +34,8 @@ def reg(a, diag=None, clip=True):
         diag = default_reg_diag
     elif clip:
         diag = B.maximum(diag, default_reg_diag)
-    r, c = B.shape(a)
-    return a + diag * B.eye(r, M=c, dtype=a.dtype)
+    return a + diag * B.eye(B.shape(a)[0],
+                            B.shape(a)[1], dtype=a.dtype)
 
 
 @property
@@ -61,8 +61,8 @@ def pw_dists2(a, b=None):
     """
     if b is None:
         norms = B.sum(a ** 2, axis=1)
-        return norms[:, None] + norms[None, :] - 2 * B.dot(a, a, tr_b=True)
+        return norms[:, None] + norms[None, :] - 2 * B.matmul(a, a, tr_b=True)
     else:
         norms_a = B.sum(a ** 2, axis=1)[:, None]
         norms_b = B.sum(b ** 2, axis=1)[None, :]
-        return norms_a + norms_b - 2 * B.dot(a, b, tr_b=True)
+        return norms_a + norms_b - 2 * B.matmul(a, b, tr_b=True)
