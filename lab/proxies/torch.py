@@ -34,5 +34,17 @@ def cast(a, dtype=None):
     return a if dtype is None else torch.tensor(a).type(dtype)
 
 
+def cholesky(a, lower=True):
+    return torch.potrf(a, upper=not lower)
+
+
+def cholesky_solve(chol, a, lower=True):
+    return torch.potrs(a, chol, upper=not lower)
+
+
+def trisolve(a, b, tr_a=False, lower=True):
+    return torch.trtrs(b, a, upper=not lower, transpose=tr_a)[0]
+
+
 array = torch.tensor
 dot = matmul
