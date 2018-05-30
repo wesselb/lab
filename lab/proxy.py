@@ -112,21 +112,21 @@ class Proxy(object):
         from . import generic as gen
         from .proxies import tensorflow as tf_proxy
         import tensorflow as tf
-        self.set_namespaces([gen, tf_proxy, tf])
+        self.set_namespaces([tf_proxy, gen, tf])
 
     def backend_to_np(self):
         """Switch the backend to NumPy."""
         from . import generic as gen
         from .proxies import numpy as np_proxy
         import autograd.numpy as np
-        self.set_namespaces([gen, np_proxy, np])
+        self.set_namespaces([np_proxy, gen, np])
 
     def backend_to_torch(self):
         """Switch the backend to PyTorch."""
         from . import generic as gen
         from .proxies import torch as torch_proxy
         import torch
-        self.set_namespaces([gen, torch_proxy, torch])
+        self.set_namespaces([torch_proxy, gen, torch])
 
     def set_default_dtype(self, dtype):
         """Set the default data type.

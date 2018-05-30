@@ -66,3 +66,32 @@ def pw_dists2(a, b=None):
         norms_a = B.sum(a ** 2, axis=1)[:, None]
         norms_b = B.sum(b ** 2, axis=1)[None, :]
         return norms_a + norms_b - 2 * B.matmul(a, b, tr_b=True)
+
+
+def pw_dists(a, b=None, dists2=False):
+    """Compute the pairwise Euclidean distances between design matrices.
+
+    Args:
+        a (design matrix, optional): First design matrix.
+        b (design matrix, optional): Second design matrix. Defaults to first
+            design matrix.
+        dists2 (bool, optional): Also return squared distances. Defaults to
+            `false`.
+    """
+    d2 = pw_dists2(a, b)
+    # Adding 1e-8 here is highly suboptimal, but unfortunately required to
+    # ensure stable gradients.
+    d = B.sqrt(d2 + B.default_reg_diag)
+    if dists2:
+        return d, d2
+    else:
+        return d
+
+
+def is_scalar(a):
+    """Check whether an object is a scalar.
+
+    Args:
+        a (tensor): Object to check.
+    """
+    return B.rank(a) == 0
