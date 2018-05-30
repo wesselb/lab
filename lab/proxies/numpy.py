@@ -77,6 +77,16 @@ def logsumexp(a, dtype=None):
     return cast(np.log(np.sum(np.exp(a - m))) + m, dtype=dtype)
 
 
+def cholesky_solve(chol, a):
+    """Solve a system given a Cholesky factorisation.
+
+    Args:
+        chol (tensor): Cholesky factorisation.
+        a (tensor): Coefficients.
+    """
+    return trisolve(chol, trisolve(chol, a), tr_a=True)
+
+
 cholesky = np.linalg.cholesky  #: Compute the Cholesky decomposition.
 eig = np.linalg.eig  #: Compute the eigendecomposition.
 dot = matmul  #: Multiply two matrices.
