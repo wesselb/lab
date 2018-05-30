@@ -41,7 +41,7 @@ def reg(a, diag=None, clip=True):
 @property
 def log_2_pi():
     """Value of `log(2 * np.pi)`."""
-    return B.log(2 * np.pi)
+    return B.log(B.array(2 * np.pi))
 
 
 @property

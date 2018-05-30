@@ -9,6 +9,10 @@ def shape(a):
     return a.shape
 
 
+def rank(a):
+    return len(a.shape)
+
+
 def transpose(a):
     return torch.transpose(a, 0, 1)
 
@@ -19,8 +23,16 @@ def matmul(a, b, tr_a=False, tr_b=False):
     return torch.mm(a, b)
 
 
-def sum(a, axis):
-    return torch.sum(a, dim=axis)
+def sum(a, axis=None):
+    if axis is None:
+        return torch.sum(a)
+    else:
+        return torch.sum(a, dim=axis)
 
 
+def cast(a, dtype=None):
+    return a if dtype is None else torch.tensor(a).type(dtype)
+
+
+array = torch.tensor
 dot = matmul
