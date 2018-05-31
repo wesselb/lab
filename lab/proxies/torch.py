@@ -26,6 +26,10 @@ def matmul(a, b, tr_a=False, tr_b=False):
     return torch.mm(a, b)
 
 
+def concat(a, axis):
+    return torch.cat(a, axis)
+
+
 def sum(a, axis=None):
     if axis is None:
         return torch.sum(a)
