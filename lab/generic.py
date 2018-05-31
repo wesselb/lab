@@ -3,12 +3,13 @@
 from __future__ import absolute_import, division, print_function
 
 import numpy as np
+from plum import dispatch, Number, PromisedType
 
 from . import B
 
-__all__ = ['default_reg_diag', 'rank', 'reg', 'log_2_pi', 'pi', 'pw_dists2']
+epsilon = 1e-12  #: Magnitude of diagonal to regularise matrices with.
 
-default_reg_diag = 1e-12  #: Magnitude of diagonal to regularise matrices with.
+_Numeric = {int, float, np.ndarray}  #: Type of numerical objects.
 
 
 def rank(a):
@@ -31,9 +32,9 @@ def reg(a, diag=None, clip=True):
             Defaults to `True`.
     """
     if diag is None:
-        diag = default_reg_diag
+        diag = epsilon
     elif clip:
-        diag = B.maximum(diag, default_reg_diag)
+        diag = B.maximum(diag, epsilon)
     return a + diag * B.eye(B.shape(a)[0],
                             B.shape(a)[1], dtype=a.dtype)
 
@@ -50,7 +51,8 @@ def pi():
     return np.pi
 
 
-def pw_dists2(a, b=None):
+@dispatch(object, object)
+def pw_dists2(a, b):
     """Compute the square of the pairwise Euclidean distances between design
     matrices.
 
@@ -59,33 +61,50 @@ def pw_dists2(a, b=None):
         b (design matrix, optional): Second design matrix. Defaults to first
             design matrix.
     """
-    if b is None:
-        norms = B.sum(a ** 2, axis=1)
-        return norms[:, None] + norms[None, :] - 2 * B.matmul(a, a, tr_b=True)
-    else:
-        norms_a = B.sum(a ** 2, axis=1)[:, None]
-        norms_b = B.sum(b ** 2, axis=1)[None, :]
-        return norms_a + norms_b - 2 * B.matmul(a, b, tr_b=True)
+    norms_a = B.sum(a ** 2, axis=1)[:, None]
+    norms_b = B.sum(b ** 2, axis=1)[None, :]
+    return norms_a + norms_b - 2 * B.matmul(a, b, tr_b=True)
 
 
-def pw_dists(a, b=None, dists2=False):
+@dispatch(object)
+def pw_dists2(a):
+    norms = B.sum(a ** 2, axis=1)
+    return norms[:, None] + norms[None, :] - 2 * B.matmul(a, a, tr_b=True)
+
+
+@dispatch(Number)
+def pw_dists2(a):
+    return B.array([[0.]])
+
+
+@dispatch(Number, Number)
+def pw_dists2(a, b):
+    return B.array([[(a - b) ** 2]])
+
+
+@dispatch([object])
+def pw_dists(*args):
     """Compute the pairwise Euclidean distances between design matrices.
 
     Args:
         a (design matrix, optional): First design matrix.
         b (design matrix, optional): Second design matrix. Defaults to first
             design matrix.
-        dists2 (bool, optional): Also return squared distances. Defaults to
-            `false`.
     """
-    d2 = pw_dists2(a, b)
+    d2 = pw_dists2(*args)
     # Adding 1e-8 here is highly suboptimal, but unfortunately required to
     # ensure stable gradients.
-    d = B.sqrt(d2 + B.default_reg_diag)
-    if dists2:
-        return d, d2
-    else:
-        return d
+    return B.sqrt(d2 + B.epsilon)
+
+
+@dispatch(Number)
+def pw_dists(a):
+    return B.array([[0.]])
+
+
+@dispatch(Number, Number)
+def pw_dists(a, b):
+    return B.array([[B.abs(a - b)]])
 
 
 def is_scalar(a):
@@ -95,3 +114,28 @@ def is_scalar(a):
         a (tensor): Object to check.
     """
     return B.rank(a) == 0
+
+
+@dispatch(object, object)
+def outer(a, b):
+    """Outer product between two matrices.
+
+    Args:
+        a (matrix): First matrix.
+        b (matrix): Second matrix.
+    """
+    return B.matmul(a, b, tr_b=True)
+
+
+@dispatch(object)
+def outer(a):
+    return B.outer(a, a)
+
+
+# Numeric type for dispatch has to be evaluated lazily.
+class PromisedNumeric(PromisedType):
+    def resolve(self):
+        return B._Numeric
+
+
+Numeric = PromisedNumeric()
