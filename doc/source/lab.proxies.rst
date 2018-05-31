@@ -12,6 +12,6 @@ Submodules
 .. toctree::
 
    lab.proxies.numpy
-   lab.proxies.pytorch
    lab.proxies.tensorflow
+   lab.proxies.torch
 
