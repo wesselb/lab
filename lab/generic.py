@@ -3,13 +3,15 @@
 from __future__ import absolute_import, division, print_function
 
 import numpy as np
-from plum import dispatch, Number, PromisedType
+from plum import Dispatcher, Number, PromisedType
 
 from . import B
 
 epsilon = 1e-12  #: Magnitude of diagonal to regularise matrices with.
 
 _Numeric = {int, float, np.ndarray}  #: Type of numerical objects.
+
+dispatch = Dispatcher()
 
 
 def rank(a):
