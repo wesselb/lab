@@ -1,6 +1,7 @@
 nose
 coveralls
 numpy
+scipy
 autograd
 tensorflow
 torch
