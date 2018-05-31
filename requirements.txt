@@ -3,7 +3,5 @@ coveralls
 numpy
 scipy
 autograd
-tensorflow
-torch
 git+git://github.com/wesselb/plum@master#egg=plum
 
