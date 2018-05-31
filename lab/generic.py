@@ -122,7 +122,7 @@ def outer(a, b):
 
     Args:
         a (matrix): First matrix.
-        b (matrix): Second matrix.
+        b (matrix, optional): Second matrix.
     """
     return B.matmul(a, b, tr_b=True)
 
@@ -139,3 +139,18 @@ class PromisedNumeric(PromisedType):
 
 
 Numeric = PromisedNumeric()
+
+
+@dispatch({int, float})
+def dtype(a):
+    """Get the data type of an object.
+
+    Args:
+        a (obj): Object to get data type of.
+    """
+    return type(a)
+
+
+@dispatch(Numeric)
+def dtype(a):
+    return a.dtype
