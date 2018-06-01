@@ -156,3 +156,12 @@ def dtype(a):
 @_dispatch(Numeric)
 def dtype(a):
     return a.dtype
+
+
+def flatten(a):
+    """Flatten an object.
+
+    Args:
+        a (tensor): Object to flatten.
+    """
+    return B.reshape(a, [-1])
