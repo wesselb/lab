@@ -5,13 +5,38 @@ from __future__ import absolute_import, division, print_function
 import numpy as np
 import tensorflow as tf
 
+from plum import Dispatcher
+
 from .. import B
 
-_Numeric = {int, float, np.ndarray, tf.Variable, tf.Tensor}
+_TF = {tf.Variable, tf.Tensor}
+_Numeric = {int, float, np.ndarray} | _TF
+
+_dispatch = Dispatcher()
+
+
+@_dispatch(object, object)
+def cast(a, dtype):
+    return np.array(a, dtype=dtype)
+
+
+@_dispatch(_TF, object)
+def cast(a, dtype):
+    return tf.cast(a, dtype)
+
+
+@_dispatch(object)
+def shape(a):
+    return np.shape(a)
+
+
+@_dispatch(_TF)
+def shape(a):
+    return tf.shape(a)
 
 
 def rank(a):
-    return B.shape(a).get_shape()[0].value
+    return tf.shape(a).get_shape()[0].value
 
 
 def matmul(a, b, tr_a=False, tr_b=False):

@@ -11,7 +11,7 @@ epsilon = 1e-12  #: Magnitude of diagonal to regularise matrices with.
 
 _Numeric = {int, float, np.ndarray}  #: Type of numerical objects.
 
-dispatch = Dispatcher()
+_dispatch = Dispatcher()
 
 
 def rank(a):
@@ -53,7 +53,7 @@ def pi():
     return np.pi
 
 
-@dispatch(object, object)
+@_dispatch(object, object)
 def pw_dists2(a, b):
     """Compute the square of the pairwise Euclidean distances between design
     matrices.
@@ -68,23 +68,23 @@ def pw_dists2(a, b):
     return norms_a + norms_b - 2 * B.matmul(a, b, tr_b=True)
 
 
-@dispatch(object)
+@_dispatch(object)
 def pw_dists2(a):
     norms = B.sum(a ** 2, axis=1)
     return norms[:, None] + norms[None, :] - 2 * B.matmul(a, a, tr_b=True)
 
 
-@dispatch(Number)
+@_dispatch(Number)
 def pw_dists2(a):
     return B.array([[0.]])
 
 
-@dispatch(Number, Number)
+@_dispatch(Number, Number)
 def pw_dists2(a, b):
     return B.array([[(a - b) ** 2]])
 
 
-@dispatch([object])
+@_dispatch([object])
 def pw_dists(*args):
     """Compute the pairwise Euclidean distances between design matrices.
 
@@ -99,12 +99,12 @@ def pw_dists(*args):
     return B.sqrt(d2 + B.epsilon)
 
 
-@dispatch(Number)
+@_dispatch(Number)
 def pw_dists(a):
     return B.array([[0.]])
 
 
-@dispatch(Number, Number)
+@_dispatch(Number, Number)
 def pw_dists(a, b):
     return B.array([[B.abs(a - b)]])
 
@@ -118,7 +118,7 @@ def is_scalar(a):
     return B.rank(a) == 0
 
 
-@dispatch(object, object)
+@_dispatch(object, object)
 def outer(a, b):
     """Outer product between two matrices.
 
@@ -129,12 +129,12 @@ def outer(a, b):
     return B.matmul(a, b, tr_b=True)
 
 
-@dispatch(object)
+@_dispatch(object)
 def outer(a):
     return B.outer(a, a)
 
 
-# Numeric type for dispatch has to be evaluated lazily.
+# Numeric type for _dispatch has to be evaluated lazily.
 class PromisedNumeric(PromisedType):
     def resolve(self):
         return B._Numeric
@@ -143,7 +143,7 @@ class PromisedNumeric(PromisedType):
 Numeric = PromisedNumeric()
 
 
-@dispatch({int, float})
+@_dispatch({int, float})
 def dtype(a):
     """Get the data type of an object.
 
@@ -153,6 +153,6 @@ def dtype(a):
     return type(a)
 
 
-@dispatch(Numeric)
+@_dispatch(Numeric)
 def dtype(a):
     return a.dtype
