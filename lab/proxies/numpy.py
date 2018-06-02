@@ -2,6 +2,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+from .. import B
 import autograd.numpy as np
 import autograd.scipy.linalg as sla
 
@@ -15,8 +16,10 @@ def matmul(a, b, tr_a=False, tr_b=False):
         tr_a (bool, optional): Transpose `a`. Defaults to `False`.
         tr_b (bool, optional): Transpose `b`. Defaults to `False`.
     """
-    a = a.T if tr_a else a
-    b = b.T if tr_b else b
+    if B.rank(a) == 0 and B.rank(b) == 0:
+        return a * b
+    a = B.transpose(a) if tr_a else a
+    b = B.transpose(b) if tr_b else b
     return np.matmul(a, b)
 
 
