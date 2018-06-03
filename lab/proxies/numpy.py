@@ -2,9 +2,13 @@
 
 from __future__ import absolute_import, division, print_function
 
-from .. import B
 import autograd.numpy as np
 import autograd.scipy.linalg as sla
+from plum import Dispatcher
+
+from .. import B
+
+_dispatch = Dispatcher()
 
 
 def matmul(a, b, tr_a=False, tr_b=False):

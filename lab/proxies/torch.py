@@ -2,10 +2,15 @@
 
 from __future__ import absolute_import, division, print_function
 
+from numbers import Number
+
 import numpy as np
 import torch
+from plum import Dispatcher
 
-_Numeric = {int, float, np.ndarray, torch.Tensor}
+_dispatch = Dispatcher()
+
+_Numeric = {Number, np.ndarray, torch.Tensor}
 
 
 def shape(a):

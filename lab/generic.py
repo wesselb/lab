@@ -3,13 +3,14 @@
 from __future__ import absolute_import, division, print_function
 
 import numpy as np
-from plum import Dispatcher, Number, PromisedType
+from plum import Dispatcher, PromisedType
+from numbers import Number
 
 from . import B
 
 epsilon = 1e-12  #: Magnitude of diagonal to regularise matrices with.
 
-_Numeric = {int, float, np.ndarray}  #: Type of numerical objects.
+_Numeric = {Number, np.ndarray}  #: Type of numerical objects.
 
 _dispatch = Dispatcher()
 
@@ -37,8 +38,7 @@ def reg(a, diag=None, clip=True):
         diag = epsilon
     elif clip:
         diag = B.maximum(diag, epsilon)
-    return a + diag * B.eye(B.shape(a)[0],
-                            B.shape(a)[1], dtype=a.dtype)
+    return a + diag * B.eye(B.shape(a)[0], B.shape(a)[1], dtype=B.dtype(a))
 
 
 @property
@@ -94,9 +94,9 @@ def pw_dists(*args):
             design matrix.
     """
     d2 = pw_dists2(*args)
-    # Adding 1e-8 here is highly suboptimal, but unfortunately required to
-    # ensure stable gradients.
-    return B.sqrt(d2 + B.epsilon)
+    # Clip at a bit higher than the smallest single-precision floating point
+    # number.
+    return B.sqrt(B.maximum(d2, B.cast(1e-30, dtype=B.dtype(d2))))
 
 
 @_dispatch(Number)
@@ -143,19 +143,13 @@ class PromisedNumeric(PromisedType):
 Numeric = PromisedNumeric()
 
 
-@_dispatch({int, float})
 def dtype(a):
     """Get the data type of an object.
 
     Args:
         a (obj): Object to get data type of.
     """
-    return type(a)
-
-
-@_dispatch(Numeric)
-def dtype(a):
-    return a.dtype
+    return B.array(a).dtype
 
 
 def flatten(a):

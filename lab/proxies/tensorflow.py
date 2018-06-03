@@ -2,27 +2,34 @@
 
 from __future__ import absolute_import, division, print_function
 
+from numbers import Number
+
 import numpy as np
 import tensorflow as tf
-
 from plum import Dispatcher
 
 from .. import B
 
-_TF = {tf.Variable, tf.Tensor}
-_Numeric = {int, float, np.ndarray} | _TF
-
 _dispatch = Dispatcher()
 
-
-@_dispatch(object, object)
-def cast(a, dtype):
-    return np.array(a, dtype=dtype)
+_TF = {tf.Variable, tf.Tensor}
+_Numeric = {Number, np.ndarray} | _TF
 
 
-@_dispatch(_TF, object)
+@_dispatch(Number)
+def dtype(a):
+    return np.array(a).dtype
+
+
+@_dispatch(_Numeric)
+def dtype(a):
+    return a.dtype
+
+
+@_dispatch(_Numeric, object)
 def cast(a, dtype):
     return tf.cast(a, dtype)
+
 
 @_dispatch(object)
 def cast(a, dtype):
