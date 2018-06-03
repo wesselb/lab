@@ -4,6 +4,7 @@ from __future__ import absolute_import, division, print_function
 
 import inspect
 import sys
+from plum import NotFoundLookupError
 
 __all__ = ['B']
 
@@ -80,12 +81,21 @@ class Proxy(object):
             namespaces_list (list): List of namespaces. The proxy will try
                 the namespaces in the provided order.
         """
+        # Clear dispatch caches before changing.
+        try:
+            for namespace in object.__getattribute__(self, '_namespace'):
+                namespace._dispatch.clear_cache()
+        except AttributeError:
+            pass
+        # Change namespaces.
         object.__setattr__(self, '_namespaces', namespaces_list)
 
     def _resolve_attr(self, name):
         for namespace in self.namespaces:
-            if hasattr(namespace, name):
+            try:
                 return namespace, getattr(namespace, name)
+            except AttributeError:
+                continue
         raise AttributeError('Reference to \'{}\' not found.'.format(name))
 
     def __getattr__(self, name):
