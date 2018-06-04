@@ -21,7 +21,7 @@ def rank(a):
     Args:
         a (tensor): Tensor to get the rank of.
     """
-    return B.shape(B.shape(a))[0]
+    return B.shape_int(B.shape(a))[0]
 
 
 def reg(a, diag=None, clip=True):
@@ -159,3 +159,12 @@ def flatten(a):
         a (tensor): Object to flatten.
     """
     return B.reshape(a, [-1])
+
+
+def shape_int(a):
+    """Get the shape of an object as a tuple of integers.
+
+    Args:
+        a (tensor): Object to get shape of.
+    """
+    return B.shape(a)

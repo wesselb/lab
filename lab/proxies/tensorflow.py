@@ -47,8 +47,14 @@ def shape(a):
     return tf.shape(a)
 
 
-def rank(a):
-    return tf.shape(a).get_shape()[0].value
+@_dispatch(object)
+def shape_int(a):
+    return B.shape(a)
+
+
+@_dispatch(_TF)
+def shape_int(a):
+    return tuple(int(x) for x in a.get_shape())
 
 
 def matmul(a, b, tr_a=False, tr_b=False):
