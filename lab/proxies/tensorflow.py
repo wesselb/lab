@@ -26,15 +26,9 @@ def dtype(a):
     return a.dtype
 
 
-@_dispatch(_Numeric, object)
+@_dispatch(_Numeric, [object])
 def cast(a, dtype):
     return tf.cast(a, dtype)
-
-
-@_dispatch(object)
-def cast(a, dtype):
-    # This is a call with a keyword argument.
-    return cast(a, dtype)
 
 
 @_dispatch(object)
