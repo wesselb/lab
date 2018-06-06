@@ -168,3 +168,15 @@ def shape_int(a):
         a (tensor): Object to get shape of.
     """
     return B.shape(a)
+
+
+def length(a):
+    """Get the number of elements in a tensor.
+
+    Args:
+        a (tensor): Tensor to get number of elements of.
+    """
+    num, shape = 1, B.shape(a)
+    for i in range(B.rank(a)):
+        num *= shape[i]
+    return num

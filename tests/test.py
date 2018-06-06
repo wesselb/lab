@@ -38,3 +38,7 @@ def tf_bvn_cdf():
             err = tf.test.compute_gradient_error(
                 inp, inp_shapes, out, B.shape_int(out), inp_init)
             yield le, err, 1e-4
+
+
+def test_length():
+    yield eq, B.length(np.ones((10, 20, 30))), 10 * 20 * 30
