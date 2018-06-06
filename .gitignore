@@ -14,3 +14,7 @@ cover
 # Other
 .DS_Store
 *.swp
+
+# Object files
+*.o
+*.so

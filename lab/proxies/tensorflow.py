@@ -8,6 +8,8 @@ import numpy as np
 import tensorflow as tf
 from plum import Dispatcher
 
+# noinspection PyUnresolvedReferences
+from .bvn_cdf import bvn_cdf
 from .. import B
 
 _dispatch = Dispatcher()

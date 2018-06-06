@@ -1,4 +1,4 @@
-.PHONY: autodoc doc init test docopen clean
+.PHONY: autodoc doc init test docopen clean testlocal
 
 autodoc:
 	rm -rf doc/source
@@ -17,6 +17,10 @@ init:
 
 test:
 	python /usr/local/bin/nosetests tests --with-coverage --cover-html --cover-package=lab
+	#
+	# Run tests that cannot be run on CI.
+	#
+	python /usr/local/bin/nosetests tests.test:tf_bvn_cdf
 
 clean:
 	rm -rf .coverage cover
