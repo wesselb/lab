@@ -6,6 +6,13 @@ lab.proxies package
     :undoc-members:
     :show-inheritance:
 
+Subpackages
+-----------
+
+.. toctree::
+
+    lab.proxies.bvn_cdf
+
 Submodules
 ----------
 

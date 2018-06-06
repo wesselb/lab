@@ -1,9 +1,9 @@
-LAB: Linear Algebra Backend
-===========================
-
-A generic interface for linear algebra backends
+`LAB: Linear Algebra Backend <https://github.com/wesselb/lab>`__
+================================================================
 
 |Build| |Coverage Status| |Latest Docs|
+
+A generic interface for linear algebra backends
 
 .. |Build| image:: https://travis-ci.org/wesselb/lab.svg?branch=master
    :target: https://travis-ci.org/wesselb/lab
