@@ -8,6 +8,7 @@ from lab import B
 # noinspection PyUnresolvedReferences
 from . import eq, neq, lt, le, ge, gt, raises, call, lam, ok
 import numpy as np
+from numpy.testing import assert_allclose
 
 
 def test_np_matmul():
@@ -41,4 +42,14 @@ def tf_bvn_cdf():
 
 
 def test_length():
+    B.backend_to_np()
     yield eq, B.length(np.ones((10, 20, 30))), 10 * 20 * 30
+
+
+def test_take():
+    B.backend_to_tf()
+    s = tf.Session()
+    a = np.random.randn(10, 50)
+    inds = (1, 2, 5, 8)
+    yield assert_allclose, np.take(a, inds, 0), s.run(B.take(a, inds, 0))
+    yield assert_allclose, np.take(a, inds, 1), s.run(B.take(a, inds, 1))

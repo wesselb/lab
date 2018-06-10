@@ -85,6 +85,18 @@ def kron(a, b):
                                       a_shape[-1] * b_shape[-1]))
 
 
+def take(a, indices, axis=0):
+    if axis == 0:
+        return tf.gather(a, indices)
+    else:
+        # Create a permutation to switch `axis` and `0`.
+        perm = [i for i in range(B.rank(a))]
+        perm[axis], perm[0] = 0, axis
+
+        # Perform gathering.
+        return tf.transpose(tf.gather(tf.transpose(a, perm), indices), perm)
+
+
 dot = matmul
 
 sum = tf.reduce_sum
