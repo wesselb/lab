@@ -94,6 +94,17 @@ def cholesky_solve(chol, a):
     return trisolve(chol, trisolve(chol, a), tr_a=True)
 
 
+def take(a, indices, axis=0):
+    """Take particular indices from an axis.
+
+    Args:
+        a (tensor): Tensor to pick apart.
+        indices (tuple or list): Indices to pick.
+        axis (int, optional): Axis to pick from.
+    """
+    return np.take(a, indices, axis)
+
+
 cholesky = np.linalg.cholesky  #: Compute the Cholesky decomposition.
 eig = np.linalg.eig  #: Compute the eigendecomposition.
 dot = matmul  #: Multiply two matrices.

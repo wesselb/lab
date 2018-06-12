@@ -23,9 +23,14 @@ def dtype(a):
     return np.array(a).dtype
 
 
-@_dispatch(_Numeric)
+@_dispatch(np.ndarray)
 def dtype(a):
     return a.dtype
+
+
+@_dispatch(_TF)
+def dtype(a):
+    return a.dtype.as_numpy_dtype
 
 
 @_dispatch(_Numeric, [object])
@@ -112,3 +117,5 @@ array = tf.constant
 eig = tf.self_adjoint_eig
 randn = tf.random_normal
 rand = tf.random_uniform
+
+power = tf.pow
