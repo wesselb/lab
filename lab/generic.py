@@ -74,14 +74,9 @@ def pw_dists2(a):
     return norms[:, None] + norms[None, :] - 2 * B.matmul(a, a, tr_b=True)
 
 
-@_dispatch(Number)
-def pw_dists2(a):
-    return B.array([[0.]])
-
-
-@_dispatch(Number, Number)
-def pw_dists2(a, b):
-    return B.array([[(a - b) ** 2]])
+@_dispatch(object, object)
+def ew_dists2(a, b):
+    return B.sum((a - b) ** 2, axis=1)[:, None]
 
 
 @_dispatch([object])
@@ -96,6 +91,12 @@ def pw_dists(*args):
     d2 = pw_dists2(*args)
     # Clip at a bit higher than the smallest single-precision floating point
     # number.
+    return B.sqrt(B.maximum(d2, B.cast(1e-30, dtype=B.dtype(d2))))
+
+
+@_dispatch([object])
+def ew_dists(*args):
+    d2 = ew_dists2(*args)
     return B.sqrt(B.maximum(d2, B.cast(1e-30, dtype=B.dtype(d2))))
 
 
