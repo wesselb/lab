@@ -2,9 +2,10 @@
 
 from __future__ import absolute_import, division, print_function
 
+from numbers import Number
+
 import numpy as np
 from plum import Dispatcher, PromisedType
-from numbers import Number
 
 from . import B
 

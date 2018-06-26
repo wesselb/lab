@@ -2,51 +2,11 @@
 
 from __future__ import absolute_import, division, print_function
 
-import inspect
 import sys
-from plum import NotFoundLookupError, Dispatcher
+
+from plum import Dispatcher, Function, Tuple
 
 __all__ = ['B']
-
-
-def default_args(f, **def_args):
-    """Change default values for arguments of a function.
-
-    Omitting the argument or setting the value to `None` will yield the
-    newly-specified default.
-
-    Args:
-        f (function): Function under consideration.
-        **def_args: Keys correspond to names of arguments, and values
-            correspond to new default values.
-    """
-    # Get the names of all the arguments of `f`.
-    try:
-        try:
-            # Python 3:
-            f_args = inspect.getfullargspec(f).args
-        except AttributeError:
-            # Python 2:
-            f_args = inspect.getargspec(f).args
-    except TypeError:
-        # Method cannot be inspected.
-        return f
-
-    # Filter any default arguments that not apply to `f`.
-    def_args = {k: def_args[k] for k in set(f_args) & set(def_args.keys())}
-
-    def wrapped_f(*args, **kw_args):
-        for k, v in def_args.items():
-            # Only set to default argument if
-            #   (1) it is not set in `*args`, and
-            #   (2) it is not set in `**kw_args`, or set to `None`.
-            set_in_args = k in f_args and len(args) > f_args.index(k)
-            set_in_kw_args = k in kw_args and kw_args[k] is not None
-            if not set_in_args and not set_in_kw_args:
-                kw_args[k] = v
-        return f(*args, **kw_args)
-
-    return wrapped_f
 
 
 class Proxy(object):
@@ -55,8 +15,6 @@ class Proxy(object):
     Args:
         module (module): This module.
     """
-
-    _default_kw_args = {}
 
     def __init__(self, module):
         object.__setattr__(self, '_module', module)
@@ -95,13 +53,26 @@ class Proxy(object):
         raise AttributeError('Reference to \'{}\' not found.'.format(name))
 
     def __getattr__(self, name):
-        _, attr = self._resolve_attr(name)
+        namespace, attr = self._resolve_attr(name)
+
+        # Check if `attr` is a property.
         if isinstance(attr, property):
             return attr.fget()
-        elif callable(attr):
-            return self._module.default_args(attr, **self._default_kw_args)
-        else:
-            return attr
+
+        # Ensure that `attr` is a Plum `Function` so that it can be
+        # extended.
+        if callable(attr) and not isinstance(attr, Function):
+            # Make a function.
+            f = Function(attr)
+
+            # Set the fallback function to be the current function.
+            f.register(Tuple([object]), attr)
+
+            # Replace `attr` with a Plum `Function.
+            setattr(namespace, name, f)
+            attr = f
+
+        return attr
 
     def __setattr__(self, name, value):
         namespace, _ = self._resolve_attr(name)
@@ -133,14 +104,6 @@ class Proxy(object):
         from .proxies import torch as torch_proxy
         import torch
         self.set_namespaces([torch_proxy, gen, torch])
-
-    def set_default_dtype(self, dtype):
-        """Set the default data type.
-
-        Args:
-            dtype (data type): New default data type.
-        """
-        self._default_kw_args['dtype'] = dtype
 
 
 B = Proxy(sys.modules[__name__])
