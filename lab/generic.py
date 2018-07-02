@@ -182,3 +182,13 @@ def length(a):
     for i in range(B.rank(a)):
         num *= shape[i]
     return num
+
+
+def issubdtype(a, b):
+    """Check if `a` is a sub-data-type of `b`.
+
+    Args:
+        a (dtype): Data type.
+        b (dtype): Data type to check membership of.
+    """
+    return np.issubdtype(a, b)

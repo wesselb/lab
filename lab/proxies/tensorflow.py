@@ -102,6 +102,14 @@ def take(a, indices, axis=0):
         return tf.transpose(tf.gather(tf.transpose(a, perm), indices), perm)
 
 
+def svd(a, full_matrices=False, compute_uv=True, name=None):
+    res = tf.svd(a,
+                 full_matrices=full_matrices,
+                 compute_uv=compute_uv,
+                 name=name)
+    return res[1], res[0], res[2] if compute_uv else res
+
+
 dot = matmul
 
 sum = tf.reduce_sum
@@ -119,3 +127,9 @@ randn = tf.random_normal
 rand = tf.random_uniform
 
 power = tf.pow
+
+# Neural net activations:
+sigmoid = tf.nn.sigmoid
+tanh = tf.nn.tanh
+relu = tf.nn.relu
+leaky_relu = tf.nn.leaky_relu

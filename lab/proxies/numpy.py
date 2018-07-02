@@ -11,6 +11,37 @@ from .. import B
 _dispatch = Dispatcher()
 
 
+def unstack(a, axis=0):
+    """Inverse operation of stack.
+
+    Args:
+        a (tensor): Tensor to unstack.
+        axis (int, optional): Axis along which to unstack. Defaults to `0`.
+    """
+    dims = len(np.shape(a))
+
+    if axis > 0:
+        # Switch `axis` and `0`.
+        perm = list(range(dims))
+        perm[axis] = 0
+        perm[0] = axis
+        a = np.transpose(a, perm)
+
+    # Transpose and unstack
+    size = np.shape(a)[0]
+    slices = [a[i] for i in range(size)]
+
+    if axis > 1:
+        # Put the axis back in place.
+        perm = list(range(dims - 1))
+        perm.pop(axis - 1)
+        perm = [axis - 1] + perm
+        slices = [np.transpose(slice, perm) for slice in slices]
+
+    # Return result.
+    return slices
+
+
 def matmul(a, b, tr_a=False, tr_b=False):
     """Multiply two matrices.
 
@@ -101,8 +132,30 @@ def take(a, indices, axis=0):
         a (tensor): Tensor to pick apart.
         indices (tuple or list): Indices to pick.
         axis (int, optional): Axis to pick from.
+
+    Returns:
+        tensor: `a` after taking `indices` from `axis`.
     """
     return np.take(a, indices, axis)
+
+
+def svd(a, full_matrices=False, compute_uv=True):
+    """Compute the singular value decomposition.
+
+    Args:
+        a (tensor): Matrix to compute SVD of.
+        full_matrices (bool, optional): Compute a full or truncated SDV.
+            Default to `False`.
+        compute_uv (bool, optional): Also compute `U` and `V`. Defaults to
+            `True`.
+
+    Returns:
+        tuple: `(U, S, V)` is `compute_uv` is `True` and just `S` otherwise.
+    """
+    res = np.linalg.svd(a,
+                        full_matrices=full_matrices,
+                        compute_uv=compute_uv)
+    return res[0], res[1], res[2].T.conj() if compute_uv else res
 
 
 cholesky = np.linalg.cholesky  #: Compute the Cholesky decomposition.
