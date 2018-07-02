@@ -158,6 +158,29 @@ def svd(a, full_matrices=False, compute_uv=True):
     return res[0], res[1], res[2].T.conj() if compute_uv else res
 
 
+def sigmoid(x):
+    """Sigmoid function."""
+    return 1. / (1. + np.exp(x))
+
+
+def relu(x):
+    """ReLU."""
+    return np.maximum(x, 0, x)
+
+
+def leaky_relu(x, alpha=0.2):
+    """ReLU.
+
+    Args:
+        x (tensor): Input.
+        alpha (tensor): Leak.
+
+    Returns:
+        tensor: Activation.
+    """
+    return np.maximum(x, alpha * x, x)
+
+
 cholesky = np.linalg.cholesky  #: Compute the Cholesky decomposition.
 eig = np.linalg.eig  #: Compute the eigendecomposition.
 dot = matmul  #: Multiply two matrices.
