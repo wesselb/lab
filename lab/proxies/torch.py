@@ -12,7 +12,7 @@ from .. import B
 
 _dispatch = Dispatcher()
 
-_Numeric = {Number, np.ndarray, torch.Tensor}
+_Numeric = {Number, torch.Tensor}
 
 
 def shape(a):
@@ -112,6 +112,10 @@ def take(a, indices, axis=0):
     if axis > 0:
         a = torch.transpose(a, 0, axis)
     return a
+
+
+def assign(a, value):
+    a.data = torch.tensor(value).data
 
 
 array = torch.tensor
