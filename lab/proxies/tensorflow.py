@@ -110,6 +110,26 @@ def svd(a, full_matrices=False, compute_uv=True, name=None):
     return res[1], res[0], res[2] if compute_uv else res
 
 
+def vec_to_tril(a):
+    if B.rank(a) != 1:
+        raise ValueError('Input must be rank 1.')
+
+    n = B.shape_int(a)[0]
+    m = int(((1 + 8 * n) ** .5 - 1) / 2)
+    return tf.scatter_nd(indices=list(zip(*np.tril_indices(m))),
+                         shape=[m, m],
+                         updates=a)
+
+
+def tril_to_vec(a):
+    if B.rank(a) != 2:
+        raise ValueError('Input must be rank 2.')
+    n, m = B.shape_int(a)
+    if n != m:
+        raise ValueError('input must be square')
+    return tf.gather_nd(a, list(zip(*np.tril_indices(n))))
+
+
 dot = matmul
 
 sum = tf.reduce_sum

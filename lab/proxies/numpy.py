@@ -181,6 +181,45 @@ def leaky_relu(x, alpha=0.2):
     return np.maximum(x, alpha * x, x)
 
 
+def vec_to_tril(a):
+    """Convert a vector to a lower-triangular matrix.
+
+    Args:
+        a (tensor): Vector.
+
+    Returns:
+        tensor: Lower triangular matrix filled with `a`.
+    """
+    if B.rank(a) != 1:
+        raise ValueError('Input must be rank 1.')
+
+    # Figure out shape of output.
+    n = B.shape_int(a)[0]
+    m = int(((1 + 8 * n) ** .5 - 1) / 2)
+
+    # Construct output and return.
+    out = np.zeros((m, m))
+    out[np.tril_indices(m)] = a
+    return out
+
+
+def tril_to_vec(a):
+    """Convert a lower-triangular matrix to a vector.
+
+    Args:
+        a (tensor): Lower-triangular matrix.
+
+    Returns:
+        tensor: The lower-triangular part of `a` as a vector.
+    """
+    if B.rank(a) != 2:
+        raise ValueError('Input must be rank 2.')
+    n, m = B.shape_int(a)
+    if n != m:
+        raise ValueError('input must be square')
+    return a[np.tril_indices(n)]
+
+
 cholesky = np.linalg.cholesky  #: Compute the Cholesky decomposition.
 eig = np.linalg.eig  #: Compute the eigendecomposition.
 dot = matmul  #: Multiply two matrices.

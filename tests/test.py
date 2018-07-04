@@ -2,6 +2,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+import numpy as np
 import tensorflow as tf
 from lab import B
 
@@ -53,3 +54,24 @@ def test_take():
     inds = (1, 2, 5, 8)
     yield assert_allclose, np.take(a, inds, 0), s.run(B.take(a, inds, 0))
     yield assert_allclose, np.take(a, inds, 1), s.run(B.take(a, inds, 1))
+
+
+def test_vec_to_tril_and_back():
+    A = np.tril(np.random.randn(10, 10))
+
+    # Test NumPy implementation.
+    B.backend_to_np()
+    vec_np = B.tril_to_vec(A)
+    A_np = B.vec_to_tril(vec_np)
+    yield assert_allclose, A_np, A
+
+    # Test TensorFlow implementation.
+    B.backend_to_tf()
+    s = tf.Session()
+    vec_tf = s.run(B.tril_to_vec(A))
+    A_tf = s.run(B.vec_to_tril(vec_tf))
+    yield assert_allclose, A_tf, A
+
+    # Compare NumPy and TensorFlow implementations.
+    yield assert_allclose, A_np, A_tf
+
