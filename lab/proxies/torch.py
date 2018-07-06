@@ -138,3 +138,7 @@ sigmoid = torch.nn.functional.sigmoid
 tanh = torch.nn.functional.tanh
 relu = torch.nn.functional.relu
 leaky_relu = torch.nn.functional.leaky_relu
+
+# Import `torch.Tensor`, so that it will not get overwritten by a Plum
+# function and remains a type.
+Tensor = torch.Tensor
