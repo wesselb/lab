@@ -5,7 +5,7 @@ from __future__ import absolute_import, division, print_function
 from numbers import Number
 
 import numpy as np
-from plum import Dispatcher, PromisedType
+from plum import Dispatcher, PromisedType, kind, type_parameter
 
 from . import B
 
@@ -136,7 +136,7 @@ def outer(a):
     return B.outer(a, a)
 
 
-# Numeric type for _dispatch has to be evaluated lazily.
+# Numeric type for dispatch has to be evaluated lazily.
 class PromisedNumeric(PromisedType):
     def resolve(self):
         return B._Numeric
@@ -192,3 +192,79 @@ def issubdtype(a, b):
         b (dtype): Data type to check membership of.
     """
     return np.issubdtype(a, b)
+
+
+Type = kind()  #: A type to be used in dispatch.
+
+
+@_dispatch(Type, Type)
+def promotion_rule(type1, type2):
+    """Promotion rule.
+
+    Args:
+        type1 (:class:`.generic.Type`): First type to promote.
+        type2 (:class:`.generic.Type`): Second type to promote.
+
+    Returns:
+        type: Type to convert to.
+    """
+    if type_parameter(type(type1)) == type_parameter(type(type2)):
+        return type_parameter(type(type1))
+    else:
+        raise RuntimeError('No promotion rule for "{}" and "{}".'
+                           ''.format(type_parameter(type(type1)).__name__,
+                                     type_parameter(type(type2)).__name__))
+
+
+@_dispatch(type, type, type)
+def add_promotion_rule(type1, type2, type_to):
+    """Add a promotion rule.
+
+    Args:
+        type1 (:class:`.generic.Type`): First type to promote.
+        type2 (:class:`.generic.Type`): Second type to promote.
+        type_to (:class:`.generic.Type`): Type to convert to.
+    """
+    promotion_rule.extend(Type(type1), Type(type2))(lambda t1, t2: type_to)
+    promotion_rule.extend(Type(type2), Type(type1))(lambda t1, t2: type_to)
+
+
+@_dispatch(Type, object)
+def convert(target_type, obj_to_convert):
+    """Convert an object to a particular type.
+
+    Args:
+        target_type (:class:`.generic.Type`): Type to convert to.
+        obj_to_convert (object): Object to convert.
+
+    Returns:
+        object: `object_to_covert` converted to `target_type`.
+    """
+    if type(obj_to_convert) == type_parameter(type(target_type)):
+        return obj_to_convert
+    else:
+        target_type_name = type_parameter(type(target_type)).__name__
+        raise RuntimeError('No conversion rule to convert a "{}" to a "{}".'
+                           ''.format(type(obj_to_convert).__name__,
+                                     target_type_name))
+
+
+@_dispatch(object, object, [object])
+def promote(*objs):
+    """Promote objects to a common type.
+
+    Args:
+        *objs (object): Objects to convert.
+
+    Returns:
+        tuple: `objs`, but all converted to a common type.
+    """
+    common_type = promotion_rule(Type(type(objs[0]))(), Type(type(objs[1]))())
+    for obj in objs[2:]:
+        common_type = promotion_rule(Type(common_type)(), Type(type(obj))())
+    return tuple(convert(Type(common_type)(), obj) for obj in objs)
+
+
+@_dispatch(object)
+def promote(*objs):
+    return objs
