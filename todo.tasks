@@ -1,2 +1,6 @@
 TODO:
      ☐ Add tests, mainly to test dispatch. @critical
+     ☐ Add capability to specify non-singleton types in promotion rules.
+
+Bugs:
+     ☐ @wraps(attr) needs to dynamically change if backend is changed.
