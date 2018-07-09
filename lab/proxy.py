@@ -3,10 +3,16 @@
 from __future__ import absolute_import, division, print_function
 
 import sys
+from functools import wraps
 
 from plum import Dispatcher, Function, Tuple
 
+from .util import Namespace
+
 __all__ = ['B']
+
+extensions = Namespace()
+"""A namespace where extensions of functions will be put."""
 
 
 class Proxy(object):
@@ -44,13 +50,36 @@ class Proxy(object):
         # Change namespaces.
         object.__setattr__(self, '_namespaces', namespaces_list)
 
-    def _resolve_attr(self, name):
-        for namespace in self.namespaces:
+    def _resolve_attr(self, name, with_extensions=True):
+        namespaces = self.namespaces
+
+        # Add the extensions namespace if required.
+        if with_extensions:
+            namespaces = [extensions] + namespaces
+
+        # Walk through the namespaces and attempt to get the function.
+        for namespace in namespaces:
             try:
                 return namespace, getattr(namespace, name)
             except AttributeError:
                 continue
-        raise AttributeError('Reference to \'{}\' not found.'.format(name))
+
+        if with_extensions:
+            # Reference could not be found. Create an empty Plum function that
+            # can be extended.
+            def function():
+                """Automatically generated function."""
+                pass
+
+            function.__name__ = name
+
+            # Save the function and return.
+            setattr(extensions, name, Function(f=function))
+            return extensions, getattr(extensions, name)
+        else:
+            # Reference could not be found, but extensions are not enabled.
+            # Throw an error.
+            raise AttributeError('Reference to \'{}\' not found.'.format(name))
 
     def __getattr__(self, name):
         namespace, attr = self._resolve_attr(name)
@@ -62,14 +91,24 @@ class Proxy(object):
         # Ensure that `attr` is a Plum `Function` so that it can be
         # extended.
         if callable(attr) and not isinstance(attr, Function):
-            # Make a function.
-            f = Function(attr)
+            # Create the function to be wrapped. This function needs to lookup
+            # `attr` again, because the backend could've changed.
+            # TODO: Dynamically change `@wraps(attr)` if backend is changed.
+            @wraps(attr)
+            def lookup_attr(*args, **kw_args):
+                # Directly call `_resolve_attr` and ignore extensions.
+                found_attr = self._resolve_attr(name, with_extensions=False)[1]
+                return found_attr(*args, **kw_args)
+
+            # Make a Plum function.
+            f = Function(lookup_attr)
 
             # Set the fallback function to be the current function.
-            f.register(Tuple([object]), attr)
+            f.register(Tuple([object]), lookup_attr)
 
-            # Replace `attr` with a Plum `Function.
-            setattr(namespace, name, f)
+            # Replace `attr` with a Plum `Function` by attaching it to the
+            # extensions namespace.
+            setattr(extensions, name, f)
             attr = f
 
         return attr
