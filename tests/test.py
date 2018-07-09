@@ -75,3 +75,35 @@ def test_vec_to_tril_and_back():
     # Compare NumPy and TensorFlow implementations.
     yield assert_allclose, A_np, A_tf
 
+
+def test_promotion():
+    B.backend_to_np()
+
+    yield eq, B.promote(1, 1), (1, 1)
+    yield eq, B.promote(1., 1.), (1., 1.)
+    yield raises, RuntimeError, lambda: B.promote(1, 1.)
+    yield raises, RuntimeError, lambda: B.promote(1., 1)
+
+    B.add_promotion_rule(int, float, float)
+
+    yield raises, RuntimeError, lambda: B.promote(1, 1.)
+    yield raises, RuntimeError, lambda: B.promote(1., 1)
+
+    B.convert.extend(B.Type(float), int)(lambda t, x: float(x))
+
+    yield eq, B.promote(1, 1.), (1., 1.)
+    yield eq, B.promote(1., 1), (1., 1.)
+
+    yield raises, RuntimeError, lambda: B.promote(1, '1')
+    yield raises, RuntimeError, lambda: B.promote('1', 1)
+    yield raises, RuntimeError, lambda: B.promote(1., '1')
+    yield raises, RuntimeError, lambda: B.promote('1', 1.)
+
+    B.add_promotion_rule(str, float, float)
+    B.add_promotion_rule(str, int, float)
+    B.convert.extend(B.Type(float), str)(lambda t, x: float(x))
+
+    yield eq, B.promote(1, '1'), (1., 1.)
+    yield eq, B.promote('1', 1), (1., 1.)
+    yield eq, B.promote(1., '1'), (1., 1.)
+    yield eq, B.promote('1', 1.), (1., 1.)
