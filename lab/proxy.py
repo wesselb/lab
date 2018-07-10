@@ -4,6 +4,7 @@ from __future__ import absolute_import, division, print_function
 
 import sys
 from functools import wraps
+from types import FunctionType
 
 from plum import Dispatcher, Function, Tuple
 
@@ -13,6 +14,10 @@ __all__ = ['B']
 
 extensions = Namespace()
 """A namespace where extensions of functions will be put."""
+
+Accepted = {type, type(None), int, float, list, tuple, set, bool, str,
+            FunctionType}
+"""A list of accepted types."""
 
 
 class Proxy(object):
@@ -103,8 +108,29 @@ class Proxy(object):
             # Make a Plum function.
             f = Function(lookup_attr)
 
-            # Set the fallback function to be the current function.
-            f.register(Tuple([object]), lookup_attr)
+            # Let the fallback function attempt to promote the arguments.
+            def promote_arguments(*args, **kw_args):
+                promoted_args = B.promote(*args)
+
+                # If promotion did not change the types, we'll end up here
+                # again. Then throw an error.
+                if all([type(x) == type(y)
+                        for x, y in zip(promoted_args, args)]):
+                    types_str = ', '.join(str(type(x)) for x in args)
+                    raise RuntimeError('Promotion resulted in recursion. '
+                                       'Could not promote arguments of types '
+                                       '({}).'.format(types_str))
+
+                # Promotion did something. Proceed.
+                return getattr(B, name)(*promoted_args, **kw_args)
+
+            f.register(Tuple([object]), promote_arguments)
+
+            # For a numeric type, data type, or accepted type, call the
+            # attribute.
+            f.register(Tuple([{B.Numeric, B.DType} | Accepted]),
+                       lookup_attr,
+                       precedence=-1)
 
             # Replace `attr` with a Plum `Function` by attaching it to the
             # extensions namespace.

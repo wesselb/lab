@@ -89,7 +89,7 @@ def test_promotion():
     yield raises, RuntimeError, lambda: B.promote(1, 1.)
     yield raises, RuntimeError, lambda: B.promote(1., 1)
 
-    B.convert.extend(B.Type(float), int)(lambda t, x: float(x))
+    B.convert.extend(int, float)(lambda x, _: float(x))
 
     yield eq, B.promote(1, 1.), (1., 1.)
     yield eq, B.promote(1., 1), (1., 1.)
@@ -99,11 +99,19 @@ def test_promotion():
     yield raises, RuntimeError, lambda: B.promote(1., '1')
     yield raises, RuntimeError, lambda: B.promote('1', 1.)
 
-    B.add_promotion_rule(str, float, float)
-    B.add_promotion_rule(str, int, float)
-    B.convert.extend(B.Type(float), str)(lambda t, x: float(x))
+    B.add_promotion_rule(str, {int, float}, {int, float})
+    B.convert.extend(str, {int, float})(lambda x, _: float(x))
 
     yield eq, B.promote(1, '1'), (1., 1.)
     yield eq, B.promote('1', 1), (1., 1.)
     yield eq, B.promote(1., '1'), (1., 1.)
     yield eq, B.promote('1', 1.), (1., 1.)
+
+    B.add_promotion_rule(str, int, float)
+    B.add_promotion_rule(str, float, float)
+    B.convert.extend(str, float)(lambda x, _: 'lel')
+
+    yield eq, B.promote(1, '1'), (1., 'lel')
+    yield eq, B.promote('1', 1), ('lel', 1.)
+    yield eq, B.promote(1., '1'), (1., 'lel')
+    yield eq, B.promote('1', 1.), ('lel', 1.)

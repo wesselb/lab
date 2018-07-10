@@ -16,6 +16,7 @@ _dispatch = Dispatcher()
 
 _TF = {tf.Variable, tf.Tensor}
 _Numeric = {Number, np.ndarray} | _TF
+_DType = {type, np.dtype, tf.DType}
 
 
 @_dispatch(Number)

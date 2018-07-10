@@ -5,13 +5,14 @@ from __future__ import absolute_import, division, print_function
 from numbers import Number
 
 import numpy as np
-from plum import Dispatcher, PromisedType, kind, type_parameter
+from plum import Dispatcher, PromisedType, as_type
 
 from . import B
 
 epsilon = 1e-12  #: Magnitude of diagonal to regularise matrices with.
 
 _Numeric = {Number, np.ndarray}  #: Type of numerical objects.
+_DType = {type, np.dtype}  #: Type of data types.
 
 _dispatch = Dispatcher()
 
@@ -145,6 +146,15 @@ class PromisedNumeric(PromisedType):
 Numeric = PromisedNumeric()
 
 
+# Type of data types for dispatch has to be evaluated lazily.
+class PromisedDType(PromisedType):
+    def resolve(self):
+        return B._DType
+
+
+DType = PromisedDType()
+
+
 def dtype(a):
     """Get the data type of an object.
 
@@ -194,59 +204,76 @@ def issubdtype(a, b):
     return np.issubdtype(a, b)
 
 
-Type = kind()  #: A type to be used in dispatch.
+class _PseudoInstance(object):
+    """A pseudo-instance to facilitate dispatch.
+
+    Args:
+        type (type): Type of pseudo-instance.
+    """
+
+    def __init__(self, type):
+        self.type = type
 
 
-@_dispatch(Type, Type)
-def promotion_rule(type1, type2):
+@_dispatch(object)
+def _get_type(x):
+    return as_type(type(x))
+
+
+@_dispatch(_PseudoInstance)
+def _get_type(x):
+    return as_type(x.type)
+
+
+@_dispatch(object, object)
+def promotion_rule(obj1, obj2):
     """Promotion rule.
 
     Args:
-        type1 (:class:`.generic.Type`): First type to promote.
-        type2 (:class:`.generic.Type`): Second type to promote.
+        obj1 (object): Object of first type to promote.
+        obj2 (object): Object of second type to promote.
 
     Returns:
         type: Type to convert to.
     """
-    if type_parameter(type(type1)) == type_parameter(type(type2)):
-        return type_parameter(type(type1))
+    if _get_type(obj1) == _get_type(obj2):
+        return _get_type(obj1)
     else:
         raise RuntimeError('No promotion rule for "{}" and "{}".'
-                           ''.format(type_parameter(type(type1)).__name__,
-                                     type_parameter(type(type2)).__name__))
+                           ''.format(_get_type(obj1), _get_type(obj2)))
 
 
-@_dispatch(type, type, type)
+@_dispatch(object, object, object)
 def add_promotion_rule(type1, type2, type_to):
     """Add a promotion rule.
 
     Args:
-        type1 (:class:`.generic.Type`): First type to promote.
-        type2 (:class:`.generic.Type`): Second type to promote.
-        type_to (:class:`.generic.Type`): Type to convert to.
+        type1 (type): First type to promote.
+        type2 (type): Second type to promote.
+        type_to (type): Type to convert to.
     """
-    promotion_rule.extend(Type(type1), Type(type2))(lambda t1, t2: type_to)
-    promotion_rule.extend(Type(type2), Type(type1))(lambda t1, t2: type_to)
+    promotion_rule.extend(type1, type2)(lambda t1, t2: type_to)
+    if as_type(type1) != as_type(type2):
+        promotion_rule.extend(type2, type1)(lambda t1, t2: type_to)
 
 
-@_dispatch(Type, object)
-def convert(target_type, obj_to_convert):
+@_dispatch(object, object)
+def convert(obj_to_convert, obj_from_target):
     """Convert an object to a particular type.
 
     Args:
-        target_type (:class:`.generic.Type`): Type to convert to.
         obj_to_convert (object): Object to convert.
+        obj_from_target (object): Object from type to convert to.
 
     Returns:
-        object: `object_to_covert` converted to `target_type`.
+        object: `object_to_covert` converted to type of `obj_from_target`.
     """
-    if type(obj_to_convert) == type_parameter(type(target_type)):
+    if _get_type(obj_to_convert) <= _get_type(obj_from_target):
         return obj_to_convert
     else:
-        target_type_name = type_parameter(type(target_type)).__name__
-        raise RuntimeError('No conversion rule to convert a "{}" to a "{}".'
-                           ''.format(type(obj_to_convert).__name__,
-                                     target_type_name))
+        raise RuntimeError('No rule to convert a "{}" to a "{}".'
+                           ''.format(_get_type(obj_to_convert),
+                                     _get_type(obj_from_target)))
 
 
 @_dispatch(object, object, [object])
@@ -259,10 +286,19 @@ def promote(*objs):
     Returns:
         tuple: `objs`, but all converted to a common type.
     """
-    common_type = promotion_rule(Type(type(objs[0]))(), Type(type(objs[1]))())
+    # Find the common type.
+    common_type = promotion_rule(objs[0], objs[1])
     for obj in objs[2:]:
-        common_type = promotion_rule(Type(common_type)(), Type(type(obj))())
-    return tuple(convert(Type(common_type)(), obj) for obj in objs)
+        method = promotion_rule.invoke(common_type, type(obj))
+        common_type = method(_PseudoInstance(common_type), obj)
+
+    # Convert objects.
+    converted_objs = []
+    for obj in objs:
+        method = convert.invoke(type(obj), common_type)
+        converted_objs.append(method(obj, _PseudoInstance(common_type)))
+
+    return tuple(converted_objs)
 
 
 @_dispatch(object)

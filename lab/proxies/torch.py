@@ -13,6 +13,7 @@ from .. import B
 _dispatch = Dispatcher()
 
 _Numeric = {Number, torch.Tensor}
+_DType = {type, np.dtype, torch.dtype}
 
 
 def shape(a):
