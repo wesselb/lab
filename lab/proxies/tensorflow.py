@@ -154,8 +154,3 @@ sigmoid = tf.nn.sigmoid
 tanh = tf.nn.tanh
 relu = tf.nn.relu
 leaky_relu = tf.nn.leaky_relu
-
-# Import `tf.Variable` and `tf.Tensor`, so that they will not get overwritten
-# by a Plum function and remain types.
-Variable = tf.Variable
-Tensor = tf.Tensor
