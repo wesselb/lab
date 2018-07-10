@@ -226,7 +226,7 @@ def _get_type(x):
 
 
 @_dispatch(object, object)
-def promotion_rule(obj1, obj2):
+def _promotion_rule(obj1, obj2):
     """Promotion rule.
 
     Args:
@@ -252,9 +252,9 @@ def add_promotion_rule(type1, type2, type_to):
         type2 (type): Second type to promote.
         type_to (type): Type to convert to.
     """
-    promotion_rule.extend(type1, type2)(lambda t1, t2: type_to)
+    _promotion_rule.extend(type1, type2)(lambda t1, t2: type_to)
     if as_type(type1) != as_type(type2):
-        promotion_rule.extend(type2, type1)(lambda t1, t2: type_to)
+        _promotion_rule.extend(type2, type1)(lambda t1, t2: type_to)
 
 
 @_dispatch(object, object)
@@ -287,15 +287,15 @@ def promote(*objs):
         tuple: `objs`, but all converted to a common type.
     """
     # Find the common type.
-    common_type = promotion_rule(objs[0], objs[1])
+    common_type = _promotion_rule(objs[0], objs[1])
     for obj in objs[2:]:
-        method = promotion_rule.invoke(common_type, type(obj))
+        method = _promotion_rule.invoke(common_type, type(obj))
         common_type = method(_PseudoInstance(common_type), obj)
 
     # Convert objects.
     converted_objs = []
     for obj in objs:
-        method = convert.invoke(type(obj), common_type)
+        method = B.convert.invoke(type(obj), common_type)
         converted_objs.append(method(obj, _PseudoInstance(common_type)))
 
     return tuple(converted_objs)

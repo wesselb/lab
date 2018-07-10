@@ -2,8 +2,8 @@
 
 from __future__ import absolute_import, division, print_function
 
+import logging
 import sys
-from functools import wraps
 from types import FunctionType
 
 from plum import Dispatcher, Function, Tuple
@@ -12,12 +12,17 @@ from .util import Namespace
 
 __all__ = ['B']
 
+log = logging.getLogger(__name__)
+
 extensions = Namespace()
 """A namespace where extensions of functions will be put."""
 
 Accepted = {type, type(None), int, float, list, tuple, set, bool, str,
             FunctionType}
-"""A list of accepted types."""
+"""A list of accepted types.
+
+The numeric type and data type type will be added dynamically to this set.
+"""
 
 
 class Proxy(object):
@@ -25,6 +30,11 @@ class Proxy(object):
 
     Args:
         module (module): This module.
+    """
+    _privileged = ['promote', 'convert', 'add_promotion_rule']
+    """Privileged attributes.
+    
+    These are guaranteed to be found and will be returned without any wrapping.
     """
 
     def __init__(self, module):
@@ -63,81 +73,80 @@ class Proxy(object):
             namespaces = [extensions] + namespaces
 
         # Walk through the namespaces and attempt to get the function.
+        namespace, attr = None, None
         for namespace in namespaces:
-            try:
-                return namespace, getattr(namespace, name)
-            except AttributeError:
-                continue
+            if hasattr(namespace, name):
+                attr = getattr(namespace, name)
+                break
 
-        if with_extensions:
-            # Reference could not be found. Create an empty Plum function that
-            # can be extended.
+        if name in Proxy._privileged:
+            # The attribute is privileged. Return without any fancy wrapping.
+            # Privileged attributes are guaranteed to be found.
+            return namespace, attr
+
+        elif attr and not callable(attr):
+            # If the attribute is found, but not callable, simply return and
+            # avoid any fancy extensions.
+            return namespace, attr
+
+        elif with_extensions and namespace != extensions:
+            # Extensions are enabled, but the resolved namespace is not
+            # `extensions`. Create a Plum function that can globally be
+            # extended.
             def function():
                 """Automatically generated function."""
                 pass
 
             function.__name__ = name
 
-            # Save the function and return.
-            setattr(extensions, name, Function(f=function))
-            return extensions, getattr(extensions, name)
+            # Create Plum function.
+            f = Function(f=function)
+
+            # If the function was found, then set the method for acceptable
+            # types to the one found and add a promotion method.
+            if namespace:
+                def lookup_attr(*args, **kw_args):
+                    # Lookup `attr`, ignoring extensions. This should always
+                    # exist.
+                    _, found_attr = self._resolve_attr(name,
+                                                       with_extensions=False)
+                    return found_attr(*args, **kw_args)
+
+                # Set the precedence of this method to `-1` to favour
+                # user-defined methods.
+                f.register(Tuple([{B.Numeric, B.DType} | Accepted]),
+                           lookup_attr,
+                           precedence=-1)
+
+                def promote_arguments(*args, **kw_args):
+                    promoted_args = B.promote(*args)
+
+                    # If promotion did not change the types, we'll end up here
+                    # again. Then simply lookup the attribute.
+                    if all([type(x) == type(y)
+                            for x, y in zip(promoted_args, args)]):
+                        return lookup_attr(*args, **kw_args)
+
+                    # Promotion did something. Cool!
+                    return getattr(B, name)(*promoted_args, **kw_args)
+
+                f.register(Tuple([object]), promote_arguments)
+
+            # Save the created function and return.
+            setattr(extensions, name, f)
+            return extensions, f
+
+        elif attr:
+            # Successfully found callable attribute. Return.
+            return namespace, attr
+
         else:
-            # Reference could not be found, but extensions are not enabled.
-            # Throw an error.
+            # Reference could not be found. Throw an error.
             raise AttributeError('Reference to \'{}\' not found.'.format(name))
 
     def __getattr__(self, name):
         namespace, attr = self._resolve_attr(name)
-
-        # Check if `attr` is a property.
-        if isinstance(attr, property):
-            return attr.fget()
-
-        # Ensure that `attr` is a Plum `Function` so that it can be
-        # extended.
-        if callable(attr) and not isinstance(attr, Function):
-            # Create the function to be wrapped. This function needs to lookup
-            # `attr` again, because the backend could've changed.
-            # TODO: Dynamically change `@wraps(attr)` if backend is changed.
-            @wraps(attr)
-            def lookup_attr(*args, **kw_args):
-                # Directly call `_resolve_attr` and ignore extensions.
-                found_attr = self._resolve_attr(name, with_extensions=False)[1]
-                return found_attr(*args, **kw_args)
-
-            # Make a Plum function.
-            f = Function(lookup_attr)
-
-            # Let the fallback function attempt to promote the arguments.
-            def promote_arguments(*args, **kw_args):
-                promoted_args = B.promote(*args)
-
-                # If promotion did not change the types, we'll end up here
-                # again. Then throw an error.
-                if all([type(x) == type(y)
-                        for x, y in zip(promoted_args, args)]):
-                    types_str = ', '.join(str(type(x)) for x in args)
-                    raise RuntimeError('Promotion resulted in recursion. '
-                                       'Could not promote arguments of types '
-                                       '({}).'.format(types_str))
-
-                # Promotion did something. Proceed.
-                return getattr(B, name)(*promoted_args, **kw_args)
-
-            f.register(Tuple([object]), promote_arguments)
-
-            # For a numeric type, data type, or accepted type, call the
-            # attribute.
-            f.register(Tuple([{B.Numeric, B.DType} | Accepted]),
-                       lookup_attr,
-                       precedence=-1)
-
-            # Replace `attr` with a Plum `Function` by attaching it to the
-            # extensions namespace.
-            setattr(extensions, name, f)
-            attr = f
-
-        return attr
+        return attr.fget() if isinstance(attr, property) else attr
 
     def __setattr__(self, name, value):
         namespace, _ = self._resolve_attr(name)

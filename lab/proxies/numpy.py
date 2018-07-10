@@ -224,3 +224,8 @@ cholesky = np.linalg.cholesky  #: Compute the Cholesky decomposition.
 eig = np.linalg.eig  #: Compute the eigendecomposition.
 dot = matmul  #: Multiply two matrices.
 concat = np.concatenate  #: Concatenate tensors.
+
+
+
+@_dispatch(object)
+def diag(a): return np.diag(a)
