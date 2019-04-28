@@ -9,7 +9,9 @@ from . import eq, neq, lt, le, ge, gt, raises, call, ok, lam, allclose, approx
 
 
 def test_matmul():
-    yield check_function, \
-          B.matmul, \
-          (Matrix(), Matrix()), \
-          {'tr_a': Bool(), 'tr_b': Bool()}
+    yield check_function, B.matmul, \
+          (Matrix(), Matrix()), {'tr_a': Bool(), 'tr_b': Bool()}
+
+
+def test_transpose():
+    yield check_function, B.transpose, (Matrix(),), {}
