@@ -2,26 +2,111 @@
 
 from __future__ import absolute_import, division, print_function
 
-from nose.tools import assert_raises, assert_equal, assert_less, \
-    assert_less_equal, assert_not_equal, assert_greater, \
-    assert_greater_equal, ok_
-from numpy.testing import assert_allclose, assert_array_almost_equal
+import logging
+from itertools import product
+from numbers import Number
 
-le = assert_less_equal
-lt = assert_less
-eq = assert_equal
-neq = assert_not_equal
-ge = assert_greater_equal
-gt = assert_greater
-raises = assert_raises
-ok = ok_
-allclose = assert_allclose
-approx = assert_array_almost_equal
+import nose.tools
+import numpy as np
+import tensorflow as tf
+import torch
+from plum import Dispatcher
+
+from . import NP, TF, Torch
+
+log = logging.getLogger('lab.' + __name__)
+_dispatch = Dispatcher()
+
+# Define some handy shorthands.
+le = nose.tools.assert_less_equal
+lt = nose.tools.assert_less
+eq = nose.tools.assert_equal
+neq = nose.tools.assert_not_equal
+ge = nose.tools.assert_greater_equal
+gt = nose.tools.assert_greater
+raises = nose.tools.assert_raises
+ok = nose.tools.ok_
+approx = np.testing.assert_array_almost_equal
 
 
 def call(f, method, args=(), res=True):
-    assert_equal(getattr(f, method)(*args), res)
+    eq(getattr(f, method)(*args), res)
 
 
 def lam(f, args=()):
-    ok_(f(*args), 'Lambda returned False.')
+    ok(f(*args), 'Lambda returned False.')
+
+
+@_dispatch({NP, Number})
+def to_np(x):
+    """Convert a tensor to NumPy."""
+    return x
+
+
+@_dispatch(Torch)
+def to_np(x):
+    return x.numpy()
+
+
+@_dispatch(TF)
+def to_np(x):
+    with tf.Session() as sess:
+        return sess.run(x)
+
+
+@_dispatch(object, object)
+def allclose(x, y):
+    """Assert that two numeric objects are close."""
+    np.testing.assert_allclose(to_np(x), to_np(y))
+
+
+@_dispatch(tuple, tuple)
+def allclose(x, y):
+    eq(len(x), len(y))
+    for xi, yi in zip(x, y):
+        allclose(xi, yi)
+
+
+def check_function(f, args_spec, kw_args_spec):
+    """Check that a function produces consistent output."""
+    # Construct product of keyword arguments.
+    kw_args_prod = list(product(*[[(k, v) for v in vs.values()]
+                                  for k, vs in kw_args_spec.items()]))
+    kw_args_prod = [{k: v for k, v in kw_args} for kw_args in kw_args_prod]
+
+    # Construct product of arguments.
+    args_prod = list(product(*[arg.forms() for arg in args_spec]))
+
+    # Check consistency of results.
+    for kw_args in kw_args_prod:
+        # Compare everything against the first result.
+        first_result = f(*args_prod[0], **kw_args)
+
+        for args in args_prod:
+            # Skip mixes of TF and Torch.
+            any_tf = any(isinstance(arg, TF) for arg in args)
+            any_torch = any(isinstance(arg, Torch) for arg in args)
+            if any_tf and any_torch:
+                continue
+
+            log.debug('Call with arguments "{}" and keyword arguments "{}".'
+                      ''.format(args, kw_args))
+            allclose(first_result, f(*args, **kw_args))
+
+
+class Matrix(object):
+    """Matrix placeholder for in argument specification."""
+
+    def __init__(self, rows=3, cols=None):
+        cols = rows if cols is None else cols
+        self.mat = np.random.randn(rows, cols)
+
+    def forms(self):
+        return [self.mat, tf.constant(self.mat), torch.tensor(self.mat)]
+
+
+class Bool(object):
+    """Boolean placeholder for in keyword argument specification."""
+
+    def values(self):
+        return [False, True]
