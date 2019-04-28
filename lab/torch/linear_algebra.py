@@ -38,3 +38,10 @@ def kron(a, b):
     a = a.view(*sum([[i, 1] for i in shape_a], []))
     b = b.view(*sum([[1, i] for i in shape_b], []))
     return torch.reshape(a * b, tuple(x * y for x, y in zip(shape_a, shape_b)))
+
+
+@dispatch(Numeric)
+def svd(a, compute_uv=True):
+    u, s, v = torch.svd(a, compute_uv=compute_uv)
+    return (u, s, v) if compute_uv else s
+

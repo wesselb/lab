@@ -49,7 +49,7 @@ def rank(a):  # pragma: no cover
         a (tensor): Tensor.
 
     Returns:
-        object: Shape of `a`.
+        int: Rank of `a`.
     """
     pass
 
@@ -63,6 +63,6 @@ def length(a):  # pragma: no cover
         a (tensor): Tensor.
 
     Returns:
-        object: Shape of `a`.
+        int: Length of `a`.
     """
     pass

@@ -43,6 +43,11 @@ def to_np(x):
     return x
 
 
+@_dispatch(tuple)
+def to_np(tup):
+    return tuple(to_np(x) for x in tup)
+
+
 @_dispatch(Torch)
 def to_np(x):
     return x.numpy()

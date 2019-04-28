@@ -29,3 +29,9 @@ def trace(a, axis1=0, axis2=1):
 @dispatch(Numeric, Numeric)
 def kron(a, b):
     return np.kron(a, b)
+
+
+@dispatch(Numeric)
+def svd(a, compute_uv=True):
+    res = np.linalg.svd(a, full_matrices=True, compute_uv=compute_uv)
+    return (res[0], res[1], res[2].T.conj()) if compute_uv else res

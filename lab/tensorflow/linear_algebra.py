@@ -40,3 +40,9 @@ def kron(a, b):
         a = tf.expand_dims(a, axis=2 * i + 1)
         b = tf.expand_dims(b, axis=2 * i)
     return tf.reshape(a * b, tuple(x * y for x, y in zip(shape_a, shape_b)))
+
+
+@dispatch(Numeric)
+def svd(a, compute_uv=True):
+    res = tf.svd(a, full_matrices=True, compute_uv=compute_uv)
+    return (res[1], res[0], res[2]) if compute_uv else res

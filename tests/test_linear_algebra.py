@@ -36,9 +36,17 @@ def test_kron():
     yield raises, ValueError, \
           lambda: B.kron(Tensor(2).torch(), Tensor(4, 5).torch())
 
-# def test_svd():
-#     yield check_function, B.svd, \
-#           (Matrix(),), {'full_matrices': Bool(), 'compute_uv': Bool()}
+
+def test_svd():
+    # Take absolute value because the sign of the result is undetermined.
+    def svd(a, compute_uv=True):
+        if compute_uv:
+            u, s, v = B.svd(a, compute_uv=True)
+            return B.abs(u), s, B.abs(v)
+        else:
+            return B.svd(a, compute_uv=False)
+
+    yield check_function, svd, (Matrix(),), {'compute_uv': Bool()}
 #
 #
 # def test_eig():

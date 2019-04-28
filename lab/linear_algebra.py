@@ -95,8 +95,6 @@ def svd(a, **kw_args):  # pragma: no cover
 
     Args:
         a (tensor): Matrix to decompose.
-        full_matrices (bool, optional): Compute a full SDV instead of the
-            truncated SVD. Default to `False`.
         compute_uv (bool, optional): Also compute `U` and `V`. Defaults to
             `True`.
 
