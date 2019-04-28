@@ -74,6 +74,9 @@ def check_function(f, args_spec, kw_args_spec):
                                   for k, vs in kw_args_spec.items()]))
     kw_args_prod = [{k: v for k, v in kw_args} for kw_args in kw_args_prod]
 
+    # Add default call.
+    kw_args_prod += [{}]
+
     # Construct product of arguments.
     args_prod = list(product(*[arg.forms() for arg in args_spec]))
 
@@ -94,19 +97,60 @@ def check_function(f, args_spec, kw_args_spec):
             allclose(first_result, f(*args, **kw_args))
 
 
-class Matrix(object):
-    """Matrix placeholder for in argument specification."""
+class Tensor(object):
+    """Tensor placeholder for in argument specification."""
 
-    def __init__(self, rows=3, cols=None):
-        cols = rows if cols is None else cols
-        self.mat = np.random.randn(rows, cols)
+    def __init__(self, *dims, **kw_args):
+        if 'mat' not in kw_args or kw_args['mat'] is None:
+            self.mat = np.random.randn(*dims)
+        else:
+            self.mat = kw_args['mat']
 
     def forms(self):
-        return [self.mat, tf.constant(self.mat), torch.tensor(self.mat)]
+        return [self.np(), self.tf(), self.torch()]
+
+    def np(self):
+        return self.mat
+
+    def tf(self):
+        return tf.constant(self.mat)
+
+    def torch(self):
+        return torch.tensor(self.mat)
 
 
-class Bool(object):
-    """Boolean placeholder for in keyword argument specification."""
+class Matrix(Tensor):
+    """Matrix placeholder for in argument specification."""
+
+    def __init__(self, rows=3, cols=None, mat=None):
+        # Default the number of columns to the number of rows.
+        cols = rows if cols is None else cols
+        Tensor.__init__(self, rows, cols, mat=mat)
+
+
+class PSD(Matrix):
+    """Positive-definite matrix placeholder for in argument specification."""
+
+    def __init__(self, rows=3):
+        a = np.random.randn(rows, rows)
+        Matrix.__init__(self, mat=np.matmul(a, np.transpose(a)))
+
+
+class Value(object):
+    """Value placeholder for in keyword argument specification."""
+
+    def __init__(self, values):
+        if not isinstance(values, (tuple, list)):
+            self._values = [values]
+        else:
+            self._values = values
 
     def values(self):
-        return [False, True]
+        return self._values
+
+
+class Bool(Value):
+    """Boolean placeholder for in keyword argument specification."""
+
+    def __init__(self):
+        Value.__init__(self, [False, True])

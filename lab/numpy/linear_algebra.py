@@ -19,3 +19,13 @@ def matmul(a, b, tr_a=False, tr_b=False):
 @dispatch(Numeric)
 def transpose(a):
     return a.T
+
+
+@dispatch(Numeric)
+def trace(a, axis1=0, axis2=1):
+    return np.trace(a, axis1=axis1, axis2=axis2)
+
+
+@dispatch(Numeric, Numeric)
+def kron(a, b):
+    return np.kron(a, b)
