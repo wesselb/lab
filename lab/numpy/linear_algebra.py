@@ -6,9 +6,16 @@ import numpy as np
 
 from . import dispatch, Numeric
 
+__all__ = []
+
 
 @dispatch(Numeric, Numeric)
 def matmul(a, b, tr_a=False, tr_b=False):
     a = a.T if tr_a else a
     b = b.T if tr_b else b
     return np.matmul(a, b)
+
+
+@dispatch(Numeric)
+def transpose(a):
+    return a.T
