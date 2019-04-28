@@ -11,7 +11,6 @@ __all__ = ['transpose', 'T',
            'kron',
            'trace',
            'svd',
-           'eig',
            'cholesky',
            'cholesky_solve',
            'trisolve']
@@ -100,20 +99,6 @@ def svd(a, **kw_args):  # pragma: no cover
 
     Returns:
         tuple: `(U, S, V)` is `compute_uv` is `True` and just `S` otherwise.
-    """
-    pass
-
-
-@dispatch(Numeric)
-@abstract
-def eig(a):  # pragma: no cover
-    """Compute the eigendecomposition.
-
-    Args:
-        a (tensor): Matrix to decompose.
-
-    Returns:
-        tuple: Tuple containing eigenvalues and eigenvectors.
     """
     pass
 

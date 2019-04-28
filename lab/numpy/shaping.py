@@ -4,26 +4,26 @@ from __future__ import absolute_import, division, print_function
 
 import numpy as np
 
-from . import dispatch, Numeric
+from . import dispatch, NP
 
 __all__ = []
 
 
-@dispatch(Numeric)
+@dispatch(NP)
 def shape(a):
     return np.shape(a)
 
 
-@dispatch(Numeric)
+@dispatch(NP)
 def shape_int(a):
     return np.shape(a)
 
 
-@dispatch(Numeric)
+@dispatch(NP)
 def rank(a):
     return a.ndim
 
 
-@dispatch(Numeric)
+@dispatch(NP)
 def length(a):
     return np.size(a)

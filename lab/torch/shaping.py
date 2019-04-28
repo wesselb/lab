@@ -2,27 +2,27 @@
 
 from __future__ import absolute_import, division, print_function
 
-from . import dispatch, Numeric
+from . import dispatch, Torch
 
 __all__ = []
 
 
-@dispatch(Numeric)
+@dispatch(Torch)
 def shape(a):
     s = a.shape
     return tuple(s[i] for i in range(rank(a)))
 
 
-@dispatch(Numeric)
+@dispatch(Torch)
 def shape_int(a):
     return shape(a)
 
 
-@dispatch(Numeric)
+@dispatch(Torch)
 def rank(a):
     return len(a.shape)
 
 
-@dispatch(Numeric)
+@dispatch(Torch)
 def length(a):
     return a.numel()

@@ -47,15 +47,11 @@ def test_svd():
             return B.svd(a, compute_uv=False)
 
     yield check_function, svd, (Matrix(),), {'compute_uv': Bool()}
-#
-#
-# def test_eig():
-#     yield check_function, B.eig, (Matrix(),)
-#
-#
-# def test_cholesky():
-#     yield check_function, B.cholesky, (PSD(),)
-#
+
+
+def test_cholesky():
+    yield check_function, B.cholesky, (PSD(),), {}
+
 #
 # def test_cholesky_solve():
 #     chol = B.cholesky(PSD().np())

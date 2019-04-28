@@ -4,34 +4,39 @@ from __future__ import absolute_import, division, print_function
 
 import numpy as np
 
-from . import dispatch, Numeric
+from . import dispatch, NP
 
 __all__ = []
 
 
-@dispatch(Numeric, Numeric)
+@dispatch(NP, NP)
 def matmul(a, b, tr_a=False, tr_b=False):
     a = a.T if tr_a else a
     b = b.T if tr_b else b
     return np.matmul(a, b)
 
 
-@dispatch(Numeric)
+@dispatch(NP)
 def transpose(a):
     return a.T
 
 
-@dispatch(Numeric)
+@dispatch(NP)
 def trace(a, axis1=0, axis2=1):
     return np.trace(a, axis1=axis1, axis2=axis2)
 
 
-@dispatch(Numeric, Numeric)
+@dispatch(NP, NP)
 def kron(a, b):
     return np.kron(a, b)
 
 
-@dispatch(Numeric)
+@dispatch(NP)
 def svd(a, compute_uv=True):
     res = np.linalg.svd(a, full_matrices=True, compute_uv=compute_uv)
     return (res[0], res[1], res[2].T.conj()) if compute_uv else res
+
+
+@dispatch(NP)
+def cholesky(a):
+    return np.linalg.cholesky(a)

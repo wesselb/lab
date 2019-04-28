@@ -4,22 +4,22 @@ from __future__ import absolute_import, division, print_function
 
 import tensorflow as tf
 
-from . import dispatch, Numeric, B
+from . import dispatch, TF, B
 
 __all__ = []
 
 
-@dispatch(Numeric, Numeric)
+@dispatch(TF, TF)
 def matmul(a, b, tr_a=False, tr_b=False):
     return tf.matmul(a, b, transpose_a=tr_a, transpose_b=tr_b)
 
 
-@dispatch(Numeric)
+@dispatch(TF)
 def transpose(a):
     return tf.transpose(a)
 
 
-@dispatch(Numeric)
+@dispatch(TF)
 def trace(a, axis1=0, axis2=1):
     perm = [i for i in range(B.rank(a)) if i not in [axis1, axis2]]
     perm += [axis1, axis2]
@@ -27,7 +27,7 @@ def trace(a, axis1=0, axis2=1):
     return tf.trace(a)
 
 
-@dispatch(Numeric, Numeric)
+@dispatch(TF, TF)
 def kron(a, b):
     shape_a = B.shape_int(a)
     shape_b = B.shape_int(b)
@@ -42,7 +42,12 @@ def kron(a, b):
     return tf.reshape(a * b, tuple(x * y for x, y in zip(shape_a, shape_b)))
 
 
-@dispatch(Numeric)
+@dispatch(TF)
 def svd(a, compute_uv=True):
     res = tf.svd(a, full_matrices=True, compute_uv=compute_uv)
     return (res[1], res[0], res[2]) if compute_uv else res
+
+
+@dispatch(TF)
+def cholesky(a):
+    return tf.cholesky(a)

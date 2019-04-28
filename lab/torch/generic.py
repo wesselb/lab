@@ -4,11 +4,11 @@ from __future__ import absolute_import, division, print_function
 
 import torch
 
-from . import dispatch, Numeric
+from . import dispatch, Torch
 
 __all__ = []
 
 
-@dispatch(Numeric)
+@dispatch(Torch)
 def abs(a):
     return torch.abs(a)

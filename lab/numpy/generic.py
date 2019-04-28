@@ -4,11 +4,11 @@ from __future__ import absolute_import, division, print_function
 
 import numpy as np
 
-from . import dispatch, Numeric
+from . import dispatch, NP
 
 __all__ = []
 
 
-@dispatch(Numeric)
+@dispatch(NP)
 def abs(a):
     return np.abs(a)

@@ -4,27 +4,27 @@ from __future__ import absolute_import, division, print_function
 
 import tensorflow as tf
 
-from . import dispatch, Numeric
+from . import dispatch, TF
 
 __all__ = []
 
 
-@dispatch(Numeric)
+@dispatch(TF)
 def shape(a):
     s = tf.shape(a)
     return tuple(s[i] for i in range(rank(a)))
 
 
-@dispatch(Numeric)
+@dispatch(TF)
 def shape_int(a):
     return tuple(x.value for x in a.get_shape())
 
 
-@dispatch(Numeric)
+@dispatch(TF)
 def rank(a):
     return len(shape_int(a))
 
 
-@dispatch(Numeric)
+@dispatch(TF)
 def length(a):
     return tf.size(a)

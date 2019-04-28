@@ -3,7 +3,7 @@
 from __future__ import absolute_import, division, print_function
 
 from .. import dispatch, B
-from ..types import NP as Numeric
+from ..types import NP
 
 from .generic import *
 from .shaping import *
