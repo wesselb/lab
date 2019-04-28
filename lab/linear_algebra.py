@@ -9,16 +9,16 @@ from .types import Numeric
 
 
 @dispatch(Numeric, Numeric)
-def matmul(x, y, **kw_args):
+def matmul(a, b, **kw_args):
     """Matrix multiplication.
 
     Args:
-        x (tensor): First matrix.
-        y (tensor): Second matrix.
-        tr_x (bool, optional): Transpose first matrix. Defaults to `False`.
-        tr_y (bool, optional): Transpose second matrix. Defaults to `False`.
+        a (tensor): First matrix.
+        b (tensor): Second matrix.
+        tr_a (bool, optional): Transpose first matrix. Defaults to `False`.
+        tr_b (bool, optional): Transpose second matrix. Defaults to `False`.
 
     Returns:
         tensor: Matrix product of `x` and `y`.
     """
-    return matmul(*promote(x, y), **kw_args)
+    return matmul(*promote(a, b), **kw_args)

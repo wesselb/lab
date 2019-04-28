@@ -8,5 +8,5 @@ from . import dispatch, Numeric
 
 
 @dispatch(Numeric, Numeric)
-def matmul(x, y):
-    return torch.matmul(x, y)
+def matmul(a, b):
+    return torch.matmul(a, b)

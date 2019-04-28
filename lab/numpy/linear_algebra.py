@@ -8,5 +8,5 @@ from . import dispatch, Numeric
 
 
 @dispatch(Numeric, Numeric)
-def matmul(x, y):
-    return np.matmul(x, y)
+def matmul(a, b):
+    return np.matmul(a, b)
