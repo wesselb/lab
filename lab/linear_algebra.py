@@ -22,7 +22,7 @@ def transpose(a):  # pragma: no cover
     """Transpose a matrix.
 
     Args:
-        a (tensor): Matrix to transposed.
+        a (tensor): Matrix to transpose.
 
     Returns:
         tensor: Transposition of `a`.
@@ -141,8 +141,6 @@ def trisolve(a, b, **kw_args):  # pragma: no cover
     Args:
         a (tensor): Triangular matrix `a`.
         b (tensor): RHS `b`.
-        tr_a (bool, optional): Transpose `a` before solving. Defaults to
-            `False`.
         lower_a (bool, optional): Indicate that `a` is lower triangular
             instead of upper triangular. Defaults to `True`.
 

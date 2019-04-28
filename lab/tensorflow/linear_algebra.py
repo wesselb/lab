@@ -51,3 +51,13 @@ def svd(a, compute_uv=True):
 @dispatch(TF)
 def cholesky(a):
     return tf.cholesky(a)
+
+
+@dispatch(TF, TF)
+def cholesky_solve(a, b):
+    return tf.cholesky_solve(a, b)
+
+
+@dispatch(TF, TF)
+def trisolve(a, b, lower_a=True):
+    return tf.matrix_triangular_solve(a, b, lower=lower_a)

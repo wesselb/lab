@@ -3,6 +3,7 @@
 from __future__ import absolute_import, division, print_function
 
 import numpy as np
+import scipy.linalg as sla
 
 from . import dispatch, NP
 
@@ -40,3 +41,13 @@ def svd(a, compute_uv=True):
 @dispatch(NP)
 def cholesky(a):
     return np.linalg.cholesky(a)
+
+
+@dispatch(NP, NP)
+def cholesky_solve(a, b):
+    return trisolve(a.T, trisolve(a, b), lower_a=False)
+
+
+@dispatch(NP, NP)
+def trisolve(a, b, lower_a=True):
+    return sla.solve_triangular(a, b, trans='N', lower=lower_a)

@@ -49,3 +49,13 @@ def svd(a, compute_uv=True):
 @dispatch(Torch)
 def cholesky(a):
     return torch.cholesky(a, upper=False)
+
+
+@dispatch(Torch, Torch)
+def cholesky_solve(a, b):
+    return torch.potrs(b, a, upper=False)
+
+
+@dispatch(Torch, Torch)
+def trisolve(a, b, lower_a=True):
+    return torch.trtrs(b, a, upper=not lower_a)[0]

@@ -52,15 +52,15 @@ def test_svd():
 def test_cholesky():
     yield check_function, B.cholesky, (PSD(),), {}
 
-#
-# def test_cholesky_solve():
-#     chol = B.cholesky(PSD().np())
-#     yield check_function, B.cholesky_solve, (Matrix(mat=chol), Matrix())
-#
-#
-# def test_trisolve():
-#     chol = B.cholesky(PSD().np())
-#     yield check_function, B.trisolve, \
-#           (Matrix(mat=chol), Matrix()), {'tr_a': Bool(), 'lower_a': True}
-#     yield check_function, B.trisolve, \
-#           (Matrix(mat=chol.T), Matrix()), {'tr_a': Bool(), 'lower_a': False}
+
+def test_cholesky_solve():
+    chol = B.cholesky(PSD().np())
+    yield check_function, B.cholesky_solve, (Matrix(mat=chol), Matrix()), {}
+
+
+def test_trisolve():
+    chol = B.cholesky(PSD().np())
+    yield check_function, B.trisolve, \
+          (Matrix(mat=chol), Matrix()), {'lower_a': Value(True)}
+    yield check_function, B.trisolve, \
+          (Matrix(mat=chol.T), Matrix()), {'lower_a': Value(False)}
