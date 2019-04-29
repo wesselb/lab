@@ -85,3 +85,8 @@ def unstack(a, axis=0):
 @dispatch(TFNumeric)
 def reshape(a, shape=(-1,)):
     return tf.reshape(a, shape=shape)
+
+
+@dispatch(TFListOrTuple)
+def concat(a, axis=0):
+    return tf.concat(a, axis=axis)

@@ -170,7 +170,7 @@ def stack(a, axis=0):  # pragma: no cover
     """Concatenate tensors along a new axis.
 
     Args:
-        a (list): List of tensors.
+        a (list[tensor]): List of tensors.
         axis (int, optional): Index of new axis. Defaults to `0`.
 
     Returns:
@@ -189,7 +189,7 @@ def unstack(a, axis=0):  # pragma: no cover
         axis (int, optional): Index along which to unstack. Defaults to `0`.
 
     Returns:
-        list: List of tensors.
+        list[tensor]: List of tensors.
     """
     pass
 
@@ -224,12 +224,13 @@ def concat(a, axis=0):  # pragma: no cover
     pass
 
 
-@dispatch(Numeric)
+@dispatch(ListOrTuple)
 def concat2d(a):  # pragma: no cover
     """Concatenate tensors into a matrix.
 
     Args:
-        a (list): List of list of tensors, which form the rows of the matrix.
+        a (list[list[tensor]): List of list of tensors, which form the rows of
+            the matrix.
 
     Returns:
         tensor: Assembled matrix.

@@ -68,9 +68,20 @@ def test_unstack():
           (Tensor(3, 4, 5),), {'axis': Value(0, 1, 2)}
 
 
-# ----------
-
-
 def test_reshape():
     yield check_function, B.reshape, \
           (Tensor(3, 4, 5),), {'shape': Value((3, 20), (12, 5))}
+
+
+def test_concat():
+    yield check_function, B.concat, \
+          (List(Matrix(3), Matrix(3), Matrix(3)),), {'axis': Value(0, 1)}
+    yield check_function, B.concat, \
+          (Tuple(Matrix(3), Matrix(3), Matrix(3)),), {'axis': Value(0, 1)}
+
+
+def test_concat2d():
+    yield check_function, B.concat2d, \
+          (List(List(Matrix(3), Matrix(3)), List(Matrix(3), Matrix(3))),), {}
+    yield check_function, B.concat2d, \
+          (Tuple(Tuple(Matrix(3), Matrix(3)), Tuple(Matrix(3), Matrix(3))),), {}

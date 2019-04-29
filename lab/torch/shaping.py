@@ -80,3 +80,8 @@ def unstack(a, axis=0):
 @dispatch(TorchNumeric)
 def reshape(a, shape=(-1,)):
     return torch.reshape(a, shape=shape)
+
+
+@dispatch(TorchListOrTuple)
+def concat(a, axis=0):
+    return torch.cat(a, dim=axis)

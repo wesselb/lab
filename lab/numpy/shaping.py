@@ -79,3 +79,8 @@ def unstack(a, axis=0):
 @dispatch(NPNumeric)
 def reshape(a, shape=(-1,)):
     return np.reshape(a, newshape=shape)
+
+
+@dispatch(NPListOrTuple)
+def concat(a, axis=0):
+    return np.concatenate(a, axis=axis)
