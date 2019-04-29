@@ -72,7 +72,10 @@ def stack(a, axis=0):
     return torch.stack(a, dim=axis)
 
 
-# ----
+@dispatch(TorchNumeric)
+def unstack(a, axis=0):
+    return torch.unbind(a, dim=axis)
+
 
 @dispatch(TorchNumeric)
 def reshape(a, shape=(-1,)):

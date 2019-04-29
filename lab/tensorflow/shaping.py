@@ -77,7 +77,10 @@ def stack(a, axis=0):
     return tf.stack(a, axis=axis)
 
 
-# -------
+@dispatch(TFNumeric)
+def unstack(a, axis=0):
+    return tf.unstack(a, axis=axis)
+
 
 @dispatch(TFNumeric)
 def reshape(a, shape=(-1,)):

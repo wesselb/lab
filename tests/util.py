@@ -12,7 +12,7 @@ import tensorflow as tf
 import torch
 from plum import Dispatcher
 
-from . import NP, TF, Torch
+from . import NPNumeric, TFNumeric, TorchNumeric, TF, Torch
 
 log = logging.getLogger('lab.' + __name__)
 _dispatch = Dispatcher()
@@ -37,10 +37,21 @@ def lam(f, args=()):
     ok(f(*args), 'Lambda returned False.')
 
 
-@_dispatch({NP, Number})
+@_dispatch({NPNumeric, Number})
 def to_np(x):
     """Convert a tensor to NumPy."""
     return x
+
+
+@_dispatch(TorchNumeric)
+def to_np(x):
+    return x.numpy()
+
+
+@_dispatch(TFNumeric)
+def to_np(x):
+    with tf.Session() as sess:
+        return sess.run(x)
 
 
 @_dispatch(tuple)
@@ -48,15 +59,9 @@ def to_np(tup):
     return tuple(to_np(x) for x in tup)
 
 
-@_dispatch(Torch)
-def to_np(x):
-    return x.numpy()
-
-
-@_dispatch(TF)
-def to_np(x):
-    with tf.Session() as sess:
-        return sess.run(x)
+@_dispatch(list)
+def to_np(lst):
+    return to_np(tuple(lst))
 
 
 @_dispatch(object, object)

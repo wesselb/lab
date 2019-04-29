@@ -63,6 +63,11 @@ def test_stack():
           (Tuple(Matrix(3), Matrix(3), Matrix(3)),), {'axis': Value(0, 1)}
 
 
+def test_unstack():
+    yield check_function, B.unstack, \
+          (Tensor(3, 4, 5),), {'axis': Value(0, 1, 2)}
+
+
 # ----------
 
 

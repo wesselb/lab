@@ -70,7 +70,11 @@ def stack(a, axis=0):
     return np.stack(a, axis=axis)
 
 
-# ----
+@dispatch(NPNumeric)
+def unstack(a, axis=0):
+    out = np.split(a, np.arange(1, a.shape[axis]), axis)
+    return [x.squeeze(axis=axis) for x in out]
+
 
 @dispatch(NPNumeric)
 def reshape(a, shape=(-1,)):
