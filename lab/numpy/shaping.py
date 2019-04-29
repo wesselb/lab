@@ -5,7 +5,7 @@ from __future__ import absolute_import, division, print_function
 import numpy as np
 
 from . import dispatch
-from ..types import NPNumeric, NPListOrTuple
+from ..types import NPNumeric, NPListOrTuple, ListOrTuple
 
 __all__ = []
 
@@ -84,3 +84,8 @@ def reshape(a, shape=(-1,)):
 @dispatch(NPListOrTuple)
 def concat(a, axis=0):
     return np.concatenate(a, axis=axis)
+
+
+@dispatch(NPNumeric, ListOrTuple)
+def take(a, indices, axis=0):
+    return np.take(a, indices, axis=axis)

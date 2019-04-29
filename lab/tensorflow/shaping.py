@@ -6,7 +6,7 @@ import numpy as np
 import tensorflow as tf
 
 from . import dispatch
-from ..types import TFNumeric, TFListOrTuple
+from ..types import TFNumeric, TFListOrTuple, ListOrTuple
 
 __all__ = []
 
@@ -90,3 +90,17 @@ def reshape(a, shape=(-1,)):
 @dispatch(TFListOrTuple)
 def concat(a, axis=0):
     return tf.concat(a, axis=axis)
+
+
+@dispatch(TFNumeric, ListOrTuple)
+def take(a, indices, axis=0):
+    # Optimise the case where `axis` equals `0`.
+    if axis == 0:
+        return tf.gather(a, indices)
+
+    # Create a permutation to switch `axis` and `0`.
+    perm = [i for i in range(rank(a))]
+    perm[axis], perm[0] = 0, axis
+
+    # Perform gathering.
+    return tf.transpose(tf.gather(tf.transpose(a, perm), indices), perm)

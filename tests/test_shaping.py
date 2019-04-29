@@ -85,3 +85,10 @@ def test_concat2d():
           (List(List(Matrix(3), Matrix(3)), List(Matrix(3), Matrix(3))),), {}
     yield check_function, B.concat2d, \
           (Tuple(Tuple(Matrix(3), Matrix(3)), Tuple(Matrix(3), Matrix(3))),), {}
+
+
+def test_take():
+    yield check_function, B.take, \
+          (Matrix(3, 4), Value([0, 1])), {'axis': Value(0, 1)}
+    yield check_function, B.take, \
+          (Matrix(3, 4), Value([2, 1])), {'axis': Value(0, 1)}

@@ -6,7 +6,7 @@ import numpy as np
 import torch
 
 from . import dispatch
-from ..types import TorchNumeric, TorchListOrTuple
+from ..types import TorchNumeric, TorchListOrTuple, ListOrTuple
 
 __all__ = []
 
@@ -85,3 +85,13 @@ def reshape(a, shape=(-1,)):
 @dispatch(TorchListOrTuple)
 def concat(a, axis=0):
     return torch.cat(a, dim=axis)
+
+
+@dispatch(TorchNumeric, ListOrTuple)
+def take(a, indices, axis=0):
+    if axis > 0:
+        a = torch.transpose(a, 0, axis)
+    a = a[(indices,) + (slice(None),) * (rank(a) - 1)]
+    if axis > 0:
+        a = torch.transpose(a, 0, axis)
+    return a

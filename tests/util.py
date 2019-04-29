@@ -167,13 +167,19 @@ class List(object):
 
 
 class Value(object):
-    """Value placeholder for in keyword argument specification."""
+    """Value placeholder for in keyword argument or argument specification."""
 
     def __init__(self, *values):
         self._values = values
 
     def values(self):
         return self._values
+
+    def forms(self):
+        if len(self._values) != 1:
+            raise RuntimeError('Must give exactly one value if used in '
+                               'argument specification.')
+        return (self._values[0],) * 3
 
 
 class Bool(Value):

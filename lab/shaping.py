@@ -229,7 +229,7 @@ def concat2d(a):  # pragma: no cover
     """Concatenate tensors into a matrix.
 
     Args:
-        a (list[list[tensor]): List of list of tensors, which form the rows of
+        a (list[list[tensor]]): List of list of tensors, which form the rows of
             the matrix.
 
     Returns:
@@ -239,7 +239,7 @@ def concat2d(a):  # pragma: no cover
 
 
 @dispatch(Numeric, ListOrTuple)
-@abstract()
+@abstract(convert_to=0, promote_to=0)
 def take(a, indices, axis=0):  # pragma: no cover
     """Take particular elements along an axis.
 
