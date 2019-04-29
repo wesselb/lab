@@ -12,6 +12,7 @@ __all__ = ['shape',
            'length',
            'is_scalar',
            'expand_dims',
+           'uprank',
            'diag',
            'flatten',
            'vec_to_tril',
@@ -106,6 +107,26 @@ def expand_dims(a, axis=0):  # pragma: no cover
         tensor: `a` with the new axis.
     """
     pass
+
+
+@dispatch(Numeric)
+def uprank(a):  # pragma: no cover
+    """Convert the input into a rank two tensor.
+
+    Args:
+        a (tensor): Tensor.
+
+    Returns:
+        tensor: `a`, but of rank two.
+    """
+    a_rank = rank(a)
+    if a_rank > 2:
+        raise ValueError('Cannot convert a tensor of rank {} to rank 2.'
+                         ''.format(a_rank))
+    while a_rank < 2:
+        a = expand_dims(a, axis=-1)
+        a_rank += 1
+    return a
 
 
 @dispatch(Numeric)

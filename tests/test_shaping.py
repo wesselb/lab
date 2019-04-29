@@ -2,6 +2,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+import numpy as np
 import lab as B
 from . import check_function, Tensor, Value, Matrix, List, Tuple
 # noinspection PyUnresolvedReferences
@@ -17,16 +18,20 @@ def test_sizing():
 
 
 def test_is_scalar():
-    for x in Tensor().forms():
-        yield ok, B.is_scalar(x)
-
-    for x in Tensor(3).forms():
-        yield ok, not B.is_scalar(x)
+    yield ok, B.is_scalar(1.0)
+    yield ok, not B.is_scalar(np.array([1.0]))
 
 
 def test_expand_dims():
     yield check_function, B.expand_dims, \
           (Tensor(3, 4, 5),), {'axis': Value(0, 1)}
+
+
+def test_uprank():
+    yield allclose, B.uprank(1.0), np.array([[1.0]])
+    yield allclose, B.uprank(np.array([1.0, 2.0])), np.array([[1.0], [2.0]])
+    yield allclose, B.uprank(np.array([[1.0, 2.0]])), np.array([[1.0, 2.0]])
+    yield raises, ValueError, lambda: B.uprank(np.array([[[1.0]]]))
 
 
 def test_diag():
