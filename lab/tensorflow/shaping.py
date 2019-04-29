@@ -28,3 +28,8 @@ def rank(a):
 @dispatch(TF)
 def length(a):
     return tf.size(a)
+
+
+@dispatch(TF)
+def expand_dims(a, axis=0):
+    return tf.expand_dims(a, axis=axis)

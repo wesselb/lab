@@ -2,6 +2,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+import torch
 from . import dispatch, Torch
 
 __all__ = []
@@ -26,3 +27,8 @@ def rank(a):
 @dispatch(Torch)
 def length(a):
     return a.numel()
+
+
+@dispatch(Torch)
+def expand_dims(a, axis=0):
+    return torch.unsqueeze(a, dim=axis)

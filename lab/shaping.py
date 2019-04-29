@@ -165,7 +165,7 @@ def tril_to_vec(a):  # pragma: no cover
     pass
 
 
-@dispatch(list)
+@dispatch({list, tuple})
 @abstract
 def stack(a, axis=0):  # pragma: no cover
     """Concatenate tensors along a new axis.
@@ -210,13 +210,13 @@ def reshape(a, shape=(-1,)):  # pragma: no cover
     pass
 
 
-@dispatch(Numeric)
+@dispatch({list, tuple})
 @abstract
 def concat(a, axis=0):  # pragma: no cover
     """Concatenate tensors along an axis.
 
     Args:
-        a (list): List of tensors.
+        a (list[tensor]): List of tensors.
         axis (int, optional): Axis along which to concatenate. Defaults to `0`.
 
     Returns:
@@ -238,7 +238,7 @@ def concat2d(a):  # pragma: no cover
     return concat([concat(row, axis=1) for row in a], axis=0)
 
 
-@dispatch(Numeric, list)
+@dispatch(Numeric, {list, tuple})
 @abstract
 def take(a, indices, axis=0):  # pragma: no cover
     """Take particular elements along an axis.

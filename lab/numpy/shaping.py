@@ -27,3 +27,8 @@ def rank(a):
 @dispatch(NP)
 def length(a):
     return np.size(a)
+
+
+@dispatch(NP)
+def expand_dims(a, axis=0):
+    return np.expand_dims(a, axis=axis)

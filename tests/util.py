@@ -144,11 +144,8 @@ class PSD(Matrix):
 class Value(object):
     """Value placeholder for in keyword argument specification."""
 
-    def __init__(self, values):
-        if not isinstance(values, (tuple, list)):
-            self._values = [values]
-        else:
-            self._values = values
+    def __init__(self, *values):
+        self._values = values
 
     def values(self):
         return self._values
@@ -158,4 +155,4 @@ class Bool(Value):
     """Boolean placeholder for in keyword argument specification."""
 
     def __init__(self):
-        Value.__init__(self, [False, True])
+        Value.__init__(self, False, True)
