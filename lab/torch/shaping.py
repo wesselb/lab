@@ -2,6 +2,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+import numpy as np
 import torch
 from . import dispatch, Torch
 
@@ -37,6 +38,31 @@ def expand_dims(a, axis=0):
 @dispatch(Torch)
 def diag(a):
     return torch.diag(a)
+
+
+@dispatch(Torch)
+def vec_to_tril(a):
+    if rank(a) != 1:
+        raise ValueError('Input must be rank 1.')
+
+    # Figure out shape of output.
+    n = shape_int(a)[0]
+    m = int(((1 + 8 * n) ** .5 - 1) / 2)
+
+    # Construct output and return.
+    out = torch.zeros(m, m, dtype=a.dtype)
+    out[np.tril_indices(m)] = a
+    return out
+
+
+@dispatch(Torch)
+def tril_to_vec(a):
+    if rank(a) != 2:
+        raise ValueError('Input must be rank 2.')
+    n, m = shape_int(a)
+    if n != m:
+        raise ValueError('Input must be square.')
+    return a[np.tril_indices(n)]
 
 
 # ----

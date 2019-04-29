@@ -3,6 +3,7 @@
 from __future__ import absolute_import, division, print_function
 
 import tensorflow as tf
+import numpy as np
 
 from . import dispatch, TF
 
@@ -43,6 +44,31 @@ def diag(a):
         return tf.diag_part(a)
     else:
         raise ValueError('Argument must have rank 1 or 2.')
+
+
+@dispatch(TF)
+def vec_to_tril(a):
+    if rank(a) != 1:
+        raise ValueError('Input must be rank 1.')
+
+    # Figure out shape of output.
+    n = shape_int(a)[0]
+    m = int(((1 + 8 * n) ** .5 - 1) / 2)
+
+    # Construct output and return.
+    return tf.scatter_nd(indices=list(zip(*np.tril_indices(m))),
+                         shape=[m, m],
+                         updates=a)
+
+
+@dispatch(TF)
+def tril_to_vec(a):
+    if rank(a) != 2:
+        raise ValueError('Input must be rank 2.')
+    n, m = shape_int(a)
+    if n != m:
+        raise ValueError('Input must be square.')
+    return tf.gather_nd(a, list(zip(*np.tril_indices(n))))
 
 
 # -------

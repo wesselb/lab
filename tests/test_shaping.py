@@ -3,7 +3,7 @@
 from __future__ import absolute_import, division, print_function
 
 import lab as B
-from . import check_function, Tensor, Value
+from . import check_function, Tensor, Value, Matrix
 # noinspection PyUnresolvedReferences
 from . import eq, neq, lt, le, ge, gt, raises, call, ok, lam, allclose, approx
 
@@ -38,6 +38,22 @@ def test_diag():
 def test_flatten():
     yield check_function, B.flatten, (Tensor(3),), {}
     yield check_function, B.flatten, (Tensor(3, 4),), {}
+
+
+def test_vec_to_tril_and_back():
+    yield check_function, B.vec_to_tril, (Tensor(6),), {}
+    yield check_function, B.tril_to_vec, (Matrix(3),), {}
+
+    # Check correctness.
+    mat = Tensor(6).np()
+    yield allclose, B.tril_to_vec(B.vec_to_tril(mat)), mat
+
+    # Check exceptions.
+    for x in Matrix(3, 4).forms():
+        yield raises, ValueError, lambda: B.vec_to_tril(x)
+        yield raises, ValueError, lambda: B.tril_to_vec(x)
+    for x in Matrix(3, 4, 5).forms():
+        yield raises, ValueError, lambda: B.tril_to_vec(x)
 
 
 # ----------
