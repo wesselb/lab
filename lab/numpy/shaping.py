@@ -4,42 +4,43 @@ from __future__ import absolute_import, division, print_function
 
 import numpy as np
 
-from . import dispatch, NP
+from . import dispatch
+from ..types import NPNumeric, NPListOrTuple
 
 __all__ = []
 
 
-@dispatch(NP)
+@dispatch(NPNumeric)
 def shape(a):
     return np.shape(a)
 
 
-@dispatch(NP)
+@dispatch(NPNumeric)
 def shape_int(a):
     return np.shape(a)
 
 
-@dispatch(NP)
+@dispatch(NPNumeric)
 def rank(a):
     return a.ndim
 
 
-@dispatch(NP)
+@dispatch(NPNumeric)
 def length(a):
     return np.size(a)
 
 
-@dispatch(NP)
+@dispatch(NPNumeric)
 def expand_dims(a, axis=0):
     return np.expand_dims(a, axis=axis)
 
 
-@dispatch(NP)
+@dispatch(NPNumeric)
 def diag(a):
     return np.diag(a)
 
 
-@dispatch(NP)
+@dispatch(NPNumeric)
 def vec_to_tril(a):
     if rank(a) != 1:
         raise ValueError('Input must be rank 1.')
@@ -54,7 +55,7 @@ def vec_to_tril(a):
     return out
 
 
-@dispatch(NP)
+@dispatch(NPNumeric)
 def tril_to_vec(a):
     if rank(a) != 2:
         raise ValueError('Input must be rank 2.')
@@ -64,8 +65,13 @@ def tril_to_vec(a):
     return a[np.tril_indices(n)]
 
 
+@dispatch(NPListOrTuple)
+def stack(a, axis=0):
+    return np.stack(a, axis=axis)
+
+
 # ----
 
-@dispatch(NP)
+@dispatch(NPNumeric)
 def reshape(a, shape=(-1,)):
     return np.reshape(a, newshape=shape)

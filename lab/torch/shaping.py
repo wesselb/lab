@@ -4,43 +4,45 @@ from __future__ import absolute_import, division, print_function
 
 import numpy as np
 import torch
-from . import dispatch, Torch
+
+from . import dispatch
+from ..types import TorchNumeric, TorchListOrTuple
 
 __all__ = []
 
 
-@dispatch(Torch)
+@dispatch(TorchNumeric)
 def shape(a):
     s = a.shape
     return tuple(s[i] for i in range(rank(a)))
 
 
-@dispatch(Torch)
+@dispatch(TorchNumeric)
 def shape_int(a):
     return shape(a)
 
 
-@dispatch(Torch)
+@dispatch(TorchNumeric)
 def rank(a):
     return len(a.shape)
 
 
-@dispatch(Torch)
+@dispatch(TorchNumeric)
 def length(a):
     return a.numel()
 
 
-@dispatch(Torch)
+@dispatch(TorchNumeric)
 def expand_dims(a, axis=0):
     return torch.unsqueeze(a, dim=axis)
 
 
-@dispatch(Torch)
+@dispatch(TorchNumeric)
 def diag(a):
     return torch.diag(a)
 
 
-@dispatch(Torch)
+@dispatch(TorchNumeric)
 def vec_to_tril(a):
     if rank(a) != 1:
         raise ValueError('Input must be rank 1.')
@@ -55,7 +57,7 @@ def vec_to_tril(a):
     return out
 
 
-@dispatch(Torch)
+@dispatch(TorchNumeric)
 def tril_to_vec(a):
     if rank(a) != 2:
         raise ValueError('Input must be rank 2.')
@@ -65,8 +67,13 @@ def tril_to_vec(a):
     return a[np.tril_indices(n)]
 
 
+@dispatch(TorchListOrTuple)
+def stack(a, axis=0):
+    return torch.stack(a, dim=axis)
+
+
 # ----
 
-@dispatch(Torch)
+@dispatch(TorchNumeric)
 def reshape(a, shape=(-1,)):
     return torch.reshape(a, shape=shape)

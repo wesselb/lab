@@ -4,11 +4,12 @@ from __future__ import absolute_import, division, print_function
 
 import tensorflow as tf
 
-from . import dispatch, TF
+from . import dispatch
+from ..types import TFNumeric
 
 __all__ = []
 
 
-@dispatch(TF)
+@dispatch(TFNumeric)
 def abs(a):
     return tf.abs(a)

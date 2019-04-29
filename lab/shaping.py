@@ -3,7 +3,7 @@
 from __future__ import absolute_import, division, print_function
 
 from . import dispatch
-from .types import Numeric
+from .types import Numeric, ListOrTuple
 from .util import abstract
 
 __all__ = ['shape',
@@ -25,7 +25,7 @@ __all__ = ['shape',
 
 
 @dispatch(Numeric)
-@abstract
+@abstract()
 def shape(a):  # pragma: no cover
     """Get the shape of a tensor.
 
@@ -39,7 +39,7 @@ def shape(a):  # pragma: no cover
 
 
 @dispatch(Numeric)
-@abstract
+@abstract()
 def shape_int(a):  # pragma: no cover
     """Get the shape of a tensor as a tuple of integers.
 
@@ -53,7 +53,7 @@ def shape_int(a):  # pragma: no cover
 
 
 @dispatch(Numeric)
-@abstract
+@abstract()
 def rank(a):  # pragma: no cover
     """Get the shape of a tensor.
 
@@ -67,7 +67,7 @@ def rank(a):  # pragma: no cover
 
 
 @dispatch(Numeric)
-@abstract
+@abstract()
 def length(a):  # pragma: no cover
     """Get the length of a tensor.
 
@@ -94,7 +94,7 @@ def is_scalar(a):
 
 
 @dispatch(Numeric)
-@abstract
+@abstract()
 def expand_dims(a, axis=0):  # pragma: no cover
     """Insert an empty axis.
 
@@ -109,7 +109,7 @@ def expand_dims(a, axis=0):  # pragma: no cover
 
 
 @dispatch(Numeric)
-@abstract
+@abstract()
 def diag(a):  # pragma: no cover
     """Take the diagonal of a matrix, or construct a diagonal matrix from its
     diagonal.
@@ -137,7 +137,7 @@ def flatten(a):  # pragma: no cover
 
 
 @dispatch(Numeric)
-@abstract
+@abstract()
 def vec_to_tril(a):  # pragma: no cover
     """Construct a lower triangular matrix from a vector.
 
@@ -151,7 +151,7 @@ def vec_to_tril(a):  # pragma: no cover
 
 
 @dispatch(Numeric)
-@abstract
+@abstract()
 def tril_to_vec(a):  # pragma: no cover
     """Construct a vector from a lower triangular matrix.
 
@@ -164,8 +164,8 @@ def tril_to_vec(a):  # pragma: no cover
     pass
 
 
-@dispatch({list, tuple})
-@abstract
+@dispatch(ListOrTuple)
+@abstract()
 def stack(a, axis=0):  # pragma: no cover
     """Concatenate tensors along a new axis.
 
@@ -180,7 +180,7 @@ def stack(a, axis=0):  # pragma: no cover
 
 
 @dispatch(Numeric)
-@abstract
+@abstract()
 def unstack(a, axis=0):  # pragma: no cover
     """Unstack tensors along an axis.
 
@@ -195,7 +195,7 @@ def unstack(a, axis=0):  # pragma: no cover
 
 
 @dispatch(Numeric)
-@abstract
+@abstract()
 def reshape(a, shape=(-1,)):  # pragma: no cover
     """Reshape a tensor.
 
@@ -209,8 +209,8 @@ def reshape(a, shape=(-1,)):  # pragma: no cover
     pass
 
 
-@dispatch({list, tuple})
-@abstract
+@dispatch(Numeric)
+@abstract()
 def concat(a, axis=0):  # pragma: no cover
     """Concatenate tensors along an axis.
 
@@ -237,8 +237,8 @@ def concat2d(a):  # pragma: no cover
     return concat([concat(row, axis=1) for row in a], axis=0)
 
 
-@dispatch(Numeric, {list, tuple})
-@abstract
+@dispatch(Numeric, ListOrTuple)
+@abstract()
 def take(a, indices, axis=0):  # pragma: no cover
     """Take particular elements along an axis.
 

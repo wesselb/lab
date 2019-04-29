@@ -97,7 +97,7 @@ def check_function(f, args_spec, kw_args_spec):
             if any_tf and any_torch:
                 continue
 
-            log.debug('Call with arguments "{}" and keyword arguments "{}".'
+            log.debug('Call with arguments {} and keyword arguments {}.'
                       ''.format(args, kw_args))
             allclose(first_result, f(*args, **kw_args))
 
@@ -139,6 +139,26 @@ class PSD(Matrix):
     def __init__(self, rows=3):
         a = np.random.randn(rows, rows)
         Matrix.__init__(self, mat=np.matmul(a, np.transpose(a)))
+
+
+class Tuple(object):
+    """Tuple placeholder for in argument specification."""
+
+    def __init__(self, *xs):
+        self.xs = xs
+
+    def forms(self):
+        return tuple(zip(*(x.forms() for x in self.xs)))
+
+
+class List(object):
+    """List placeholder for in argument specification."""
+
+    def __init__(self, *xs):
+        self.xs = xs
+
+    def forms(self):
+        return list(zip(*(x.forms() for x in self.xs)))
 
 
 class Value(object):

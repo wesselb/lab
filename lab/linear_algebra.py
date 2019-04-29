@@ -17,7 +17,7 @@ __all__ = ['transpose', 'T',
 
 
 @dispatch(Numeric)
-@abstract
+@abstract()
 def transpose(a):  # pragma: no cover
     """Transpose a matrix.
 
@@ -34,7 +34,7 @@ T = transpose  #: Shorthand for `transpose`.
 
 
 @dispatch(Numeric, Numeric)
-@abstract
+@abstract()
 def matmul(a, b, **kw_args):  # pragma: no cover
     """Matrix multiplication.
 
@@ -55,7 +55,7 @@ dot = matmul  #: Also a shorthand for `matmul`.
 
 
 @dispatch(Numeric)
-@abstract
+@abstract()
 def trace(a, **kw_args):  # pragma: no cover
     """Compute the trace of a tensor.
 
@@ -73,7 +73,7 @@ def trace(a, **kw_args):  # pragma: no cover
 
 
 @dispatch(Numeric, Numeric)
-@abstract
+@abstract()
 def kron(a, b):  # pragma: no cover
     """Kronecker product.
 
@@ -88,7 +88,7 @@ def kron(a, b):  # pragma: no cover
 
 
 @dispatch(Numeric)
-@abstract
+@abstract()
 def svd(a, **kw_args):  # pragma: no cover
     """Compute the singular value decomposition.
 
@@ -104,7 +104,7 @@ def svd(a, **kw_args):  # pragma: no cover
 
 
 @dispatch(Numeric)
-@abstract
+@abstract()
 def cholesky(a):  # pragma: no cover
     """Compute the Cholesky decomposition.
 
@@ -118,7 +118,7 @@ def cholesky(a):  # pragma: no cover
 
 
 @dispatch(Numeric, Numeric)
-@abstract
+@abstract()
 def cholesky_solve(a, b):  # pragma: no cover
     """Solve the linear system `a x = b` given the Cholesky factorisation of
     `a`.
@@ -134,7 +134,7 @@ def cholesky_solve(a, b):  # pragma: no cover
 
 
 @dispatch(Numeric, Numeric)
-@abstract
+@abstract()
 def trisolve(a, b, **kw_args):  # pragma: no cover
     """Solve the linear system `a x = b` where `a` is triangular.
 

@@ -10,7 +10,7 @@ __all__ = ['abs']
 
 
 @dispatch(Numeric)
-@abstract
+@abstract()
 def abs(a):  # pragma: no cover
     """Absolute value.
 

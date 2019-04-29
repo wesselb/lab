@@ -3,7 +3,7 @@
 from __future__ import absolute_import, division, print_function
 
 import lab as B
-from . import check_function, Tensor, Value, Matrix
+from . import check_function, Tensor, Value, Matrix, List, Tuple
 # noinspection PyUnresolvedReferences
 from . import eq, neq, lt, le, ge, gt, raises, call, ok, lam, allclose, approx
 
@@ -54,6 +54,13 @@ def test_vec_to_tril_and_back():
         yield raises, ValueError, lambda: B.tril_to_vec(x)
     for x in Matrix(3, 4, 5).forms():
         yield raises, ValueError, lambda: B.tril_to_vec(x)
+
+
+def test_stack():
+    yield check_function, B.stack, \
+          (List(Matrix(3), Matrix(3), Matrix(3)),), {'axis': Value(0, 1)}
+    yield check_function, B.stack, \
+          (Tuple(Matrix(3), Matrix(3), Matrix(3)),), {'axis': Value(0, 1)}
 
 
 # ----------

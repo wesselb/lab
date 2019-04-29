@@ -9,7 +9,7 @@ import tensorflow as tf
 import torch
 from plum import add_promotion_rule, add_conversion_method
 
-from .types import NP, TF, Torch, Numeric
+from .types import NP, TF, Torch, Framework
 
 __all__ = []
 
@@ -22,4 +22,4 @@ add_promotion_rule(NP, Torch, Torch)
 add_conversion_method(NP, Torch, torch.tensor)
 
 # Add conversion method for regular numbers.
-add_conversion_method(Number, Numeric, np.array)
+add_conversion_method(Number, Framework, np.array)
