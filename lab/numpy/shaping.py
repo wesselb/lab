@@ -32,3 +32,8 @@ def length(a):
 @dispatch(NP)
 def expand_dims(a, axis=0):
     return np.expand_dims(a, axis=axis)
+
+
+@dispatch(NP)
+def diag(a):
+    return np.diag(a)

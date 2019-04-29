@@ -33,3 +33,13 @@ def length(a):
 @dispatch(TF)
 def expand_dims(a, axis=0):
     return tf.expand_dims(a, axis=axis)
+
+
+@dispatch(TF)
+def diag(a):
+    if rank(a) == 1:
+        return tf.diag(a)
+    elif rank(a) == 2:
+        return tf.diag_part(a)
+    else:
+        raise ValueError('Argument must have rank 1 or 2.')

@@ -27,3 +27,9 @@ def test_is_scalar():
 def test_expand_dims():
     yield check_function, B.expand_dims, \
           (Tensor(3, 4, 5),), {'axis': Value(0, 1)}
+
+
+def test_diag():
+    yield check_function, B.diag, (Tensor(3),), {}
+    yield check_function, B.diag, (Tensor(3, 3),), {}
+    yield raises, ValueError, lambda: B.diag(Tensor().tf())

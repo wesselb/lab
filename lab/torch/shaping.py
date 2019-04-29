@@ -32,3 +32,8 @@ def length(a):
 @dispatch(Torch)
 def expand_dims(a, axis=0):
     return torch.unsqueeze(a, dim=axis)
+
+
+@dispatch(Torch)
+def diag(a):
+    return torch.diag(a)
