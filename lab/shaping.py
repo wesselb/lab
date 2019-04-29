@@ -124,7 +124,6 @@ def diag(a):  # pragma: no cover
 
 
 @dispatch(Numeric)
-@abstract
 def flatten(a):  # pragma: no cover
     """Flatten a tensor.
 
@@ -134,7 +133,7 @@ def flatten(a):  # pragma: no cover
     Returns:
         tensor: Flattened tensor.
     """
-    pass
+    return reshape(a, shape=(-1,))
 
 
 @dispatch(Numeric)

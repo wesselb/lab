@@ -33,3 +33,16 @@ def test_diag():
     yield check_function, B.diag, (Tensor(3),), {}
     yield check_function, B.diag, (Tensor(3, 3),), {}
     yield raises, ValueError, lambda: B.diag(Tensor().tf())
+
+
+def test_flatten():
+    yield check_function, B.flatten, (Tensor(3),), {}
+    yield check_function, B.flatten, (Tensor(3, 4),), {}
+
+
+# ----------
+
+
+def test_reshape():
+    yield check_function, B.reshape, \
+          (Tensor(3, 4, 5),), {'shape': Value((3, 20), (12, 5))}

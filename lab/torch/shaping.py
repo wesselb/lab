@@ -37,3 +37,10 @@ def expand_dims(a, axis=0):
 @dispatch(Torch)
 def diag(a):
     return torch.diag(a)
+
+
+# ----
+
+@dispatch(Torch)
+def reshape(a, shape=(-1,)):
+    return torch.reshape(a, shape=shape)

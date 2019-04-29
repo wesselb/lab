@@ -43,3 +43,10 @@ def diag(a):
         return tf.diag_part(a)
     else:
         raise ValueError('Argument must have rank 1 or 2.')
+
+
+# -------
+
+@dispatch(TF)
+def reshape(a, shape=(-1,)):
+    return tf.reshape(a, shape=shape)

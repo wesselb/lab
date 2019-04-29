@@ -37,3 +37,10 @@ def expand_dims(a, axis=0):
 @dispatch(NP)
 def diag(a):
     return np.diag(a)
+
+
+# ----
+
+@dispatch(NP)
+def reshape(a, shape=(-1,)):
+    return np.reshape(a, newshape=shape)
