@@ -149,3 +149,23 @@ def any(a, axis=None):
         return a.any()
     else:
         return a.any(dim=axis)
+
+
+@dispatch(TorchNumeric, TorchNumeric)
+def lt(a, b):
+    return torch.lt(a, b)
+
+
+@dispatch(TorchNumeric, TorchNumeric)
+def le(a, b):
+    return torch.le(a, b)
+
+
+@dispatch(TorchNumeric, TorchNumeric)
+def gt(a, b):
+    return torch.gt(a, b)
+
+
+@dispatch(TorchNumeric, TorchNumeric)
+def ge(a, b):
+    return torch.ge(a, b)

@@ -133,3 +133,23 @@ def all(a, axis=None):
 @dispatch(TFNumeric)
 def any(a, axis=None):
     return tf.reduce_any(a, axis=axis)
+
+
+@dispatch(TFNumeric, TFNumeric)
+def lt(a, b):
+    return tf.less(a, b)
+
+
+@dispatch(TFNumeric, TFNumeric)
+def le(a, b):
+    return tf.less_equal(a, b)
+
+
+@dispatch(TFNumeric, TFNumeric)
+def gt(a, b):
+    return tf.greater(a, b)
+
+
+@dispatch(TFNumeric, TFNumeric)
+def ge(a, b):
+    return tf.greater_equal(a, b)

@@ -119,10 +119,32 @@ def mean(a, axis=None):
 def std(a, axis=None):
     return np.std(a, axis=axis, ddof=0)
 
+
 @dispatch(NPNumeric)
 def all(a, axis=None):
     return np.all(a, axis=axis)
 
+
 @dispatch(NPNumeric)
 def any(a, axis=None):
     return np.any(a, axis=axis)
+
+
+@dispatch(NPNumeric, NPNumeric)
+def lt(a, b):
+    return np.less(a, b)
+
+
+@dispatch(NPNumeric, NPNumeric)
+def le(a, b):
+    return np.less_equal(a, b)
+
+
+@dispatch(NPNumeric, NPNumeric)
+def gt(a, b):
+    return np.greater(a, b)
+
+
+@dispatch(NPNumeric, NPNumeric)
+def ge(a, b):
+    return np.greater_equal(a, b)

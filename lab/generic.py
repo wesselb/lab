@@ -472,7 +472,57 @@ def any(a, axis=None):  # pragma: no cover
     """
 
 
-lt = None
-le = None
-gt = None
-ge = None
+@dispatch(Numeric, Numeric)
+@abstract()
+def lt(a, b):  # pragma: no cover
+    """Check whether one tensor is strictly less than another.
+
+    Args:
+        a (tensor): First tensor.
+        b (tensor): Second tensor.
+
+    Returns:
+        tensor[bool]: `a` is strictly less than `b`.
+    """
+
+
+@dispatch(Numeric, Numeric)
+@abstract()
+def le(a, b):  # pragma: no cover
+    """Check whether one tensor is less than or equal to another.
+
+    Args:
+        a (tensor): First tensor.
+        b (tensor): Second tensor.
+
+    Returns:
+        tensor[bool]: `a` is less than or equal to `b`.
+    """
+
+
+@dispatch(Numeric, Numeric)
+@abstract()
+def gt(a, b):  # pragma: no cover
+    """Check whether one tensor is strictly greater than another.
+
+    Args:
+        a (tensor): First tensor.
+        b (tensor): Second tensor.
+
+    Returns:
+        tensor[bool]: `a` is strictly greater than `b`.
+    """
+
+
+@dispatch(Numeric, Numeric)
+@abstract()
+def ge(a, b):  # pragma: no cover
+    """Check whether one tensor is greater than or equal to another.
+
+    Args:
+        a (tensor): First tensor.
+        b (tensor): Second tensor.
+
+    Returns:
+        tensor[bool]: `a` is greater than or equal to `b`.
+    """
