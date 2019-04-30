@@ -29,12 +29,17 @@ ok = nose.tools.ok_
 approx = np.testing.assert_array_almost_equal
 
 
-def call(f, method, args=(), res=True):
-    eq(getattr(f, method)(*args), res)
+def eeq(x, y):
+    assert x is y
 
 
-def lam(f, args=()):
-    ok(f(*args), 'Lambda returned False.')
+def assert_isinstance(x, y):
+    assert isinstance(x, y)
+
+
+def call(f, args=(), kw_args=None, res=True):
+    kw_args = {} if kw_args is None else kw_args
+    eq(f(*args, **kw_args), res)
 
 
 @_dispatch({NPNumeric, Number})
@@ -52,6 +57,11 @@ def to_np(x):
 def to_np(x):
     with tf.Session() as sess:
         return sess.run(x)
+
+
+@_dispatch(tf.Dimension)
+def to_np(x):
+    return x.value
 
 
 @_dispatch(tuple)
