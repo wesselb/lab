@@ -6,7 +6,7 @@ import numpy as np
 import lab as B
 from . import check_function, Tensor, Value, Matrix, List, Tuple
 # noinspection PyUnresolvedReferences
-from . import eq, neq, lt, le, ge, gt, raises, call, ok, lam, allclose, approx
+from . import eq, neq, lt, le, ge, gt, raises, call, ok, allclose, approx
 
 
 def test_sizing():

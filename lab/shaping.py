@@ -36,7 +36,6 @@ def shape(a):  # pragma: no cover
     Returns:
         object: Shape of `a`.
     """
-    pass
 
 
 @dispatch(Numeric)
@@ -50,7 +49,6 @@ def shape_int(a):  # pragma: no cover
     Returns:
         tuple: Shape of `a` as a tuple of integers.
     """
-    pass
 
 
 @dispatch(Numeric)
@@ -64,7 +62,6 @@ def rank(a):  # pragma: no cover
     Returns:
         int: Rank of `a`.
     """
-    pass
 
 
 @dispatch(Numeric)
@@ -78,7 +75,6 @@ def length(a):  # pragma: no cover
     Returns:
         int: Length of `a`.
     """
-    pass
 
 
 @dispatch(Numeric)
@@ -106,7 +102,6 @@ def expand_dims(a, axis=0):  # pragma: no cover
     Returns:
         tensor: `a` with the new axis.
     """
-    pass
 
 
 @dispatch(Numeric)
@@ -141,7 +136,6 @@ def diag(a):  # pragma: no cover
     Returns:
         tensor: Diagonal or matrix.
     """
-    pass
 
 
 @dispatch(Numeric)
@@ -168,7 +162,6 @@ def vec_to_tril(a):  # pragma: no cover
     Returns:
         tensor: Lower triangular matrix.
     """
-    pass
 
 
 @dispatch(Numeric)
@@ -182,7 +175,6 @@ def tril_to_vec(a):  # pragma: no cover
     Returns:
         tensor: Vector
     """
-    pass
 
 
 @dispatch(ListOrTuple)
@@ -197,7 +189,6 @@ def stack(a, axis=0):  # pragma: no cover
     Returns:
         tensor: Stacked tensors.
     """
-    pass
 
 
 @dispatch(Numeric)
@@ -212,7 +203,6 @@ def unstack(a, axis=0):  # pragma: no cover
     Returns:
         list[tensor]: List of tensors.
     """
-    pass
 
 
 @dispatch(Numeric)
@@ -222,15 +212,14 @@ def reshape(a, shape=(-1,)):  # pragma: no cover
 
     Args:
         a (tensor): List of tensors.
-        shape (tuple, optional): New shape. Defaults to `(-1,)`.
+        shape (shape, optional): New shape. Defaults to `(-1,)`.
 
     Returns:
         tensor: Reshaped tensor.
     """
-    pass
 
 
-@dispatch(Numeric)
+@dispatch(ListOrTuple)
 @abstract()
 def concat(a, axis=0):  # pragma: no cover
     """Concatenate tensors along an axis.
@@ -242,7 +231,6 @@ def concat(a, axis=0):  # pragma: no cover
     Returns:
         tensor: Concatenation.
     """
-    pass
 
 
 @dispatch(ListOrTuple)
@@ -260,7 +248,7 @@ def concat2d(a):  # pragma: no cover
 
 
 @dispatch(Numeric, ListOrTuple)
-@abstract(convert_to=0, promote_to=0)
+@abstract(convert_to=0, promote_to=None)
 def take(a, indices, axis=0):  # pragma: no cover
     """Take particular elements along an axis.
 
@@ -272,4 +260,3 @@ def take(a, indices, axis=0):  # pragma: no cover
     Returns:
         tensor: Selected subtensor.
     """
-    pass
