@@ -5,9 +5,14 @@ from __future__ import absolute_import, division, print_function
 import torch
 
 from . import dispatch
-from ..types import TorchNumeric
+from ..types import TorchNumeric, TorchDType
 
 __all__ = []
+
+
+@dispatch(TorchNumeric, TorchDType)
+def cast(a, dtype):
+    return a.type(dtype)
 
 
 @dispatch(TorchNumeric)

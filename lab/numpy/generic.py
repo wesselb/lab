@@ -5,9 +5,14 @@ from __future__ import absolute_import, division, print_function
 import numpy as np
 
 from . import dispatch
-from ..types import NPNumeric
+from ..types import NPNumeric, NPDType
 
 __all__ = []
+
+
+@dispatch(NPNumeric, NPDType)
+def cast(a, dtype):
+    return a.astype(dtype)
 
 
 @dispatch(NPNumeric)
