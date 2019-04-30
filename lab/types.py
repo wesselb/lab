@@ -19,7 +19,7 @@ __all__ = ['NPNumeric', 'TFNumeric', 'TorchNumeric', 'Numeric',
            'NPListOrTuple', 'TFListOrTuple', 'TorchListOrTuple', 'ListOrTuple',
            'NPShape', 'TFShape', 'TorchShape', 'Shape',
            'NPDType', 'TFDType', 'TorchDType', 'DType',
-           'default_dtype', 'issubdtype',
+           'default_dtype', 'issubdtype', 'dtype',
            'NP', 'TF', 'Torch', 'Framework']
 
 # Numeric types:
@@ -117,6 +117,21 @@ def issubdtype(dtype1, dtype2):
 @dispatch(object, object)
 def issubdtype(dtype1, dtype2):
     return issubdtype(convert(dtype1, type), convert(dtype2, type))
+
+
+@dispatch(Number)
+def dtype(a):
+    """Determine the data type of an object.
+
+    Args:
+        a (tensor): Object to determine data type of.
+    """
+    return type(a)
+
+
+@dispatch({NPNumeric, TFNumeric, TorchNumeric})
+def dtype(a):
+    return a.dtype
 
 
 # Framework types:

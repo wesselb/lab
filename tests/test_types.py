@@ -106,6 +106,19 @@ def test_issubdtype():
     yield call, B.issubdtype, (torch.float32, np.integer), {}, False
 
 
+def test_dtype():
+    yield call, B.dtype, (1,), {}, int
+    yield call, B.dtype, (1.0,), {}, float
+    yield call, B.dtype, (np.array(1, dtype=np.int32),), {}, np.int32
+    yield call, B.dtype, (np.array(1.0, dtype=np.float32),), {}, np.float32
+    yield call, B.dtype, (tf.constant(1, dtype=tf.int32),), {}, tf.int32
+    yield call, B.dtype, (tf.constant(1.0, dtype=tf.float32),), {}, tf.float32
+    yield call, B.dtype, (torch.tensor(1, dtype=torch.int32),), {}, \
+          torch.int32
+    yield call, B.dtype, (torch.tensor(1.0, dtype=torch.float32),), {}, \
+          torch.float32
+
+
 def test_framework():
     for t in [B.NP, B.Framework]:
         yield assert_isinstance, np.array(1), t
