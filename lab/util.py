@@ -12,6 +12,15 @@ from . import B
 __all__ = ['abstract']
 
 
+def _determine_splitting_index(args, to):
+    if to is None:
+        return 0
+    elif to < 0:
+        return to + len(args) + 1
+    else:
+        return to + 1
+
+
 def abstract(convert_to=-1, promote_to=-1):
     """Create a decorator for an abstract function.
 
@@ -28,20 +37,9 @@ def abstract(convert_to=-1, promote_to=-1):
     def decorator(f):
         @wraps(f)
         def wrapper(*args, **kw_args):
-            # Fix negative indices: adding `1` below will otherwise break.
-            if convert_to is None:
-                convert_index = 0
-            elif convert_to < 0:
-                convert_index = convert_to + len(args) + 1
-            else:
-                convert_index = convert_to + 1
-
-            if promote_to is None:
-                promote_index = 0
-            elif promote_to < 0:
-                promote_index = promote_to + len(args) + 1
-            else:
-                promote_index = promote_to + 1
+            # Determine splitting indices.
+            convert_index = _determine_splitting_index(args, convert_to)
+            promote_index = _determine_splitting_index(args, promote_to)
 
             # Record types.
             types_before = tuple(type(arg) for arg in args)
