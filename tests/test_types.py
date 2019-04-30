@@ -96,6 +96,9 @@ def test_data_type():
     yield eeq, convert(torch.float32, B.NPDType), np.float32
     yield eeq, convert(torch.float32, B.TFDType), tf.float32
 
+    # Test conversion of `np.dtype`.
+    yield eeq, convert(np.dtype('float32'), B.DType), np.float32
+
 
 def test_issubdtype():
     yield call, B.issubdtype, (np.float32, np.floating)

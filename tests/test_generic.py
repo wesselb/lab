@@ -5,7 +5,7 @@ from __future__ import absolute_import, division, print_function
 import lab as B
 from . import check_function, Tensor
 # noinspection PyUnresolvedReferences
-from . import eq, neq, lt, le, ge, gt, raises, call, ok, lam, allclose, approx
+from . import eq, neq, lt, le, ge, gt, raises, call, ok, allclose, approx
 
 
 def test_abs():

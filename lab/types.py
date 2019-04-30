@@ -97,6 +97,9 @@ add_conversion_method(TFDType, NPDType, lambda x: x.as_numpy_dtype)
 add_conversion_method(TFDType, TorchDType,
                       lambda x: getattr(torch, x.as_numpy_dtype.__name__))
 
+# NumPy data types can be of type `np.dtype`. Convert to the proper types.
+add_conversion_method(np.dtype, DType, lambda x: x.type)
+
 default_dtype = np.float64  #: Default dtype.
 
 
@@ -131,7 +134,7 @@ def dtype(a):
 
 @dispatch({NPNumeric, TFNumeric, TorchNumeric})
 def dtype(a):
-    return a.dtype
+    return convert(a.dtype, DType)
 
 
 # Framework types:

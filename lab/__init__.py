@@ -12,10 +12,10 @@ dispatch = Dispatcher()  # This dispatch namespace will be used everywhere.
 from .generic import *
 from .shaping import *
 from .linear_algebra import *
+from .random import *
 
 from .numpy import *
 from .tensorflow import *
 from .torch import *
 
 from .types import *
-from .conversion import *

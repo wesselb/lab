@@ -12,7 +12,7 @@ import tensorflow as tf
 import torch
 from plum import Dispatcher
 
-from . import NPNumeric, TFNumeric, TorchNumeric, TF, Torch
+from . import B
 
 log = logging.getLogger('lab.' + __name__)
 _dispatch = Dispatcher()
@@ -42,18 +42,18 @@ def call(f, args=(), kw_args=None, res=True):
     eq(f(*args, **kw_args), res)
 
 
-@_dispatch({NPNumeric, Number})
+@_dispatch({B.NPNumeric, Number})
 def to_np(x):
     """Convert a tensor to NumPy."""
     return x
 
 
-@_dispatch(TorchNumeric)
+@_dispatch(B.TorchNumeric)
 def to_np(x):
     return x.numpy()
 
 
-@_dispatch(TFNumeric)
+@_dispatch(B.TFNumeric)
 def to_np(x):
     with tf.Session() as sess:
         return sess.run(x)
@@ -90,7 +90,7 @@ def allclose(x, y):
 def check_function(f, args_spec, kw_args_spec):
     """Check that a function produces consistent output."""
     # Construct product of keyword arguments.
-    kw_args_prod = list(product(*[[(k, v) for v in vs.values()]
+    kw_args_prod = list(product(*[[(k, v) for v in vs.forms()]
                                   for k, vs in kw_args_spec.items()]))
     kw_args_prod = [{k: v for k, v in kw_args} for kw_args in kw_args_prod]
 
@@ -106,10 +106,16 @@ def check_function(f, args_spec, kw_args_spec):
         first_result = f(*args_prod[0], **kw_args)
 
         for args in args_prod:
-            # Skip mixes of TF and Torch.
-            any_tf = any(isinstance(arg, TF) for arg in args)
-            any_torch = any(isinstance(arg, Torch) for arg in args)
+            # Skip mixes of TF and Torch numerics, lists, or tuples.
+            any_tf = any(isinstance(arg, (B.TFNumeric,
+                                          B.TFListOrTuple))
+                         for arg in args)
+            any_torch = any(isinstance(arg, (B.TorchNumeric,
+                                             B.TorchListOrTuple))
+                            for arg in args)
             if any_tf and any_torch:
+                log.debug('Skipping call with arguments {} and keyword '
+                          'arguments {}.'.format(args, kw_args))
                 continue
 
             log.debug('Call with arguments {} and keyword arguments {}.'
@@ -182,14 +188,8 @@ class Value(object):
     def __init__(self, *values):
         self._values = values
 
-    def values(self):
-        return self._values
-
     def forms(self):
-        if len(self._values) != 1:
-            raise RuntimeError('Must give exactly one value if used in '
-                               'argument specification.')
-        return (self._values[0],) * 3
+        return self._values
 
 
 class Bool(Value):

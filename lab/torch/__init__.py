@@ -7,3 +7,4 @@ from .. import dispatch, B
 from .generic import *
 from .shaping import *
 from .linear_algebra import *
+from .random import *

@@ -20,4 +20,3 @@ def abs(a):  # pragma: no cover
     Returns:
         tensor: Absolute value of `a`.
     """
-    pass
