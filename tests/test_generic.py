@@ -2,6 +2,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+import scipy.special
 import numpy as np
 import tensorflow as tf
 import torch
@@ -51,14 +52,12 @@ def test_unary():
         yield check_function, f, (Tensor(),), {}
         yield check_function, f, (Tensor(2),), {}
         yield check_function, f, (Tensor(2, 3),), {}
-        yield check_function, f, (Tensor(2, 3, 4),), {}
 
     # Test functions with positive arguments.
     for f in [B.log]:
         yield check_function, f, (PositiveTensor(),), {}
         yield check_function, f, (PositiveTensor(2),), {}
         yield check_function, f, (PositiveTensor(2, 3),), {}
-        yield check_function, f, (PositiveTensor(2, 3, 4),), {}
 
 
 def test_binary():
@@ -67,4 +66,17 @@ def test_binary():
         yield check_function, f, (Tensor(), Tensor()), {}
         yield check_function, f, (Tensor(2), Tensor(2)), {}
         yield check_function, f, (Tensor(2, 3), Tensor(2, 3)), {}
-        yield check_function, f, (Tensor(2, 3, 4), Tensor(2, 3, 4)), {}
+
+
+def test_reduction():
+    for f in [B.min, B.max, B.sum, B.mean, B.std, B.logsumexp]:
+        yield check_function, f, (Tensor(),), {}
+        yield check_function, f, (Tensor(2),), {}
+        yield check_function, f, (Tensor(2),), {'axis': Value(0)}
+        yield check_function, f, (Tensor(2, 3),), {}
+        yield check_function, f, (Tensor(2, 3),), {'axis': Value(0, 1)}
+
+    # Check correctness of `logsumexp`.
+    mat = PositiveTensor(3, 4).np()
+    yield allclose, \
+          B.logsumexp(mat, axis=1), scipy.special.logsumexp(mat, axis=1)

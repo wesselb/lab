@@ -25,7 +25,13 @@ __all__ = ['zeros',
            'power',
            'minimum',
            'maximum',
-           'leaky_relu']
+           'leaky_relu',
+           'min',
+           'max',
+           'sum',
+           'mean',
+           'std',
+           'logsumexp']
 
 
 @dispatch(Shape, DType)
@@ -339,3 +345,94 @@ def leaky_relu(a, alpha):  # pragma: no cover
         tensor: Activation value.
     """
     return maximum(multiply(a, alpha), a)
+
+
+@dispatch(Numeric)
+@abstract()
+def min(a, axis=None):  # pragma: no cover
+    """Take the minimum of a tensor, possibly along an axis.
+
+    Args:
+        a (tensor): Tensor.
+        axis (int, optional): Optional axis.
+
+    Returns:
+        tensor: Reduced tensor.
+    """
+
+
+@dispatch(Numeric)
+@abstract()
+def max(a, axis=None):  # pragma: no cover
+    """Take the maximum of a tensor, possibly along an axis.
+
+    Args:
+        a (tensor): Tensor.
+        axis (int, optional): Optional axis.
+
+    Returns:
+        tensor: Reduced tensor.
+    """
+
+
+@dispatch(Numeric)
+@abstract()
+def sum(a, axis=None):  # pragma: no cover
+    """Sum a tensor, possibly along an axis.
+
+    Args:
+        a (tensor): Tensor.
+        axis (int, optional): Optional axis.
+
+    Returns:
+        tensor: Reduced tensor.
+    """
+
+
+@dispatch(Numeric)
+@abstract()
+def mean(a, axis=None):  # pragma: no cover
+    """Take the mean of a tensor, possibly along an axis.
+
+    Args:
+        a (tensor): Tensor.
+        axis (int, optional): Optional axis.
+
+    Returns:
+        tensor: Reduced tensor.
+    """
+
+
+@dispatch(Numeric)
+@abstract()
+def std(a, axis=None):  # pragma: no cover
+    """Compute the standard deviation of a tensor, possibly along an axis.
+
+    Args:
+        a (tensor): Tensor.
+        axis (int, optional): Optional axis.
+
+    Returns:
+        tensor: Reduced tensor.
+    """
+
+
+@dispatch(Numeric)
+def logsumexp(a, axis=None):  # pragma: no cover
+    """Exponentiate a tensor, sum it, and then take the logarithm, possibly
+    along an axis.
+
+    Args:
+        a (tensor): Tensor.
+        axis (int, optional): Optional axis.
+
+    Returns:
+        tensor: Reduced tensor.
+    """
+    a_max = max(a, axis=axis)
+    # Put the axis back if one is specified.
+    if axis is None:
+        a_expanded = a_max
+    else:
+        a_expanded = B.expand_dims(a_max, axis=axis)
+    return log(sum(exp(a - a_expanded), axis=axis)) + a_max

@@ -93,3 +93,28 @@ def minimum(a, b):
 @dispatch(NPNumeric, NPNumeric)
 def maximum(a, b):
     return np.maximum(a, b)
+
+
+@dispatch(NPNumeric)
+def min(a, axis=None):
+    return np.min(a, axis=axis)
+
+
+@dispatch(NPNumeric)
+def max(a, axis=None):
+    return np.max(a, axis=axis)
+
+
+@dispatch(NPNumeric)
+def sum(a, axis=None):
+    return np.sum(a, axis=axis)
+
+
+@dispatch(NPNumeric)
+def mean(a, axis=None):
+    return np.mean(a, axis=axis)
+
+
+@dispatch(NPNumeric)
+def std(a, axis=None):
+    return np.std(a, axis=axis, ddof=0)

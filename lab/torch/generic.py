@@ -93,3 +93,43 @@ def minimum(a, b):
 @dispatch(TorchNumeric, TorchNumeric)
 def maximum(a, b):
     return torch.max(a, b)
+
+
+@dispatch(TorchNumeric)
+def min(a, axis=None):
+    if axis is None:
+        return torch.min(a)
+    else:
+        return torch.min(a, dim=axis)[0]
+
+
+@dispatch(TorchNumeric)
+def max(a, axis=None):
+    if axis is None:
+        return torch.max(a)
+    else:
+        return torch.max(a, dim=axis)[0]
+
+
+@dispatch(TorchNumeric)
+def sum(a, axis=None):
+    if axis is None:
+        return torch.sum(a)
+    else:
+        return torch.sum(a, dim=axis)
+
+
+@dispatch(TorchNumeric)
+def mean(a, axis=None):
+    if axis is None:
+        return torch.mean(a)
+    else:
+        return torch.mean(a, dim=axis)
+
+
+@dispatch(TorchNumeric)
+def std(a, axis=None):
+    if axis is None:
+        return torch.std(a, unbiased=False)
+    else:
+        return torch.std(a, dim=axis, unbiased=False)

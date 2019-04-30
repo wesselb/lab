@@ -4,7 +4,7 @@ from __future__ import absolute_import, division, print_function
 
 import tensorflow as tf
 
-from . import dispatch
+from . import dispatch, B
 from ..types import TFNumeric, TFDType, TFShape
 
 __all__ = []
@@ -93,3 +93,33 @@ def minimum(a, b):
 @dispatch(TFNumeric, TFNumeric)
 def maximum(a, b):
     return tf.maximum(a, b)
+
+
+@dispatch(TFNumeric)
+def min(a, axis=None):
+    return tf.reduce_min(a, axis=axis)
+
+
+@dispatch(TFNumeric)
+def max(a, axis=None):
+    return tf.reduce_max(a, axis=axis)
+
+
+@dispatch(TFNumeric)
+def sum(a, axis=None):
+    return tf.reduce_sum(a, axis=axis)
+
+
+@dispatch(TFNumeric)
+def mean(a, axis=None):
+    return tf.reduce_mean(a, axis=axis)
+
+
+@dispatch(TFNumeric)
+def std(a, axis=None):
+    if axis is None:
+        axes = list(range(B.rank(a)))
+    else:
+        axes = [axis]
+    _, var = tf.nn.moments(a, axes=axes)
+    return tf.sqrt(var)
