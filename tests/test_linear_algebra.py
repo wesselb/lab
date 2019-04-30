@@ -8,6 +8,10 @@ from . import check_function, Matrix, Bool, Value, PSD, Tensor
 from . import eq, neq, lt, le, ge, gt, raises, call, ok, allclose, approx
 
 
+def test_constants():
+    yield eq, B.epsilon, 1e-12
+
+
 def test_transpose():
     for f in [B.transpose, B.T]:
         yield check_function, f, (Matrix(),), {}

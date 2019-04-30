@@ -15,6 +15,8 @@ __all__ = ['transpose', 'T',
            'cholesky_solve',
            'trisolve']
 
+epsilon = 1e-12  #: Magnitude of diagonal to regularise matrices with.
+
 
 @dispatch(Numeric)
 @abstract()
