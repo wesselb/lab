@@ -133,3 +133,19 @@ def std(a, axis=None):
         return torch.std(a, unbiased=False)
     else:
         return torch.std(a, dim=axis, unbiased=False)
+
+
+@dispatch(TorchNumeric)
+def all(a, axis=None):
+    if axis is None:
+        return a.all()
+    else:
+        return a.all(dim=axis)
+
+
+@dispatch(TorchNumeric)
+def any(a, axis=None):
+    if axis is None:
+        return a.any()
+    else:
+        return a.any(dim=axis)

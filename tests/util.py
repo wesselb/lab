@@ -42,7 +42,7 @@ def call(f, args=(), kw_args=None, res=True):
     eq(f(*args, **kw_args), res)
 
 
-@_dispatch({B.NPNumeric, Number})
+@_dispatch({B.NPNumeric, Number, np.bool_})
 def to_np(x):
     """Convert a tensor to NumPy."""
     return x
@@ -154,6 +154,20 @@ class PositiveTensor(Tensor):
         else:
             mat = kw_args['mat']
         Tensor.__init__(self, mat=mat)
+
+
+class BoolTensor(Tensor):
+    """Boolean tensor placeholder."""
+
+    def __init__(self, *dims, **kw_args):
+        if 'mat' not in kw_args or kw_args['mat'] is None:
+            mat = np.array(np.random.rand(*dims) > .5)
+        else:
+            mat = kw_args['mat']
+        Tensor.__init__(self, mat=mat)
+
+    def torch(self):
+        return torch.tensor(self.mat.astype(np.uint8))
 
 
 class Matrix(Tensor):

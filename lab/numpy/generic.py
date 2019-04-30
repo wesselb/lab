@@ -118,3 +118,11 @@ def mean(a, axis=None):
 @dispatch(NPNumeric)
 def std(a, axis=None):
     return np.std(a, axis=axis, ddof=0)
+
+@dispatch(NPNumeric)
+def all(a, axis=None):
+    return np.all(a, axis=axis)
+
+@dispatch(NPNumeric)
+def any(a, axis=None):
+    return np.any(a, axis=axis)

@@ -31,7 +31,13 @@ __all__ = ['zeros',
            'sum',
            'mean',
            'std',
-           'logsumexp']
+           'logsumexp',
+           'all',
+           'any',
+           'lt',
+           'le',
+           'gt',
+           'ge']
 
 
 @dispatch(Shape, DType)
@@ -436,3 +442,37 @@ def logsumexp(a, axis=None):  # pragma: no cover
     else:
         a_expanded = B.expand_dims(a_max, axis=axis)
     return log(sum(exp(a - a_expanded), axis=axis)) + a_max
+
+
+@dispatch(Numeric)
+@abstract()
+def all(a, axis=None):  # pragma: no cover
+    """Logical all of a tensor, possibly along an axis.
+
+    Args:
+        a (tensor): Tensor.
+        axis (int, optional): Optional axis.
+
+    Returns:
+        tensor: Reduced tensor.
+    """
+
+
+@dispatch(Numeric)
+@abstract()
+def any(a, axis=None):  # pragma: no cover
+    """Logical any of a tensor, possibly along an axis.
+
+    Args:
+        a (tensor): Tensor.
+        axis (int, optional): Optional axis.
+
+    Returns:
+        tensor: Reduced tensor.
+    """
+
+
+lt = None
+le = None
+gt = None
+ge = None

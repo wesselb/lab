@@ -8,7 +8,8 @@ import tensorflow as tf
 import torch
 
 import lab as B
-from . import check_function, Tensor, Value, default_dtype, PositiveTensor
+from . import check_function, Tensor, Value, default_dtype, PositiveTensor, \
+    BoolTensor
 # noinspection PyUnresolvedReferences
 from . import eq, neq, lt, le, ge, gt, raises, call, ok, allclose, approx, eeq
 
@@ -80,3 +81,12 @@ def test_reduction():
     mat = PositiveTensor(3, 4).np()
     yield allclose, \
           B.logsumexp(mat, axis=1), scipy.special.logsumexp(mat, axis=1)
+
+
+def test_logical_reduction():
+    for f in [B.all, B.any]:
+        yield check_function, f, (BoolTensor(),), {}
+        yield check_function, f, (BoolTensor(2),), {}
+        yield check_function, f, (BoolTensor(2),), {'axis': Value(0)}
+        yield check_function, f, (BoolTensor(2, 3),), {}
+        yield check_function, f, (BoolTensor(2, 3),), {'axis': Value(0, 1)}

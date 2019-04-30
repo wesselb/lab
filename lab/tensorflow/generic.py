@@ -123,3 +123,13 @@ def std(a, axis=None):
         axes = [axis]
     _, var = tf.nn.moments(a, axes=axes)
     return tf.sqrt(var)
+
+
+@dispatch(TFNumeric)
+def all(a, axis=None):
+    return tf.reduce_all(a, axis=axis)
+
+
+@dispatch(TFNumeric)
+def any(a, axis=None):
+    return tf.reduce_any(a, axis=axis)
