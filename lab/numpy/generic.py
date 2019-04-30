@@ -28,3 +28,68 @@ def cast(a, dtype):
 @dispatch(NPNumeric)
 def abs(a):
     return np.abs(a)
+
+
+@dispatch(NPNumeric)
+def exp(a):
+    return np.exp(a)
+
+
+@dispatch(NPNumeric)
+def log(a):
+    return np.log(a)
+
+
+@dispatch(NPNumeric)
+def sin(a):
+    return np.sin(a)
+
+
+@dispatch(NPNumeric)
+def cos(a):
+    return np.cos(a)
+
+
+@dispatch(NPNumeric)
+def tan(a):
+    return np.tan(a)
+
+
+@dispatch(NPNumeric)
+def tanh(a):
+    return np.tanh(a)
+
+
+@dispatch(NPNumeric, NPNumeric)
+def add(a, b):
+    return np.add(a, b)
+
+
+@dispatch(NPNumeric, NPNumeric)
+def subtract(a, b):
+    return np.subtract(a, b)
+
+
+@dispatch(NPNumeric, NPNumeric)
+def multiply(a, b):
+    return np.multiply(a, b)
+
+
+@dispatch(NPNumeric, NPNumeric)
+def divide(a, b):
+    return np.divide(a, b)
+
+
+@dispatch(NPNumeric, NPNumeric)
+def power(a, b):
+    return np.power(a, b)
+
+
+@dispatch(NPNumeric, NPNumeric)
+def minimum(a, b):
+    return np.minimum(a, b)
+
+
+@dispatch(NPNumeric, NPNumeric)
+def maximum(a, b):
+    return np.maximum(a, b)

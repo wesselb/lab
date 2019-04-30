@@ -124,11 +124,11 @@ def check_function(f, args_spec, kw_args_spec):
 
 
 class Tensor(object):
-    """Tensor placeholder for in argument specification."""
+    """Tensor placeholder."""
 
     def __init__(self, *dims, **kw_args):
         if 'mat' not in kw_args or kw_args['mat'] is None:
-            self.mat = np.random.randn(*dims)
+            self.mat = np.array(np.random.randn(*dims))
         else:
             self.mat = kw_args['mat']
 
@@ -145,8 +145,19 @@ class Tensor(object):
         return torch.tensor(self.mat)
 
 
+class PositiveTensor(Tensor):
+    """Positive tensor placeholder."""
+
+    def __init__(self, *dims, **kw_args):
+        if 'mat' not in kw_args or kw_args['mat'] is None:
+            mat = np.array(np.random.rand(*dims))
+        else:
+            mat = kw_args['mat']
+        Tensor.__init__(self, mat=mat)
+
+
 class Matrix(Tensor):
-    """Matrix placeholder for in argument specification."""
+    """Matrix placeholder."""
 
     def __init__(self, rows=3, cols=None, mat=None):
         # Default the number of columns to the number of rows.
@@ -155,7 +166,7 @@ class Matrix(Tensor):
 
 
 class PSD(Matrix):
-    """Positive-definite matrix placeholder for in argument specification."""
+    """Positive-definite matrix placeholder."""
 
     def __init__(self, rows=3):
         a = np.random.randn(rows, rows)
@@ -163,7 +174,7 @@ class PSD(Matrix):
 
 
 class Tuple(object):
-    """Tuple placeholder for in argument specification."""
+    """Tuple placeholder."""
 
     def __init__(self, *xs):
         self.xs = xs
@@ -183,7 +194,7 @@ class List(object):
 
 
 class Value(object):
-    """Value placeholder for in keyword argument or argument specification."""
+    """Value placeholder."""
 
     def __init__(self, *values):
         self._values = values
@@ -193,7 +204,7 @@ class Value(object):
 
 
 class Bool(Value):
-    """Boolean placeholder for in keyword argument specification."""
+    """Boolean placeholder."""
 
     def __init__(self):
         Value.__init__(self, False, True)

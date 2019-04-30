@@ -7,7 +7,7 @@ import tensorflow as tf
 import torch
 
 import lab as B
-from . import check_function, Tensor, Value, default_dtype
+from . import check_function, Tensor, Value, default_dtype, PositiveTensor
 # noinspection PyUnresolvedReferences
 from . import eq, neq, lt, le, ge, gt, raises, call, ok, allclose, approx, eeq
 
@@ -45,5 +45,26 @@ def test_cast():
     yield eeq, B.dtype(B.cast(torch.tensor(1), torch.float64)), torch.float64
 
 
-def test_abs():
-    yield check_function, B.abs, (Tensor(2, 3, 4),), {}
+def test_unary():
+    # Test functions with signed arguments.
+    for f in [B.abs, B.exp, B.sin, B.cos, B.tan, B.tanh, B.sigmoid, B.relu]:
+        yield check_function, f, (Tensor(),), {}
+        yield check_function, f, (Tensor(2),), {}
+        yield check_function, f, (Tensor(2, 3),), {}
+        yield check_function, f, (Tensor(2, 3, 4),), {}
+
+    # Test functions with positive arguments.
+    for f in [B.log]:
+        yield check_function, f, (PositiveTensor(),), {}
+        yield check_function, f, (PositiveTensor(2),), {}
+        yield check_function, f, (PositiveTensor(2, 3),), {}
+        yield check_function, f, (PositiveTensor(2, 3, 4),), {}
+
+
+def test_binary():
+    for f in [B.add, B.subtract, B.multiply, B.divide, B.power,
+              B.minimum, B.maximum, B.leaky_relu]:
+        yield check_function, f, (Tensor(), Tensor()), {}
+        yield check_function, f, (Tensor(2), Tensor(2)), {}
+        yield check_function, f, (Tensor(2, 3), Tensor(2, 3)), {}
+        yield check_function, f, (Tensor(2, 3, 4), Tensor(2, 3, 4)), {}
