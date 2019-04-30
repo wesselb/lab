@@ -13,18 +13,17 @@ __all__ = []
 
 @dispatch(TFNumeric)
 def shape(a):
-    s = tf.shape(a)
-    return tuple(s[i] for i in range(rank(a)))
+    return tuple(a.shape)
 
 
 @dispatch(TFNumeric)
 def shape_int(a):
-    return tuple(x.value for x in a.get_shape())
+    return tuple(x.value for x in shape(a))
 
 
 @dispatch(TFNumeric)
 def rank(a):
-    return len(shape_int(a))
+    return len(a.shape)
 
 
 @dispatch(TFNumeric)
