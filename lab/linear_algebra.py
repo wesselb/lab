@@ -27,7 +27,6 @@ def transpose(a):  # pragma: no cover
     Returns:
         tensor: Transposition of `a`.
     """
-    pass
 
 
 T = transpose  #: Shorthand for `transpose`.
@@ -47,7 +46,6 @@ def matmul(a, b, **kw_args):  # pragma: no cover
     Returns:
         tensor: Matrix product of `a` and `b`.
     """
-    pass
 
 
 mm = matmul  #: Shorthand for `matmul`.
@@ -69,7 +67,6 @@ def trace(a, **kw_args):  # pragma: no cover
     Returns:
         tensor: Trace.
     """
-    pass
 
 
 @dispatch(Numeric, Numeric)
@@ -84,7 +81,6 @@ def kron(a, b):  # pragma: no cover
     Returns:
         tensor: Kronecker product of `a` and `b`.
     """
-    pass
 
 
 @dispatch(Numeric)
@@ -100,7 +96,6 @@ def svd(a, **kw_args):  # pragma: no cover
     Returns:
         tuple: `(U, S, V)` is `compute_uv` is `True` and just `S` otherwise.
     """
-    pass
 
 
 @dispatch(Numeric)
@@ -114,7 +109,6 @@ def cholesky(a):  # pragma: no cover
     Returns:
         tensor: Cholesky decomposition.
     """
-    pass
 
 
 @dispatch(Numeric, Numeric)
@@ -130,7 +124,6 @@ def cholesky_solve(a, b):  # pragma: no cover
     Returns:
         tensor: Solution `x`.
     """
-    pass
 
 
 @dispatch(Numeric, Numeric)
@@ -147,4 +140,3 @@ def trisolve(a, b, **kw_args):  # pragma: no cover
     Returns:
         tensor: Solution `x`.
     """
-    pass
