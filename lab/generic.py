@@ -2,11 +2,15 @@
 
 from __future__ import absolute_import, division, print_function
 
+import numpy as np
 from . import dispatch, B
 from .types import Numeric, DType, Shape, default_dtype
 from .util import abstract
 
-__all__ = ['zeros',
+__all__ = ['nan',
+           'pi',
+           'log_2_pi',
+           'zeros',
            'ones',
            'cast',
            'abs',
@@ -38,6 +42,10 @@ __all__ = ['zeros',
            'le',
            'gt',
            'ge']
+
+nan = np.nan  #: NaN.
+pi = np.pi  #: Value of pi.
+log_2_pi = np.log(2 * pi)  #: Value of log(2 * pi).
 
 
 @dispatch(Shape, DType)

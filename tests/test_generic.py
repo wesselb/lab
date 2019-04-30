@@ -14,6 +14,12 @@ from . import check_function, Tensor, Value, default_dtype, PositiveTensor, \
 from . import eq, neq, lt, le, ge, gt, raises, call, ok, allclose, approx, eeq
 
 
+def test_constants():
+    yield eq, B.pi, np.pi
+    yield eq, B.log_2_pi, np.log(2 * np.pi)
+    yield eeq, B.nan, np.nan
+
+
 def test_zeros_ones():
     for f in [B.zeros, B.ones]:
         # Check consistency.
