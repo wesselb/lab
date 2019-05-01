@@ -5,7 +5,7 @@ from __future__ import absolute_import, division, print_function
 import tensorflow as tf
 
 from . import dispatch, B
-from ..types import TFNumeric, TFDType, TFShape, NPNumeric
+from ..types import TFNumeric, TFDType, TFShape, NPNumeric, Int
 
 __all__ = []
 
@@ -23,6 +23,11 @@ def zeros(shape, dtype):
 @dispatch(TFShape, TFDType)
 def ones(shape, dtype):
     return tf.ones(shape, dtype=dtype)
+
+
+@dispatch(TFNumeric, TFNumeric, Int)
+def linspace(a, b, c):
+    return tf.linspace(a, b, c)
 
 
 @dispatch(TFShape, TFDType)
@@ -50,8 +55,18 @@ def cast(a, dtype):
 
 
 @dispatch(TFNumeric)
+def identity(a):
+    return tf.identity(a)
+
+
+@dispatch(TFNumeric)
 def abs(a):
     return tf.abs(a)
+
+
+@dispatch(TFNumeric)
+def sign(a):
+    return tf.sign(a)
 
 
 @dispatch(TFNumeric)

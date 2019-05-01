@@ -22,7 +22,10 @@ def shape_int(a):
 
 @dispatch(NPNumeric)
 def rank(a):
-    return a.ndim
+    if hasattr(a, 'ndim'):
+        return a.ndim
+    else:
+        return len(shape(a))
 
 
 @dispatch(NPNumeric)

@@ -4,8 +4,8 @@ from __future__ import absolute_import, division, print_function
 
 import autograd.numpy as np
 
-from . import dispatch
-from ..types import NPNumeric, NPDType, NPShape
+from . import dispatch, B
+from ..types import NPNumeric, NPDType, NPShape, Int
 
 __all__ = []
 
@@ -25,6 +25,11 @@ def ones(shape, dtype):
     return np.ones(shape, dtype=dtype)
 
 
+@dispatch(NPNumeric, NPNumeric, Int)
+def linspace(a, b, c):
+    return np.linspace(a, b, c, dtype=B.dtype(a))
+
+
 @dispatch(NPShape, NPDType)
 def eye(shape, dtype):
     if len(shape) != 2:
@@ -34,12 +39,25 @@ def eye(shape, dtype):
 
 @dispatch(NPNumeric, NPDType)
 def cast(a, dtype):
-    return a.astype(dtype)
+    if hasattr(a, 'astype'):
+        return a.astype(dtype)
+    else:
+        return np.array(a, dtype=dtype)
+
+
+@dispatch(NPNumeric)
+def identity(a):
+    return np.array(a)
 
 
 @dispatch(NPNumeric)
 def abs(a):
     return np.abs(a)
+
+
+@dispatch(NPNumeric)
+def sign(a):
+    return np.sign(a)
 
 
 @dispatch(NPNumeric)

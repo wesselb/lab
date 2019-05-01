@@ -4,8 +4,8 @@ from __future__ import absolute_import, division, print_function
 
 import torch
 
-from . import dispatch
-from ..types import TorchNumeric, TorchDType, TorchShape, NPNumeric
+from . import dispatch, B
+from ..types import TorchNumeric, TorchDType, TorchShape, NPNumeric, Int
 
 __all__ = []
 
@@ -23,6 +23,11 @@ def zeros(shape, dtype):
 @dispatch(TorchShape, TorchDType)
 def ones(shape, dtype):
     return torch.ones(shape, dtype=dtype)
+
+
+@dispatch(TorchNumeric, TorchNumeric, Int)
+def linspace(a, b, c):
+    return torch.linspace(a, b, c, dtype=B.dtype(a))
 
 
 @dispatch(TorchShape, TorchDType)
@@ -43,8 +48,18 @@ def cast(a, dtype):
 
 
 @dispatch(TorchNumeric)
+def identity(a):
+    return a.clone()
+
+
+@dispatch(TorchNumeric)
 def abs(a):
     return torch.abs(a)
+
+
+@dispatch(TorchNumeric)
+def sign(a):
+    return torch.sign(a)
 
 
 @dispatch(TorchNumeric)
