@@ -36,6 +36,11 @@ def expand_dims(a, axis=0):
 
 
 @dispatch(NPNumeric)
+def squeeze(a):
+    return np.squeeze(a)
+
+
+@dispatch(NPNumeric)
 def diag(a):
     return np.diag(a)
 

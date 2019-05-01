@@ -12,6 +12,7 @@ __all__ = ['shape',
            'length',
            'isscalar',
            'expand_dims',
+           'squeeze',
            'uprank',
            'diag',
            'flatten',
@@ -101,6 +102,19 @@ def expand_dims(a, axis=0):  # pragma: no cover
 
     Returns:
         tensor: `a` with the new axis.
+    """
+
+
+@dispatch(Numeric)
+@abstract()
+def squeeze(a):  # pragma: no cover
+    """Remove all axes containing only a single element.
+
+    Args:
+        a (tensor): Tensor.
+
+    Returns:
+        tensor: `a` without axes containing only a single element.
     """
 
 

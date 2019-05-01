@@ -37,6 +37,11 @@ def expand_dims(a, axis=0):
 
 
 @dispatch(TFNumeric)
+def squeeze(a):
+    return tf.squeeze(a)
+
+
+@dispatch(TFNumeric)
 def diag(a):
     if rank(a) == 1:
         return tf.diag(a)

@@ -38,6 +38,11 @@ def expand_dims(a, axis=0):
 
 
 @dispatch(TorchNumeric)
+def squeeze(a):
+    return torch.squeeze(a)
+
+
+@dispatch(TorchNumeric)
 def diag(a):
     return torch.diag(a)
 
