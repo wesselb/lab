@@ -28,6 +28,7 @@ def test_random_generators():
     for f in [B.rand, B.randn]:
         # Test without specifying data type.
         yield eeq, B.dtype(f()), B.default_dtype
+        yield eeq, B.dtype(f(2)), B.default_dtype
         yield eeq, B.dtype(f(())), B.default_dtype
         yield eeq, B.dtype(f((2,))), B.default_dtype
         yield eeq, B.dtype(f((2, 2))), B.default_dtype
@@ -35,6 +36,7 @@ def test_random_generators():
         # Test with specifying data type.
         for t in [np.float32, tf.float32, torch.float32]:
             yield eeq, B.dtype(f(t)), t
+            yield eeq, B.dtype(f(2, t)), t
             yield eeq, B.dtype(f((), t)), t
             yield eeq, B.dtype(f((2,), t)), t
             yield eeq, B.dtype(f((2, 2), t)), t

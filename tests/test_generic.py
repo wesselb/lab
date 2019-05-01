@@ -26,8 +26,8 @@ def test_isnan():
     yield check_function, B.isnan, (NaNTensor(2, 3),), {}
 
 
-def test_zeros_ones():
-    for f in [B.zeros, B.ones]:
+def test_zeros_ones_eye():
+    for f in [B.zeros, B.ones, B.eye]:
         # Check consistency.
         yield check_function, f, \
               (Value((2, 3)), Value(np.float32, tf.float32, torch.float32)), {}
@@ -37,19 +37,39 @@ def test_zeros_ones():
                        (torch.float32, torch.int64)]:
             ref = B.randn((4, 5), t1)
 
-            # Check shape of calls.
+            # Check shape of shape calls.
             yield eq, B.shape_int(f((2, 3))), (2, 3)
             yield eq, B.shape_int(f((2, 3), t2)), (2, 3)
             yield eq, B.shape_int(f(ref, t2)), (4, 5)
             yield eq, B.shape_int(f((2, 3), ref)), (2, 3)
             yield eq, B.shape_int(f(ref)), (4, 5)
 
-            # Check dtype of calls.
+            # Check shape of integer calls.
+            if f is B.eye:
+                yield eq, B.shape_int(f(3)), (3, 3)
+                yield eq, B.shape_int(f(3, t2)), (3, 3)
+                yield eq, B.shape_int(f(3, ref)), (3, 3)
+            else:
+                yield eq, B.shape_int(f(3)), (3,)
+                yield eq, B.shape_int(f(3, t2)), (3,)
+                yield eq, B.shape_int(f(3, ref)), (3,)
+
+            # Check data type of shape calls.
             yield eeq, B.dtype(f((2, 3))), default_dtype
             yield eeq, B.dtype(f((2, 3), t2)), t2
             yield eeq, B.dtype(f(ref, t2)), t2
             yield eeq, B.dtype(f((2, 3), ref)), t1
             yield eeq, B.dtype(f(ref)), t1
+
+            # Check data type of integer calls.
+            yield eeq, B.dtype(f(3)), default_dtype
+            yield eeq, B.dtype(f(3, t2)), t2
+            yield eeq, B.dtype(f(3, ref)), t1
+
+    # Check exceptions.
+    for t in [np.float32, tf.float32, torch.float32]:
+        yield raises, ValueError, lambda: B.eye((3,), t)
+        yield raises, ValueError, lambda: B.eye((3, 4, 5), t)
 
 
 def test_cast():

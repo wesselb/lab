@@ -25,6 +25,13 @@ def ones(shape, dtype):
     return torch.ones(shape, dtype=dtype)
 
 
+@dispatch(TorchShape, TorchDType)
+def eye(shape, dtype):
+    if len(shape) != 2:
+        raise ValueError('Must feed a two-dimensional shape to eye.')
+    return torch.eye(shape[0], shape[1], dtype=dtype)
+
+
 @dispatch(TorchNumeric, TorchDType)
 def cast(a, dtype):
     return a.type(dtype)

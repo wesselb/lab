@@ -13,6 +13,7 @@ __all__ = ['nan',
            'isnan',
            'zeros',
            'ones',
+           'eye',
            'cast',
            'abs',
            'exp',
@@ -69,9 +70,17 @@ def zeros(shape, dtype):  # pragma: no cover
 
     Args:
         shape (shape or tensor): Shape of the tensor.
-        dtype (dtype, optional): Data type. Defaults to `.types.default_dtype`
-            or the data type of the provided tensor.
+        dtype (dtype or tensor, optional): Data type. Defaults to
+            `.types.default_dtype` or the data type of the provided tensor.
+
+    Returns:
+        tensor: Matrix of zeros of shape `shape` and data type `dtype`.
     """
+
+
+@dispatch(int, DType)
+def zeros(shape, dtype):
+    return zeros((shape,), dtype)
 
 
 @dispatch(Shape)
@@ -79,9 +88,19 @@ def zeros(shape):
     return zeros(shape, default_dtype)
 
 
+@dispatch(int)
+def zeros(shape):
+    return zeros((shape,), default_dtype)
+
+
 @dispatch(Shape, Numeric)
 def zeros(shape, ref):
     return zeros(shape, B.dtype(ref))
+
+
+@dispatch(int, Numeric)
+def zeros(shape, ref):
+    return zeros((shape,), B.dtype(ref))
 
 
 @dispatch(Numeric, DType)
@@ -101,9 +120,17 @@ def ones(shape, dtype):  # pragma: no cover
 
     Args:
         shape (shape or tensor): Shape of the tensor.
-        dtype (dtype, optional): Data type. Defaults to `.types.default_dtype`
-            or the data type of the provided tensor.
+        dtype (dtype or tensor, optional): Data type. Defaults to
+            `.types.default_dtype` or the data type of the provided tensor.
+
+    Returns:
+        tensor: Matrix of ones of shape `shape` and data type `dtype`.
     """
+
+
+@dispatch(int, DType)
+def ones(shape, dtype):
+    return ones((shape,), dtype)
 
 
 @dispatch(Shape)
@@ -111,9 +138,19 @@ def ones(shape):
     return ones(shape, default_dtype)
 
 
+@dispatch(int)
+def ones(shape):
+    return ones((shape,), default_dtype)
+
+
 @dispatch(Shape, Numeric)
 def ones(shape, ref):
     return ones(shape, B.dtype(ref))
+
+
+@dispatch(int, Numeric)
+def ones(shape, ref):
+    return ones((shape,), B.dtype(ref))
 
 
 @dispatch(Numeric, DType)
@@ -124,6 +161,56 @@ def ones(ref, dtype):
 @dispatch(Numeric)
 def ones(ref):
     return ones(B.shape(ref), B.dtype(ref))
+
+
+@dispatch(Shape, DType)
+@abstract(promote_to=None)
+def eye(shape, dtype):  # pragma: no cover
+    """Create an identity matrix.
+
+    Args:
+        shape (int or shape or tensor): Shape of the matrix.
+        dtype (dtype or tensor, optional): Data type. Defaults to
+            `.types.default_dtype` or the data type of the provided tensor.
+
+    Returns:
+        tensor: Identity matrix of shape `shape` and data type `dtype`.
+    """
+
+
+@dispatch(int, DType)
+def eye(shape, dtype):
+    return eye((shape, shape), dtype)
+
+
+@dispatch(Shape)
+def eye(shape):
+    return eye(shape, default_dtype)
+
+
+@dispatch(int)
+def eye(shape):
+    return eye((shape, shape), default_dtype)
+
+
+@dispatch(Shape, Numeric)
+def eye(shape, ref):
+    return eye(shape, B.dtype(ref))
+
+
+@dispatch(int, Numeric)
+def eye(shape, ref):
+    return eye((shape, shape), B.dtype(ref))
+
+
+@dispatch(Numeric, DType)
+def eye(ref, dtype):
+    return eye(B.shape(ref), dtype)
+
+
+@dispatch(Numeric)
+def eye(ref):
+    return eye(B.shape(ref), B.dtype(ref))
 
 
 @dispatch(Numeric, DType)

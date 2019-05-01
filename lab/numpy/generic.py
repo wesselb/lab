@@ -25,6 +25,13 @@ def ones(shape, dtype):
     return np.ones(shape, dtype=dtype)
 
 
+@dispatch(NPShape, NPDType)
+def eye(shape, dtype):
+    if len(shape) != 2:
+        raise ValueError('Must feed a two-dimensional shape to eye.')
+    return np.eye(shape[0], shape[1], dtype=dtype)
+
+
 @dispatch(NPNumeric, NPDType)
 def cast(a, dtype):
     return a.astype(dtype)

@@ -2,7 +2,7 @@
 
 from __future__ import absolute_import, division, print_function
 
-from . import dispatch
+from . import dispatch, B
 from .types import Numeric
 from .util import abstract
 
@@ -14,7 +14,8 @@ __all__ = ['epsilon',
            'svd',
            'cholesky',
            'cholesky_solve',
-           'trisolve']
+           'trisolve',
+           'outer']
 
 epsilon = 1e-12  #: Magnitude of diagonal to regularise matrices with.
 
@@ -147,4 +148,20 @@ def trisolve(a, b, **kw_args):  # pragma: no cover
 
 @dispatch(Numeric, Numeric)
 def outer(a, b):
-    """Compute the outer product between two vectors.   """
+    """Compute the outer product between two vectors.
+
+    Args:
+        a (vector): First vector.
+        b (vector): Second vector.
+
+    Returns:
+        tensor: Outer product of `a` and `b`.
+    """
+    if B.rank(a) != 1 or B.rank(b) != 1:
+        raise ValueError('Arguments must have rank 1.')
+    return a[:, None] * b[None, :]
+
+
+@dispatch(Numeric)
+def outer(a):
+    return outer(a, a)

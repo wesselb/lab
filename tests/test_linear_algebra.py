@@ -2,6 +2,8 @@
 
 from __future__ import absolute_import, division, print_function
 
+import numpy as np
+
 import lab as B
 from . import check_function, Matrix, Bool, Value, PSD, Tensor
 # noinspection PyUnresolvedReferences
@@ -66,3 +68,11 @@ def test_trisolve():
           (Matrix(mat=chol), Matrix()), {'lower_a': Value(True)}
     yield check_function, B.trisolve, \
           (Matrix(mat=chol.T), Matrix()), {'lower_a': Value(False)}
+
+
+def test_outer():
+    yield raises, ValueError, lambda: B.outer(B.eye(5), B.ones(5))
+    yield raises, ValueError, lambda: B.outer(B.ones(5), B.eye(5))
+    a, b = B.randn(5), B.randn(5)
+    yield allclose, B.outer(a), np.outer(a, a)
+    yield allclose, B.outer(a, b), np.outer(a, b)

@@ -38,9 +38,19 @@ def rand(shape, dtype):  # pragma: no cover
     """
 
 
+@dispatch(int, DType)
+def rand(shape, dtype):
+    return rand((shape,), dtype)
+
+
 @dispatch(Shape)
 def rand(shape):
     return rand(shape, default_dtype)
+
+
+@dispatch(int)
+def rand(shape):
+    return rand((shape,), default_dtype)
 
 
 @dispatch(DType)
@@ -67,6 +77,11 @@ def randn(shape, dtype):  # pragma: no cover
     """
 
 
+@dispatch(int, DType)
+def randn(shape, dtype):
+    return randn((shape,), dtype)
+
+
 @dispatch(Shape)
 def randn(shape):
     return randn(shape, default_dtype)
@@ -75,6 +90,11 @@ def randn(shape):
 @dispatch(DType)
 def randn(dtype):
     return randn((), dtype)
+
+
+@dispatch(int)
+def randn(shape):
+    return randn((shape,), default_dtype)
 
 
 @dispatch()

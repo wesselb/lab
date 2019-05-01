@@ -25,6 +25,25 @@ def ones(shape, dtype):
     return tf.ones(shape, dtype=dtype)
 
 
+@dispatch(TFShape, TFDType)
+def eye(shape, dtype):
+    if len(shape) != 2:
+        raise ValueError('Must feed a two-dimensional shape to eye.')
+    return tf.eye(shape[0], shape[1], dtype=dtype)
+
+
+@dispatch(TFNumeric, TFDType)
+def eye(ref, dtype):
+    # TensorFlow requires shapes as tuples of integers to the call of `eye`.
+    return eye(B.shape_int(ref), dtype)
+
+
+@dispatch(TFNumeric)
+def eye(ref):
+    # TensorFlow requires shapes as tuples of integers to the call of `eye`.
+    return eye(B.shape_int(ref), B.dtype(ref))
+
+
 @dispatch(TFNumeric, TFDType)
 def cast(a, dtype):
     return tf.cast(a, dtype=dtype)
