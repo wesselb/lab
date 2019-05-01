@@ -34,13 +34,13 @@ def eye(shape, dtype):
 
 @dispatch(TFNumeric, TFDType)
 def eye(ref, dtype):
-    # TensorFlow requires shapes as tuples of integers to the call of `eye`.
+    # TensorFlow requires shapes as tuples of integers for `eye`.
     return eye(B.shape_int(ref), dtype)
 
 
 @dispatch(TFNumeric)
 def eye(ref):
-    # TensorFlow requires shapes as tuples of integers to the call of `eye`.
+    # TensorFlow requires shapes as tuples of integers for `eye`.
     return eye(B.shape_int(ref), B.dtype(ref))
 
 
@@ -52,6 +52,11 @@ def cast(a, dtype):
 @dispatch(TFNumeric)
 def abs(a):
     return tf.abs(a)
+
+
+@dispatch(TFNumeric)
+def sqrt(a):
+    return tf.sqrt(a)
 
 
 @dispatch(TFNumeric)

@@ -74,8 +74,8 @@ def test_outer():
     yield raises, ValueError, lambda: B.outer(B.eye(5), B.ones(5))
     yield raises, ValueError, lambda: B.outer(B.ones(5), B.eye(5))
     a, b = Tensor(5).np(), Tensor(5).np()
-    yield allclose, B.outer(a), np.outer(a, a)
     yield allclose, B.outer(a, b), np.outer(a, b)
+    yield allclose, B.outer(a), np.outer(a, a)
 
 
 def test_reg():
@@ -96,3 +96,27 @@ def test_reg():
     yield allclose, \
           B.reg(a, diag=B.epsilon * 10, clip=True), \
           a + B.epsilon * 10 * np.eye(*a.shape)
+
+
+def test_pw():
+    a, b = Matrix(5, 1).np(), Matrix(10, 1).np()
+    yield allclose, B.pw_dists2(a, b), np.abs(a - b.T) ** 2
+    yield allclose, B.pw_dists2(a), np.abs(a - a.T) ** 2
+    yield allclose, B.pw_dists(a, b), np.maximum(np.abs(a - b.T), 1e-30)
+    yield allclose, B.pw_dists(a), np.maximum(np.abs(a - a.T), 1e-30)
+    yield allclose, B.pw_sums2(a, b), np.abs(a + b.T) ** 2
+    yield allclose, B.pw_sums2(a), np.abs(a + a.T) ** 2
+    yield allclose, B.pw_sums(a, b), np.maximum(np.abs(a + b.T), 1e-30)
+    yield allclose, B.pw_sums(a), np.maximum(np.abs(a + a.T), 1e-30)
+
+
+def test_ew():
+    a, b = Matrix(10, 1).np(), Matrix(10, 1).np()
+    yield allclose, B.ew_dists2(a, b), np.abs(a - b) ** 2
+    yield allclose, B.ew_dists2(a), np.zeros((10, 1))
+    yield allclose, B.ew_dists(a, b), np.maximum(np.abs(a - b), 1e-30)
+    yield allclose, B.ew_dists(a), np.maximum(np.zeros((10, 1)), 1e-30)
+    yield allclose, B.ew_sums2(a, b), np.abs(a + b) ** 2
+    yield allclose, B.ew_sums2(a), np.abs(a + a) ** 2
+    yield allclose, B.ew_sums(a, b), np.maximum(np.abs(a + b), 1e-30)
+    yield allclose, B.ew_sums(a), np.maximum(np.abs(a + a), 1e-30)

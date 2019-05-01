@@ -43,6 +43,11 @@ def abs(a):
 
 
 @dispatch(TorchNumeric)
+def sqrt(a):
+    return torch.sqrt(a)
+
+
+@dispatch(TorchNumeric)
 def exp(a):
     return torch.exp(a)
 

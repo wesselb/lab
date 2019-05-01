@@ -73,10 +73,22 @@ def test_zeros_ones_eye():
 
 
 def test_cast():
+    # Test casting to a given data type.
     yield eeq, B.dtype(B.cast(1, np.float64)), np.float64
     yield eeq, B.dtype(B.cast(np.array(1), np.float64)), np.float64
     yield eeq, B.dtype(B.cast(tf.constant(1), tf.float64)), tf.float64
     yield eeq, B.dtype(B.cast(torch.tensor(1), torch.float64)), torch.float64
+
+    # Test casting to the data type of a reference object.
+    yield eeq, B.dtype(B.cast(1, np.ones(5, dtype=np.float64))), np.float64
+    yield eeq, B.dtype(B.cast(np.array(1),
+                              np.ones(5, dtype=np.float64))), np.float64
+    yield eeq, B.dtype(B.cast(tf.constant(1),
+                              tf.ones(5, dtype=tf.float64))), tf.float64
+    yield eeq, \
+          B.dtype(B.cast(torch.tensor(1),
+                         torch.ones(5, dtype=torch.float64))), \
+          torch.float64
 
 
 def test_unary():
@@ -87,7 +99,7 @@ def test_unary():
         yield check_function, f, (Tensor(2, 3),), {}
 
     # Test functions using positive arguments.
-    for f in [B.log]:
+    for f in [B.log, B.sqrt]:
         yield check_function, f, (PositiveTensor(),), {}
         yield check_function, f, (PositiveTensor(2),), {}
         yield check_function, f, (PositiveTensor(2, 3),), {}

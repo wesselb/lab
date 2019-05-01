@@ -16,6 +16,7 @@ __all__ = ['nan',
            'eye',
            'cast',
            'abs',
+           'sqrt',
            'exp',
            'log',
            'sin',
@@ -220,11 +221,16 @@ def cast(a, dtype):  # pragma: no cover
 
     Args:
         a (tensor): Tensor to cast.
-        dtype (dtype): New data type.
+        dtype (dtype or tensor): New data type.
 
     Returns:
         tensor: `a`, but of data type `dtype`.
     """
+
+
+@dispatch(Numeric, Numeric)
+def cast(a, ref):
+    return cast(a, B.dtype(ref))
 
 
 # Unary functions:
@@ -240,6 +246,19 @@ def abs(a):  # pragma: no cover
 
     Returns:
         tensor: Absolute value of `a`.
+    """
+
+
+@dispatch(Numeric)
+@abstract()
+def sqrt(a):  # pragma: no cover
+    """Square root.
+
+    Args:
+        a (tensor): Tensor.
+
+    Returns:
+        tensor: Square root of `a`.
     """
 
 

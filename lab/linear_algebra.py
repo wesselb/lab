@@ -16,7 +16,9 @@ __all__ = ['epsilon',
            'cholesky_solve',
            'trisolve',
            'outer',
-           'reg']
+           'reg',
+           'pw_dists2', 'pw_dists', 'ew_dists2', 'ew_dists',
+           'pw_sums2', 'pw_sums', 'ew_sums2', 'ew_sums']
 
 epsilon = 1e-12  #: Magnitude of diagonal to regularise matrices with.
 
@@ -186,3 +188,183 @@ def reg(a, diag=None, clip=True):
     elif clip:
         diag = B.maximum(diag, epsilon)
     return a + diag * B.eye(a)
+
+
+@dispatch(Numeric, Numeric)
+def pw_dists2(a, b):
+    """Compute the square the Euclidean norm of the pairwise
+    differences between two matrices where rows correspond to elements and
+    columns to features.
+
+    Args:
+        a (matrix): First matrix.
+        b (matrix, optional): Second matrix. Defaults to `a`.
+
+    Returns:
+        matrix: Square of the Euclidean norm of the pairwise differences
+            between the elements of `a` and `b`.
+    """
+    norms_a = B.sum(a ** 2, axis=1)[:, None]
+    norms_b = B.sum(b ** 2, axis=1)[None, :]
+    return norms_a + norms_b - 2 * B.matmul(a, b, tr_b=True)
+
+
+@dispatch(Numeric)
+def pw_dists2(a):
+    return pw_dists2(a, a)
+
+
+@dispatch(Numeric, Numeric)
+def pw_dists(a, b):
+    """Compute the Euclidean norm of the pairwise differences between two
+    matrices where rows correspond to elements and columns to features.
+
+    Args:
+        a (matrix): First matrix.
+        b (matrix, optional): Second matrix. Defaults to `a`.
+
+    Returns:
+        matrix: Euclidean norm of the pairwise differences between the
+            elements of `a` and `b`.
+    """
+    return B.maximum(B.sqrt(B.pw_dists2(a, b)),
+                     B.cast(1e-30, B.dtype(a)))
+
+
+@dispatch(Numeric)
+def pw_dists(a):
+    return pw_dists(a, a)
+
+
+@dispatch(Numeric, Numeric)
+def ew_dists2(a, b):
+    """Compute the square the Euclidean norm of the element-wise
+    differences between two matrices where rows correspond to elements and
+    columns to features.
+
+    Args:
+        a (matrix): First matrix.
+        b (matrix, optional): Second matrix. Defaults to `a`.
+
+    Returns:
+        matrix: Square of the Euclidean norm of the element-wise differences
+            between the elements of `a` and `b`.
+    """
+    return B.sum((a - b) ** 2, axis=1)[:, None]
+
+
+@dispatch(Numeric)
+def ew_dists2(a):
+    return ew_dists2(a, a)
+
+
+@dispatch(Numeric, Numeric)
+def ew_dists(a, b):
+    """Compute the Euclidean norm of the element-wise differences between two
+    matrices where rows correspond to elements and columns to features.
+
+    Args:
+        a (matrix): First matrix.
+        b (matrix, optional): Second matrix. Defaults to `a`.
+
+    Returns:
+        matrix: Euclidean norm of the element-wise differences between the
+            elements of `a` and `b`.
+    """
+    return B.maximum(B.sqrt(B.ew_dists2(a, b)),
+                     B.cast(1e-30, B.dtype(a)))
+
+
+@dispatch(Numeric)
+def ew_dists(a):
+    return ew_dists(a, a)
+
+
+@dispatch(Numeric, Numeric)
+def pw_sums2(a, b):
+    """Compute the square the Euclidean norm of the pairwise
+    sums between two matrices where rows correspond to elements and
+    columns to features.
+
+    Args:
+        a (matrix): First matrix.
+        b (matrix, optional): Second matrix. Defaults to `a`.
+
+    Returns:
+        matrix: Square of the Euclidean norm of the pairwise sums
+            between the elements of `a` and `b`.
+    """
+    norms_a = B.sum(a ** 2, axis=1)[:, None]
+    norms_b = B.sum(b ** 2, axis=1)[None, :]
+    return norms_a + norms_b + 2 * B.matmul(a, b, tr_b=True)
+
+
+@dispatch(Numeric)
+def pw_sums2(a):
+    return pw_sums2(a, a)
+
+
+@dispatch(Numeric, Numeric)
+def pw_sums(a, b):
+    """Compute the Euclidean norm of the pairwise sums between two
+    matrices where rows correspond to elements and columns to features.
+
+    Args:
+        a (matrix): First matrix.
+        b (matrix, optional): Second matrix. Defaults to `a`.
+
+    Returns:
+        matrix: Euclidean norm of the pairwise sums between the
+            elements of `a` and `b`.
+    """
+    return B.maximum(B.sqrt(B.pw_sums2(a, b)),
+                     B.cast(1e-30, B.dtype(a)))
+
+
+@dispatch(Numeric)
+def pw_sums(a):
+    return pw_sums(a, a)
+
+
+@dispatch(Numeric, Numeric)
+def ew_sums2(a, b):
+    """Compute the square the Euclidean norm of the element-wise
+    sums between two matrices where rows correspond to elements and
+    columns to features.
+
+    Args:
+        a (matrix): First matrix.
+        b (matrix, optional): Second matrix. Defaults to `a`.
+
+    Returns:
+        matrix: Square of the Euclidean norm of the element-wise sums
+            between the elements of `a` and `b`.
+    """
+    return B.sum((a + b) ** 2, axis=1)[:, None]
+
+
+@dispatch(Numeric)
+def ew_sums2(a):
+    return ew_sums2(a, a)
+
+
+@dispatch(Numeric, Numeric)
+def ew_sums(a, b):
+    """Compute the Euclidean norm of the element-wise sums between two
+    matrices where rows correspond to elements and columns to features.
+
+    Args:
+        a (matrix): First matrix.
+        b (matrix, optional): Second matrix. Defaults to `a`.
+
+    Returns:
+        matrix: Euclidean norm of the element-wise sums between the
+            elements of `a` and `b`.
+    """
+    return B.maximum(B.sqrt(B.ew_sums2(a, b)),
+                     B.cast(1e-30, B.dtype(a)))
+
+
+@dispatch(Numeric)
+def ew_sums(a):
+    return ew_sums(a, a)

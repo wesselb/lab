@@ -43,6 +43,11 @@ def abs(a):
 
 
 @dispatch(NPNumeric)
+def sqrt(a):
+    return np.sqrt(a)
+
+
+@dispatch(NPNumeric)
 def exp(a):
     return np.exp(a)
 
