@@ -2,8 +2,8 @@
 
 from __future__ import absolute_import, division, print_function
 
-import numpy as np
-import scipy.linalg as sla
+import autograd.numpy as np
+import autograd.scipy.linalg as sla
 
 from . import dispatch
 from ..types import NPNumeric

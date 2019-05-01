@@ -3,6 +3,7 @@
 from __future__ import absolute_import, division, print_function
 
 import numpy as np
+from autograd import grad
 import tensorflow as tf
 import torch
 
@@ -36,6 +37,22 @@ def test_numeric():
     yield assert_isinstance, convert(np.array(1), B.TFNumeric), B.TFNumeric
     yield assert_isinstance, convert(np.array(1), B.TorchNumeric), \
           B.TorchNumeric
+
+
+def test_autograd_tracing():
+    found_objs = []
+
+    def f(x):
+        found_objs.append(x)
+        return B.sum(x)
+
+    # Test that function runs.
+    yield f, np.ones(5)
+    yield grad(f), np.ones(5)
+
+    # Test that objects are of the right type.
+    for obj in found_objs:
+        yield assert_isinstance, obj, B.NPNumeric
 
 
 def test_tuple():

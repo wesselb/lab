@@ -2,7 +2,7 @@
 
 from __future__ import absolute_import, division, print_function
 
-import numpy as np
+import autograd.numpy as np
 from plum import convert
 
 from . import dispatch

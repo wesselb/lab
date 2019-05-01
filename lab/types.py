@@ -5,6 +5,7 @@ from __future__ import absolute_import, division, print_function
 from numbers import Number
 
 import numpy as np
+from autograd.tracer import Box
 import tensorflow as tf
 from tensorflow.python.ops.variables import RefVariable
 import torch
@@ -24,7 +25,7 @@ __all__ = ['NPNumeric', 'TFNumeric', 'TorchNumeric', 'Numeric',
 
 # Numeric types:
 
-NPNumeric = np.ndarray
+NPNumeric = Union(np.ndarray, Box)
 TFNumeric = Union(tf.Tensor, tf.Variable, RefVariable)
 TorchNumeric = torch.Tensor
 Numeric = Union(Number, NPNumeric, TFNumeric, TorchNumeric)
@@ -38,13 +39,13 @@ add_conversion_method(NPNumeric, TorchNumeric, torch.tensor)
 
 # List types:
 
-NPList = ListType(NPNumeric)
+NPList = NPNumeric.expand(ListType)
 TFList = TFNumeric.expand(ListType)
 TorchList = ListType(TorchNumeric)
 
 # Tuple types:
 
-NPTuple = TupleType(NPNumeric)
+NPTuple = NPNumeric.expand(TupleType)
 TFTuple = TFNumeric.expand(TupleType)
 TorchTuple = TupleType(TorchNumeric)
 
