@@ -5,7 +5,7 @@ from __future__ import absolute_import, division, print_function
 import torch
 
 from . import dispatch
-from ..types import TorchNumeric, TorchDType, TorchShape
+from ..types import TorchNumeric, TorchDType, TorchShape, NPNumeric
 
 __all__ = []
 
@@ -35,6 +35,11 @@ def eye(shape, dtype):
 @dispatch(TorchNumeric, TorchDType)
 def cast(a, dtype):
     return a.type(dtype)
+
+
+@dispatch(NPNumeric, TorchDType)
+def cast(a, dtype):
+    return torch.tensor(a, dtype=dtype)
 
 
 @dispatch(TorchNumeric)

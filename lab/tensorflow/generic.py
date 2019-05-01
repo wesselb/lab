@@ -5,7 +5,7 @@ from __future__ import absolute_import, division, print_function
 import tensorflow as tf
 
 from . import dispatch, B
-from ..types import TFNumeric, TFDType, TFShape
+from ..types import TFNumeric, TFDType, TFShape, NPNumeric
 
 __all__ = []
 
@@ -44,7 +44,7 @@ def eye(ref):
     return eye(B.shape_int(ref), B.dtype(ref))
 
 
-@dispatch(TFNumeric, TFDType)
+@dispatch({TFNumeric, NPNumeric}, TFDType)
 def cast(a, dtype):
     return tf.cast(a, dtype=dtype)
 

@@ -93,7 +93,8 @@ def test_cast():
 
 def test_unary():
     # Test functions using signed arguments.
-    for f in [B.abs, B.exp, B.sin, B.cos, B.tan, B.tanh, B.sigmoid, B.relu]:
+    for f in [B.identity, B.abs, B.exp, B.sin, B.cos, B.tan, B.tanh,
+              B.sigmoid, B.relu]:
         yield check_function, f, (Tensor(),), {}
         yield check_function, f, (Tensor(2),), {}
         yield check_function, f, (Tensor(2, 3),), {}

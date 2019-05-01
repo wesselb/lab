@@ -15,6 +15,7 @@ __all__ = ['nan',
            'ones',
            'eye',
            'cast',
+           'identity',
            'abs',
            'sqrt',
            'exp',
@@ -234,6 +235,18 @@ def cast(a, ref):
 
 
 # Unary functions:
+
+@dispatch(Numeric)
+def identity(a):  # pragma: no cover
+    """Identity function
+
+    Args:
+        a (tensor): Tensor.
+
+    Returns:
+        tensor: `a` exactly.
+    """
+    return a
 
 
 @dispatch(Numeric)

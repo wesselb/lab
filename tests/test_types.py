@@ -17,10 +17,12 @@ from . import eq, neq, lt, le, ge, gt, raises, call, ok, allclose, approx, \
 
 def test_numeric():
     yield assert_isinstance, np.array(1), B.NPNumeric
+    yield assert_isinstance, np.float64(1), B.NPNumeric
     yield assert_isinstance, tf.constant(1), B.TFNumeric
     yield assert_isinstance, tf.Variable(1), B.TFNumeric
     yield assert_isinstance, torch.tensor(1), B.TorchNumeric
     yield assert_isinstance, np.array(1), B.Numeric
+    yield assert_isinstance, np.float64(1), B.Numeric
     yield assert_isinstance, tf.constant(1), B.Numeric
     yield assert_isinstance, torch.tensor(1), B.Numeric
     yield assert_isinstance, 1, B.Numeric
@@ -90,11 +92,16 @@ def test_shape():
         yield assert_isinstance, (), t
         yield assert_isinstance, (1, 2), t
 
+    # Test TensorFlow-specific and PyTorch-specific shapes.
     for a, t in [(tf.random_normal([2, 2]), B.TFShape),
                  (torch.randn(2, 2), B.TorchShape)]:
         yield assert_isinstance, a.shape, t
         yield assert_isinstance, (a.shape[0], a.shape[1]), t
         yield assert_isinstance, [a.shape[0], a.shape[1]], t
+
+    # Test NumPy-specific shapes.
+    yield assert_isinstance, (np.int32(1), np.int32(1)), B.NPShape
+    yield assert_isinstance, (np.int64(1), np.int64(1)), B.NPShape
 
 
 def test_data_type():

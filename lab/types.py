@@ -25,7 +25,7 @@ __all__ = ['NPNumeric', 'TFNumeric', 'TorchNumeric', 'Numeric',
 
 # Numeric types:
 
-NPNumeric = Union(np.ndarray, Box)
+NPNumeric = Union(np.number, np.ndarray, Box)
 TFNumeric = Union(tf.Tensor, tf.Variable, RefVariable)
 TorchNumeric = torch.Tensor
 Numeric = Union(Number, NPNumeric, TFNumeric, TorchNumeric)
@@ -58,8 +58,14 @@ ListOrTuple = Union(list, tuple)
 
 # Shape types:
 
-NPShape = Union(ListType(int), ListType(Union()),
-                TupleType(int), TupleType(Union()))
+NPShape = Union(ListType(int),
+                ListType(np.int32),
+                ListType(np.int64),
+                ListType(Union()),
+                TupleType(int),
+                TupleType(np.int32),
+                TupleType(np.int64),
+                TupleType(Union()))
 TFShape = Union(NPShape,
                 tf.TensorShape,
                 ListType(tf.Dimension),
