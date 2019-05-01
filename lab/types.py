@@ -2,19 +2,18 @@
 
 from __future__ import absolute_import, division, print_function
 
-from numbers import Number
-
 import numpy as np
-from autograd.tracer import Box
 import tensorflow as tf
-from tensorflow.python.ops.variables import RefVariable
 import torch
+from autograd.tracer import Box
 from plum import ListType, TupleType, Union, add_conversion_method, convert, \
     add_promotion_rule
+from tensorflow.python.ops.variables import RefVariable
 
 from . import dispatch
 
-__all__ = ['NPNumeric', 'TFNumeric', 'TorchNumeric', 'Numeric',
+__all__ = ['Int', 'Float', 'Bool', 'Number',
+           'NPNumeric', 'TFNumeric', 'TorchNumeric', 'Numeric',
            'NPList', 'TFList', 'TorchList',
            'NPTuple', 'TFTuple', 'TorchTuple',
            'NPListOrTuple', 'TFListOrTuple', 'TorchListOrTuple', 'ListOrTuple',
@@ -24,11 +23,14 @@ __all__ = ['NPNumeric', 'TFNumeric', 'TorchNumeric', 'Numeric',
            'NP', 'TF', 'Torch', 'Framework']
 
 # Numeric types:
-
-NPNumeric = Union(np.number, np.ndarray, Box)
-TFNumeric = Union(tf.Tensor, tf.Variable, RefVariable)
-TorchNumeric = torch.Tensor
-Numeric = Union(Number, NPNumeric, TFNumeric, TorchNumeric)
+Int = Union(*([int] + np.sctypes['int'] + np.sctypes['uint']), alias='Int')
+Float = Union(*([float] + np.sctypes['float']), alias='Float')
+Bool = Union(bool, np.bool_, alias='Bool')
+Number = Union(Int, Float, alias='Number')
+NPNumeric = Union(Number, Bool, np.ndarray, Box, alias='NPNumeric')
+TFNumeric = Union(tf.Tensor, tf.Variable, RefVariable, alias='TFNumeric')
+TorchNumeric = Union(torch.Tensor, alias='TorchNumeric')
+Numeric = Union(NPNumeric, TFNumeric, TorchNumeric, alias='Numeric')
 
 # Define promotion rules and the corresponding conversion methods.
 add_promotion_rule(NPNumeric, TFNumeric, TFNumeric)
@@ -39,14 +41,14 @@ add_conversion_method(NPNumeric, TorchNumeric, torch.tensor)
 
 # List types:
 
-NPList = NPNumeric.expand(ListType)
-TFList = TFNumeric.expand(ListType)
+NPList = ListType(NPNumeric)
+TFList = ListType(TFNumeric)
 TorchList = ListType(TorchNumeric)
 
 # Tuple types:
 
-NPTuple = NPNumeric.expand(TupleType)
-TFTuple = TFNumeric.expand(TupleType)
+NPTuple = TupleType(NPNumeric)
+TFTuple = TupleType(TFNumeric)
 TorchTuple = TupleType(TorchNumeric)
 
 # List or tuple types:
@@ -57,28 +59,21 @@ TorchListOrTuple = Union(TorchList, TorchTuple)
 ListOrTuple = Union(list, tuple)
 
 # Shape types:
-
-NPShape = Union(ListType(int),
-                ListType(np.int32),
-                ListType(np.int64),
-                ListType(Union()),
-                TupleType(int),
-                TupleType(np.int32),
-                TupleType(np.int64),
-                TupleType(Union()))
-TFShape = Union(NPShape,
-                tf.TensorShape,
-                ListType(tf.Dimension),
-                TupleType(tf.Dimension))
-TorchShape = Union(NPShape, torch.Size)
-Shape = Union(NPShape, TFShape, TorchShape)
+NPShape = Union(ListType(Int), ListType(Union()),
+                TupleType(Int), TupleType(Union()),
+                alias='NPShape')
+TFShape = Union(NPShape, tf.TensorShape,
+                ListType(tf.Dimension), TupleType(tf.Dimension),
+                alias='TFShape')
+TorchShape = Union(NPShape, torch.Size, alias='TorchShape')
+Shape = Union(NPShape, TFShape, TorchShape, alias='Shape')
 
 # Data types:
 
-NPDType = type(np.float64)
-TFDType = tf.DType
-TorchDType = torch.dtype
-DType = Union(NPDType, TFDType, TorchDType)
+NPDType = Union(type(np.float64), alias='NPDType')
+TFDType = Union(tf.DType, alias='TFDType')
+TorchDType = Union(torch.dtype, alias='TorchDType')
+DType = Union(NPDType, TFDType, TorchDType, alias='DType')
 
 # Create lookup for PyTorch dtypes.
 _torch_to_np_lookup = {}
@@ -129,27 +124,23 @@ def issubdtype(dtype1, dtype2):
     return issubdtype(convert(dtype1, type), convert(dtype2, type))
 
 
-@dispatch(Number)
+@dispatch(object)
 def dtype(a):
     """Determine the data type of an object.
 
     Args:
         a (tensor): Object to determine data type of.
     """
-    return type(a)
-
-
-@dispatch({NPNumeric, TFNumeric, TorchNumeric})
-def dtype(a):
-    return convert(a.dtype, DType)
+    if hasattr(a, 'dtype'):
+        return convert(a.dtype, DType)
+    else:
+        return type(a)
 
 
 # Framework types:
 
-NP = Union(NPNumeric, NPListOrTuple, NPShape, NPDType)
-TF = Union(TFNumeric, TFListOrTuple, TFShape, TFDType)
-Torch = Union(TorchNumeric, TorchListOrTuple, TorchShape, TorchDType)
-Framework = Union(NP, TF, Torch)
-
-# Add conversion method for regular numbers.
-add_conversion_method(Number, Framework, np.array)
+NP = Union(NPNumeric, NPListOrTuple, NPShape, NPDType, alias='NP')
+TF = Union(TFNumeric, TFListOrTuple, TFShape, TFDType, alias='TF')
+Torch = Union(TorchNumeric, TorchListOrTuple, TorchShape, TorchDType,
+              alias='Torch')
+Framework = Union(NP, TF, Torch, alias='Framework')
