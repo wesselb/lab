@@ -7,12 +7,13 @@ import tensorflow as tf
 import torch
 
 from . import dispatch
-from .types import Shape, DType, default_dtype
+from .types import Shape, DType, default_dtype, Int
 from .util import abstract
 
 __all__ = ['set_random_seed', 'rand', 'randn']
 
 
+@dispatch(Int)
 def set_random_seed(seed):
     """Set the random seed for all frameworks.
 
@@ -25,7 +26,7 @@ def set_random_seed(seed):
 
 
 @dispatch(Shape, DType)
-@abstract(promote_to=None)
+@abstract()
 def rand(shape, dtype):  # pragma: no cover
     """Construct a U[0, 1] random tensor.
 
@@ -38,7 +39,7 @@ def rand(shape, dtype):  # pragma: no cover
     """
 
 
-@dispatch(int, DType)
+@dispatch(Int, DType)
 def rand(shape, dtype):
     return rand((shape,), dtype)
 
@@ -48,7 +49,7 @@ def rand(shape):
     return rand(shape, default_dtype)
 
 
-@dispatch(int)
+@dispatch(Int)
 def rand(shape):
     return rand((shape,), default_dtype)
 
@@ -64,7 +65,7 @@ def rand():
 
 
 @dispatch(Shape, DType)
-@abstract(promote_to=None)
+@abstract(promote=None)
 def randn(shape, dtype):  # pragma: no cover
     """Construct a N(0, 1) random tensor.
 
@@ -77,7 +78,7 @@ def randn(shape, dtype):  # pragma: no cover
     """
 
 
-@dispatch(int, DType)
+@dispatch(Int, DType)
 def randn(shape, dtype):
     return randn((shape,), dtype)
 
@@ -92,7 +93,7 @@ def randn(dtype):
     return randn((), dtype)
 
 
-@dispatch(int)
+@dispatch(Int)
 def randn(shape):
     return randn((shape,), default_dtype)
 
