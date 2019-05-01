@@ -72,6 +72,11 @@ def test_zeros_ones_eye():
         yield raises, ValueError, lambda: B.eye((3, 4, 5), t)
 
 
+def test_linspace():
+    for num in [10, 20]:
+        yield check_function, B.linspace, (Tensor(), Tensor(), Value(num)), {}
+
+
 def test_cast():
     # Test casting to a given data type.
     yield eeq, B.dtype(B.cast(1, np.float64)), np.float64
@@ -93,7 +98,7 @@ def test_cast():
 
 def test_unary():
     # Test functions using signed arguments.
-    for f in [B.identity, B.abs, B.exp, B.sin, B.cos, B.tan, B.tanh,
+    for f in [B.identity, B.abs, B.sign, B.exp, B.sin, B.cos, B.tan, B.tanh,
               B.sigmoid, B.relu]:
         yield check_function, f, (Tensor(),), {}
         yield check_function, f, (Tensor(2),), {}

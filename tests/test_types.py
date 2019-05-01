@@ -16,16 +16,37 @@ from . import eq, neq, lt, le, ge, gt, raises, call, ok, allclose, approx, \
 
 
 def test_numeric():
+    # Test convenient types.
+    yield assert_isinstance, 1, B.Int
+    yield assert_isinstance, np.int32(1), B.Int
+    yield assert_isinstance, np.uint64(1), B.Int
+    yield assert_isinstance, 1.0, B.Float
+    yield assert_isinstance, np.float32(1), B.Float
+    yield assert_isinstance, True, B.Bool
+    yield assert_isinstance, np.bool_(True), B.Bool
+    yield assert_isinstance, np.uint(1), B.Number
+    yield assert_isinstance, np.float64(1), B.Number
+
+    # Test NumPy.
+    yield assert_isinstance, 1, B.NPNumeric
+    yield assert_isinstance, np.bool_(1), B.NPNumeric
+    yield assert_isinstance, np.float32(1), B.NPNumeric
     yield assert_isinstance, np.array(1), B.NPNumeric
-    yield assert_isinstance, np.float64(1), B.NPNumeric
+
+    # Test TensorFlow.
     yield assert_isinstance, tf.constant(1), B.TFNumeric
     yield assert_isinstance, tf.Variable(1), B.TFNumeric
+
+    # Test Torch.
     yield assert_isinstance, torch.tensor(1), B.TorchNumeric
-    yield assert_isinstance, np.array(1), B.Numeric
+
+    # Test general numeric type.
+    yield assert_isinstance, 1, B.Numeric
+    yield assert_isinstance, np.bool_(1), B.Numeric
     yield assert_isinstance, np.float64(1), B.Numeric
+    yield assert_isinstance, np.array(1), B.Numeric
     yield assert_isinstance, tf.constant(1), B.Numeric
     yield assert_isinstance, torch.tensor(1), B.Numeric
-    yield assert_isinstance, 1, B.Numeric
 
     # Test promotion.
     yield eq, _promotion_rule(np.array(1), tf.constant(1)), B.TFNumeric
@@ -59,7 +80,8 @@ def test_autograd_tracing():
 
 def test_tuple():
     for t in [B.NPTuple, B.NPListOrTuple, B.ListOrTuple]:
-        yield assert_isinstance, (np.array(1), np.array(2)), t
+        yield assert_isinstance, (1, np.bool_(True)), t
+        yield assert_isinstance, (np.float32(1), np.array(1)), t
 
     for t in [B.TFTuple, B.TFListOrTuple, B.ListOrTuple]:
         yield assert_isinstance, (tf.constant(1), tf.constant(2)), t
@@ -73,7 +95,8 @@ def test_tuple():
 
 def test_list():
     for t in [B.NPList, B.NPListOrTuple, B.ListOrTuple]:
-        yield assert_isinstance, [np.array(1), np.array(2)], t
+        yield assert_isinstance, [1, np.bool_(True)], t
+        yield assert_isinstance, [np.float32(1), np.array(1)], t
 
     for t in [B.TFList, B.TFListOrTuple, B.ListOrTuple]:
         yield assert_isinstance, [tf.constant(1), tf.constant(2)], t
@@ -88,9 +111,9 @@ def test_list():
 def test_shape():
     for t in [B.NPShape, B.TFShape, B.TorchShape]:
         yield assert_isinstance, [], t
-        yield assert_isinstance, [1, 2], t
+        yield assert_isinstance, [1, np.uint(8)], t
         yield assert_isinstance, (), t
-        yield assert_isinstance, (1, 2), t
+        yield assert_isinstance, (np.int32(1), 2), t
 
     # Test TensorFlow-specific and PyTorch-specific shapes.
     for a, t in [(tf.random_normal([2, 2]), B.TFShape),
@@ -167,6 +190,3 @@ def test_framework():
         yield assert_isinstance, [torch.tensor(1)], t
         yield assert_isinstance, torch.ones(5, 5).shape, t
         yield assert_isinstance, torch.float32, t
-
-    # Test conversion.
-    yield assert_isinstance, convert(1, B.Framework), B.NPNumeric

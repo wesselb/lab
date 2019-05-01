@@ -2,6 +2,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+import warnings
 import numpy  as np
 import tensorflow as tf
 import torch
@@ -40,3 +41,14 @@ def test_random_generators():
             yield eeq, B.dtype(f((), t)), t
             yield eeq, B.dtype(f((2,), t)), t
             yield eeq, B.dtype(f((2, 2), t)), t
+
+
+def test_conversion_warnings():
+    for f in [B.rand, B.randn]:
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter('always')
+
+            # Trigger the warning!
+            f(5, int)
+
+            yield eq, len(w), 1

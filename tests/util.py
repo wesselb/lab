@@ -42,7 +42,7 @@ def call(f, args=(), kw_args=None, res=True):
     eq(f(*args, **kw_args), res)
 
 
-@_dispatch({B.NPNumeric, Number, np.bool_})
+@_dispatch({B.NPNumeric, B.Number, B.Bool})
 def to_np(x):
     """Convert a tensor to NumPy."""
     return x

@@ -79,44 +79,40 @@ def test_outer():
 
 
 def test_reg():
+    old_epsilon = B.epsilon
+    B.epsilon = 10
     a = Matrix(2, 3).np()
-    yield allclose, B.reg(a, diag=None, clip=False), a
-    yield allclose, \
-          B.reg(a, diag=None, clip=True), \
-          a + B.epsilon * np.eye(*a.shape)
-    yield allclose, \
-          B.reg(a, diag=B.epsilon / 10, clip=False), \
-          a + B.epsilon / 10 * np.eye(*a.shape)
-    yield allclose, \
-          B.reg(a, diag=B.epsilon / 10, clip=True), \
-          a + B.epsilon * np.eye(*a.shape)
-    yield allclose, \
-          B.reg(a, diag=B.epsilon * 10, clip=False), \
-          a + B.epsilon * 10 * np.eye(*a.shape)
-    yield allclose, \
-          B.reg(a, diag=B.epsilon * 10, clip=True), \
-          a + B.epsilon * 10 * np.eye(*a.shape)
+    yield allclose, B.reg(a, diag=None, clip=False), a + 10 * np.eye(*a.shape)
+    yield allclose, B.reg(a, diag=None, clip=True), a + 10 * np.eye(*a.shape)
+    yield allclose, B.reg(a, diag=1, clip=False), a + 1 * np.eye(*a.shape)
+    yield allclose, B.reg(a, diag=1, clip=True), a + 10 * np.eye(*a.shape)
+    yield allclose, B.reg(a, diag=100, clip=False), a + 100 * np.eye(*a.shape)
+    yield allclose, B.reg(a, diag=100, clip=True), a + 100 * np.eye(*a.shape)
+    B.epsilon = old_epsilon
 
 
 def test_pw():
     a, b = Matrix(5, 1).np(), Matrix(10, 1).np()
     yield allclose, B.pw_dists2(a, b), np.abs(a - b.T) ** 2
     yield allclose, B.pw_dists2(a), np.abs(a - a.T) ** 2
-    yield allclose, B.pw_dists(a, b), np.maximum(np.abs(a - b.T), 1e-30)
-    yield allclose, B.pw_dists(a), np.maximum(np.abs(a - a.T), 1e-30)
+    yield allclose, \
+          B.pw_dists(a, b), np.maximum(np.abs(a - b.T) ** 2, 1e-30) ** .5
+    yield allclose, B.pw_dists(a), np.maximum(np.abs(a - a.T) ** 2, 1e-30) ** .5
     yield allclose, B.pw_sums2(a, b), np.abs(a + b.T) ** 2
     yield allclose, B.pw_sums2(a), np.abs(a + a.T) ** 2
-    yield allclose, B.pw_sums(a, b), np.maximum(np.abs(a + b.T), 1e-30)
-    yield allclose, B.pw_sums(a), np.maximum(np.abs(a + a.T), 1e-30)
+    yield allclose, \
+          B.pw_sums(a, b), np.maximum(np.abs(a + b.T) ** 2, 1e-30) ** .5
+    yield allclose, B.pw_sums(a), np.maximum(np.abs(a + a.T) ** 2, 1e-30) ** .5
 
 
 def test_ew():
     a, b = Matrix(10, 1).np(), Matrix(10, 1).np()
     yield allclose, B.ew_dists2(a, b), np.abs(a - b) ** 2
     yield allclose, B.ew_dists2(a), np.zeros((10, 1))
-    yield allclose, B.ew_dists(a, b), np.maximum(np.abs(a - b), 1e-30)
-    yield allclose, B.ew_dists(a), np.maximum(np.zeros((10, 1)), 1e-30)
+    yield allclose, \
+          B.ew_dists(a, b), np.maximum(np.abs(a - b) ** 2, 1e-30) ** .5
+    yield allclose, B.ew_dists(a), 1e-15 * np.ones((10, 1))
     yield allclose, B.ew_sums2(a, b), np.abs(a + b) ** 2
     yield allclose, B.ew_sums2(a), np.abs(a + a) ** 2
-    yield allclose, B.ew_sums(a, b), np.maximum(np.abs(a + b), 1e-30)
-    yield allclose, B.ew_sums(a), np.maximum(np.abs(a + a), 1e-30)
+    yield allclose, B.ew_sums(a, b), np.maximum(np.abs(a + b) ** 2, 1e-30) ** .5
+    yield allclose, B.ew_sums(a), np.maximum(np.abs(a + a) ** 2, 1e-30) ** .5
