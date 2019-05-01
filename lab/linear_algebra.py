@@ -39,7 +39,7 @@ T = transpose  #: Shorthand for `transpose`.
 
 @dispatch(Numeric, Numeric)
 @abstract()
-def matmul(a, b, **kw_args):  # pragma: no cover
+def matmul(a, b, tr_a=False, tr_b=False):  # pragma: no cover
     """Matrix multiplication.
 
     Args:
@@ -59,7 +59,7 @@ dot = matmul  #: Also a shorthand for `matmul`.
 
 @dispatch(Numeric)
 @abstract()
-def trace(a, **kw_args):  # pragma: no cover
+def trace(a, axis1=0, axis2=1):  # pragma: no cover
     """Compute the trace of a tensor.
 
     Args:
@@ -90,7 +90,7 @@ def kron(a, b):  # pragma: no cover
 
 @dispatch(Numeric)
 @abstract()
-def svd(a, **kw_args):  # pragma: no cover
+def svd(a, compute_uv=True):  # pragma: no cover
     """Compute the singular value decomposition.
 
     Args:
@@ -133,7 +133,7 @@ def cholesky_solve(a, b):  # pragma: no cover
 
 @dispatch(Numeric, Numeric)
 @abstract()
-def trisolve(a, b, **kw_args):  # pragma: no cover
+def trisolve(a, b, lower_a=True):  # pragma: no cover
     """Solve the linear system `a x = b` where `a` is triangular.
 
     Args:
