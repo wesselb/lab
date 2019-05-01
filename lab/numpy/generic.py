@@ -10,6 +10,11 @@ from ..types import NPNumeric, NPDType, NPShape
 __all__ = []
 
 
+@dispatch(NPNumeric)
+def isnan(a):
+    return np.isnan(a)
+
+
 @dispatch(NPShape, NPDType)
 def zeros(shape, dtype):
     return np.zeros(shape, dtype=dtype)

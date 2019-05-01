@@ -6,7 +6,8 @@ from . import dispatch
 from .types import Numeric
 from .util import abstract
 
-__all__ = ['transpose', 'T',
+__all__ = ['epsilon',
+           'transpose', 'T',
            'matmul', 'mm', 'dot',
            'kron',
            'trace',
@@ -142,3 +143,8 @@ def trisolve(a, b, **kw_args):  # pragma: no cover
     Returns:
         tensor: Solution `x`.
     """
+
+
+@dispatch(Numeric, Numeric)
+def outer(a, b):
+    """Compute the outer product between two vectors.   """

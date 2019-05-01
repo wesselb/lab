@@ -170,6 +170,19 @@ class BoolTensor(Tensor):
         return torch.tensor(self.mat.astype(np.uint8))
 
 
+class NaNTensor(Tensor):
+    """Tensor containing NaNs placeholder."""
+
+    def __init__(self, *dims, **kw_args):
+        if 'mat' not in kw_args or kw_args['mat'] is None:
+            mat = np.array(np.random.randn(*dims))
+            set_nan = np.array(np.random.randn(*dims) > .5)
+            mat[set_nan] = np.nan
+        else:
+            mat = kw_args['mat']
+        Tensor.__init__(self, mat=mat)
+
+
 class Matrix(Tensor):
     """Matrix placeholder."""
 

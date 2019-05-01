@@ -10,6 +10,7 @@ from .util import abstract
 __all__ = ['nan',
            'pi',
            'log_2_pi',
+           'isnan',
            'zeros',
            'ones',
            'cast',
@@ -46,6 +47,19 @@ __all__ = ['nan',
 nan = np.nan  #: NaN.
 pi = np.pi  #: Value of pi.
 log_2_pi = np.log(2 * pi)  #: Value of log(2 * pi).
+
+
+@dispatch(Numeric)
+@abstract()
+def isnan(a):  # pragma: no cover
+    """Check whether a tensor is NaN.
+
+    Args:
+        a (tensor): Tensor.
+
+    Returns:
+        bool[tensor]: `a` is NaN.
+    """
 
 
 @dispatch(Shape, DType)
@@ -361,6 +375,9 @@ def leaky_relu(a, alpha):  # pragma: no cover
     return maximum(multiply(a, alpha), a)
 
 
+# Reductions:
+
+
 @dispatch(Numeric)
 @abstract()
 def min(a, axis=None):  # pragma: no cover
@@ -452,6 +469,9 @@ def logsumexp(a, axis=None):  # pragma: no cover
     return log(sum(exp(a - a_expanded), axis=axis)) + a_max
 
 
+# Logical reductions:
+
+
 @dispatch(Numeric)
 @abstract()
 def all(a, axis=None):  # pragma: no cover
@@ -478,6 +498,9 @@ def any(a, axis=None):  # pragma: no cover
     Returns:
         tensor: Reduced tensor.
     """
+
+
+# Logical comparisons:
 
 
 @dispatch(Numeric, Numeric)

@@ -10,7 +10,7 @@ __all__ = ['shape',
            'shape_int',
            'rank',
            'length',
-           'is_scalar',
+           'isscalar',
            'expand_dims',
            'uprank',
            'diag',
@@ -78,7 +78,7 @@ def length(a):  # pragma: no cover
 
 
 @dispatch(Numeric)
-def is_scalar(a):
+def isscalar(a):
     """Check whether a tensor is a scalar.
 
     Args:

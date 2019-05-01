@@ -10,6 +10,11 @@ from ..types import TFNumeric, TFDType, TFShape
 __all__ = []
 
 
+@dispatch(TFNumeric)
+def isnan(a):
+    return tf.is_nan(a)
+
+
 @dispatch(TFShape, TFDType)
 def zeros(shape, dtype):
     return tf.zeros(shape, dtype=dtype)

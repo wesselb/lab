@@ -9,7 +9,7 @@ import torch
 
 import lab as B
 from . import check_function, Tensor, Value, default_dtype, PositiveTensor, \
-    BoolTensor
+    BoolTensor, NaNTensor
 # noinspection PyUnresolvedReferences
 from . import eq, neq, lt, le, ge, gt, raises, call, ok, allclose, approx, eeq
 
@@ -18,6 +18,12 @@ def test_constants():
     yield eq, B.pi, np.pi
     yield eq, B.log_2_pi, np.log(2 * np.pi)
     yield eeq, B.nan, np.nan
+
+
+def test_isnan():
+    yield check_function, B.isnan, (NaNTensor(),), {}
+    yield check_function, B.isnan, (NaNTensor(2),), {}
+    yield check_function, B.isnan, (NaNTensor(2, 3),), {}
 
 
 def test_zeros_ones():

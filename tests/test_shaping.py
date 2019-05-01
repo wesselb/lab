@@ -17,9 +17,9 @@ def test_sizing():
         yield check_function, f, (Tensor(3, 4, 5),), {}
 
 
-def test_is_scalar():
-    yield ok, B.is_scalar(1.0)
-    yield ok, not B.is_scalar(np.array([1.0]))
+def test_isscalar():
+    yield ok, B.isscalar(1.0)
+    yield ok, not B.isscalar(np.array([1.0]))
 
 
 def test_expand_dims():

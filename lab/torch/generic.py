@@ -10,6 +10,11 @@ from ..types import TorchNumeric, TorchDType, TorchShape
 __all__ = []
 
 
+@dispatch(TorchNumeric)
+def isnan(a):
+    return torch.isnan(a)
+
+
 @dispatch(TorchShape, TorchDType)
 def zeros(shape, dtype):
     return torch.zeros(shape, dtype=dtype)
