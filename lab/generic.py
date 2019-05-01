@@ -4,7 +4,7 @@ from __future__ import absolute_import, division, print_function
 
 import numpy as np
 from . import dispatch, B
-from .types import Numeric, DType, Shape, default_dtype
+from .types import Numeric, DType, Shape, default_dtype, Number, Int
 from .util import abstract
 
 __all__ = ['nan',
@@ -13,10 +13,12 @@ __all__ = ['nan',
            'isnan',
            'zeros',
            'ones',
+           'linspace',
            'eye',
            'cast',
            'identity',
            'abs',
+           'sign',
            'sqrt',
            'exp',
            'log',
@@ -66,7 +68,7 @@ def isnan(a):  # pragma: no cover
 
 
 @dispatch(Shape, DType)
-@abstract(promote_to=None)
+@abstract()
 def zeros(shape, dtype):  # pragma: no cover
     """Create a tensor of zeros.
 
@@ -80,7 +82,7 @@ def zeros(shape, dtype):  # pragma: no cover
     """
 
 
-@dispatch(int, DType)
+@dispatch(Int, DType)
 def zeros(shape, dtype):
     return zeros((shape,), dtype)
 
@@ -90,7 +92,7 @@ def zeros(shape):
     return zeros(shape, default_dtype)
 
 
-@dispatch(int)
+@dispatch(Int)
 def zeros(shape):
     return zeros((shape,), default_dtype)
 
@@ -100,7 +102,7 @@ def zeros(shape, ref):
     return zeros(shape, B.dtype(ref))
 
 
-@dispatch(int, Numeric)
+@dispatch(Int, Numeric)
 def zeros(shape, ref):
     return zeros((shape,), B.dtype(ref))
 
@@ -116,7 +118,7 @@ def zeros(ref):
 
 
 @dispatch(Shape, DType)
-@abstract(promote_to=None)
+@abstract()
 def ones(shape, dtype):  # pragma: no cover
     """Create a tensor of ones.
 
@@ -130,7 +132,7 @@ def ones(shape, dtype):  # pragma: no cover
     """
 
 
-@dispatch(int, DType)
+@dispatch(Int, DType)
 def ones(shape, dtype):
     return ones((shape,), dtype)
 
@@ -140,7 +142,7 @@ def ones(shape):
     return ones(shape, default_dtype)
 
 
-@dispatch(int)
+@dispatch(Int)
 def ones(shape):
     return ones((shape,), default_dtype)
 
@@ -150,7 +152,7 @@ def ones(shape, ref):
     return ones(shape, B.dtype(ref))
 
 
-@dispatch(int, Numeric)
+@dispatch(Int, Numeric)
 def ones(shape, ref):
     return ones((shape,), B.dtype(ref))
 
@@ -165,8 +167,24 @@ def ones(ref):
     return ones(B.shape(ref), B.dtype(ref))
 
 
+@dispatch(object, object, Int)
+@abstract(promote=2)
+def linspace(a, b, c):
+    """Create a vector of `c` numbers ranging from `a` to `c`, distributed
+    linearly.
+
+    Args:
+        a (number): Lower bound.
+        b (number): Upper bound.
+        c (int): Number of numbers.
+
+    Returns:
+        vector: `c` numbers ranging from `a` to `c`, distributed linearly.
+    """
+
+
 @dispatch(Shape, DType)
-@abstract(promote_to=None)
+@abstract()
 def eye(shape, dtype):  # pragma: no cover
     """Create an identity matrix.
 
@@ -180,7 +198,7 @@ def eye(shape, dtype):  # pragma: no cover
     """
 
 
-@dispatch(int, DType)
+@dispatch(Int, DType)
 def eye(shape, dtype):
     return eye((shape, shape), dtype)
 
@@ -190,7 +208,7 @@ def eye(shape):
     return eye(shape, default_dtype)
 
 
-@dispatch(int)
+@dispatch(Int)
 def eye(shape):
     return eye((shape, shape), default_dtype)
 
@@ -200,7 +218,7 @@ def eye(shape, ref):
     return eye(shape, B.dtype(ref))
 
 
-@dispatch(int, Numeric)
+@dispatch(Int, Numeric)
 def eye(shape, ref):
     return eye((shape, shape), B.dtype(ref))
 
@@ -216,7 +234,7 @@ def eye(ref):
 
 
 @dispatch(Numeric, DType)
-@abstract(promote_to=None)
+@abstract()
 def cast(a, dtype):  # pragma: no cover
     """Cast an object to another data type.
 
@@ -237,6 +255,7 @@ def cast(a, ref):
 # Unary functions:
 
 @dispatch(Numeric)
+@abstract()
 def identity(a):  # pragma: no cover
     """Identity function
 
@@ -246,7 +265,6 @@ def identity(a):  # pragma: no cover
     Returns:
         tensor: `a` exactly.
     """
-    return a
 
 
 @dispatch(Numeric)
@@ -259,6 +277,19 @@ def abs(a):  # pragma: no cover
 
     Returns:
         tensor: Absolute value of `a`.
+    """
+
+
+@dispatch(Numeric)
+@abstract()
+def sign(a):  # pragma: no cover
+    """Sign function.
+
+    Args:
+        a (tensor): Tensor.
+
+    Returns:
+        tensor: Sign of `a`.
     """
 
 
@@ -353,7 +384,7 @@ def tanh(a):  # pragma: no cover
     """
 
 
-@dispatch(Numeric)
+@dispatch(object)
 def sigmoid(a):
     """Sigmoid function.
 
@@ -366,7 +397,7 @@ def sigmoid(a):
     return 1 / (1 + exp(-a))
 
 
-@dispatch(Numeric)
+@dispatch(object)
 def relu(a):
     """Rectified linear unit.
 
@@ -382,8 +413,8 @@ def relu(a):
 # Binary functions:
 
 
-@dispatch(Numeric, Numeric)
-@abstract()
+@dispatch(object, object)
+@abstract(promote=2)
 def add(a, b):  # pragma: no cover
     """Add two tensors.
 
@@ -396,8 +427,8 @@ def add(a, b):  # pragma: no cover
     """
 
 
-@dispatch(Numeric, Numeric)
-@abstract()
+@dispatch(object, object)
+@abstract(promote=2)
 def subtract(a, b):  # pragma: no cover
     """Subtract two tensors.
 
@@ -410,8 +441,8 @@ def subtract(a, b):  # pragma: no cover
     """
 
 
-@dispatch(Numeric, Numeric)
-@abstract()
+@dispatch(object, object)
+@abstract(promote=2)
 def multiply(a, b):  # pragma: no cover
     """Multiply two tensors.
 
@@ -424,8 +455,8 @@ def multiply(a, b):  # pragma: no cover
     """
 
 
-@dispatch(Numeric, Numeric)
-@abstract()
+@dispatch(object, object)
+@abstract(promote=2)
 def divide(a, b):  # pragma: no cover
     """Divide two tensors.
 
@@ -438,8 +469,8 @@ def divide(a, b):  # pragma: no cover
     """
 
 
-@dispatch(Numeric, Numeric)
-@abstract()
+@dispatch(object, object)
+@abstract(promote=2)
 def power(a, power):  # pragma: no cover
     """Raise a tensor to a power.
 
@@ -452,8 +483,8 @@ def power(a, power):  # pragma: no cover
     """
 
 
-@dispatch(Numeric, Numeric)
-@abstract()
+@dispatch(object, object)
+@abstract(promote=2)
 def minimum(a, b):  # pragma: no cover
     """Take the minimum of two tensors.
 
@@ -466,8 +497,8 @@ def minimum(a, b):  # pragma: no cover
     """
 
 
-@dispatch(Numeric, Numeric)
-@abstract()
+@dispatch(object, object)
+@abstract(promote=2)
 def maximum(a, b):  # pragma: no cover
     """Take the maximum of two tensors.
 
@@ -480,7 +511,7 @@ def maximum(a, b):  # pragma: no cover
     """
 
 
-@dispatch(Numeric, Numeric)
+@dispatch(object, object)
 def leaky_relu(a, alpha):  # pragma: no cover
     """Leaky rectified linear unit.
 
@@ -567,7 +598,7 @@ def std(a, axis=None):  # pragma: no cover
     """
 
 
-@dispatch(Numeric)
+@dispatch(object)
 def logsumexp(a, axis=None):  # pragma: no cover
     """Exponentiate a tensor, sum it, and then take the logarithm, possibly
     along an axis.
@@ -622,8 +653,8 @@ def any(a, axis=None):  # pragma: no cover
 # Logical comparisons:
 
 
-@dispatch(Numeric, Numeric)
-@abstract()
+@dispatch(object, object)
+@abstract(promote=2)
 def lt(a, b):  # pragma: no cover
     """Check whether one tensor is strictly less than another.
 
@@ -636,8 +667,8 @@ def lt(a, b):  # pragma: no cover
     """
 
 
-@dispatch(Numeric, Numeric)
-@abstract()
+@dispatch(object, object)
+@abstract(promote=2)
 def le(a, b):  # pragma: no cover
     """Check whether one tensor is less than or equal to another.
 
@@ -650,8 +681,8 @@ def le(a, b):  # pragma: no cover
     """
 
 
-@dispatch(Numeric, Numeric)
-@abstract()
+@dispatch(object, object)
+@abstract(promote=2)
 def gt(a, b):  # pragma: no cover
     """Check whether one tensor is strictly greater than another.
 
@@ -664,8 +695,8 @@ def gt(a, b):  # pragma: no cover
     """
 
 
-@dispatch(Numeric, Numeric)
-@abstract()
+@dispatch(object, object)
+@abstract(promote=2)
 def ge(a, b):  # pragma: no cover
     """Check whether one tensor is greater than or equal to another.
 
