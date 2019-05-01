@@ -2,6 +2,8 @@
 
 from __future__ import absolute_import, division, print_function
 
+from plum import promote
+
 from . import dispatch, B
 from .types import Numeric
 from .util import abstract
@@ -39,8 +41,8 @@ def transpose(a):  # pragma: no cover
 T = transpose  #: Shorthand for `transpose`.
 
 
-@dispatch(Numeric, Numeric)
-@abstract()
+@dispatch(object, object)
+@abstract(promote=2)
 def matmul(a, b, tr_a=False, tr_b=False):  # pragma: no cover
     """Matrix multiplication.
 
@@ -76,8 +78,8 @@ def trace(a, axis1=0, axis2=1):  # pragma: no cover
     """
 
 
-@dispatch(Numeric, Numeric)
-@abstract()
+@dispatch(object, object)
+@abstract(promote=2)
 def kron(a, b):  # pragma: no cover
     """Kronecker product.
 
@@ -118,8 +120,8 @@ def cholesky(a):  # pragma: no cover
     """
 
 
-@dispatch(Numeric, Numeric)
-@abstract()
+@dispatch(object, object)
+@abstract(promote=2)
 def cholesky_solve(a, b):  # pragma: no cover
     """Solve the linear system `a x = b` given the Cholesky factorisation of
     `a`.
@@ -133,8 +135,8 @@ def cholesky_solve(a, b):  # pragma: no cover
     """
 
 
-@dispatch(Numeric, Numeric)
-@abstract()
+@dispatch(object, object)
+@abstract(promote=2)
 def trisolve(a, b, lower_a=True):  # pragma: no cover
     """Solve the linear system `a x = b` where `a` is triangular.
 
@@ -149,7 +151,7 @@ def trisolve(a, b, lower_a=True):  # pragma: no cover
     """
 
 
-@dispatch(Numeric, Numeric)
+@dispatch(object, object)
 def outer(a, b):
     """Compute the outer product between two vectors.
 
@@ -162,14 +164,15 @@ def outer(a, b):
     """
     if B.rank(a) != 1 or B.rank(b) != 1:
         raise ValueError('Arguments must have rank 1.')
-    return a[:, None] * b[None, :]
+    return B.expand_dims(a, axis=1) * B.expand_dims(b, axis=0)
 
 
-@dispatch(Numeric)
+@dispatch(object)
 def outer(a):
     return outer(a, a)
 
 
+@dispatch(object)
 def reg(a, diag=None, clip=True):
     """Add a diagonal to a matrix.
 
@@ -183,14 +186,16 @@ def reg(a, diag=None, clip=True):
     Returns:
         matrix: Regularised version of `a`.
     """
+    # Careful to use `B.epsilon` here and not `epsilon`! Otherwise, changes
+    # will not be tracked.
     if diag is None:
-        diag = epsilon
-    elif clip:
-        diag = B.maximum(diag, epsilon)
+        diag = B.epsilon
+    if clip:
+        diag = B.maximum(diag, B.epsilon)
     return a + diag * B.eye(a)
 
 
-@dispatch(Numeric, Numeric)
+@dispatch(object, object)
 def pw_dists2(a, b):
     """Compute the square the Euclidean norm of the pairwise
     differences between two matrices where rows correspond to elements and
@@ -209,12 +214,12 @@ def pw_dists2(a, b):
     return norms_a + norms_b - 2 * B.matmul(a, b, tr_b=True)
 
 
-@dispatch(Numeric)
+@dispatch(object)
 def pw_dists2(a):
     return pw_dists2(a, a)
 
 
-@dispatch(Numeric, Numeric)
+@dispatch(object, object)
 def pw_dists(a, b):
     """Compute the Euclidean norm of the pairwise differences between two
     matrices where rows correspond to elements and columns to features.
@@ -227,16 +232,16 @@ def pw_dists(a, b):
         matrix: Euclidean norm of the pairwise differences between the
             elements of `a` and `b`.
     """
-    return B.maximum(B.sqrt(B.pw_dists2(a, b)),
-                     B.cast(1e-30, B.dtype(a)))
+    return B.sqrt(B.maximum(B.pw_dists2(a, b),
+                            B.cast(1e-30, B.dtype(a))))
 
 
-@dispatch(Numeric)
+@dispatch(object)
 def pw_dists(a):
     return pw_dists(a, a)
 
 
-@dispatch(Numeric, Numeric)
+@dispatch(object, object)
 def ew_dists2(a, b):
     """Compute the square the Euclidean norm of the element-wise
     differences between two matrices where rows correspond to elements and
@@ -253,12 +258,12 @@ def ew_dists2(a, b):
     return B.sum((a - b) ** 2, axis=1)[:, None]
 
 
-@dispatch(Numeric)
+@dispatch(object)
 def ew_dists2(a):
     return ew_dists2(a, a)
 
 
-@dispatch(Numeric, Numeric)
+@dispatch(object, object)
 def ew_dists(a, b):
     """Compute the Euclidean norm of the element-wise differences between two
     matrices where rows correspond to elements and columns to features.
@@ -271,16 +276,16 @@ def ew_dists(a, b):
         matrix: Euclidean norm of the element-wise differences between the
             elements of `a` and `b`.
     """
-    return B.maximum(B.sqrt(B.ew_dists2(a, b)),
-                     B.cast(1e-30, B.dtype(a)))
+    return B.sqrt(B.maximum(B.ew_dists2(a, b),
+                            B.cast(1e-30, B.dtype(a))))
 
 
-@dispatch(Numeric)
+@dispatch(object)
 def ew_dists(a):
     return ew_dists(a, a)
 
 
-@dispatch(Numeric, Numeric)
+@dispatch(object, object)
 def pw_sums2(a, b):
     """Compute the square the Euclidean norm of the pairwise
     sums between two matrices where rows correspond to elements and
@@ -299,12 +304,12 @@ def pw_sums2(a, b):
     return norms_a + norms_b + 2 * B.matmul(a, b, tr_b=True)
 
 
-@dispatch(Numeric)
+@dispatch(object)
 def pw_sums2(a):
     return pw_sums2(a, a)
 
 
-@dispatch(Numeric, Numeric)
+@dispatch(object, object)
 def pw_sums(a, b):
     """Compute the Euclidean norm of the pairwise sums between two
     matrices where rows correspond to elements and columns to features.
@@ -317,16 +322,16 @@ def pw_sums(a, b):
         matrix: Euclidean norm of the pairwise sums between the
             elements of `a` and `b`.
     """
-    return B.maximum(B.sqrt(B.pw_sums2(a, b)),
-                     B.cast(1e-30, B.dtype(a)))
+    return B.sqrt(B.maximum(B.pw_sums2(a, b),
+                            B.cast(1e-30, B.dtype(a))))
 
 
-@dispatch(Numeric)
+@dispatch(object)
 def pw_sums(a):
     return pw_sums(a, a)
 
 
-@dispatch(Numeric, Numeric)
+@dispatch(object, object)
 def ew_sums2(a, b):
     """Compute the square the Euclidean norm of the element-wise
     sums between two matrices where rows correspond to elements and
@@ -343,12 +348,12 @@ def ew_sums2(a, b):
     return B.sum((a + b) ** 2, axis=1)[:, None]
 
 
-@dispatch(Numeric)
+@dispatch(object)
 def ew_sums2(a):
     return ew_sums2(a, a)
 
 
-@dispatch(Numeric, Numeric)
+@dispatch(object, object)
 def ew_sums(a, b):
     """Compute the Euclidean norm of the element-wise sums between two
     matrices where rows correspond to elements and columns to features.
@@ -361,10 +366,10 @@ def ew_sums(a, b):
         matrix: Euclidean norm of the element-wise sums between the
             elements of `a` and `b`.
     """
-    return B.maximum(B.sqrt(B.ew_sums2(a, b)),
-                     B.cast(1e-30, B.dtype(a)))
+    return B.sqrt(B.maximum(B.ew_sums2(a, b),
+                            B.cast(1e-30, B.dtype(a))))
 
 
-@dispatch(Numeric)
+@dispatch(object)
 def ew_sums(a):
     return ew_sums(a, a)
