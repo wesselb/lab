@@ -262,7 +262,7 @@ def concat2d(a):  # pragma: no cover
 
 
 @dispatch(Numeric, ListOrTuple)
-@abstract(convert_to=0, promote_to=None)
+@abstract(promote=None)
 def take(a, indices, axis=0):  # pragma: no cover
     """Take particular elements along an axis.
 
