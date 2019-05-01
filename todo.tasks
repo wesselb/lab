@@ -1,2 +1,8 @@
- ☐ Also rename `lab` folder.
- ☐ Remove clutter, e.g. `.git` and `.idea`.
+TODO:
+    ☐ Port bvn_cdf.
+        ☐ Check Python 2 and Python 3 compatibility.
+
+
+＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+Archive:
+ ✓ Add support for AutoGrad. @done (19-05-01 13:25) @project(TODO)
