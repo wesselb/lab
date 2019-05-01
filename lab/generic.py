@@ -58,7 +58,7 @@ def isnan(a):  # pragma: no cover
         a (tensor): Tensor.
 
     Returns:
-        bool[tensor]: `a` is NaN.
+        tensor[bool]: `a` is NaN.
     """
 
 
