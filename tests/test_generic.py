@@ -80,13 +80,13 @@ def test_cast():
 
 
 def test_unary():
-    # Test functions with signed arguments.
+    # Test functions using signed arguments.
     for f in [B.abs, B.exp, B.sin, B.cos, B.tan, B.tanh, B.sigmoid, B.relu]:
         yield check_function, f, (Tensor(),), {}
         yield check_function, f, (Tensor(2),), {}
         yield check_function, f, (Tensor(2, 3),), {}
 
-    # Test functions with positive arguments.
+    # Test functions using positive arguments.
     for f in [B.log]:
         yield check_function, f, (PositiveTensor(),), {}
         yield check_function, f, (PositiveTensor(2),), {}
@@ -94,11 +94,19 @@ def test_unary():
 
 
 def test_binary():
-    for f in [B.add, B.subtract, B.multiply, B.divide, B.power,
+    # Test functions using signed arguments.
+    for f in [B.add, B.subtract, B.multiply, B.divide,
               B.minimum, B.maximum, B.leaky_relu]:
         yield check_function, f, (Tensor(), Tensor()), {}
         yield check_function, f, (Tensor(2), Tensor(2)), {}
         yield check_function, f, (Tensor(2, 3), Tensor(2, 3)), {}
+
+    # Test functions using a positive first argument, but signed second
+    # argument.
+    for f in [B.power]:
+        yield check_function, f, (PositiveTensor(), Tensor()), {}
+        yield check_function, f, (PositiveTensor(2), Tensor(2)), {}
+        yield check_function, f, (PositiveTensor(2, 3), Tensor(2, 3)), {}
 
 
 def test_reductions():

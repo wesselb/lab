@@ -15,7 +15,8 @@ __all__ = ['epsilon',
            'cholesky',
            'cholesky_solve',
            'trisolve',
-           'outer']
+           'outer',
+           'reg']
 
 epsilon = 1e-12  #: Magnitude of diagonal to regularise matrices with.
 
@@ -165,3 +166,23 @@ def outer(a, b):
 @dispatch(Numeric)
 def outer(a):
     return outer(a, a)
+
+
+def reg(a, diag=None, clip=True):
+    """Add a diagonal to a matrix.
+
+    Args:
+        a (matrix): Matrix to add a diagonal to.
+        diag (float, optional): Magnitude of the diagonal to add. Defaults to
+            `.linear_algebra.epsilon`.
+        clip (bool, optional): Let `diag` be at least `.linear_algebra.epsilon`.
+            Defaults to `True`.
+
+    Returns:
+        matrix: Regularised version of `a`.
+    """
+    if diag is None:
+        diag = epsilon
+    elif clip:
+        diag = B.maximum(diag, epsilon)
+    return a + diag * B.eye(a)

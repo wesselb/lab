@@ -73,6 +73,26 @@ def test_trisolve():
 def test_outer():
     yield raises, ValueError, lambda: B.outer(B.eye(5), B.ones(5))
     yield raises, ValueError, lambda: B.outer(B.ones(5), B.eye(5))
-    a, b = B.randn(5), B.randn(5)
+    a, b = Tensor(5).np(), Tensor(5).np()
     yield allclose, B.outer(a), np.outer(a, a)
     yield allclose, B.outer(a, b), np.outer(a, b)
+
+
+def test_reg():
+    a = Matrix(2, 3).np()
+    yield allclose, B.reg(a, diag=None, clip=False), a
+    yield allclose, \
+          B.reg(a, diag=None, clip=True), \
+          a + B.epsilon * np.eye(*a.shape)
+    yield allclose, \
+          B.reg(a, diag=B.epsilon / 10, clip=False), \
+          a + B.epsilon / 10 * np.eye(*a.shape)
+    yield allclose, \
+          B.reg(a, diag=B.epsilon / 10, clip=True), \
+          a + B.epsilon * np.eye(*a.shape)
+    yield allclose, \
+          B.reg(a, diag=B.epsilon * 10, clip=False), \
+          a + B.epsilon * 10 * np.eye(*a.shape)
+    yield allclose, \
+          B.reg(a, diag=B.epsilon * 10, clip=True), \
+          a + B.epsilon * 10 * np.eye(*a.shape)
