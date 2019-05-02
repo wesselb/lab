@@ -1,0 +1,7 @@
+lab.tensorflow.random module
+============================
+
+.. automodule:: lab.tensorflow.random
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,483 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>lab.shaping &mdash; lab 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> lab
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">LAB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">Application Programming Interface</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">lab</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>lab.shaping</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for lab.shaping</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">dispatch</span>
+<span class="kn">from</span> <span class="nn">.types</span> <span class="k">import</span> <span class="n">Numeric</span><span class="p">,</span> <span class="n">ListOrTuple</span>
+<span class="kn">from</span> <span class="nn">.util</span> <span class="k">import</span> <span class="n">abstract</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;shape&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;shape_int&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;rank&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;length&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;isscalar&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;expand_dims&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;squeeze&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;uprank&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;diag&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;flatten&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;vec_to_tril&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;tril_to_vec&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;stack&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;unstack&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;reshape&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;concat&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;concat2d&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;take&#39;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="shape"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.shape">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Get the shape of a tensor.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        object: Shape of `a`.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="shape_int"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.shape_int">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">shape_int</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Get the shape of a tensor as a tuple of integers.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tuple: Shape of `a` as a tuple of integers.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="rank"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.rank">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">rank</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Get the shape of a tensor.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        int: Rank of `a`.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="length"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.length">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">length</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Get the length of a tensor.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        int: Length of `a`.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="isscalar"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.isscalar">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">isscalar</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check whether a tensor is a scalar.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: `True` if `a` is a scalar, otherwise `False`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">rank</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="expand_dims"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.expand_dims">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">expand_dims</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Insert an empty axis.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor.</span>
+<span class="sd">        axis (int, optional): Index of new axis. Defaults to `0`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: `a` with the new axis.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="squeeze"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.squeeze">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">squeeze</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Remove all axes containing only a single element.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: `a` without axes containing only a single element.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="uprank"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.uprank">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">uprank</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Convert the input into a rank two tensor.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: `a`, but of rank two.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">a_rank</span> <span class="o">=</span> <span class="n">rank</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">a_rank</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Cannot convert a tensor of rank </span><span class="si">{}</span><span class="s1"> to rank 2.&#39;</span>
+                         <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">a_rank</span><span class="p">))</span>
+    <span class="k">while</span> <span class="n">a_rank</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">expand_dims</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">a_rank</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">a</span></div>
+
+
+<div class="viewcode-block" id="diag"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.diag">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">diag</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Take the diagonal of a matrix, or construct a diagonal matrix from its</span>
+<span class="sd">    diagonal.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Matrix or diagonal.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Diagonal or matrix.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="flatten"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.flatten">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">flatten</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Flatten a tensor.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Flattened tensor.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">reshape</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,))</span></div>
+
+
+<div class="viewcode-block" id="vec_to_tril"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.vec_to_tril">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">vec_to_tril</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Construct a lower triangular matrix from a vector.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Vector.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Lower triangular matrix.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="tril_to_vec"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.tril_to_vec">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">tril_to_vec</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Construct a vector from a lower triangular matrix.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Lower triangular matrix.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Vector</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="stack"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.stack">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">ListOrTuple</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">stack</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Concatenate tensors along a new axis.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (list[tensor]): List of tensors.</span>
+<span class="sd">        axis (int, optional): Index of new axis. Defaults to `0`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Stacked tensors.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="unstack"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.unstack">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">unstack</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Unstack tensors along an axis.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (list): List of tensors.</span>
+<span class="sd">        axis (int, optional): Index along which to unstack. Defaults to `0`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list[tensor]: List of tensors.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="reshape"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.reshape">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">reshape</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,)):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Reshape a tensor.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): List of tensors.</span>
+<span class="sd">        shape (shape, optional): New shape. Defaults to `(-1,)`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Reshaped tensor.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="concat"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.concat">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">ListOrTuple</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">concat</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Concatenate tensors along an axis.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (list[tensor]): List of tensors.</span>
+<span class="sd">        axis (int, optional): Axis along which to concatenate. Defaults to `0`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Concatenation.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="concat2d"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.concat2d">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">ListOrTuple</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">concat2d</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Concatenate tensors into a matrix.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (list[list[tensor]]): List of list of tensors, which form the rows of</span>
+<span class="sd">            the matrix.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Assembled matrix.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">concat</span><span class="p">([</span><span class="n">concat</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">a</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="take"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.take">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">,</span> <span class="n">ListOrTuple</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">(</span><span class="n">promote</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">take</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Take particular elements along an axis.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor.</span>
+<span class="sd">        indices (list): List of indices to take.</span>
+<span class="sd">        axis (int, optional): Axis along which to take indices. Defaults to `0`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Selected subtensor.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Wessel Bruinsma.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+lab.tensorflow.linear\_algebra module
+=====================================
+
+.. automodule:: lab.tensorflow.linear_algebra
+    :members:
+    :undoc-members:
+    :show-inheritance:

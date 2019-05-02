@@ -1,0 +1,563 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>LAB &mdash; lab 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Application Programming Interface" href="api.html" />
+    <link rel="prev" title="Welcome" href="index.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> lab
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">LAB</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#basic-usage">Basic Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#list-of-types">List of Types</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#general">General</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#numpy">NumPy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tensorflow">TensorFlow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pytorch">PyTorch</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#list-of-methods">List of Methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#constants">Constants</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#generic">Generic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#linear-algebra">Linear Algebra</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#random">Random</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shaping">Shaping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Application Programming Interface</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">lab</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>LAB</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/readme.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="lab">
+<h1><a class="reference external" href="http://github.com/wesselb/lab">LAB</a><a class="headerlink" href="#lab" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://travis-ci.org/wesselb/lab"><img alt="Build" src="https://travis-ci.org/wesselb/lab.svg?branch=master" /></a> <a class="reference external" href="https://coveralls.io/github/wesselb/lab?branch=master"><img alt="Coverage Status" src="https://coveralls.io/repos/github/wesselb/lab/badge.svg?branch=master&amp;service=github" /></a> <a class="reference external" href="https://wesselb.github.io/lab"><img alt="Latest Docs" src="https://img.shields.io/badge/docs-latest-blue.svg" /></a></p>
+<p>A generic interface for linear algebra backends: code it once, run it on
+any backend</p>
+<ul class="simple">
+<li><a class="reference external" href="#installation">Installation</a></li>
+<li><a class="reference external" href="#basic-usage">Basic Usage</a></li>
+<li><a class="reference external" href="#list-of-types">List of Types</a><ul>
+<li><a class="reference external" href="#general">General</a></li>
+<li><a class="reference external" href="#numpy">NumPy</a></li>
+<li><a class="reference external" href="#tensorflow">TensorFlow</a></li>
+<li><a class="reference external" href="#pytorch">PyTorch</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#list-of-methods">List of Methods</a><ul>
+<li><a class="reference external" href="#constants">Constants</a></li>
+<li><a class="reference external" href="#generic">Generic</a></li>
+<li><a class="reference external" href="#linear-algebra">Linear Algebra</a></li>
+<li><a class="reference external" href="#random">Random</a></li>
+<li><a class="reference external" href="#shaping">Shaping</a></li>
+</ul>
+</li>
+</ul>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>The package is tested for Python 2.7 and Python 3.6, which are the
+versions recommended to use. To install the package, use the following
+sequence of commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">wesselb</span><span class="o">/</span><span class="n">gpar</span>
+<span class="n">cd</span> <span class="n">gpar</span>
+<span class="n">make</span> <span class="n">install</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="basic-usage">
+<h2>Basic Usage<a class="headerlink" href="#basic-usage" title="Permalink to this headline">¶</a></h2>
+<p>The basic use case for the package is to write code that automatically
+determines the backend to use depending on the types of its arguments.</p>
+<p>Example:</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">lab</span> <span class="k">as</span> <span class="nn">B</span>
+
+<span class="k">def</span> <span class="nf">objective</span><span class="p">(</span><span class="n">matrix</span><span class="p">):</span>
+    <span class="n">outer_product</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">matrix</span><span class="p">,</span> <span class="n">tr_b</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">outer_product</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Run it with NumPy and AutoGrad:</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">autograd.numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">autograd</span> <span class="k">import</span> <span class="n">grad</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">grad</span><span class="p">(</span><span class="n">objective</span><span class="p">)(</span><span class="n">B</span><span class="o">.</span><span class="n">randn</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">))</span>
+<span class="go">array([[-0.35247881, -0.4144402 ],</span>
+<span class="go">       [-0.35247881, -0.4144402 ]])</span>
+</pre></div>
+</div>
+<p>Run it with TensorFlow:</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">objective</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">randn</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">tf</span><span class="o">.</span><span class="n">float64</span><span class="p">))</span>
+<span class="go">&lt;tf.Tensor &#39;Mean:0&#39; shape=() dtype=float64&gt;</span>
+</pre></div>
+</div>
+<p>Run it with PyTorch:</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">objective</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">randn</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">float64</span><span class="p">))</span>
+<span class="go">tensor(1.9557, dtype=torch.float64)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="list-of-types">
+<h2>List of Types<a class="headerlink" href="#list-of-types" title="Permalink to this headline">¶</a></h2>
+<p>This section lists all available types, which can be used to check types
+of objects or extend functions.</p>
+<p>Example:</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">lab</span> <span class="k">as</span> <span class="nn">B</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">])],</span> <span class="n">B</span><span class="o">.</span><span class="n">NPList</span><span class="p">)</span>
+<span class="go">True</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">])],</span> <span class="n">B</span><span class="o">.</span><span class="n">TFList</span><span class="p">)</span>
+<span class="go">False</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">((</span><span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">(</span><span class="mf">1.</span><span class="p">),</span> <span class="n">tf</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">5</span><span class="p">)),</span> <span class="n">B</span><span class="o">.</span><span class="n">TFTuple</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<div class="section" id="general">
+<h3>General<a class="headerlink" href="#general" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Int</span>          <span class="c1"># Integers</span>
+<span class="n">Float</span>        <span class="c1"># Floating-point numbers</span>
+<span class="n">Bool</span>         <span class="c1"># Booleans</span>
+<span class="n">Number</span>       <span class="c1"># Numbers</span>
+<span class="n">Numeric</span>      <span class="c1"># Numerical objects, including booleans</span>
+<span class="n">ListOrTuple</span>  <span class="c1"># Lists or tuples</span>
+<span class="n">Shape</span>        <span class="c1"># Shapes</span>
+<span class="n">DType</span>        <span class="c1"># Data typse</span>
+<span class="n">Framework</span>    <span class="c1"># Anything accepted by supported frameworks</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="numpy">
+<h3>NumPy<a class="headerlink" href="#numpy" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">NPNumeric</span>
+<span class="n">NPList</span>
+<span class="n">NPTuple</span>
+<span class="n">NPList</span>
+<span class="n">NPListOrTuple</span>
+<span class="n">NPShape</span>
+<span class="n">NPDType</span>
+
+<span class="n">NP</span>             <span class="c1"># Anything NumPy</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="tensorflow">
+<h3>TensorFlow<a class="headerlink" href="#tensorflow" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TFNumeric</span>
+<span class="n">TFList</span>
+<span class="n">TFTuple</span>
+<span class="n">TFList</span>
+<span class="n">TFListOrTuple</span>
+<span class="n">TFShape</span>
+<span class="n">TFDType</span>
+
+<span class="n">TF</span>             <span class="c1"># Anything TensorFlow</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pytorch">
+<h3>PyTorch<a class="headerlink" href="#pytorch" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TorchNumeric</span>
+<span class="n">TorchList</span>
+<span class="n">TorchTuple</span>
+<span class="n">TorchList</span>
+<span class="n">TorchListOrTuple</span>
+<span class="n">TorchShape</span>
+<span class="n">TorchDType</span>
+
+<span class="n">Torch</span>             <span class="c1"># Anything PyTorch</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="list-of-methods">
+<h2>List of Methods<a class="headerlink" href="#list-of-methods" title="Permalink to this headline">¶</a></h2>
+<p>This section lists all available constants and methods.</p>
+<ul class="simple">
+<li>Arguments <em>must</em> be given as arguments and keyword arguments <em>must</em>
+be given as keyword arguments. For example, <code class="docutils literal notranslate"><span class="pre">zeros((2,</span> <span class="pre">2))</span></code> is
+valid, but <code class="docutils literal notranslate"><span class="pre">zeros(shape=(2,</span> <span class="pre">2))</span></code> is not; and
+<code class="docutils literal notranslate"><span class="pre">sum(tensor,</span> <span class="pre">axis=1)</span></code> is valid, but <code class="docutils literal notranslate"><span class="pre">sum(tensor,</span> <span class="pre">1)</span></code> is not.</li>
+<li>The names of arguments are indicative of their function:<ul>
+<li><code class="docutils literal notranslate"><span class="pre">a</span></code>, <code class="docutils literal notranslate"><span class="pre">b</span></code>, and <code class="docutils literal notranslate"><span class="pre">c</span></code> indicate general tensors.</li>
+<li><code class="docutils literal notranslate"><span class="pre">dtype</span></code> indicates a data type. E.g, <code class="docutils literal notranslate"><span class="pre">np.float32</span></code> or
+<code class="docutils literal notranslate"><span class="pre">tf.float64</span></code>, and <code class="docutils literal notranslate"><span class="pre">rand(np.float32)</span></code> creates a NumPy random
+number, whereas <code class="docutils literal notranslate"><span class="pre">rand(tf.float64)</span></code> creates a TensorFlow random
+number.</li>
+<li><code class="docutils literal notranslate"><span class="pre">shape</span></code> indicates a shape. E.g., <code class="docutils literal notranslate"><span class="pre">(2,</span> <span class="pre">2)</span></code> or <code class="docutils literal notranslate"><span class="pre">[2,</span> <span class="pre">2]</span></code>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">axis</span></code> indicates an axis over which the function may perform its
+action.</li>
+<li><code class="docutils literal notranslate"><span class="pre">ref</span></code> indicates a <em>reference tensor</em> from which a property (like
+its data type) will be inferred. E.g., <code class="docutils literal notranslate"><span class="pre">zeros(tensor)</span></code> creates a
+tensor full or zeros of the same shape and data type as
+<code class="docutils literal notranslate"><span class="pre">tensor</span></code>.</li>
+</ul>
+</li>
+</ul>
+<p>See the documentation for more detailled descriptions of each function.</p>
+<div class="section" id="constants">
+<h3>Constants<a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nan</span>
+<span class="n">pi</span>
+<span class="n">log_2_pi</span>
+
+<span class="n">isnan</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="generic">
+<h3>Generic<a class="headerlink" href="#generic" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)</span>
+<span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">ref</span><span class="p">)</span>
+<span class="n">zeros</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)</span>
+<span class="n">zeros</span><span class="p">(</span><span class="n">ref</span><span class="p">)</span>
+
+<span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)</span>
+<span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">ref</span><span class="p">)</span>
+<span class="n">ones</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)</span>
+<span class="n">ones</span><span class="p">(</span><span class="n">ref</span><span class="p">)</span>
+
+<span class="n">eye</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)</span>
+<span class="n">eye</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">eye</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">ref</span><span class="p">)</span>
+<span class="n">eye</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)</span>
+<span class="n">eye</span><span class="p">(</span><span class="n">ref</span><span class="p">)</span>
+
+<span class="n">linspace</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span>
+
+<span class="n">cast</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)</span>
+<span class="n">cast</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">ref</span><span class="p">)</span>
+
+<span class="n">identity</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="nb">abs</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">sign</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">sqrt</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">exp</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">log</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">cos</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">tan</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">sigmoid</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">relu</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+
+<span class="n">add</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">subtract</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">multiply</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">divide</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">power</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">minimum</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">maximum</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">leaky_relu</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+
+<span class="nb">min</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="nb">max</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="nb">sum</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">mean</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">std</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">logsumexp</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+<span class="nb">all</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="nb">any</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+<span class="n">lt</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">le</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">gt</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">ge</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="linear-algebra">
+<h3>Linear Algebra<a class="headerlink" href="#linear-algebra" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">transpose</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="p">(</span><span class="n">alias</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span>
+<span class="n">matmul</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">tr_a</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tr_b</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="p">(</span><span class="n">alias</span><span class="p">:</span> <span class="n">mm</span><span class="p">,</span> <span class="n">dot</span><span class="p">)</span>
+<span class="n">trace</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">axis2</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">kron</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">svd</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">compute_uv</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">cholesky</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">cholesky_solve</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">trisolve</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">lower_a</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">outer</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">reg</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">diag</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">clip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">pw_dists2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">pw_dists2</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">pw_dists</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">pw_dists</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+
+<span class="n">ew_dists2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">ew_dists2</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">ew_dists</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">ew_dists</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+
+<span class="n">pw_sums2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">pw_sums2</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">pw_sums</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">pw_sums</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+
+<span class="n">ew_sums2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">ew_sums2</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">ew_sums</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">ew_sums</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="random">
+<h3>Random<a class="headerlink" href="#random" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_random_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+
+<span class="n">rand</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)</span>
+<span class="n">rand</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">rand</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+<span class="n">rand</span><span class="p">()</span>
+
+<span class="n">randn</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)</span>
+<span class="n">randn</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">randn</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+<span class="n">randn</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="shaping">
+<h3>Shaping<a class="headerlink" href="#shaping" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">shape</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">shape_int</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">rank</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">length</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">isscalar</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">expand_dims</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">squeeze</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">uprank</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+
+<span class="n">diag</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">flatten</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">vec_to_tril</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">tril_to_vec</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">stack</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">unstack</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">reshape</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,))</span>
+<span class="n">concat</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">concat2d</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">take</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="api.html" class="btn btn-neutral float-right" title="Application Programming Interface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Welcome" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Wessel Bruinsma.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

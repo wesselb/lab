@@ -1,0 +1,582 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>lab.linear_algebra &mdash; lab 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> lab
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">LAB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">Application Programming Interface</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">lab</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>lab.linear_algebra</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for lab.linear_algebra</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+
+<span class="kn">from</span> <span class="nn">plum</span> <span class="k">import</span> <span class="n">promote</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">dispatch</span><span class="p">,</span> <span class="n">B</span>
+<span class="kn">from</span> <span class="nn">.types</span> <span class="k">import</span> <span class="n">Numeric</span>
+<span class="kn">from</span> <span class="nn">.util</span> <span class="k">import</span> <span class="n">abstract</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;epsilon&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;transpose&#39;</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;matmul&#39;</span><span class="p">,</span> <span class="s1">&#39;mm&#39;</span><span class="p">,</span> <span class="s1">&#39;dot&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;kron&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;trace&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;svd&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;cholesky&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;cholesky_solve&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;trisolve&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;outer&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;reg&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;pw_dists2&#39;</span><span class="p">,</span> <span class="s1">&#39;pw_dists&#39;</span><span class="p">,</span> <span class="s1">&#39;ew_dists2&#39;</span><span class="p">,</span> <span class="s1">&#39;ew_dists&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;pw_sums2&#39;</span><span class="p">,</span> <span class="s1">&#39;pw_sums&#39;</span><span class="p">,</span> <span class="s1">&#39;ew_sums2&#39;</span><span class="p">,</span> <span class="s1">&#39;ew_sums&#39;</span><span class="p">]</span>
+
+<span class="n">epsilon</span> <span class="o">=</span> <span class="mf">1e-12</span>  <span class="c1">#: Magnitude of diagonal to regularise matrices with.</span>
+
+
+<div class="viewcode-block" id="transpose"><a class="viewcode-back" href="../../source/lab.linear_algebra.html#lab.linear_algebra.transpose">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">transpose</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Transpose a matrix.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Matrix to transpose.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Transposition of `a`.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<span class="n">T</span> <span class="o">=</span> <span class="n">transpose</span>  <span class="c1">#: Shorthand for `transpose`.</span>
+
+
+<div class="viewcode-block" id="matmul"><a class="viewcode-back" href="../../source/lab.linear_algebra.html#lab.linear_algebra.matmul">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">(</span><span class="n">promote</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">matmul</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">tr_a</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tr_b</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Matrix multiplication.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): First matrix.</span>
+<span class="sd">        b (tensor): Second matrix.</span>
+<span class="sd">        tr_a (bool, optional): Transpose first matrix. Defaults to `False`.</span>
+<span class="sd">        tr_b (bool, optional): Transpose second matrix. Defaults to `False`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Matrix product of `a` and `b`.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<span class="n">mm</span> <span class="o">=</span> <span class="n">matmul</span>  <span class="c1">#: Shorthand for `matmul`.</span>
+<span class="n">dot</span> <span class="o">=</span> <span class="n">matmul</span>  <span class="c1">#: Also a shorthand for `matmul`.</span>
+
+
+<div class="viewcode-block" id="trace"><a class="viewcode-back" href="../../source/lab.linear_algebra.html#lab.linear_algebra.trace">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">trace</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">axis2</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Compute the trace of a tensor.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor to compute trace of.</span>
+<span class="sd">        axis1 (int, optional): First dimension to compute trace over. Defaults</span>
+<span class="sd">            to `0`.</span>
+<span class="sd">        axis2 (int, optional): Second dimension to compute trace over. Defaults</span>
+<span class="sd">            to `1`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Trace.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="kron"><a class="viewcode-back" href="../../source/lab.linear_algebra.html#lab.linear_algebra.kron">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">(</span><span class="n">promote</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">kron</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Kronecker product.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): First matrix.</span>
+<span class="sd">        b (tensor): Second matrix.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Kronecker product of `a` and `b`.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="svd"><a class="viewcode-back" href="../../source/lab.linear_algebra.html#lab.linear_algebra.svd">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">svd</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">compute_uv</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Compute the singular value decomposition.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Matrix to decompose.</span>
+<span class="sd">        compute_uv (bool, optional): Also compute `U` and `V`. Defaults to</span>
+<span class="sd">            `True`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tuple: `(U, S, V)` is `compute_uv` is `True` and just `S` otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="cholesky"><a class="viewcode-back" href="../../source/lab.linear_algebra.html#lab.linear_algebra.cholesky">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">cholesky</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Compute the Cholesky decomposition.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Matrix to decompose.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Cholesky decomposition.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="cholesky_solve"><a class="viewcode-back" href="../../source/lab.linear_algebra.html#lab.linear_algebra.cholesky_solve">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">(</span><span class="n">promote</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">cholesky_solve</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Solve the linear system `a x = b` given the Cholesky factorisation of</span>
+<span class="sd">    `a`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Cholesky factorisation of `a`.</span>
+<span class="sd">        b (tensor): RHS `b`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Solution `x`.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="trisolve"><a class="viewcode-back" href="../../source/lab.linear_algebra.html#lab.linear_algebra.trisolve">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">(</span><span class="n">promote</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">trisolve</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">lower_a</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Solve the linear system `a x = b` where `a` is triangular.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Triangular matrix `a`.</span>
+<span class="sd">        b (tensor): RHS `b`.</span>
+<span class="sd">        lower_a (bool, optional): Indicate that `a` is lower triangular</span>
+<span class="sd">            instead of upper triangular. Defaults to `True`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Solution `x`.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">outer</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute the outer product between two vectors.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (vector): First vector.</span>
+<span class="sd">        b (vector): Second vector.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Outer product of `a` and `b`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">B</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">B</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Arguments must have rank 1.&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">B</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="outer"><a class="viewcode-back" href="../../source/lab.linear_algebra.html#lab.linear_algebra.outer">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">outer</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">outer</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="reg"><a class="viewcode-back" href="../../source/lab.linear_algebra.html#lab.linear_algebra.reg">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">reg</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">diag</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">clip</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Add a diagonal to a matrix.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (matrix): Matrix to add a diagonal to.</span>
+<span class="sd">        diag (float, optional): Magnitude of the diagonal to add. Defaults to</span>
+<span class="sd">            `.linear_algebra.epsilon`.</span>
+<span class="sd">        clip (bool, optional): Let `diag` be at least `.linear_algebra.epsilon`.</span>
+<span class="sd">            Defaults to `True`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        matrix: Regularised version of `a`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Careful to use `B.epsilon` here and not `epsilon`! Otherwise, changes</span>
+    <span class="c1"># will not be tracked.</span>
+    <span class="k">if</span> <span class="n">diag</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">diag</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">epsilon</span>
+    <span class="k">if</span> <span class="n">clip</span><span class="p">:</span>
+        <span class="n">diag</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">diag</span><span class="p">,</span> <span class="n">B</span><span class="o">.</span><span class="n">epsilon</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">diag</span> <span class="o">*</span> <span class="n">B</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">a</span><span class="p">)</span></div>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">pw_dists2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute the square the Euclidean norm of the pairwise</span>
+<span class="sd">    differences between two matrices where rows correspond to elements and</span>
+<span class="sd">    columns to features.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (matrix): First matrix.</span>
+<span class="sd">        b (matrix, optional): Second matrix. Defaults to `a`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        matrix: Square of the Euclidean norm of the pairwise differences</span>
+<span class="sd">            between the elements of `a` and `b`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">norms_a</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">a</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="n">norms_b</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">b</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="k">return</span> <span class="n">norms_a</span> <span class="o">+</span> <span class="n">norms_b</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">B</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">tr_b</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="pw_dists2"><a class="viewcode-back" href="../../source/lab.linear_algebra.html#lab.linear_algebra.pw_dists2">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">pw_dists2</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">pw_dists2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span></div>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">pw_dists</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute the Euclidean norm of the pairwise differences between two</span>
+<span class="sd">    matrices where rows correspond to elements and columns to features.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (matrix): First matrix.</span>
+<span class="sd">        b (matrix, optional): Second matrix. Defaults to `a`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        matrix: Euclidean norm of the pairwise differences between the</span>
+<span class="sd">            elements of `a` and `b`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">pw_dists2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span>
+                            <span class="n">B</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="mf">1e-30</span><span class="p">,</span> <span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">a</span><span class="p">))))</span>
+
+
+<div class="viewcode-block" id="pw_dists"><a class="viewcode-back" href="../../source/lab.linear_algebra.html#lab.linear_algebra.pw_dists">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">pw_dists</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">pw_dists</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span></div>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">ew_dists2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute the square the Euclidean norm of the element-wise</span>
+<span class="sd">    differences between two matrices where rows correspond to elements and</span>
+<span class="sd">    columns to features.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (matrix): First matrix.</span>
+<span class="sd">        b (matrix, optional): Second matrix. Defaults to `a`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        matrix: Square of the Euclidean norm of the element-wise differences</span>
+<span class="sd">            between the elements of `a` and `b`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="ew_dists2"><a class="viewcode-back" href="../../source/lab.linear_algebra.html#lab.linear_algebra.ew_dists2">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">ew_dists2</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">ew_dists2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span></div>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">ew_dists</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute the Euclidean norm of the element-wise differences between two</span>
+<span class="sd">    matrices where rows correspond to elements and columns to features.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (matrix): First matrix.</span>
+<span class="sd">        b (matrix, optional): Second matrix. Defaults to `a`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        matrix: Euclidean norm of the element-wise differences between the</span>
+<span class="sd">            elements of `a` and `b`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">ew_dists2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span>
+                            <span class="n">B</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="mf">1e-30</span><span class="p">,</span> <span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">a</span><span class="p">))))</span>
+
+
+<div class="viewcode-block" id="ew_dists"><a class="viewcode-back" href="../../source/lab.linear_algebra.html#lab.linear_algebra.ew_dists">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">ew_dists</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">ew_dists</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span></div>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">pw_sums2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute the square the Euclidean norm of the pairwise</span>
+<span class="sd">    sums between two matrices where rows correspond to elements and</span>
+<span class="sd">    columns to features.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (matrix): First matrix.</span>
+<span class="sd">        b (matrix, optional): Second matrix. Defaults to `a`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        matrix: Square of the Euclidean norm of the pairwise sums</span>
+<span class="sd">            between the elements of `a` and `b`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">norms_a</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">a</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="n">norms_b</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">b</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="k">return</span> <span class="n">norms_a</span> <span class="o">+</span> <span class="n">norms_b</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">B</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">tr_b</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="pw_sums2"><a class="viewcode-back" href="../../source/lab.linear_algebra.html#lab.linear_algebra.pw_sums2">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">pw_sums2</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">pw_sums2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span></div>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">pw_sums</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute the Euclidean norm of the pairwise sums between two</span>
+<span class="sd">    matrices where rows correspond to elements and columns to features.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (matrix): First matrix.</span>
+<span class="sd">        b (matrix, optional): Second matrix. Defaults to `a`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        matrix: Euclidean norm of the pairwise sums between the</span>
+<span class="sd">            elements of `a` and `b`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">pw_sums2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span>
+                            <span class="n">B</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="mf">1e-30</span><span class="p">,</span> <span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">a</span><span class="p">))))</span>
+
+
+<div class="viewcode-block" id="pw_sums"><a class="viewcode-back" href="../../source/lab.linear_algebra.html#lab.linear_algebra.pw_sums">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">pw_sums</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">pw_sums</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span></div>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">ew_sums2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute the square the Euclidean norm of the element-wise</span>
+<span class="sd">    sums between two matrices where rows correspond to elements and</span>
+<span class="sd">    columns to features.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (matrix): First matrix.</span>
+<span class="sd">        b (matrix, optional): Second matrix. Defaults to `a`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        matrix: Square of the Euclidean norm of the element-wise sums</span>
+<span class="sd">            between the elements of `a` and `b`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="ew_sums2"><a class="viewcode-back" href="../../source/lab.linear_algebra.html#lab.linear_algebra.ew_sums2">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">ew_sums2</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">ew_sums2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span></div>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">ew_sums</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute the Euclidean norm of the element-wise sums between two</span>
+<span class="sd">    matrices where rows correspond to elements and columns to features.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (matrix): First matrix.</span>
+<span class="sd">        b (matrix, optional): Second matrix. Defaults to `a`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        matrix: Euclidean norm of the element-wise sums between the</span>
+<span class="sd">            elements of `a` and `b`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">ew_sums2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span>
+                            <span class="n">B</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="mf">1e-30</span><span class="p">,</span> <span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">a</span><span class="p">))))</span>
+
+
+<div class="viewcode-block" id="ew_sums"><a class="viewcode-back" href="../../source/lab.linear_algebra.html#lab.linear_algebra.ew_sums">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">ew_sums</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">ew_sums</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Wessel Bruinsma.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

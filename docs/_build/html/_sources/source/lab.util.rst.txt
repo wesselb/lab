@@ -1,0 +1,7 @@
+lab.util module
+===============
+
+.. automodule:: lab.util
+    :members:
+    :undoc-members:
+    :show-inheritance:

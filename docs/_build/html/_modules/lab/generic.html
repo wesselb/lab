@@ -1,0 +1,934 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>lab.generic &mdash; lab 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> lab
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">LAB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">Application Programming Interface</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">lab</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>lab.generic</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for lab.generic</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">dispatch</span><span class="p">,</span> <span class="n">B</span>
+<span class="kn">from</span> <span class="nn">.types</span> <span class="k">import</span> <span class="n">Numeric</span><span class="p">,</span> <span class="n">DType</span><span class="p">,</span> <span class="n">Shape</span><span class="p">,</span> <span class="n">default_dtype</span><span class="p">,</span> <span class="n">Number</span><span class="p">,</span> <span class="n">Int</span>
+<span class="kn">from</span> <span class="nn">.util</span> <span class="k">import</span> <span class="n">abstract</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;nan&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;pi&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;log_2_pi&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;isnan&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;zeros&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;ones&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;eye&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;linspace&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;cast&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;identity&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;abs&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;sign&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;sqrt&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;exp&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;log&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;sin&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;cos&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;tan&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;tanh&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;sigmoid&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;relu&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;add&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;subtract&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;multiply&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;divide&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;power&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;minimum&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;maximum&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;leaky_relu&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;min&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;max&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;sum&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;mean&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;std&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;logsumexp&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;all&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;any&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;lt&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;le&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;gt&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;ge&#39;</span><span class="p">]</span>
+
+<span class="n">nan</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>  <span class="c1">#: NaN.</span>
+<span class="n">pi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>  <span class="c1">#: Value of pi.</span>
+<span class="n">log_2_pi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span><span class="p">)</span>  <span class="c1">#: Value of log(2 * pi).</span>
+
+
+<div class="viewcode-block" id="isnan"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.isnan">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">isnan</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Check whether a tensor is NaN.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor[bool]: `a` is NaN.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Shape</span><span class="p">,</span> <span class="n">DType</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Create a tensor of zeros.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        shape (shape or tensor): Shape of the tensor.</span>
+<span class="sd">        dtype (dtype or tensor, optional): Data type. Defaults to</span>
+<span class="sd">            `.types.default_dtype` or the data type of the provided tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Matrix of zeros of shape `shape` and data type `dtype`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Int</span><span class="p">,</span> <span class="n">DType</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">zeros</span><span class="p">((</span><span class="n">shape</span><span class="p">,),</span> <span class="n">dtype</span><span class="p">)</span>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Shape</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">default_dtype</span><span class="p">)</span>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Int</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">zeros</span><span class="p">((</span><span class="n">shape</span><span class="p">,),</span> <span class="n">default_dtype</span><span class="p">)</span>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Shape</span><span class="p">,</span> <span class="n">Numeric</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">ref</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">ref</span><span class="p">))</span>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Int</span><span class="p">,</span> <span class="n">Numeric</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">ref</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">zeros</span><span class="p">((</span><span class="n">shape</span><span class="p">,),</span> <span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">ref</span><span class="p">))</span>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Int</span><span class="p">,</span> <span class="n">Number</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">ref</span><span class="p">):</span>
+    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Called &quot;zeros&quot; as &quot;zeros(shape, ref)&quot; where &quot;ref&quot; is &#39;</span>
+                       <span class="s1">&#39;an integer. Did you mean to call &quot;zeros(shape)&quot;?&#39;</span><span class="p">)</span>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">,</span> <span class="n">DType</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">zeros</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">dtype</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">zeros</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">ref</span><span class="p">),</span> <span class="n">dtype</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="zeros"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.zeros">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">zeros</span><span class="p">(</span><span class="n">ref</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">zeros</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">ref</span><span class="p">),</span> <span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">ref</span><span class="p">))</span></div>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Shape</span><span class="p">,</span> <span class="n">DType</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">ones</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Create a tensor of ones.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        shape (shape or tensor): Shape of the tensor.</span>
+<span class="sd">        dtype (dtype or tensor, optional): Data type. Defaults to</span>
+<span class="sd">            `.types.default_dtype` or the data type of the provided tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Matrix of ones of shape `shape` and data type `dtype`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Int</span><span class="p">,</span> <span class="n">DType</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">ones</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">ones</span><span class="p">((</span><span class="n">shape</span><span class="p">,),</span> <span class="n">dtype</span><span class="p">)</span>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Shape</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">ones</span><span class="p">(</span><span class="n">shape</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">default_dtype</span><span class="p">)</span>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Int</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">ones</span><span class="p">(</span><span class="n">shape</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">ones</span><span class="p">((</span><span class="n">shape</span><span class="p">,),</span> <span class="n">default_dtype</span><span class="p">)</span>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Shape</span><span class="p">,</span> <span class="n">Numeric</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">ones</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">ref</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">ref</span><span class="p">))</span>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Int</span><span class="p">,</span> <span class="n">Numeric</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">ones</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">ref</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">ones</span><span class="p">((</span><span class="n">shape</span><span class="p">,),</span> <span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">ref</span><span class="p">))</span>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Int</span><span class="p">,</span> <span class="n">Number</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">ones</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">ref</span><span class="p">):</span>
+    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Called &quot;ones&quot; as &quot;ones(shape, ref)&quot; where &quot;ref&quot; is &#39;</span>
+                       <span class="s1">&#39;an integer. Did you mean to call &quot;ones(shape)&quot;?&#39;</span><span class="p">)</span>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">,</span> <span class="n">DType</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">ones</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">dtype</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">ones</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">ref</span><span class="p">),</span> <span class="n">dtype</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ones"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.ones">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">ones</span><span class="p">(</span><span class="n">ref</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">ones</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">ref</span><span class="p">),</span> <span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">ref</span><span class="p">))</span></div>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Shape</span><span class="p">,</span> <span class="n">DType</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">eye</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Create an identity matrix.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        shape (int or shape or tensor): Shape of the matrix.</span>
+<span class="sd">        dtype (dtype or tensor, optional): Data type. Defaults to</span>
+<span class="sd">            `.types.default_dtype` or the data type of the provided tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Identity matrix of shape `shape` and data type `dtype`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Int</span><span class="p">,</span> <span class="n">DType</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">eye</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">eye</span><span class="p">((</span><span class="n">shape</span><span class="p">,</span> <span class="n">shape</span><span class="p">),</span> <span class="n">dtype</span><span class="p">)</span>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Shape</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">eye</span><span class="p">(</span><span class="n">shape</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">eye</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">default_dtype</span><span class="p">)</span>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Int</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">eye</span><span class="p">(</span><span class="n">shape</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">eye</span><span class="p">((</span><span class="n">shape</span><span class="p">,</span> <span class="n">shape</span><span class="p">),</span> <span class="n">default_dtype</span><span class="p">)</span>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Shape</span><span class="p">,</span> <span class="n">Numeric</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">eye</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">ref</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">eye</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">ref</span><span class="p">))</span>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Int</span><span class="p">,</span> <span class="n">Numeric</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">eye</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">ref</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">eye</span><span class="p">((</span><span class="n">shape</span><span class="p">,</span> <span class="n">shape</span><span class="p">),</span> <span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">ref</span><span class="p">))</span>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Int</span><span class="p">,</span> <span class="n">Number</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">eye</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">ref</span><span class="p">):</span>
+    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Called &quot;eye&quot; as &quot;eye(shape, ref)&quot; where &quot;ref&quot; is &#39;</span>
+                       <span class="s1">&#39;an integer. Did you mean to call &quot;eye(shape)&quot;?&#39;</span><span class="p">)</span>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">,</span> <span class="n">DType</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">eye</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">dtype</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">eye</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">ref</span><span class="p">),</span> <span class="n">dtype</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="eye"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.eye">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">eye</span><span class="p">(</span><span class="n">ref</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">eye</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">ref</span><span class="p">),</span> <span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">ref</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="linspace"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.linspace">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">Int</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">(</span><span class="n">promote</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">linspace</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a vector of `c` numbers ranging from `a` to `c`, distributed</span>
+<span class="sd">    linearly.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (number): Lower bound.</span>
+<span class="sd">        b (number): Upper bound.</span>
+<span class="sd">        num (int): Number of numbers.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        vector: `c` numbers ranging from `a` to `c`, distributed linearly.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">,</span> <span class="n">DType</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">cast</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">dtype</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Cast an object to another data type.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor to cast.</span>
+<span class="sd">        dtype (dtype or tensor): New data type.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: `a`, but of data type `dtype`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="cast"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.cast">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">,</span> <span class="n">Numeric</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">cast</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">ref</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">ref</span><span class="p">))</span></div>
+
+
+<span class="c1"># Unary functions:</span>
+
+<div class="viewcode-block" id="identity"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.identity">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">identity</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Identity function</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: `a` exactly.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="abs"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.abs">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">abs</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Absolute value.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Absolute value of `a`.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="sign"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.sign">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">sign</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Sign function.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Sign of `a`.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="sqrt"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.sqrt">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">sqrt</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Square root.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Square root of `a`.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="exp"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.exp">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">exp</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Exponential function.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Exponential function evaluated at `a`.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="log"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.log">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Logarithmic function</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Logarithmic function evaluated at `a`.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="sin"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.sin">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">sin</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Sine function.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Sine function evaluated at `a`.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="cos"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.cos">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">cos</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Cosine function.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Cosine function evaluated at `a`.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="tan"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.tan">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">tan</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Tangent function.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Tangent function evaluated at `a`.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="tanh"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.tanh">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">tanh</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Tangent hyperbolic function.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Tangent hyperbolic function evaluated at `a`.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="sigmoid"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.sigmoid">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">sigmoid</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Sigmoid function.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Sigmoid function evaluated at `a`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">a</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="relu"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.relu">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">relu</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Rectified linear unit.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Rectified linear unit evaluated at `a`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">maximum</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">a</span><span class="p">)</span></div>
+
+
+<span class="c1"># Binary functions:</span>
+
+
+<div class="viewcode-block" id="add"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.add">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">(</span><span class="n">promote</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Add two tensors.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): First tensor.</span>
+<span class="sd">        b (tensor): Second tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Sum of `a` and `b`.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="subtract"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.subtract">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">(</span><span class="n">promote</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">subtract</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Subtract two tensors.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): First tensor.</span>
+<span class="sd">        b (tensor): Second tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: `a` minus `b`.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="multiply"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.multiply">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">(</span><span class="n">promote</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">multiply</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Multiply two tensors.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): First tensor.</span>
+<span class="sd">        b (tensor): Second tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Product of `a` and `b`.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="divide"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.divide">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">(</span><span class="n">promote</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">divide</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Divide two tensors.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): First tensor.</span>
+<span class="sd">        b (tensor): Second tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: `a` divided by `b`.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="power"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.power">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">(</span><span class="n">promote</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">power</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">power</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Raise a tensor to a power.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor.</span>
+<span class="sd">        power (tensor): Power.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: `a` to the power of `power`.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="minimum"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.minimum">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">(</span><span class="n">promote</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">minimum</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Take the minimum of two tensors.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): First tensor.</span>
+<span class="sd">        b (tensor): Second tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Minimum of `a` and `b`.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="maximum"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.maximum">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">(</span><span class="n">promote</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">maximum</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Take the maximum of two tensors.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): First tensor.</span>
+<span class="sd">        b (tensor): Second tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Maximum of `a` and `b`.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="leaky_relu"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.leaky_relu">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">leaky_relu</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">alpha</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Leaky rectified linear unit.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Input.</span>
+<span class="sd">        alpha (tensor): Coefficient of leak.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Activation value.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">maximum</span><span class="p">(</span><span class="n">multiply</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">alpha</span><span class="p">),</span> <span class="n">a</span><span class="p">)</span></div>
+
+
+<span class="c1"># Reductions:</span>
+
+
+<div class="viewcode-block" id="min"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.min">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">min</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Take the minimum of a tensor, possibly along an axis.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor.</span>
+<span class="sd">        axis (int, optional): Optional axis.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Reduced tensor.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="max"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.max">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">max</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Take the maximum of a tensor, possibly along an axis.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor.</span>
+<span class="sd">        axis (int, optional): Optional axis.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Reduced tensor.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="sum"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.sum">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">sum</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Sum a tensor, possibly along an axis.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor.</span>
+<span class="sd">        axis (int, optional): Optional axis.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Reduced tensor.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="mean"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.mean">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">mean</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Take the mean of a tensor, possibly along an axis.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor.</span>
+<span class="sd">        axis (int, optional): Optional axis.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Reduced tensor.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="std"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.std">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">std</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Compute the standard deviation of a tensor, possibly along an axis.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor.</span>
+<span class="sd">        axis (int, optional): Optional axis.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Reduced tensor.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="logsumexp"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.logsumexp">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">logsumexp</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Exponentiate a tensor, sum it, and then take the logarithm, possibly</span>
+<span class="sd">    along an axis.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor.</span>
+<span class="sd">        axis (int, optional): Optional axis.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Reduced tensor.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">a_max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+    <span class="c1"># Put the axis back if one is specified.</span>
+    <span class="k">if</span> <span class="n">axis</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">a_expanded</span> <span class="o">=</span> <span class="n">a_max</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">a_expanded</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">a_max</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">log</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">exp</span><span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">a_expanded</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">))</span> <span class="o">+</span> <span class="n">a_max</span></div>
+
+
+<span class="c1"># Logical reductions:</span>
+
+
+<div class="viewcode-block" id="all"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.all">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">all</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Logical all of a tensor, possibly along an axis.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor.</span>
+<span class="sd">        axis (int, optional): Optional axis.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Reduced tensor.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="any"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.any">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">any</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Logical any of a tensor, possibly along an axis.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor.</span>
+<span class="sd">        axis (int, optional): Optional axis.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Reduced tensor.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<span class="c1"># Logical comparisons:</span>
+
+
+<div class="viewcode-block" id="lt"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.lt">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">(</span><span class="n">promote</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">lt</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Check whether one tensor is strictly less than another.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): First tensor.</span>
+<span class="sd">        b (tensor): Second tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor[bool]: `a` is strictly less than `b`.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="le"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.le">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">(</span><span class="n">promote</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">le</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Check whether one tensor is less than or equal to another.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): First tensor.</span>
+<span class="sd">        b (tensor): Second tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor[bool]: `a` is less than or equal to `b`.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="gt"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.gt">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">(</span><span class="n">promote</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">gt</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Check whether one tensor is strictly greater than another.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): First tensor.</span>
+<span class="sd">        b (tensor): Second tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor[bool]: `a` is strictly greater than `b`.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="ge"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.ge">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">(</span><span class="n">promote</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">ge</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Check whether one tensor is greater than or equal to another.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): First tensor.</span>
+<span class="sd">        b (tensor): Second tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor[bool]: `a` is greater than or equal to `b`.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Wessel Bruinsma.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

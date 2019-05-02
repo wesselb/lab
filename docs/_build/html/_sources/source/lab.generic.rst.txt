@@ -1,0 +1,7 @@
+lab.generic module
+==================
+
+.. automodule:: lab.generic
+    :members:
+    :undoc-members:
+    :show-inheritance:

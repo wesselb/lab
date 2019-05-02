@@ -1,0 +1,7 @@
+lab.torch.shaping module
+========================
+
+.. automodule:: lab.torch.shaping
+    :members:
+    :undoc-members:
+    :show-inheritance:

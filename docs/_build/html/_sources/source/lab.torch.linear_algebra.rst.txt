@@ -1,0 +1,7 @@
+lab.torch.linear\_algebra module
+================================
+
+.. automodule:: lab.torch.linear_algebra
+    :members:
+    :undoc-members:
+    :show-inheritance:

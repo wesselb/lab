@@ -1,0 +1,7 @@
+lab.torch.generic module
+========================
+
+.. automodule:: lab.torch.generic
+    :members:
+    :undoc-members:
+    :show-inheritance:

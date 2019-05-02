@@ -1,0 +1,353 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>lab.types &mdash; lab 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> lab
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">LAB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">Application Programming Interface</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">lab</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>lab.types</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for lab.types</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">autograd.tracer</span> <span class="k">import</span> <span class="n">Box</span>
+<span class="kn">from</span> <span class="nn">plum</span> <span class="k">import</span> <span class="n">ListType</span><span class="p">,</span> <span class="n">TupleType</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">add_conversion_method</span><span class="p">,</span> <span class="n">convert</span><span class="p">,</span> \
+    <span class="n">add_promotion_rule</span>
+<span class="kn">from</span> <span class="nn">tensorflow.python.ops.variables</span> <span class="k">import</span> <span class="n">RefVariable</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">dispatch</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Int&#39;</span><span class="p">,</span> <span class="s1">&#39;Float&#39;</span><span class="p">,</span> <span class="s1">&#39;Bool&#39;</span><span class="p">,</span> <span class="s1">&#39;Number&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;NPNumeric&#39;</span><span class="p">,</span> <span class="s1">&#39;TFNumeric&#39;</span><span class="p">,</span> <span class="s1">&#39;TorchNumeric&#39;</span><span class="p">,</span> <span class="s1">&#39;Numeric&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;NPList&#39;</span><span class="p">,</span> <span class="s1">&#39;TFList&#39;</span><span class="p">,</span> <span class="s1">&#39;TorchList&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;NPTuple&#39;</span><span class="p">,</span> <span class="s1">&#39;TFTuple&#39;</span><span class="p">,</span> <span class="s1">&#39;TorchTuple&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;NPListOrTuple&#39;</span><span class="p">,</span> <span class="s1">&#39;TFListOrTuple&#39;</span><span class="p">,</span> <span class="s1">&#39;TorchListOrTuple&#39;</span><span class="p">,</span> <span class="s1">&#39;ListOrTuple&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;NPShape&#39;</span><span class="p">,</span> <span class="s1">&#39;TFShape&#39;</span><span class="p">,</span> <span class="s1">&#39;TorchShape&#39;</span><span class="p">,</span> <span class="s1">&#39;Shape&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;NPDType&#39;</span><span class="p">,</span> <span class="s1">&#39;TFDType&#39;</span><span class="p">,</span> <span class="s1">&#39;TorchDType&#39;</span><span class="p">,</span> <span class="s1">&#39;DType&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;default_dtype&#39;</span><span class="p">,</span> <span class="s1">&#39;issubdtype&#39;</span><span class="p">,</span> <span class="s1">&#39;dtype&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;NP&#39;</span><span class="p">,</span> <span class="s1">&#39;TF&#39;</span><span class="p">,</span> <span class="s1">&#39;Torch&#39;</span><span class="p">,</span> <span class="s1">&#39;Framework&#39;</span><span class="p">]</span>
+
+<span class="c1"># Numeric types:</span>
+<span class="n">Int</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="o">*</span><span class="p">([</span><span class="nb">int</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sctypes</span><span class="p">[</span><span class="s1">&#39;int&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sctypes</span><span class="p">[</span><span class="s1">&#39;uint&#39;</span><span class="p">]),</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;Int&#39;</span><span class="p">)</span>
+<span class="n">Float</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="o">*</span><span class="p">([</span><span class="nb">float</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sctypes</span><span class="p">[</span><span class="s1">&#39;float&#39;</span><span class="p">]),</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;Float&#39;</span><span class="p">)</span>
+<span class="n">Bool</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">bool_</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;Bool&#39;</span><span class="p">)</span>
+<span class="n">Number</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">Int</span><span class="p">,</span> <span class="n">Float</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;Number&#39;</span><span class="p">)</span>
+<span class="n">NPNumeric</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">Number</span><span class="p">,</span> <span class="n">Bool</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Box</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;NPNumeric&#39;</span><span class="p">)</span>
+<span class="n">TFNumeric</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">,</span> <span class="n">RefVariable</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;TFNumeric&#39;</span><span class="p">)</span>
+<span class="n">TorchNumeric</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;TorchNumeric&#39;</span><span class="p">)</span>
+<span class="n">Numeric</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">NPNumeric</span><span class="p">,</span> <span class="n">TFNumeric</span><span class="p">,</span> <span class="n">TorchNumeric</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;Numeric&#39;</span><span class="p">)</span>
+
+<span class="c1"># Define promotion rules and the corresponding conversion methods.</span>
+<span class="n">add_promotion_rule</span><span class="p">(</span><span class="n">NPNumeric</span><span class="p">,</span> <span class="n">TFNumeric</span><span class="p">,</span> <span class="n">TFNumeric</span><span class="p">)</span>
+<span class="n">add_promotion_rule</span><span class="p">(</span><span class="n">NPNumeric</span><span class="p">,</span> <span class="n">TorchNumeric</span><span class="p">,</span> <span class="n">TorchNumeric</span><span class="p">)</span>
+<span class="n">add_promotion_rule</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">,</span> <span class="n">TFNumeric</span><span class="p">)</span>
+<span class="n">add_conversion_method</span><span class="p">(</span><span class="n">NPNumeric</span><span class="p">,</span> <span class="n">TFNumeric</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">)</span>
+<span class="n">add_conversion_method</span><span class="p">(</span><span class="n">NPNumeric</span><span class="p">,</span> <span class="n">TorchNumeric</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">)</span>
+
+<span class="c1"># List types:</span>
+
+<span class="n">NPList</span> <span class="o">=</span> <span class="n">ListType</span><span class="p">(</span><span class="n">NPNumeric</span><span class="p">)</span>
+<span class="n">TFList</span> <span class="o">=</span> <span class="n">ListType</span><span class="p">(</span><span class="n">TFNumeric</span><span class="p">)</span>
+<span class="n">TorchList</span> <span class="o">=</span> <span class="n">ListType</span><span class="p">(</span><span class="n">TorchNumeric</span><span class="p">)</span>
+
+<span class="c1"># Tuple types:</span>
+
+<span class="n">NPTuple</span> <span class="o">=</span> <span class="n">TupleType</span><span class="p">(</span><span class="n">NPNumeric</span><span class="p">)</span>
+<span class="n">TFTuple</span> <span class="o">=</span> <span class="n">TupleType</span><span class="p">(</span><span class="n">TFNumeric</span><span class="p">)</span>
+<span class="n">TorchTuple</span> <span class="o">=</span> <span class="n">TupleType</span><span class="p">(</span><span class="n">TorchNumeric</span><span class="p">)</span>
+
+<span class="c1"># List or tuple types:</span>
+
+<span class="n">NPListOrTuple</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">NPList</span><span class="p">,</span> <span class="n">NPTuple</span><span class="p">)</span>
+<span class="n">TFListOrTuple</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">TFList</span><span class="p">,</span> <span class="n">TFTuple</span><span class="p">)</span>
+<span class="n">TorchListOrTuple</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">TorchList</span><span class="p">,</span> <span class="n">TorchTuple</span><span class="p">)</span>
+<span class="n">ListOrTuple</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span>
+
+<span class="c1"># Shape types:</span>
+<span class="n">NPShape</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">ListType</span><span class="p">(</span><span class="n">Int</span><span class="p">),</span> <span class="n">ListType</span><span class="p">(</span><span class="n">Union</span><span class="p">()),</span>
+                <span class="n">TupleType</span><span class="p">(</span><span class="n">Int</span><span class="p">),</span> <span class="n">TupleType</span><span class="p">(</span><span class="n">Union</span><span class="p">()),</span>
+                <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;NPShape&#39;</span><span class="p">)</span>
+<span class="n">TFShape</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">NPShape</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">TensorShape</span><span class="p">,</span>
+                <span class="n">ListType</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">Dimension</span><span class="p">),</span> <span class="n">TupleType</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">Dimension</span><span class="p">),</span>
+                <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;TFShape&#39;</span><span class="p">)</span>
+<span class="n">TorchShape</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">NPShape</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Size</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;TorchShape&#39;</span><span class="p">)</span>
+<span class="n">Shape</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">NPShape</span><span class="p">,</span> <span class="n">TFShape</span><span class="p">,</span> <span class="n">TorchShape</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;Shape&#39;</span><span class="p">)</span>
+
+<span class="c1"># Data types:</span>
+
+<span class="n">NPDType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;NPDType&#39;</span><span class="p">)</span>
+<span class="n">TFDType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">DType</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;TFDType&#39;</span><span class="p">)</span>
+<span class="n">TorchDType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;TorchDType&#39;</span><span class="p">)</span>
+<span class="n">DType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">NPDType</span><span class="p">,</span> <span class="n">TFDType</span><span class="p">,</span> <span class="n">TorchDType</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;DType&#39;</span><span class="p">)</span>
+
+<span class="c1"># Create lookup for PyTorch dtypes.</span>
+<span class="n">_torch_to_np_lookup</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">numerictypes</span><span class="o">.</span><span class="n">__all__</span><span class="p">:</span>
+    <span class="c1"># Check that it is a type.</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">np</span><span class="p">,</span> <span class="n">name</span><span class="p">),</span> <span class="nb">type</span><span class="p">):</span>
+        <span class="k">continue</span>
+
+    <span class="c1"># Attempt to get the PyTorch equivalent.</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">_torch_to_np_lookup</span><span class="p">[</span><span class="nb">getattr</span><span class="p">(</span><span class="n">torch</span><span class="p">,</span> <span class="n">name</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">np</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="c1"># Could not find the PyTorch equivalent. That&#39;s okay.</span>
+        <span class="k">pass</span>
+
+<span class="c1"># Add conversions between data types.</span>
+<span class="n">add_conversion_method</span><span class="p">(</span><span class="n">NPDType</span><span class="p">,</span> <span class="n">TFDType</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">tf</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
+<span class="n">add_conversion_method</span><span class="p">(</span><span class="n">NPDType</span><span class="p">,</span> <span class="n">TorchDType</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">torch</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
+<span class="n">add_conversion_method</span><span class="p">(</span><span class="n">TorchDType</span><span class="p">,</span> <span class="n">NPDType</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">_torch_to_np_lookup</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
+<span class="n">add_conversion_method</span><span class="p">(</span><span class="n">TorchDType</span><span class="p">,</span> <span class="n">TFDType</span><span class="p">,</span>
+                      <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">tf</span><span class="p">,</span> <span class="n">_torch_to_np_lookup</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
+<span class="n">add_conversion_method</span><span class="p">(</span><span class="n">TFDType</span><span class="p">,</span> <span class="n">NPDType</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">as_numpy_dtype</span><span class="p">)</span>
+<span class="n">add_conversion_method</span><span class="p">(</span><span class="n">TFDType</span><span class="p">,</span> <span class="n">TorchDType</span><span class="p">,</span>
+                      <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">torch</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">as_numpy_dtype</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
+
+<span class="c1"># NumPy data types can be of type `np.dtype`. Convert to the proper types.</span>
+<span class="n">add_conversion_method</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">DType</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
+
+<span class="n">default_dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span>  <span class="c1">#: Default dtype.</span>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="nb">type</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">issubdtype</span><span class="p">(</span><span class="n">dtype1</span><span class="p">,</span> <span class="n">dtype2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check whether one data type is a subtype of another.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dtype1 (dtype): First data type.</span>
+<span class="sd">        dtype2 (dtype): Second data type.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: `dtype1` is a subtype of `dtype2`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">dtype1</span><span class="p">,</span> <span class="n">dtype2</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="issubdtype"><a class="viewcode-back" href="../../source/lab.types.html#lab.types.issubdtype">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">issubdtype</span><span class="p">(</span><span class="n">dtype1</span><span class="p">,</span> <span class="n">dtype2</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">issubdtype</span><span class="p">(</span><span class="n">convert</span><span class="p">(</span><span class="n">dtype1</span><span class="p">,</span> <span class="nb">type</span><span class="p">),</span> <span class="n">convert</span><span class="p">(</span><span class="n">dtype2</span><span class="p">,</span> <span class="nb">type</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="dtype"><a class="viewcode-back" href="../../source/lab.types.html#lab.types.dtype">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">dtype</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Determine the data type of an object.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Object to determine data type of.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s1">&#39;dtype&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">convert</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">DType</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">a</span><span class="p">)</span></div>
+
+
+<span class="c1"># Framework types:</span>
+
+<span class="n">NP</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">NPNumeric</span><span class="p">,</span> <span class="n">NPListOrTuple</span><span class="p">,</span> <span class="n">NPShape</span><span class="p">,</span> <span class="n">NPDType</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;NP&#39;</span><span class="p">)</span>
+<span class="n">TF</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">TFNumeric</span><span class="p">,</span> <span class="n">TFListOrTuple</span><span class="p">,</span> <span class="n">TFShape</span><span class="p">,</span> <span class="n">TFDType</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;TF&#39;</span><span class="p">)</span>
+<span class="n">Torch</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">TorchNumeric</span><span class="p">,</span> <span class="n">TorchListOrTuple</span><span class="p">,</span> <span class="n">TorchShape</span><span class="p">,</span> <span class="n">TorchDType</span><span class="p">,</span>
+              <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;Torch&#39;</span><span class="p">)</span>
+<span class="n">Framework</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">NP</span><span class="p">,</span> <span class="n">TF</span><span class="p">,</span> <span class="n">Torch</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;Framework&#39;</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Wessel Bruinsma.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

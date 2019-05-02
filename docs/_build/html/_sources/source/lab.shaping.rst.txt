@@ -1,0 +1,7 @@
+lab.shaping module
+==================
+
+.. automodule:: lab.shaping
+    :members:
+    :undoc-members:
+    :show-inheritance:

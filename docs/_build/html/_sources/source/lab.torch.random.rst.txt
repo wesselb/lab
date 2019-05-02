@@ -1,0 +1,7 @@
+lab.torch.random module
+=======================
+
+.. automodule:: lab.torch.random
+    :members:
+    :undoc-members:
+    :show-inheritance:

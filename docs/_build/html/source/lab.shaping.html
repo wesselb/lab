@@ -1,0 +1,610 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>lab.shaping module &mdash; lab 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="lab.tensorflow package" href="lab.tensorflow.html" />
+    <link rel="prev" title="lab.random module" href="lab.random.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> lab
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">LAB</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">Application Programming Interface</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="lab.generic.html">lab.generic module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.linear_algebra.html">lab.linear_algebra module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.numpy.html">lab.numpy package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.numpy.generic.html">lab.numpy.generic module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.numpy.linear_algebra.html">lab.numpy.linear_algebra module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.numpy.random.html">lab.numpy.random module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.numpy.shaping.html">lab.numpy.shaping module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.random.html">lab.random module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">lab.shaping module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.tensorflow.html">lab.tensorflow package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.tensorflow.generic.html">lab.tensorflow.generic module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.tensorflow.linear_algebra.html">lab.tensorflow.linear_algebra module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.tensorflow.random.html">lab.tensorflow.random module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.tensorflow.shaping.html">lab.tensorflow.shaping module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.torch.html">lab.torch package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.torch.generic.html">lab.torch.generic module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.torch.linear_algebra.html">lab.torch.linear_algebra module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.torch.random.html">lab.torch.random module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.torch.shaping.html">lab.torch.shaping module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.types.html">lab.types module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.util.html">lab.util module</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">lab</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../api.html">Application Programming Interface</a> &raquo;</li>
+        
+      <li>lab.shaping module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/source/lab.shaping.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-lab.shaping">
+<span id="lab-shaping-module"></span><h1>lab.shaping module<a class="headerlink" href="#module-lab.shaping" title="Permalink to this headline">¶</a></h1>
+<dl class="attribute">
+<dt id="lab.shaping.shape">
+<code class="descclassname">lab.shaping.</code><code class="descname">shape</code><a class="reference internal" href="../_modules/lab/shaping.html#shape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the shape of a tensor.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>a</strong> (<em>tensor</em>) – Tensor.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Shape of <cite>a</cite>.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lab.shaping.shape_int">
+<code class="descclassname">lab.shaping.</code><code class="descname">shape_int</code><a class="reference internal" href="../_modules/lab/shaping.html#shape_int"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.shape_int" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the shape of a tensor as a tuple of integers.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>a</strong> (<em>tensor</em>) – Tensor.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Shape of <cite>a</cite> as a tuple of integers.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lab.shaping.rank">
+<code class="descclassname">lab.shaping.</code><code class="descname">rank</code><a class="reference internal" href="../_modules/lab/shaping.html#rank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.rank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the shape of a tensor.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>a</strong> (<em>tensor</em>) – Tensor.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Rank of <cite>a</cite>.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lab.shaping.length">
+<code class="descclassname">lab.shaping.</code><code class="descname">length</code><a class="reference internal" href="../_modules/lab/shaping.html#length"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the length of a tensor.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>a</strong> (<em>tensor</em>) – Tensor.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Length of <cite>a</cite>.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lab.shaping.isscalar">
+<code class="descclassname">lab.shaping.</code><code class="descname">isscalar</code><a class="reference internal" href="../_modules/lab/shaping.html#isscalar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.isscalar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether a tensor is a scalar.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>a</strong> (<em>tensor</em>) – Tensor.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><cite>True</cite> if <cite>a</cite> is a scalar, otherwise <cite>False</cite>.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lab.shaping.expand_dims">
+<code class="descclassname">lab.shaping.</code><code class="descname">expand_dims</code><a class="reference internal" href="../_modules/lab/shaping.html#expand_dims"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.expand_dims" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert an empty axis.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>a</strong> (<em>tensor</em>) – Tensor.</li>
+<li><strong>axis</strong> (<em>int</em><em>, </em><em>optional</em>) – Index of new axis. Defaults to <cite>0</cite>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><cite>a</cite> with the new axis.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tensor</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lab.shaping.squeeze">
+<code class="descclassname">lab.shaping.</code><code class="descname">squeeze</code><a class="reference internal" href="../_modules/lab/shaping.html#squeeze"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.squeeze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove all axes containing only a single element.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>a</strong> (<em>tensor</em>) – Tensor.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><cite>a</cite> without axes containing only a single element.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tensor</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lab.shaping.uprank">
+<code class="descclassname">lab.shaping.</code><code class="descname">uprank</code><a class="reference internal" href="../_modules/lab/shaping.html#uprank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.uprank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the input into a rank two tensor.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>a</strong> (<em>tensor</em>) – Tensor.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><cite>a</cite>, but of rank two.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tensor</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lab.shaping.diag">
+<code class="descclassname">lab.shaping.</code><code class="descname">diag</code><a class="reference internal" href="../_modules/lab/shaping.html#diag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.diag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take the diagonal of a matrix, or construct a diagonal matrix from its
+diagonal.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>a</strong> (<em>tensor</em>) – Matrix or diagonal.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Diagonal or matrix.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tensor</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lab.shaping.flatten">
+<code class="descclassname">lab.shaping.</code><code class="descname">flatten</code><a class="reference internal" href="../_modules/lab/shaping.html#flatten"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.flatten" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flatten a tensor.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>a</strong> (<em>tensor</em>) – Tensor.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Flattened tensor.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tensor</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lab.shaping.vec_to_tril">
+<code class="descclassname">lab.shaping.</code><code class="descname">vec_to_tril</code><a class="reference internal" href="../_modules/lab/shaping.html#vec_to_tril"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.vec_to_tril" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a lower triangular matrix from a vector.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>a</strong> (<em>tensor</em>) – Vector.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Lower triangular matrix.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tensor</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lab.shaping.tril_to_vec">
+<code class="descclassname">lab.shaping.</code><code class="descname">tril_to_vec</code><a class="reference internal" href="../_modules/lab/shaping.html#tril_to_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.tril_to_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a vector from a lower triangular matrix.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>a</strong> (<em>tensor</em>) – Lower triangular matrix.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Vector</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tensor</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lab.shaping.stack">
+<code class="descclassname">lab.shaping.</code><code class="descname">stack</code><a class="reference internal" href="../_modules/lab/shaping.html#stack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.stack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Concatenate tensors along a new axis.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>a</strong> (<em>list</em><em>[</em><em>tensor</em><em>]</em>) – List of tensors.</li>
+<li><strong>axis</strong> (<em>int</em><em>, </em><em>optional</em>) – Index of new axis. Defaults to <cite>0</cite>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Stacked tensors.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tensor</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lab.shaping.unstack">
+<code class="descclassname">lab.shaping.</code><code class="descname">unstack</code><a class="reference internal" href="../_modules/lab/shaping.html#unstack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.unstack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unstack tensors along an axis.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>a</strong> (<em>list</em>) – List of tensors.</li>
+<li><strong>axis</strong> (<em>int</em><em>, </em><em>optional</em>) – Index along which to unstack. Defaults to <cite>0</cite>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">List of tensors.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list[tensor]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lab.shaping.reshape">
+<code class="descclassname">lab.shaping.</code><code class="descname">reshape</code><a class="reference internal" href="../_modules/lab/shaping.html#reshape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.reshape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reshape a tensor.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>a</strong> (<em>tensor</em>) – List of tensors.</li>
+<li><strong>shape</strong> (<em>shape</em><em>, </em><em>optional</em>) – New shape. Defaults to <cite>(-1,)</cite>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Reshaped tensor.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tensor</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lab.shaping.concat">
+<code class="descclassname">lab.shaping.</code><code class="descname">concat</code><a class="reference internal" href="../_modules/lab/shaping.html#concat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.concat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Concatenate tensors along an axis.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>a</strong> (<em>list</em><em>[</em><em>tensor</em><em>]</em>) – List of tensors.</li>
+<li><strong>axis</strong> (<em>int</em><em>, </em><em>optional</em>) – Axis along which to concatenate. Defaults to <cite>0</cite>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Concatenation.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tensor</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lab.shaping.concat2d">
+<code class="descclassname">lab.shaping.</code><code class="descname">concat2d</code><a class="reference internal" href="../_modules/lab/shaping.html#concat2d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.concat2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Concatenate tensors into a matrix.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>a</strong> (<em>list</em><em>[</em><em>list</em><em>[</em><em>tensor</em><em>]</em><em>]</em>) – List of list of tensors, which form the rows of
+the matrix.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Assembled matrix.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tensor</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lab.shaping.take">
+<code class="descclassname">lab.shaping.</code><code class="descname">take</code><a class="reference internal" href="../_modules/lab/shaping.html#take"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.take" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take particular elements along an axis.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>a</strong> (<em>tensor</em>) – Tensor.</li>
+<li><strong>indices</strong> (<em>list</em>) – List of indices to take.</li>
+<li><strong>axis</strong> (<em>int</em><em>, </em><em>optional</em>) – Axis along which to take indices. Defaults to <cite>0</cite>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Selected subtensor.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tensor</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="lab.tensorflow.html" class="btn btn-neutral float-right" title="lab.tensorflow package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="lab.random.html" class="btn btn-neutral" title="lab.random module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Wessel Bruinsma.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.1.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

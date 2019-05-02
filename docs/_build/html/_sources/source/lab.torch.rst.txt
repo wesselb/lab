@@ -1,0 +1,18 @@
+lab.torch package
+=================
+
+.. automodule:: lab.torch
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+
+   lab.torch.generic
+   lab.torch.linear_algebra
+   lab.torch.random
+   lab.torch.shaping
+
