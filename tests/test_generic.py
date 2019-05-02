@@ -86,6 +86,7 @@ def test_cast():
     yield eeq, B.dtype(B.cast(1, np.float64)), np.float64
     yield eeq, B.dtype(B.cast(np.array(1), np.float64)), np.float64
     yield eeq, B.dtype(B.cast(tf.constant(1), tf.float64)), tf.float64
+    yield eeq, B.dtype(B.cast(1, torch.float64)), torch.float64
     yield eeq, B.dtype(B.cast(torch.tensor(1), torch.float64)), torch.float64
 
     # Test casting to the data type of a reference object.
