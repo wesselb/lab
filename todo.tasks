@@ -1,8 +1,10 @@
 TODO:
     ☐ Port bvn_cdf.
         ☐ Check Python 2 and Python 3 compatibility.
+    ☐ Reuse Plum's error message.
 
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✓ Documentation. @critical @done (19-05-02 13:29) @project(TODO)
  ✓ Add support for AutoGrad. @done (19-05-01 13:25) @project(TODO)
