@@ -13,8 +13,8 @@ __all__ = ['nan',
            'isnan',
            'zeros',
            'ones',
-           'linspace',
            'eye',
+           'linspace',
            'cast',
            'identity',
            'abs',
@@ -107,6 +107,12 @@ def zeros(shape, ref):
     return zeros((shape,), B.dtype(ref))
 
 
+@dispatch(Int, Number)
+def zeros(shape, ref):
+    raise RuntimeError('Called "zeros" as "zeros(shape, ref)" where "ref" is '
+                       'an integer. Did you mean to call "zeros(shape)"?')
+
+
 @dispatch(Numeric, DType)
 def zeros(ref, dtype):
     return zeros(B.shape(ref), dtype)
@@ -157,6 +163,12 @@ def ones(shape, ref):
     return ones((shape,), B.dtype(ref))
 
 
+@dispatch(Int, Number)
+def ones(shape, ref):
+    raise RuntimeError('Called "ones" as "ones(shape, ref)" where "ref" is '
+                       'an integer. Did you mean to call "ones(shape)"?')
+
+
 @dispatch(Numeric, DType)
 def ones(ref, dtype):
     return ones(B.shape(ref), dtype)
@@ -165,22 +177,6 @@ def ones(ref, dtype):
 @dispatch(Numeric)
 def ones(ref):
     return ones(B.shape(ref), B.dtype(ref))
-
-
-@dispatch(object, object, Int)
-@abstract(promote=2)
-def linspace(a, b, c):
-    """Create a vector of `c` numbers ranging from `a` to `c`, distributed
-    linearly.
-
-    Args:
-        a (number): Lower bound.
-        b (number): Upper bound.
-        c (int): Number of numbers.
-
-    Returns:
-        vector: `c` numbers ranging from `a` to `c`, distributed linearly.
-    """
 
 
 @dispatch(Shape, DType)
@@ -223,6 +219,12 @@ def eye(shape, ref):
     return eye((shape, shape), B.dtype(ref))
 
 
+@dispatch(Int, Number)
+def eye(shape, ref):
+    raise RuntimeError('Called "eye" as "eye(shape, ref)" where "ref" is '
+                       'an integer. Did you mean to call "eye(shape)"?')
+
+
 @dispatch(Numeric, DType)
 def eye(ref, dtype):
     return eye(B.shape(ref), dtype)
@@ -231,6 +233,22 @@ def eye(ref, dtype):
 @dispatch(Numeric)
 def eye(ref):
     return eye(B.shape(ref), B.dtype(ref))
+
+
+@dispatch(object, object, Int)
+@abstract(promote=2)
+def linspace(a, b, num):
+    """Create a vector of `c` numbers ranging from `a` to `c`, distributed
+    linearly.
+
+    Args:
+        a (number): Lower bound.
+        b (number): Upper bound.
+        num (int): Number of numbers.
+
+    Returns:
+        vector: `c` numbers ranging from `a` to `c`, distributed linearly.
+    """
 
 
 @dispatch(Numeric, DType)

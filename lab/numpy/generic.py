@@ -25,16 +25,16 @@ def ones(shape, dtype):
     return np.ones(shape, dtype=dtype)
 
 
-@dispatch(NPNumeric, NPNumeric, Int)
-def linspace(a, b, c):
-    return np.linspace(a, b, c, dtype=B.dtype(a))
-
-
 @dispatch(NPShape, NPDType)
 def eye(shape, dtype):
     if len(shape) != 2:
         raise ValueError('Must feed a two-dimensional shape to eye.')
     return np.eye(shape[0], shape[1], dtype=dtype)
+
+
+@dispatch(NPNumeric, NPNumeric, Int)
+def linspace(a, b, num):
+    return np.linspace(a, b, num, dtype=B.dtype(a))
 
 
 @dispatch(NPNumeric, NPDType)

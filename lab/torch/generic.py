@@ -25,16 +25,16 @@ def ones(shape, dtype):
     return torch.ones(shape, dtype=dtype)
 
 
-@dispatch(TorchNumeric, TorchNumeric, Int)
-def linspace(a, b, c):
-    return torch.linspace(a, b, c, dtype=B.dtype(a))
-
-
 @dispatch(TorchShape, TorchDType)
 def eye(shape, dtype):
     if len(shape) != 2:
         raise ValueError('Must feed a two-dimensional shape to eye.')
     return torch.eye(shape[0], shape[1], dtype=dtype)
+
+
+@dispatch(TorchNumeric, TorchNumeric, Int)
+def linspace(a, b, num):
+    return torch.linspace(a, b, num, dtype=B.dtype(a))
 
 
 @dispatch(TorchNumeric, TorchDType)

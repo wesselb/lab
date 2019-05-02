@@ -25,16 +25,16 @@ def ones(shape, dtype):
     return tf.ones(shape, dtype=dtype)
 
 
-@dispatch(TFNumeric, TFNumeric, Int)
-def linspace(a, b, c):
-    return tf.linspace(a, b, c)
-
-
 @dispatch(TFShape, TFDType)
 def eye(shape, dtype):
     if len(shape) != 2:
         raise ValueError('Must feed a two-dimensional shape to eye.')
     return tf.eye(shape[0], shape[1], dtype=dtype)
+
+
+@dispatch(TFNumeric, TFNumeric, Int)
+def linspace(a, b, num):
+    return tf.linspace(a, b, num)
 
 
 @dispatch(TFNumeric, TFDType)

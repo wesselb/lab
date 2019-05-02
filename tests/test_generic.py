@@ -32,6 +32,10 @@ def test_zeros_ones_eye():
         yield check_function, f, \
               (Value((2, 3)), Value(np.float32, tf.float32, torch.float32)), {}
 
+        # Check that calling it with two integers results raises an
+        # exception, because that would be a common mistake.
+        yield raises, RuntimeError, lambda: f(2, 3)
+
         for t1, t2 in [(np.float32, np.int64),
                        (tf.float32, tf.int64),
                        (torch.float32, torch.int64)]:
