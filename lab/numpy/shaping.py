@@ -5,6 +5,7 @@ from __future__ import absolute_import, division, print_function
 import autograd.numpy as np
 
 from . import dispatch
+from ..shaping import _vec_to_tril_shape
 from ..types import NPNumeric, NPListOrTuple, ListOrTuple
 
 __all__ = []
@@ -52,12 +53,7 @@ def diag(a):
 def vec_to_tril(a):
     if rank(a) != 1:
         raise ValueError('Input must be rank 1.')
-
-    # Figure out shape of output.
-    n = shape_int(a)[0]
-    m = int(((1 + 8 * n) ** .5 - 1) / 2)
-
-    # Construct output and return.
+    m = _vec_to_tril_shape(a)
     out = np.zeros((m, m), dtype=a.dtype)
     out[np.tril_indices(m)] = a
     return out

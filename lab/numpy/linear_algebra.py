@@ -6,6 +6,7 @@ import autograd.numpy as np
 import autograd.scipy.linalg as sla
 
 from . import dispatch
+from ..linear_algebra import _default_perm
 from ..types import NPNumeric
 
 __all__ = []
@@ -19,8 +20,10 @@ def matmul(a, b, tr_a=False, tr_b=False):
 
 
 @dispatch(NPNumeric)
-def transpose(a):
-    return a.T
+def transpose(a, perm=None):
+    if perm is None:
+        perm = _default_perm(a)
+    return np.transpose(a, axes=perm)
 
 
 @dispatch(NPNumeric)

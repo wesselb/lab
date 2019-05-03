@@ -165,6 +165,11 @@ def flatten(a):  # pragma: no cover
     return reshape(a, shape=(-1,))
 
 
+def _vec_to_tril_shape(a):
+    n = shape_int(a)[0]
+    return int(((1 + 8 * n) ** .5 - 1) / 2)
+
+
 @dispatch(Numeric)
 @abstract()
 def vec_to_tril(a):  # pragma: no cover

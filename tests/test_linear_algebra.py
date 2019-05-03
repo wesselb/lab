@@ -16,8 +16,24 @@ def test_constants():
 
 def test_transpose():
     for f in [B.transpose, B.T]:
-        yield check_function, f, (Matrix(),), {}
-        yield check_function, f, (Matrix(),), {}
+        # Check consistency.
+        yield check_function, f, (Tensor(2),), {'perm': Value(None, (0,))}
+        yield check_function, f, \
+              (Tensor(2, 3),), {'perm': Value(None, (0, 1), (1, 0))}
+        yield check_function, f, \
+              (Tensor(2, 3, 4),), {'perm': Value(None,
+                                                 (0, 1, 2),
+                                                 (0, 2, 1),
+                                                 (1, 0, 2),
+                                                 (1, 2, 0),
+                                                 (2, 1, 0),
+                                                 (2, 0, 1))}
+
+        # Check correctness.
+        a = Tensor(2, 3, 4, 5).np()
+        yield allclose, f(a), np.transpose(a)
+        yield allclose, \
+              f(a, perm=(1, 2, 0, 3)), np.transpose(a, axes=(1, 2, 0, 3))
 
 
 def test_matmul():

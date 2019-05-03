@@ -5,6 +5,7 @@ from __future__ import absolute_import, division, print_function
 import tensorflow as tf
 
 from . import dispatch, B
+from ..linear_algebra import _default_perm
 from ..types import TFNumeric
 
 __all__ = []
@@ -16,8 +17,10 @@ def matmul(a, b, tr_a=False, tr_b=False):
 
 
 @dispatch(TFNumeric)
-def transpose(a):
-    return tf.transpose(a)
+def transpose(a, perm=None):
+    if perm is None:
+        perm = _default_perm(a)
+    return tf.transpose(a, perm=perm)
 
 
 @dispatch(TFNumeric)

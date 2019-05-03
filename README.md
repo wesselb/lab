@@ -255,7 +255,7 @@ ge(a, b)
 
 ### Linear Algebra
 ```
-transpose(a) (alias: T)
+transpose(a, perm=None) (alias: T)
 matmul(a, b, tr_a=False, tr_b=False) (alias: mm, dot)
 trace(a, axis1=0, axis2=1)
 kron(a, b)

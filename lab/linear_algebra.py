@@ -25,13 +25,19 @@ __all__ = ['epsilon',
 epsilon = 1e-12  #: Magnitude of diagonal to regularise matrices with.
 
 
+def _default_perm(a):
+    return tuple(range(B.rank(a) - 1, -1, -1))
+
+
 @dispatch(Numeric)
 @abstract()
-def transpose(a):  # pragma: no cover
+def transpose(a, perm=None):  # pragma: no cover
     """Transpose a matrix.
 
     Args:
         a (tensor): Matrix to transpose.
+        perm (list[int] or tuple[int], optional): Permutation. Defaults to
+            reversing the ordering of all axes.
 
     Returns:
         tensor: Transposition of `a`.

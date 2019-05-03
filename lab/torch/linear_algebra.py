@@ -5,6 +5,7 @@ from __future__ import absolute_import, division, print_function
 import torch
 
 from . import dispatch, B
+from ..linear_algebra import _default_perm
 from ..types import TorchNumeric
 
 __all__ = []
@@ -18,8 +19,10 @@ def matmul(a, b, tr_a=False, tr_b=False):
 
 
 @dispatch(TorchNumeric)
-def transpose(a):
-    return a.t()
+def transpose(a, perm=None):
+    if perm is None:
+        perm = _default_perm(a)
+    return a.permute(*perm)
 
 
 @dispatch(TorchNumeric)
