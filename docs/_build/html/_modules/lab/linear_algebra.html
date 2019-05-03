@@ -173,13 +173,19 @@
 <span class="n">epsilon</span> <span class="o">=</span> <span class="mf">1e-12</span>  <span class="c1">#: Magnitude of diagonal to regularise matrices with.</span>
 
 
+<span class="k">def</span> <span class="nf">_default_perm</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+
+
 <div class="viewcode-block" id="transpose"><a class="viewcode-back" href="../../source/lab.linear_algebra.html#lab.linear_algebra.transpose">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
 <span class="nd">@abstract</span><span class="p">()</span>
-<span class="k">def</span> <span class="nf">transpose</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+<span class="k">def</span> <span class="nf">transpose</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">perm</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
     <span class="sd">&quot;&quot;&quot;Transpose a matrix.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        a (tensor): Matrix to transpose.</span>
+<span class="sd">        perm (list[int] or tuple[int], optional): Permutation. Defaults to</span>
+<span class="sd">            reversing the ordering of all axes.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        tensor: Transposition of `a`.</span>
