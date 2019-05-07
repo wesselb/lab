@@ -154,7 +154,7 @@
 <span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">autograd.tracer</span> <span class="k">import</span> <span class="n">Box</span>
-<span class="kn">from</span> <span class="nn">plum</span> <span class="k">import</span> <span class="n">ListType</span><span class="p">,</span> <span class="n">TupleType</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">add_conversion_method</span><span class="p">,</span> <span class="n">convert</span><span class="p">,</span> \
+<span class="kn">from</span> <span class="nn">plum</span> <span class="k">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">add_conversion_method</span><span class="p">,</span> <span class="n">convert</span><span class="p">,</span> \
     <span class="n">add_promotion_rule</span>
 <span class="kn">from</span> <span class="nn">tensorflow.python.ops.variables</span> <span class="k">import</span> <span class="n">RefVariable</span>
 
@@ -189,15 +189,15 @@
 
 <span class="c1"># List types:</span>
 
-<span class="n">NPList</span> <span class="o">=</span> <span class="n">ListType</span><span class="p">(</span><span class="n">NPNumeric</span><span class="p">)</span>
-<span class="n">TFList</span> <span class="o">=</span> <span class="n">ListType</span><span class="p">(</span><span class="n">TFNumeric</span><span class="p">)</span>
-<span class="n">TorchList</span> <span class="o">=</span> <span class="n">ListType</span><span class="p">(</span><span class="n">TorchNumeric</span><span class="p">)</span>
+<span class="n">NPList</span> <span class="o">=</span> <span class="n">List</span><span class="p">(</span><span class="n">NPNumeric</span><span class="p">)</span>
+<span class="n">TFList</span> <span class="o">=</span> <span class="n">List</span><span class="p">(</span><span class="n">TFNumeric</span><span class="p">)</span>
+<span class="n">TorchList</span> <span class="o">=</span> <span class="n">List</span><span class="p">(</span><span class="n">TorchNumeric</span><span class="p">)</span>
 
 <span class="c1"># Tuple types:</span>
 
-<span class="n">NPTuple</span> <span class="o">=</span> <span class="n">TupleType</span><span class="p">(</span><span class="n">NPNumeric</span><span class="p">)</span>
-<span class="n">TFTuple</span> <span class="o">=</span> <span class="n">TupleType</span><span class="p">(</span><span class="n">TFNumeric</span><span class="p">)</span>
-<span class="n">TorchTuple</span> <span class="o">=</span> <span class="n">TupleType</span><span class="p">(</span><span class="n">TorchNumeric</span><span class="p">)</span>
+<span class="n">NPTuple</span> <span class="o">=</span> <span class="n">Tuple</span><span class="p">(</span><span class="n">NPNumeric</span><span class="p">)</span>
+<span class="n">TFTuple</span> <span class="o">=</span> <span class="n">Tuple</span><span class="p">(</span><span class="n">TFNumeric</span><span class="p">)</span>
+<span class="n">TorchTuple</span> <span class="o">=</span> <span class="n">Tuple</span><span class="p">(</span><span class="n">TorchNumeric</span><span class="p">)</span>
 
 <span class="c1"># List or tuple types:</span>
 
@@ -207,11 +207,10 @@
 <span class="n">ListOrTuple</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span>
 
 <span class="c1"># Shape types:</span>
-<span class="n">NPShape</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">ListType</span><span class="p">(</span><span class="n">Int</span><span class="p">),</span> <span class="n">ListType</span><span class="p">(</span><span class="n">Union</span><span class="p">()),</span>
-                <span class="n">TupleType</span><span class="p">(</span><span class="n">Int</span><span class="p">),</span> <span class="n">TupleType</span><span class="p">(</span><span class="n">Union</span><span class="p">()),</span>
+<span class="n">NPShape</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">List</span><span class="p">(</span><span class="n">Int</span><span class="p">),</span> <span class="n">List</span><span class="p">(</span><span class="n">Union</span><span class="p">()),</span> <span class="n">Tuple</span><span class="p">(</span><span class="n">Int</span><span class="p">),</span> <span class="n">Tuple</span><span class="p">(</span><span class="n">Union</span><span class="p">()),</span>
                 <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;NPShape&#39;</span><span class="p">)</span>
 <span class="n">TFShape</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">NPShape</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">TensorShape</span><span class="p">,</span>
-                <span class="n">ListType</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">Dimension</span><span class="p">),</span> <span class="n">TupleType</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">Dimension</span><span class="p">),</span>
+                <span class="n">List</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">Dimension</span><span class="p">),</span> <span class="n">Tuple</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">Dimension</span><span class="p">),</span>
                 <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;TFShape&#39;</span><span class="p">)</span>
 <span class="n">TorchShape</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">NPShape</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Size</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;TorchShape&#39;</span><span class="p">)</span>
 <span class="n">Shape</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">NPShape</span><span class="p">,</span> <span class="n">TFShape</span><span class="p">,</span> <span class="n">TorchShape</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;Shape&#39;</span><span class="p">)</span>

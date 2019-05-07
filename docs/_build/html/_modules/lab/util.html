@@ -192,7 +192,7 @@
             <span class="c1"># means that an implementation is not available.</span>
             <span class="n">types_after</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">plum</span><span class="o">.</span><span class="n">type_of</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">types_before</span> <span class="o">==</span> <span class="n">types_after</span><span class="p">:</span>
-                <span class="n">signature</span> <span class="o">=</span> <span class="n">plum</span><span class="o">.</span><span class="n">Tuple</span><span class="p">(</span><span class="o">*</span><span class="n">types_after</span><span class="p">)</span>
+                <span class="n">signature</span> <span class="o">=</span> <span class="n">plum</span><span class="o">.</span><span class="n">Signature</span><span class="p">(</span><span class="o">*</span><span class="n">types_after</span><span class="p">)</span>
                 <span class="c1"># TODO: Use the message from Plum directly here.</span>
                 <span class="k">raise</span> <span class="n">plum</span><span class="o">.</span><span class="n">NotFoundLookupError</span><span class="p">(</span>
                     <span class="s1">&#39;For function &quot;</span><span class="si">{}</span><span class="s1">&quot;, signature </span><span class="si">{}</span><span class="s1"> could not be resolved.&#39;</span>
