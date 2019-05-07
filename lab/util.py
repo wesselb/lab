@@ -44,7 +44,7 @@ def abstract(promote=-1):
             # means that an implementation is not available.
             types_after = tuple(plum.type_of(arg) for arg in args)
             if types_before == types_after:
-                signature = plum.Tuple(*types_after)
+                signature = plum.Signature(*types_after)
                 # TODO: Use the message from Plum directly here.
                 raise plum.NotFoundLookupError(
                     'For function "{}", signature {} could not be resolved.'

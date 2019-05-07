@@ -6,7 +6,7 @@ import numpy as np
 import tensorflow as tf
 import torch
 from autograd.tracer import Box
-from plum import ListType, TupleType, Union, add_conversion_method, convert, \
+from plum import List, Tuple, Union, add_conversion_method, convert, \
     add_promotion_rule
 from tensorflow.python.ops.variables import RefVariable
 
@@ -41,15 +41,15 @@ add_conversion_method(NPNumeric, TorchNumeric, torch.tensor)
 
 # List types:
 
-NPList = ListType(NPNumeric)
-TFList = ListType(TFNumeric)
-TorchList = ListType(TorchNumeric)
+NPList = List(NPNumeric)
+TFList = List(TFNumeric)
+TorchList = List(TorchNumeric)
 
 # Tuple types:
 
-NPTuple = TupleType(NPNumeric)
-TFTuple = TupleType(TFNumeric)
-TorchTuple = TupleType(TorchNumeric)
+NPTuple = Tuple(NPNumeric)
+TFTuple = Tuple(TFNumeric)
+TorchTuple = Tuple(TorchNumeric)
 
 # List or tuple types:
 
@@ -59,11 +59,10 @@ TorchListOrTuple = Union(TorchList, TorchTuple)
 ListOrTuple = Union(list, tuple)
 
 # Shape types:
-NPShape = Union(ListType(Int), ListType(Union()),
-                TupleType(Int), TupleType(Union()),
+NPShape = Union(List(Int), List(Union()), Tuple(Int), Tuple(Union()),
                 alias='NPShape')
 TFShape = Union(NPShape, tf.TensorShape,
-                ListType(tf.Dimension), TupleType(tf.Dimension),
+                List(tf.Dimension), Tuple(tf.Dimension),
                 alias='TFShape')
 TorchShape = Union(NPShape, torch.Size, alias='TorchShape')
 Shape = Union(NPShape, TFShape, TorchShape, alias='Shape')
