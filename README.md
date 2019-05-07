@@ -27,8 +27,8 @@ recommended to use.
 To install the package, use the following sequence of commands:
 
 ```
-git clone https://github.com/wesselb/gpar
-cd gpar
+git clone https://github.com/wesselb/lab
+cd lab
 make install
 ```
 
