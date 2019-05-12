@@ -57,9 +57,9 @@ def cholesky(a):
 
 @dispatch(TorchNumeric, TorchNumeric)
 def cholesky_solve(a, b):
-    return torch.potrs(b, a, upper=False)
+    return torch.cholesky_solve(b, a, upper=False)
 
 
 @dispatch(TorchNumeric, TorchNumeric)
 def trisolve(a, b, lower_a=True):
-    return torch.trtrs(b, a, upper=not lower_a)[0]
+    return torch.triangular_solve(b, a, upper=not lower_a)[0]
