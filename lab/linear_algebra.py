@@ -2,8 +2,6 @@
 
 from __future__ import absolute_import, division, print_function
 
-from plum import promote
-
 from . import dispatch, B
 from .types import Numeric
 from .util import abstract
