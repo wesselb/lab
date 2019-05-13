@@ -108,6 +108,11 @@ def test_reg():
 
 
 def test_pw_2d():
+    # In this case, allow for 1e-7 absolute error, because the computation is
+    # approximate.
+    def approx_allclose(a, b):
+        np.testing.assert_allclose(a, b, atol=1e-7)
+
     a, b = Matrix(5, 2).np(), Matrix(10, 2).np()
     dists2_ab, dists2_aa = np.zeros((5, 10)), np.zeros((5, 5))
     sums2_ab, sums2_aa = np.zeros((5, 10)), np.zeros((5, 5))
@@ -119,14 +124,14 @@ def test_pw_2d():
                 dists2_aa[i, j] = np.sum((a[i] - a[j]) ** 2)
                 sums2_aa[i, j] = np.sum((a[i] + a[j]) ** 2)
 
-    yield allclose, B.pw_dists2(a, b), dists2_ab
-    yield allclose, B.pw_dists2(a), dists2_aa
-    yield allclose, B.pw_dists(a, b), np.maximum(dists2_ab, 1e-30) ** .5
-    yield allclose, B.pw_dists(a), np.maximum(dists2_aa, 1e-30) ** .5
-    yield allclose, B.pw_sums2(a, b), sums2_ab
-    yield allclose, B.pw_sums2(a), sums2_aa
-    yield allclose, B.pw_sums(a, b), np.maximum(sums2_ab, 1e-30) ** .5
-    yield allclose, B.pw_sums(a), np.maximum(sums2_aa, 1e-30) ** .5
+    yield approx_allclose, B.pw_dists2(a, b), dists2_ab
+    yield approx_allclose, B.pw_dists2(a), dists2_aa
+    yield approx_allclose, B.pw_dists(a, b), np.maximum(dists2_ab, 1e-30) ** .5
+    yield approx_allclose, B.pw_dists(a), np.maximum(dists2_aa, 1e-30) ** .5
+    yield approx_allclose, B.pw_sums2(a, b), sums2_ab
+    yield approx_allclose, B.pw_sums2(a), sums2_aa
+    yield approx_allclose, B.pw_sums(a, b), np.maximum(sums2_ab, 1e-30) ** .5
+    yield approx_allclose, B.pw_sums(a), np.maximum(sums2_aa, 1e-30) ** .5
 
 
 def test_pw_1d():
