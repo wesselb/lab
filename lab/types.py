@@ -6,23 +6,21 @@ import numpy as np
 import tensorflow as tf
 import torch
 from autograd.tracer import Box
-from plum import List, Tuple, Union, add_conversion_method, convert, \
-    add_promotion_rule
+from plum import Union, add_conversion_method, convert, add_promotion_rule
 from tensorflow.python.ops.variables import RefVariable
 
 from . import dispatch
 
-__all__ = ['Int', 'Float', 'Bool', 'Number',
-           'NPNumeric', 'TFNumeric', 'TorchNumeric', 'Numeric',
-           'NPList', 'TFList', 'TorchList',
-           'NPTuple', 'TFTuple', 'TorchTuple',
-           'NPListOrTuple', 'TFListOrTuple', 'TorchListOrTuple', 'ListOrTuple',
-           'NPShape', 'TFShape', 'TorchShape', 'Shape',
-           'NPDType', 'TFDType', 'TorchDType', 'DType',
-           'default_dtype', 'issubdtype', 'dtype',
-           'NP', 'TF', 'Torch', 'Framework']
+__all__ = [
+    'Int', 'Float', 'Bool', 'Number',
+    'NPNumeric', 'TFNumeric', 'TorchNumeric', 'Numeric',
+    'NPDimension', 'TorchDimension', 'TFDimension', 'Dimension',
+    'NPDType', 'TFDType', 'TorchDType', 'DType',
+    'default_dtype', 'issubdtype', 'dtype',
+    'NP', 'TF', 'Torch', 'Framework']
 
 # Numeric types:
+
 Int = Union(*([int] + np.sctypes['int'] + np.sctypes['uint']), alias='Int')
 Float = Union(*([float] + np.sctypes['float']), alias='Float')
 Bool = Union(bool, np.bool_, alias='Bool')
@@ -39,33 +37,15 @@ add_promotion_rule(tf.Tensor, tf.Variable, TFNumeric)
 add_conversion_method(NPNumeric, TFNumeric, tf.constant)
 add_conversion_method(NPNumeric, TorchNumeric, torch.tensor)
 
-# List types:
+# Dimension types:
 
-NPList = List(NPNumeric)
-TFList = List(TFNumeric)
-TorchList = List(TorchNumeric)
+NPDimension = Union(int, alias='NPDimension')
+TFDimension = Union(NPDimension, tf.Dimension, alias='TFDimension')
+TorchDimension = Union(NPDimension, alias='TorchDimension')
+Dimension = Union(NPDimension, TFDimension, TorchDimension, alias='Dimension')
 
-# Tuple types:
-
-NPTuple = Tuple(NPNumeric)
-TFTuple = Tuple(TFNumeric)
-TorchTuple = Tuple(TorchNumeric)
-
-# List or tuple types:
-
-NPListOrTuple = Union(NPList, NPTuple)
-TFListOrTuple = Union(TFList, TFTuple)
-TorchListOrTuple = Union(TorchList, TorchTuple)
-ListOrTuple = Union(list, tuple)
-
-# Shape types:
-NPShape = Union(List(Int), List(Union()), Tuple(Int), Tuple(Union()),
-                alias='NPShape')
-TFShape = Union(NPShape, tf.TensorShape,
-                List(tf.Dimension), Tuple(tf.Dimension),
-                alias='TFShape')
-TorchShape = Union(NPShape, torch.Size, alias='TorchShape')
-Shape = Union(NPShape, TFShape, TorchShape, alias='Shape')
+# Define corresponding conversion methods.
+add_conversion_method(tf.Dimension, int, lambda x: x.value)
 
 # Data types:
 
@@ -138,8 +118,7 @@ def dtype(a):
 
 # Framework types:
 
-NP = Union(NPNumeric, NPListOrTuple, NPShape, NPDType, alias='NP')
-TF = Union(TFNumeric, TFListOrTuple, TFShape, TFDType, alias='TF')
-Torch = Union(TorchNumeric, TorchListOrTuple, TorchShape, TorchDType,
-              alias='Torch')
+NP = Union(NPNumeric, NPDType, alias='NP')
+TF = Union(TFNumeric, TFDType, alias='TF')
+Torch = Union(TorchNumeric, TorchDType, alias='Torch')
 Framework = Union(NP, TF, Torch, alias='Framework')

@@ -4,12 +4,12 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 from itertools import product
-from numbers import Number
 
 import nose.tools
 import numpy as np
 import tensorflow as tf
 import torch
+import plum
 from plum import Dispatcher
 
 from . import B
@@ -77,7 +77,14 @@ def to_np(lst):
 @_dispatch(object, object)
 def allclose(x, y):
     """Assert that two numeric objects are close."""
-    np.testing.assert_allclose(to_np(x), to_np(y), rtol=1e-7, atol=1e-10)
+    x, y = to_np(x), to_np(y)
+
+    # Assert that data types are equal if it concerns floats.
+    dtype_x, dtype_y = np.array(x).dtype, np.array(y).dtype
+    if np.issubdtype(dtype_x, np.floating):
+        eq(np.array(x).dtype, np.array(y).dtype)
+
+    np.testing.assert_allclose(x, y)
 
 
 @_dispatch(tuple, tuple)
@@ -100,6 +107,14 @@ def check_function(f, args_spec, kw_args_spec):
     # Construct product of arguments.
     args_prod = list(product(*[arg.forms() for arg in args_spec]))
 
+    # Construct types TF and Torch numerics, lists, or tuples.
+    tf_type = plum.Union(B.TFNumeric,
+                         plum.List(B.TFNumeric),
+                         plum.Tuple(B.TFNumeric))
+    torch_type = plum.Union(B.TorchNumeric,
+                            plum.List(B.TorchNumeric),
+                            plum.Tuple(B.TorchNumeric))
+
     # Check consistency of results.
     for kw_args in kw_args_prod:
         # Compare everything against the first result.
@@ -107,12 +122,8 @@ def check_function(f, args_spec, kw_args_spec):
 
         for args in args_prod:
             # Skip mixes of TF and Torch numerics, lists, or tuples.
-            any_tf = any(isinstance(arg, (B.TFNumeric,
-                                          B.TFListOrTuple))
-                         for arg in args)
-            any_torch = any(isinstance(arg, (B.TorchNumeric,
-                                             B.TorchListOrTuple))
-                            for arg in args)
+            any_tf = any(isinstance(arg, tf_type) for arg in args)
+            any_torch = any(isinstance(arg, torch_type) for arg in args)
             if any_tf and any_torch:
                 log.debug('Skipping call with arguments {} and keyword '
                           'arguments {}.'.format(args, kw_args))

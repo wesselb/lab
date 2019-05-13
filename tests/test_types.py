@@ -2,14 +2,13 @@
 
 from __future__ import absolute_import, division, print_function
 
+import lab as B
 import numpy as np
-from autograd import grad
 import tensorflow as tf
 import torch
-
+from autograd import grad
 from plum.promotion import _promotion_rule, convert
 
-import lab as B
 # noinspection PyUnresolvedReferences
 from . import eq, neq, lt, le, ge, gt, raises, call, ok, allclose, approx, \
     assert_isinstance, eeq
@@ -78,53 +77,10 @@ def test_autograd_tracing():
         yield assert_isinstance, obj, B.NPNumeric
 
 
-def test_tuple():
-    for t in [B.NPTuple, B.NPListOrTuple, B.ListOrTuple]:
-        yield assert_isinstance, (1, np.bool_(True)), t
-        yield assert_isinstance, (np.float32(1), np.array(1)), t
-
-    for t in [B.TFTuple, B.TFListOrTuple, B.ListOrTuple]:
-        yield assert_isinstance, (tf.constant(1), tf.constant(2)), t
-        yield assert_isinstance, (tf.constant(1), tf.Variable(2)), t
-        yield assert_isinstance, (tf.Variable(1), tf.constant(2)), t
-        yield assert_isinstance, (tf.Variable(1), tf.Variable(2)), t
-
-    for t in [B.TorchTuple, B.TorchListOrTuple, B.ListOrTuple]:
-        yield assert_isinstance, (torch.tensor(1), torch.tensor(2)), t
-
-
-def test_list():
-    for t in [B.NPList, B.NPListOrTuple, B.ListOrTuple]:
-        yield assert_isinstance, [1, np.bool_(True)], t
-        yield assert_isinstance, [np.float32(1), np.array(1)], t
-
-    for t in [B.TFList, B.TFListOrTuple, B.ListOrTuple]:
-        yield assert_isinstance, [tf.constant(1), tf.constant(2)], t
-        yield assert_isinstance, [tf.constant(1), tf.Variable(2)], t
-        yield assert_isinstance, [tf.Variable(1), tf.constant(2)], t
-        yield assert_isinstance, [tf.Variable(1), tf.Variable(2)], t
-
-    for t in [B.TorchList, B.TorchListOrTuple, B.ListOrTuple]:
-        yield assert_isinstance, [torch.tensor(1), torch.tensor(2)], t
-
-
-def test_shape():
-    for t in [B.NPShape, B.TFShape, B.TorchShape]:
-        yield assert_isinstance, [], t
-        yield assert_isinstance, [1, np.uint(8)], t
-        yield assert_isinstance, (), t
-        yield assert_isinstance, (np.int32(1), 2), t
-
-    # Test TensorFlow-specific and PyTorch-specific shapes.
-    for a, t in [(tf.random_normal([2, 2]), B.TFShape),
-                 (torch.randn(2, 2), B.TorchShape)]:
-        yield assert_isinstance, a.shape, t
-        yield assert_isinstance, (a.shape[0], a.shape[1]), t
-        yield assert_isinstance, [a.shape[0], a.shape[1]], t
-
-    # Test NumPy-specific shapes.
-    yield assert_isinstance, (np.int32(1), np.int32(1)), B.NPShape
-    yield assert_isinstance, (np.int64(1), np.int64(1)), B.NPShape
+def test_dimension():
+    for t in [B.NPDimension, B.TFDimension, B.TorchDimension, B.Dimension]:
+        yield assert_isinstance, 1, t
+    yield assert_isinstance, tf.ones((1, 1)).shape[0], B.Dimension
 
 
 def test_data_type():
@@ -172,21 +128,12 @@ def test_dtype():
 def test_framework():
     for t in [B.NP, B.Framework]:
         yield assert_isinstance, np.array(1), t
-        yield assert_isinstance, (np.array(1)), t
-        yield assert_isinstance, [np.array(1)], t
-        yield assert_isinstance, np.ones((5, 5)).shape, t
         yield assert_isinstance, np.float32, t
 
     for t in [B.TF, B.Framework]:
         yield assert_isinstance, tf.constant(1), t
-        yield assert_isinstance, (tf.constant(1)), t
-        yield assert_isinstance, [tf.constant(1)], t
-        yield assert_isinstance, tf.ones([5, 5]).shape, t
         yield assert_isinstance, tf.float32, t
 
     for t in [B.Torch, B.Framework]:
         yield assert_isinstance, torch.tensor(1), t
-        yield assert_isinstance, (torch.tensor(1)), t
-        yield assert_isinstance, [torch.tensor(1)], t
-        yield assert_isinstance, torch.ones(5, 5).shape, t
         yield assert_isinstance, torch.float32, t

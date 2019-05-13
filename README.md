@@ -85,17 +85,19 @@ Example:
 ```python
 >>> import lab as B
 
+>>> from plum import List, Tuple
+
 >>> import numpy as np
 
->>> isinstance([1., np.array([1., 2.])], B.NPList)
+>>> isinstance([1., np.array([1., 2.])], List(B.NPNumeric))
 True
 
->>> isinstance([1., np.array([1., 2.])], B.TFList)
+>>> isinstance([1., np.array([1., 2.])], List(B.TFNumeric))
 False
 
 >>> import tensorflow as tf
 
->>> isinstance((tf.constant(1.), tf.ones(5)), B.TFTuple)
+>>> isinstance((tf.constant(1.), tf.ones(5)), Tuple(B.TFNumeric))
 True
 ```
 
@@ -107,9 +109,8 @@ Float        # Floating-point numbers
 Bool         # Booleans
 Number       # Numbers
 Numeric      # Numerical objects, including booleans
-ListOrTuple  # Lists or tuples
-Shape        # Shapes
-DType        # Data typse
+Dimension    # Dimensions of shapes
+DType        # Data type
 Framework    # Anything accepted by supported frameworks
 ```
 
@@ -118,11 +119,7 @@ Framework    # Anything accepted by supported frameworks
 
 ```
 NPNumeric
-NPList
-NPTuple
-NPList
-NPListOrTuple
-NPShape
+NPDimension
 NPDType
  
 NP             # Anything NumPy
@@ -132,11 +129,7 @@ NP             # Anything NumPy
 
 ```
 TFNumeric
-TFList
-TFTuple
-TFList
-TFListOrTuple
-TFShape
+TFDimension
 TFDType
  
 TF             # Anything TensorFlow
@@ -147,11 +140,7 @@ TF             # Anything TensorFlow
 
 ```
 TorchNumeric
-TorchList
-TorchTuple
-TorchList
-TorchListOrTuple
-TorchShape
+TorchDimension
 TorchDType
  
 Torch             # Anything PyTorch
@@ -193,22 +182,16 @@ isnan(a)
 
 ### Generic
 ```
-zeros(shape, dtype)
-zeros(shape)
-zeros(shape, ref)
-zeros(ref, dtype)
+zeros(dtype, *shape)
+zeros(*shape)
 zeros(ref)
 
-ones(shape, dtype)
-ones(shape)
-ones(shape, ref)
-ones(ref, dtype)
+ones(dtype, *shape)
+ones(*shape)
 ones(ref)
 
-eye(shape, dtype)
-eye(shape)
-eye(shape, ref)
-eye(ref, dtype)
+eye(dtype, *shape)
+eye(*shape)
 eye(ref)
 
 linspace(a, b, num)
@@ -255,7 +238,7 @@ ge(a, b)
 
 ### Linear Algebra
 ```
-transpose(a, perm=None) (alias: T)
+transpose(a, perm=None) (alias: t, T)
 matmul(a, b, tr_a=False, tr_b=False) (alias: mm, dot)
 trace(a, axis1=0, axis2=1)
 kron(a, b)
@@ -290,13 +273,13 @@ ew_sums(a)
 ```
 set_random_seed(seed) 
 
-rand(shape, dtype)
-rand(shape)
+rand(dtype, *shape)
+rand(*shape)
 rand(dtype)
 rand()
 
-randn(shape, dtype)
-randn(shape)
+randn(dtype, *shape)
+randn(*shape)
 randn(dtype)
 randn()
 ```
@@ -316,10 +299,10 @@ diag(a)
 flatten(a)
 vec_to_tril(a)
 tril_to_vec(a)
-stack(a, axis=0)
+stack(*elements, axis=0)
 unstack(a, axis=0)
-reshape(a, shape=(-1,))
-concat(a, axis=0)
-concat2d(a)
+reshape(a, *shape)
+concat(*elements, axis=0)
+concat2d(*rows)
 take(a, indices, axis=0)
 ```
