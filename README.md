@@ -42,29 +42,32 @@ Example:
 
 ```python
 import lab as B
+import lab.torch       # Load the PyTorch extension.
+import lab.tensorflow  # Load the TensorFlow extension.
 
 def objective(matrix):
     outer_product = B.matmul(matrix, matrix, tr_b=True)
     return B.mean(outer_product)
 ```
 
+By default, the PyTorch and TensorFlow extensions are not loaded to save 
+startup time. Alternatively, one can directly `import lab.torch as B` or
+`import lab.tensorflow as B`.
+
 Run it with NumPy and AutoGrad:
 
 ```python
 >>> import autograd.numpy as np
 
->>> from autograd import grad
-
->>> grad(objective)(B.randn((2, 2), np.float64))
-array([[-0.35247881, -0.4144402 ],
-       [-0.35247881, -0.4144402 ]])
+>>> objective(B.randn(np.float64, 2, 2))
+0.15772589216756833
 ```
 
 Run it with TensorFlow:
 ```python
 >>> import tensorflow as tf
 
->>> objective(B.randn((2, 2), tf.float64))
+>>> objective(B.randn(tf.float64, 2, 2))
 <tf.Tensor 'Mean:0' shape=() dtype=float64>
 ```
 
@@ -72,7 +75,7 @@ Run it with PyTorch:
 ```python
 >>> import torch
 
->>> objective(B.randn((2, 2), torch.float64))
+>>> objective(B.randn(torch.float64, 2, 2))
 tensor(1.9557, dtype=torch.float64)
 ```
 
@@ -96,6 +99,8 @@ True
 False
 
 >>> import tensorflow as tf
+
+>>> import lab.tensorflow
 
 >>> isinstance((tf.constant(1.), tf.ones(5)), Tuple(B.TFNumeric))
 True
@@ -122,7 +127,7 @@ NPNumeric
 NPDimension
 NPDType
  
-NP             # Anything NumPy
+NP           # Anything NumPy
 ```
 
 ### TensorFlow
@@ -132,7 +137,7 @@ TFNumeric
 TFDimension
 TFDType
  
-TF             # Anything TensorFlow
+TF           # Anything TensorFlow
 ```
 
 
@@ -143,7 +148,7 @@ TorchNumeric
 TorchDimension
 TorchDType
  
-Torch             # Anything PyTorch
+Torch        # Anything PyTorch
 ```
 
 
@@ -159,17 +164,20 @@ This section lists all available constants and methods.
 * The names of arguments are indicative of their function:
     - `a`, `b`, and `c` indicate general tensors.
     -
-        `dtype` indicates a data type. E.g, `np.float32` or `tf.float64`, and
+        `dtype` indicates a data type. E.g, `np.float32` or `tf.float64`; and
         `rand(np.float32)` creates a NumPy random number, whereas
         `rand(tf.float64)` creates a TensorFlow random number.
-    - `shape` indicates a shape. E.g., `(2, 2)` or `[2, 2]`.
+    -
+        `shape` indicates a shape.
+        The dimensions of a shape as always given as separate arguments to 
+        the function.
     - `axis` indicates an axis over which the function may perform its action.
     -
         `ref` indicates a *reference tensor* from which a property (like its
         data type) will be inferred. E.g., `zeros(tensor)` creates a tensor
         full or zeros of the same shape and data type as `tensor`.
     
-See the documentation for more detailled descriptions of each function. 
+See the documentation for more detailed descriptions of each function. 
 
 ### Constants
 ```

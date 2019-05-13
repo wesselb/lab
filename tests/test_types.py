@@ -128,12 +128,16 @@ def test_dtype():
 def test_framework():
     for t in [B.NP, B.Framework]:
         yield assert_isinstance, np.array(1), t
+        yield assert_isinstance, 1, t
         yield assert_isinstance, np.float32, t
 
     for t in [B.TF, B.Framework]:
         yield assert_isinstance, tf.constant(1), t
+        yield assert_isinstance, 1, t
+        yield assert_isinstance, tf.ones((1, 1)).shape[0], t
         yield assert_isinstance, tf.float32, t
 
     for t in [B.Torch, B.Framework]:
         yield assert_isinstance, torch.tensor(1), t
+        yield assert_isinstance, 1, t
         yield assert_isinstance, torch.float32, t

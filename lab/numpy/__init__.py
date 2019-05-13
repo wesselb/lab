@@ -2,7 +2,8 @@
 
 from __future__ import absolute_import, division, print_function
 
-from .. import dispatch, B
+# noinspection PyUnresolvedReferences
+from .. import *
 
 from .generic import *
 from .shaping import *

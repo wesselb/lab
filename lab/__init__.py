@@ -15,7 +15,5 @@ from .linear_algebra import *
 from .random import *
 
 from .numpy import *
-from .tensorflow import *
-from .torch import *
 
 from .types import *
