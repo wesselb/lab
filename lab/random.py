@@ -2,9 +2,9 @@
 
 from __future__ import absolute_import, division, print_function
 
+import sys
+
 import numpy as np
-import tensorflow as tf
-import torch
 
 from . import dispatch
 from .types import Dimension, DType, default_dtype, Int
@@ -20,9 +20,18 @@ def set_random_seed(seed):
     Args:
         seed (int): Seed.
     """
+    # Set seed in NumPy.
     np.random.seed(seed)
-    tf.set_random_seed(seed)
-    torch.manual_seed(seed)
+
+    # Set seed for TensorFlow, if it is loaded.
+    if 'tensorflow' in sys.modules:
+        import tensorflow
+        tensorflow.set_random_seed(seed)
+
+    # Set seed for PyTorch, if it is loaded.
+    if 'torch' in sys.modules:
+        import torch
+        torch.manual_seed(seed)
 
 
 @dispatch(DType, [Dimension])
