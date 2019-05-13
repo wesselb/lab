@@ -195,7 +195,7 @@ def reg(a, diag=None, clip=True):
     # will not be tracked.
     if diag is None:
         diag = B.epsilon
-    if clip:
+    if clip and diag is not B.epsilon:
         diag = B.maximum(diag, B.epsilon)
     return a + diag * B.eye(a)
 
