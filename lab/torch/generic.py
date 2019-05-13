@@ -5,7 +5,7 @@ from __future__ import absolute_import, division, print_function
 import torch
 
 from . import dispatch, B
-from ..types import TorchNumeric, TorchDType, TorchShape, NPNumeric, Int
+from ..types import TorchNumeric, TorchDType, TorchDimension, NPNumeric
 
 __all__ = []
 
@@ -15,24 +15,22 @@ def isnan(a):
     return torch.isnan(a)
 
 
-@dispatch(TorchShape, TorchDType)
-def zeros(shape, dtype):
+@dispatch(TorchDType, [TorchDimension])
+def zeros(dtype, *shape):
     return torch.zeros(shape, dtype=dtype)
 
 
-@dispatch(TorchShape, TorchDType)
-def ones(shape, dtype):
+@dispatch(TorchDType, [TorchDimension])
+def ones(dtype, *shape):
     return torch.ones(shape, dtype=dtype)
 
 
-@dispatch(TorchShape, TorchDType)
-def eye(shape, dtype):
-    if len(shape) != 2:
-        raise ValueError('Must feed a two-dimensional shape to eye.')
+@dispatch(TorchDType, TorchDimension, TorchDimension)
+def eye(dtype, *shape):
     return torch.eye(shape[0], shape[1], dtype=dtype)
 
 
-@dispatch(TorchNumeric, TorchNumeric, Int)
+@dispatch(TorchNumeric, TorchNumeric, int)
 def linspace(a, b, num):
     return torch.linspace(a, b, num, dtype=B.dtype(a))
 

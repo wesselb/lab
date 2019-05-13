@@ -5,7 +5,7 @@ from __future__ import absolute_import, division, print_function
 import autograd.numpy as np
 
 from . import dispatch, B
-from ..types import NPNumeric, NPDType, NPShape, Int
+from ..types import NPNumeric, NPDType, NPDimension
 
 __all__ = []
 
@@ -15,24 +15,22 @@ def isnan(a):
     return np.isnan(a)
 
 
-@dispatch(NPShape, NPDType)
-def zeros(shape, dtype):
+@dispatch(NPDType, [NPDimension])
+def zeros(dtype, *shape):
     return np.zeros(shape, dtype=dtype)
 
 
-@dispatch(NPShape, NPDType)
-def ones(shape, dtype):
+@dispatch(NPDType, [NPDimension])
+def ones(dtype, *shape):
     return np.ones(shape, dtype=dtype)
 
 
-@dispatch(NPShape, NPDType)
-def eye(shape, dtype):
-    if len(shape) != 2:
-        raise ValueError('Must feed a two-dimensional shape to eye.')
+@dispatch(NPDType, NPDimension, NPDimension)
+def eye(dtype, *shape):
     return np.eye(shape[0], shape[1], dtype=dtype)
 
 
-@dispatch(NPNumeric, NPNumeric, Int)
+@dispatch(NPNumeric, NPNumeric, int)
 def linspace(a, b, num):
     return np.linspace(a, b, num, dtype=B.dtype(a))
 

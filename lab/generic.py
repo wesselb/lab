@@ -3,8 +3,9 @@
 from __future__ import absolute_import, division, print_function
 
 import numpy as np
+
 from . import dispatch, B
-from .types import Numeric, DType, Shape, default_dtype, Number, Int
+from .types import Numeric, DType, default_dtype, Dimension
 from .util import abstract
 
 __all__ = ['nan',
@@ -67,175 +68,104 @@ def isnan(a):  # pragma: no cover
     """
 
 
-@dispatch(Shape, DType)
-@abstract()
-def zeros(shape, dtype):  # pragma: no cover
+@dispatch(DType, [Dimension])
+@abstract(promote=None)
+def zeros(dtype, *shape):  # pragma: no cover
     """Create a tensor of zeros.
 
+    Can also give a reference tensor whose data type and shape will be used to
+    construct a tensor of zeros.
+
     Args:
-        shape (shape or tensor): Shape of the tensor.
-        dtype (dtype or tensor, optional): Data type. Defaults to
-            `.types.default_dtype` or the data type of the provided tensor.
+        dtype (dtype, optional): Data type. Defaults to
+            `.types.default_dtype`.
+        *shape (shape): Shape of the tensor.
 
     Returns:
         tensor: Matrix of zeros of shape `shape` and data type `dtype`.
     """
 
 
-@dispatch(Int, DType)
-def zeros(shape, dtype):
-    return zeros((shape,), dtype)
-
-
-@dispatch(Shape)
-def zeros(shape):
-    return zeros(shape, default_dtype)
-
-
-@dispatch(Int)
-def zeros(shape):
-    return zeros((shape,), default_dtype)
-
-
-@dispatch(Shape, Numeric)
-def zeros(shape, ref):
-    return zeros(shape, B.dtype(ref))
-
-
-@dispatch(Int, Numeric)
-def zeros(shape, ref):
-    return zeros((shape,), B.dtype(ref))
-
-
-@dispatch(Int, Number)
-def zeros(shape, ref):
-    raise RuntimeError('Called "zeros" as "zeros(shape, ref)" where "ref" is '
-                       'an integer. Did you mean to call "zeros(shape)"?')
-
-
-@dispatch(Numeric, DType)
-def zeros(ref, dtype):
-    return zeros(B.shape(ref), dtype)
+@dispatch.multi((int,),  # Single integer is not a reference.
+                ([Dimension],))
+def zeros(*shape):
+    return zeros(default_dtype, *shape)
 
 
 @dispatch(Numeric)
 def zeros(ref):
-    return zeros(B.shape(ref), B.dtype(ref))
+    return zeros(B.dtype(ref), *B.shape(ref))
 
 
-@dispatch(Shape, DType)
-@abstract()
-def ones(shape, dtype):  # pragma: no cover
+@dispatch(DType, [Dimension])
+@abstract(promote=None)
+def ones(dtype, *shape):  # pragma: no cover
     """Create a tensor of ones.
 
+    Can also give a reference tensor whose data type and shape will be used to
+    construct a tensor of ones.
+
     Args:
-        shape (shape or tensor): Shape of the tensor.
-        dtype (dtype or tensor, optional): Data type. Defaults to
-            `.types.default_dtype` or the data type of the provided tensor.
+        dtype (dtype, optional): Data type. Defaults to
+            `.types.default_dtype`.
+        *shape (shape or ): Shape of the tensor.
 
     Returns:
         tensor: Matrix of ones of shape `shape` and data type `dtype`.
     """
 
 
-@dispatch(Int, DType)
-def ones(shape, dtype):
-    return ones((shape,), dtype)
-
-
-@dispatch(Shape)
-def ones(shape):
-    return ones(shape, default_dtype)
-
-
-@dispatch(Int)
-def ones(shape):
-    return ones((shape,), default_dtype)
-
-
-@dispatch(Shape, Numeric)
-def ones(shape, ref):
-    return ones(shape, B.dtype(ref))
-
-
-@dispatch(Int, Numeric)
-def ones(shape, ref):
-    return ones((shape,), B.dtype(ref))
-
-
-@dispatch(Int, Number)
-def ones(shape, ref):
-    raise RuntimeError('Called "ones" as "ones(shape, ref)" where "ref" is '
-                       'an integer. Did you mean to call "ones(shape)"?')
-
-
-@dispatch(Numeric, DType)
-def ones(ref, dtype):
-    return ones(B.shape(ref), dtype)
+@dispatch.multi((int,),  # Single integer is not a reference.
+                ([Dimension],))
+def ones(*shape):
+    return ones(default_dtype, *shape)
 
 
 @dispatch(Numeric)
 def ones(ref):
-    return ones(B.shape(ref), B.dtype(ref))
+    return ones(B.dtype(ref), *B.shape(ref))
 
 
-@dispatch(Shape, DType)
-@abstract()
-def eye(shape, dtype):  # pragma: no cover
+@dispatch(DType, Dimension, Dimension)
+@abstract(promote=None)
+def eye(dtype, *shape):  # pragma: no cover
     """Create an identity matrix.
 
+    Can also give a reference tensor whose data type and shape will be used to
+    construct an identity matrix.
+
     Args:
-        shape (int or shape or tensor): Shape of the matrix.
-        dtype (dtype or tensor, optional): Data type. Defaults to
-            `.types.default_dtype` or the data type of the provided tensor.
+        dtype (dtype, optional): Data type. Defaults to
+            `.types.default_dtype`.
+        *shape (shape): Shape of the matrix.
 
     Returns:
         tensor: Identity matrix of shape `shape` and data type `dtype`.
     """
 
 
-@dispatch(Int, DType)
-def eye(shape, dtype):
-    return eye((shape, shape), dtype)
+@dispatch(DType, Dimension)
+def eye(dtype, *shape):
+    return eye(dtype, shape[0], shape[0])
 
 
-@dispatch(Shape)
+@dispatch(Dimension, [Dimension])
+def eye(*shape):
+    return eye(default_dtype, *shape)
+
+
+@dispatch.multi((int,),  # Single integer is not a reference.
+                (Dimension,))
 def eye(shape):
-    return eye(shape, default_dtype)
-
-
-@dispatch(Int)
-def eye(shape):
-    return eye((shape, shape), default_dtype)
-
-
-@dispatch(Shape, Numeric)
-def eye(shape, ref):
-    return eye(shape, B.dtype(ref))
-
-
-@dispatch(Int, Numeric)
-def eye(shape, ref):
-    return eye((shape, shape), B.dtype(ref))
-
-
-@dispatch(Int, Number)
-def eye(shape, ref):
-    raise RuntimeError('Called "eye" as "eye(shape, ref)" where "ref" is '
-                       'an integer. Did you mean to call "eye(shape)"?')
-
-
-@dispatch(Numeric, DType)
-def eye(ref, dtype):
-    return eye(B.shape(ref), dtype)
+    return eye(default_dtype, shape, shape)
 
 
 @dispatch(Numeric)
 def eye(ref):
-    return eye(B.shape(ref), B.dtype(ref))
+    return eye(B.dtype(ref), *B.shape(ref))
 
 
-@dispatch(object, object, Int)
+@dispatch(object, object, int)
 @abstract(promote=2)
 def linspace(a, b, num):
     """Create a vector of `c` numbers ranging from `a` to `c`, distributed

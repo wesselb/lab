@@ -6,6 +6,7 @@ import scipy.special
 import numpy as np
 import tensorflow as tf
 import torch
+from plum import NotFoundLookupError
 
 import lab as B
 from . import check_function, Tensor, Value, default_dtype, PositiveTensor, \
@@ -30,50 +31,37 @@ def test_zeros_ones_eye():
     for f in [B.zeros, B.ones, B.eye]:
         # Check consistency.
         yield check_function, f, \
-              (Value((2, 3)), Value(np.float32, tf.float32, torch.float32)), {}
+              (Value(np.float32, tf.float32, torch.float32),
+               Value(2),
+               Value(3)), {}
 
-        # Check that calling it with two integers results raises an
-        # exception, because that would be a common mistake.
-        yield raises, RuntimeError, lambda: f(2, 3)
+        # Check shape of calls.
+        yield eq, B.shape_int(f(2)), (2, 2) if f is B.eye else (2,)
+        yield eq, B.shape_int(f(2, 3)), (2, 3)
+
+        # Check shape type of calls.
+        yield eq, B.dtype(f(2)), B.default_dtype
+        yield eq, B.dtype(f(2, 3)), B.default_dtype
 
         for t1, t2 in [(np.float32, np.int64),
                        (tf.float32, tf.int64),
                        (torch.float32, torch.int64)]:
-            ref = B.randn((4, 5), t1)
+            ref = B.randn(t1, 4, 5)
 
-            # Check shape of shape calls.
-            yield eq, B.shape_int(f((2, 3))), (2, 3)
-            yield eq, B.shape_int(f((2, 3), t2)), (2, 3)
-            yield eq, B.shape_int(f(ref, t2)), (4, 5)
-            yield eq, B.shape_int(f((2, 3), ref)), (2, 3)
+            # Check shape of calls.
+            yield eq, B.shape_int(f(t2, 2)), (2, 2) if f is B.eye else (2,)
+            yield eq, B.shape_int(f(t2, 2, 3)), (2, 3)
             yield eq, B.shape_int(f(ref)), (4, 5)
 
-            # Check shape of integer calls.
-            if f is B.eye:
-                yield eq, B.shape_int(f(3)), (3, 3)
-                yield eq, B.shape_int(f(3, t2)), (3, 3)
-                yield eq, B.shape_int(f(3, ref)), (3, 3)
-            else:
-                yield eq, B.shape_int(f(3)), (3,)
-                yield eq, B.shape_int(f(3, t2)), (3,)
-                yield eq, B.shape_int(f(3, ref)), (3,)
-
-            # Check data type of shape calls.
-            yield eeq, B.dtype(f((2, 3))), default_dtype
-            yield eeq, B.dtype(f((2, 3), t2)), t2
-            yield eeq, B.dtype(f(ref, t2)), t2
-            yield eeq, B.dtype(f((2, 3), ref)), t1
-            yield eeq, B.dtype(f(ref)), t1
-
-            # Check data type of integer calls.
-            yield eeq, B.dtype(f(3)), default_dtype
-            yield eeq, B.dtype(f(3, t2)), t2
-            yield eeq, B.dtype(f(3, ref)), t1
+            # Check shape type of calls.
+            yield eq, B.dtype(f(t2, 2)), t2
+            yield eq, B.dtype(f(t2, 2, 3)), t2
+            yield eq, B.dtype(f(ref)), t1
 
     # Check exceptions.
+    yield raises, NotFoundLookupError, lambda: B.eye(3, 4, 5)
     for t in [np.float32, tf.float32, torch.float32]:
-        yield raises, ValueError, lambda: B.eye((3,), t)
-        yield raises, ValueError, lambda: B.eye((3, 4, 5), t)
+        yield raises, NotFoundLookupError, lambda: B.eye(t, 3, 4, 5)
 
 
 def test_linspace():

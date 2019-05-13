@@ -3,11 +3,12 @@
 from __future__ import absolute_import, division, print_function
 
 import warnings
-import numpy as np_
+
 import autograd.numpy as np
+import numpy as np_
 
 from . import dispatch, B
-from ..types import NPShape, NPDType
+from ..types import NPDimension, NPDType
 
 __all__ = []
 
@@ -17,13 +18,13 @@ def _warn_dtype(dtype):
         warnings.warn('Casting random number of type float to type integer.')
 
 
-@dispatch(NPShape, NPDType)
-def rand(shape, dtype):
+@dispatch(NPDType, [NPDimension])
+def rand(dtype, *shape):
     _warn_dtype(dtype)
     return B.cast(np.random.rand(*shape), dtype)
 
 
-@dispatch(NPShape, NPDType)
-def randn(shape, dtype):
+@dispatch(NPDType, [NPDimension])
+def randn(dtype, *shape):
     _warn_dtype(dtype)
     return B.cast(np.random.randn(*shape), dtype)

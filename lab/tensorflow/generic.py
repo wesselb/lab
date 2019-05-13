@@ -3,9 +3,10 @@
 from __future__ import absolute_import, division, print_function
 
 import tensorflow as tf
+from plum import convert
 
 from . import dispatch, B
-from ..types import TFNumeric, TFDType, TFShape, NPNumeric, Int
+from ..types import TFNumeric, TFDType, TFDimension, NPNumeric
 
 __all__ = []
 
@@ -15,38 +16,30 @@ def isnan(a):
     return tf.is_nan(a)
 
 
-@dispatch(TFShape, TFDType)
-def zeros(shape, dtype):
+@dispatch(TFDType, [TFDimension])
+def zeros(dtype, *shape):
     return tf.zeros(shape, dtype=dtype)
 
 
-@dispatch(TFShape, TFDType)
-def ones(shape, dtype):
+@dispatch(TFDType, [TFDimension])
+def ones(dtype, *shape):
     return tf.ones(shape, dtype=dtype)
 
 
-@dispatch(TFShape, TFDType)
-def eye(shape, dtype):
-    if len(shape) != 2:
-        raise ValueError('Must feed a two-dimensional shape to eye.')
+@dispatch(TFDType, int, int)
+def eye(dtype, *shape):
     return tf.eye(shape[0], shape[1], dtype=dtype)
 
 
-@dispatch(TFNumeric, TFNumeric, Int)
+@dispatch(TFDType, TFDimension, TFDimension)
+def eye(dtype, *shape):
+    # `tf.eye` requires integers!
+    return eye(dtype, *(convert(x, int) for x in shape))
+
+
+@dispatch(TFNumeric, TFNumeric, int)
 def linspace(a, b, num):
     return tf.linspace(a, b, num)
-
-
-@dispatch(TFNumeric, TFDType)
-def eye(ref, dtype):
-    # TensorFlow requires shapes as tuples of integers for `eye`.
-    return eye(B.shape_int(ref), dtype)
-
-
-@dispatch(TFNumeric)
-def eye(ref):
-    # TensorFlow requires shapes as tuples of integers for `eye`.
-    return eye(B.shape_int(ref), B.dtype(ref))
 
 
 @dispatch({TFNumeric, NPNumeric}, TFDType)

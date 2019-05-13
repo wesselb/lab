@@ -7,7 +7,7 @@ import tensorflow as tf
 import torch
 
 from . import dispatch
-from .types import Shape, DType, default_dtype, Int
+from .types import Dimension, DType, default_dtype, Int
 from .util import abstract
 
 __all__ = ['set_random_seed', 'rand', 'randn']
@@ -25,79 +25,39 @@ def set_random_seed(seed):
     torch.manual_seed(seed)
 
 
-@dispatch(Shape, DType)
+@dispatch(DType, [Dimension])
 @abstract()
-def rand(shape, dtype):  # pragma: no cover
+def rand(dtype, *shape):  # pragma: no cover
     """Construct a U[0, 1] random tensor.
 
     Args:
-        shape (shape, optional): Shape of the tensor. Defaults to `()`.
         dtype (dtype, optional): Data type. Defaults to `.types.default_dtype`.
+        *shape (shape, optional): Shape of the tensor. Defaults to `()`.
 
     Returns:
         tensor: Random tensor.
     """
 
 
-@dispatch(Int, DType)
-def rand(shape, dtype):
-    return rand((shape,), dtype)
+@dispatch([Dimension])
+def rand(*shape):
+    return rand(default_dtype, *shape)
 
 
-@dispatch(Shape)
-def rand(shape):
-    return rand(shape, default_dtype)
-
-
-@dispatch(Int)
-def rand(shape):
-    return rand((shape,), default_dtype)
-
-
-@dispatch(DType)
-def rand(dtype):
-    return rand((), dtype)
-
-
-@dispatch()
-def rand():
-    return rand(())
-
-
-@dispatch(Shape, DType)
+@dispatch(DType, [Dimension])
 @abstract(promote=None)
-def randn(shape, dtype):  # pragma: no cover
+def randn(dtype, *shape):  # pragma: no cover
     """Construct a N(0, 1) random tensor.
 
     Args:
-        shape (shape, optional): Shape of the tensor. Defaults to `()`.
         dtype (dtype, optional): Data type. Defaults to `.types.default_dtype`.
+        *shape (shape, optional): Shape of the tensor. Defaults to `()`.
 
     Returns:
         tensor: Random tensor.
     """
 
 
-@dispatch(Int, DType)
-def randn(shape, dtype):
-    return randn((shape,), dtype)
-
-
-@dispatch(Shape)
-def randn(shape):
-    return randn(shape, default_dtype)
-
-
-@dispatch(DType)
-def randn(dtype):
-    return randn((), dtype)
-
-
-@dispatch(Int)
-def randn(shape):
-    return randn((shape,), default_dtype)
-
-
-@dispatch()
-def randn():
-    return randn(())
+@dispatch([Dimension])
+def randn(*shape):
+    return randn(default_dtype, *shape)
