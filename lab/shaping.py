@@ -3,7 +3,7 @@
 from __future__ import absolute_import, division, print_function
 
 from . import dispatch
-from .types import Numeric, ListOrTuple
+from .types import Numeric, Dimension
 from .util import abstract
 
 __all__ = ['shape',
@@ -119,7 +119,7 @@ def squeeze(a):  # pragma: no cover
 
 
 @dispatch(Numeric)
-def uprank(a):  # pragma: no cover
+def uprank(a):
     """Convert the input into a rank two tensor.
 
     Args:
@@ -162,7 +162,7 @@ def flatten(a):  # pragma: no cover
     Returns:
         tensor: Flattened tensor.
     """
-    return reshape(a, shape=(-1,))
+    return reshape(a, -1)
 
 
 def _vec_to_tril_shape(a):
@@ -196,13 +196,13 @@ def tril_to_vec(a):  # pragma: no cover
     """
 
 
-@dispatch(ListOrTuple)
+@dispatch([Numeric])
 @abstract()
-def stack(a, axis=0):  # pragma: no cover
+def stack(*elements, **kw_args):  # pragma: no cover
     """Concatenate tensors along a new axis.
 
     Args:
-        a (list[tensor]): List of tensors.
+        *elements (tensor): Tensors to stack.
         axis (int, optional): Index of new axis. Defaults to `0`.
 
     Returns:
@@ -224,27 +224,27 @@ def unstack(a, axis=0):  # pragma: no cover
     """
 
 
-@dispatch(Numeric)
+@dispatch(Numeric, [Dimension])
 @abstract()
-def reshape(a, shape=(-1,)):  # pragma: no cover
+def reshape(a, *shape):  # pragma: no cover
     """Reshape a tensor.
 
     Args:
-        a (tensor): List of tensors.
-        shape (shape, optional): New shape. Defaults to `(-1,)`.
+        a (tensor): Tensor to reshape.
+        *shape (shape): New shape.
 
     Returns:
         tensor: Reshaped tensor.
     """
 
 
-@dispatch(ListOrTuple)
+@dispatch([Numeric])
 @abstract()
-def concat(a, axis=0):  # pragma: no cover
+def concat(*elements, **kw_args):  # pragma: no cover
     """Concatenate tensors along an axis.
 
     Args:
-        a (list[tensor]): List of tensors.
+        *elements (tensor): Tensors to concatenate
         axis (int, optional): Axis along which to concatenate. Defaults to `0`.
 
     Returns:
@@ -252,21 +252,21 @@ def concat(a, axis=0):  # pragma: no cover
     """
 
 
-@dispatch(ListOrTuple)
-def concat2d(a):  # pragma: no cover
+@dispatch([{list, tuple}])
+def concat2d(*rows):
     """Concatenate tensors into a matrix.
 
     Args:
-        a (list[list[tensor]]): List of list of tensors, which form the rows of
-            the matrix.
+        *rows (list[list[tensor]]): List of list of tensors, which form the
+            rows of the matrix.
 
     Returns:
         tensor: Assembled matrix.
     """
-    return concat([concat(row, axis=1) for row in a], axis=0)
+    return concat(*[concat(*row, axis=1) for row in rows], axis=0)
 
 
-@dispatch(Numeric, ListOrTuple)
+@dispatch(Numeric, object)
 @abstract(promote=None)
 def take(a, indices, axis=0):  # pragma: no cover
     """Take particular elements along an axis.

@@ -7,7 +7,7 @@ import torch
 
 from . import dispatch
 from ..shaping import _vec_to_tril_shape
-from ..types import TorchNumeric, TorchListOrTuple, ListOrTuple
+from ..types import TorchNumeric, TorchDimension
 
 __all__ = []
 
@@ -68,9 +68,9 @@ def tril_to_vec(a):
     return a[np.tril_indices(n)]
 
 
-@dispatch(TorchListOrTuple)
-def stack(a, axis=0):
-    return torch.stack(a, dim=axis)
+@dispatch([TorchNumeric])
+def stack(*elements, **kw_args):
+    return torch.stack(elements, dim=kw_args.get('axis', 0))
 
 
 @dispatch(TorchNumeric)
@@ -78,17 +78,17 @@ def unstack(a, axis=0):
     return torch.unbind(a, dim=axis)
 
 
-@dispatch(TorchNumeric)
-def reshape(a, shape=(-1,)):
+@dispatch(TorchNumeric, [TorchDimension])
+def reshape(a, *shape):
     return torch.reshape(a, shape=shape)
 
 
-@dispatch(TorchListOrTuple)
-def concat(a, axis=0):
-    return torch.cat(a, dim=axis)
+@dispatch([TorchNumeric])
+def concat(*elements, **kw_args):
+    return torch.cat(elements, dim=kw_args.get('axis', 0))
 
 
-@dispatch(TorchNumeric, ListOrTuple)
+@dispatch(TorchNumeric, object)
 def take(a, indices, axis=0):
     if axis > 0:
         a = torch.transpose(a, 0, axis)

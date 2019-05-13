@@ -6,7 +6,7 @@ import autograd.numpy as np
 
 from . import dispatch
 from ..shaping import _vec_to_tril_shape
-from ..types import NPNumeric, NPListOrTuple, ListOrTuple
+from ..types import NPNumeric, NPDimension
 
 __all__ = []
 
@@ -69,9 +69,9 @@ def tril_to_vec(a):
     return a[np.tril_indices(n)]
 
 
-@dispatch(NPListOrTuple)
-def stack(a, axis=0):
-    return np.stack(a, axis=axis)
+@dispatch([NPNumeric])
+def stack(*elements, **kw_args):
+    return np.stack(elements, axis=kw_args.get('axis', 0))
 
 
 @dispatch(NPNumeric)
@@ -80,16 +80,16 @@ def unstack(a, axis=0):
     return [x.squeeze(axis=axis) for x in out]
 
 
-@dispatch(NPNumeric)
-def reshape(a, shape=(-1,)):
+@dispatch(NPNumeric, [NPDimension])
+def reshape(a, *shape):
     return np.reshape(a, shape)
 
 
-@dispatch(NPListOrTuple)
-def concat(a, axis=0):
-    return np.concatenate(a, axis=axis)
+@dispatch([NPNumeric])
+def concat(*elements, **kw_args):
+    return np.concatenate(elements, axis=kw_args.get('axis', 0))
 
 
-@dispatch(NPNumeric, ListOrTuple)
+@dispatch(NPNumeric, object)
 def take(a, indices, axis=0):
     return np.take(a, indices, axis=axis)

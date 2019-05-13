@@ -77,7 +77,7 @@ def to_np(lst):
 @_dispatch(object, object)
 def allclose(x, y):
     """Assert that two numeric objects are close."""
-    np.testing.assert_allclose(to_np(x), to_np(y))
+    np.testing.assert_allclose(to_np(x), to_np(y), rtol=1e-7, atol=1e-10)
 
 
 @_dispatch(tuple, tuple)

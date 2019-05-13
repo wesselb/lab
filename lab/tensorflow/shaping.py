@@ -7,7 +7,7 @@ import tensorflow as tf
 
 from . import dispatch
 from ..shaping import _vec_to_tril_shape
-from ..types import TFNumeric, TFListOrTuple, ListOrTuple
+from ..types import TFNumeric, TFDimension
 
 __all__ = []
 
@@ -72,9 +72,9 @@ def tril_to_vec(a):
     return tf.gather_nd(a, list(zip(*np.tril_indices(n))))
 
 
-@dispatch(TFListOrTuple)
-def stack(a, axis=0):
-    return tf.stack(a, axis=axis)
+@dispatch([TFNumeric])
+def stack(*elements, **kw_args):
+    return tf.stack(elements, axis=kw_args.get('axis', 0))
 
 
 @dispatch(TFNumeric)
@@ -82,17 +82,17 @@ def unstack(a, axis=0):
     return tf.unstack(a, axis=axis)
 
 
-@dispatch(TFNumeric)
-def reshape(a, shape=(-1,)):
+@dispatch(TFNumeric, [TFDimension])
+def reshape(a, *shape):
     return tf.reshape(a, shape=shape)
 
 
-@dispatch(TFListOrTuple)
-def concat(a, axis=0):
-    return tf.concat(a, axis=axis)
+@dispatch([TFNumeric])
+def concat(*elements, **kw_args):
+    return tf.concat(elements, axis=kw_args.get('axis', 0))
 
 
-@dispatch(TFNumeric, ListOrTuple)
+@dispatch(TFNumeric, object)
 def take(a, indices, axis=0):
     # Optimise the case where `axis` equals `0`.
     if axis == 0:
