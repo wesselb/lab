@@ -9,7 +9,7 @@ from .types import Numeric
 from .util import abstract
 
 __all__ = ['epsilon',
-           'transpose', 'T',
+           'transpose', 't', 'T',
            'matmul', 'mm', 'dot',
            'kron',
            'trace',
@@ -44,6 +44,7 @@ def transpose(a, perm=None):  # pragma: no cover
     """
 
 
+t = transpose  #: Shorthand for `transpose`.
 T = transpose  #: Shorthand for `transpose`.
 
 
