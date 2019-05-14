@@ -11,8 +11,8 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__),
 # noinspection PyUnresolvedReferences
 from lab import *
 # noinspection PyUnresolvedReferences
-import lab.tensorflow
-# noinspection PyUnresolvedReferences
 import lab.torch
+# noinspection PyUnresolvedReferences
+import lab.tensorflow
 
 from .util import *
