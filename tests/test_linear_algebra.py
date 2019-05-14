@@ -43,10 +43,20 @@ def test_matmul():
 
 
 def test_trace():
+    # Check default call.
     yield check_function, B.trace, \
-          (Matrix(),), {'axis1': Value(0), 'axis2': Value(1)}
+          (Tensor(2, 3, 4, 5),), {'axis1': Value(0), 'axis2': Value(1)}
+
+    # Check calls with `axis1 < axis2`.
     yield check_function, B.trace, \
-          (Matrix(),), {'axis1': Value(1), 'axis2': Value(0)}
+          (Tensor(2, 3, 4, 5),), {'axis1': Value(0, 1), 'axis2': Value(2, 3)}
+
+    # Check calls with `axis1 > axis2`.
+    yield check_function, B.trace, \
+          (Tensor(2, 3, 4, 5),), {'axis1': Value(2, 3), 'axis2': Value(0, 1)}
+
+    # Check that call with `axis1 == axis2` raises an error in NumPy.
+    yield raises, ValueError, lambda: B.trace(Matrix().np(), axis1=0, axis2=0)
 
 
 def test_kron():

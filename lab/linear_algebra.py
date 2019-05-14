@@ -28,7 +28,7 @@ epsilon = 1e-12  #: Magnitude of diagonal to regularise matrices with.
 
 
 def _default_perm(a):
-    return tuple(range(B.rank(a) - 1, -1, -1))
+    return list(range(B.rank(a) - 1, -1, -1))
 
 
 @dispatch(Numeric)

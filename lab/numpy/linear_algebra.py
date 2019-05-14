@@ -2,14 +2,17 @@
 
 from __future__ import absolute_import, division, print_function
 
+import logging
+
 import autograd.numpy as np
 import autograd.scipy.linalg as sla
 
-from . import dispatch
+from . import dispatch, B
 from ..linear_algebra import _default_perm
 from ..types import NPNumeric
 
 __all__ = []
+log = logging.getLogger(__name__)
 
 
 @dispatch(NPNumeric, NPNumeric)
@@ -28,7 +31,22 @@ def transpose(a, perm=None):
 
 @dispatch(NPNumeric)
 def trace(a, axis1=0, axis2=1):
-    return np.trace(a, axis1=axis1, axis2=axis2)
+    if axis1 == axis2:
+        raise ValueError('Keyword argument axis1 and axis2 cannot be the same.')
+
+    # AutoGrad does not support the `axis1` and `axis2` arguments...
+
+    # Order the axis as `axis1 < axis`.
+    if axis2 < axis1:
+        axis1, axis2 = axis2, axis1
+
+    # Bring the trace axes forward.
+    if (axis1, axis2) != (0, 1):
+        perm = [axis1, axis2] + \
+               [i for i in range(B.rank(a)) if i != axis1 and i != axis2]
+        a = np.transpose(a, axes=perm)
+
+    return np.trace(a)
 
 
 @dispatch(NPNumeric, NPNumeric)
