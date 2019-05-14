@@ -17,32 +17,34 @@
   
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -151,7 +153,7 @@
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">dispatch</span>
-<span class="kn">from</span> <span class="nn">.types</span> <span class="k">import</span> <span class="n">Numeric</span><span class="p">,</span> <span class="n">ListOrTuple</span>
+<span class="kn">from</span> <span class="nn">.types</span> <span class="k">import</span> <span class="n">Numeric</span><span class="p">,</span> <span class="n">Dimension</span>
 <span class="kn">from</span> <span class="nn">.util</span> <span class="k">import</span> <span class="n">abstract</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;shape&#39;</span><span class="p">,</span>
@@ -267,7 +269,7 @@
 
 
 <div class="viewcode-block" id="uprank"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.uprank">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">uprank</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+<span class="k">def</span> <span class="nf">uprank</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Convert the input into a rank two tensor.</span>
 
 <span class="sd">    Args:</span>
@@ -310,7 +312,7 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        tensor: Flattened tensor.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">reshape</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,))</span></div>
+    <span class="k">return</span> <span class="n">reshape</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span></div>
 
 
 <span class="k">def</span> <span class="nf">_vec_to_tril_shape</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
@@ -344,13 +346,13 @@
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
 
-<div class="viewcode-block" id="stack"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.stack">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">ListOrTuple</span><span class="p">)</span>
+<div class="viewcode-block" id="stack"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.stack">[docs]</a><span class="nd">@dispatch</span><span class="p">([</span><span class="n">Numeric</span><span class="p">])</span>
 <span class="nd">@abstract</span><span class="p">()</span>
-<span class="k">def</span> <span class="nf">stack</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+<span class="k">def</span> <span class="nf">stack</span><span class="p">(</span><span class="o">*</span><span class="n">elements</span><span class="p">,</span> <span class="o">**</span><span class="n">kw_args</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
     <span class="sd">&quot;&quot;&quot;Concatenate tensors along a new axis.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        a (list[tensor]): List of tensors.</span>
+<span class="sd">        *elements (tensor): Tensors to stack.</span>
 <span class="sd">        axis (int, optional): Index of new axis. Defaults to `0`.</span>
 
 <span class="sd">    Returns:</span>
@@ -372,27 +374,27 @@
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
 
-<div class="viewcode-block" id="reshape"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.reshape">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<div class="viewcode-block" id="reshape"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.reshape">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">,</span> <span class="p">[</span><span class="n">Dimension</span><span class="p">])</span>
 <span class="nd">@abstract</span><span class="p">()</span>
-<span class="k">def</span> <span class="nf">reshape</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,)):</span>  <span class="c1"># pragma: no cover</span>
+<span class="k">def</span> <span class="nf">reshape</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
     <span class="sd">&quot;&quot;&quot;Reshape a tensor.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        a (tensor): List of tensors.</span>
-<span class="sd">        shape (shape, optional): New shape. Defaults to `(-1,)`.</span>
+<span class="sd">        a (tensor): Tensor to reshape.</span>
+<span class="sd">        *shape (shape): New shape.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        tensor: Reshaped tensor.</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
 
-<div class="viewcode-block" id="concat"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.concat">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">ListOrTuple</span><span class="p">)</span>
+<div class="viewcode-block" id="concat"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.concat">[docs]</a><span class="nd">@dispatch</span><span class="p">([</span><span class="n">Numeric</span><span class="p">])</span>
 <span class="nd">@abstract</span><span class="p">()</span>
-<span class="k">def</span> <span class="nf">concat</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+<span class="k">def</span> <span class="nf">concat</span><span class="p">(</span><span class="o">*</span><span class="n">elements</span><span class="p">,</span> <span class="o">**</span><span class="n">kw_args</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
     <span class="sd">&quot;&quot;&quot;Concatenate tensors along an axis.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        a (list[tensor]): List of tensors.</span>
+<span class="sd">        *elements (tensor): Tensors to concatenate</span>
 <span class="sd">        axis (int, optional): Axis along which to concatenate. Defaults to `0`.</span>
 
 <span class="sd">    Returns:</span>
@@ -400,21 +402,21 @@
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
 
-<div class="viewcode-block" id="concat2d"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.concat2d">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">ListOrTuple</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">concat2d</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+<div class="viewcode-block" id="concat2d"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.concat2d">[docs]</a><span class="nd">@dispatch</span><span class="p">([{</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">}])</span>
+<span class="k">def</span> <span class="nf">concat2d</span><span class="p">(</span><span class="o">*</span><span class="n">rows</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Concatenate tensors into a matrix.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        a (list[list[tensor]]): List of list of tensors, which form the rows of</span>
-<span class="sd">            the matrix.</span>
+<span class="sd">        *rows (list[list[tensor]]): List of list of tensors, which form the</span>
+<span class="sd">            rows of the matrix.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        tensor: Assembled matrix.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">concat</span><span class="p">([</span><span class="n">concat</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">a</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">concat</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">concat</span><span class="p">(</span><span class="o">*</span><span class="n">row</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="take"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.take">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">,</span> <span class="n">ListOrTuple</span><span class="p">)</span>
+<div class="viewcode-block" id="take"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.take">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
 <span class="nd">@abstract</span><span class="p">(</span><span class="n">promote</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">take</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
     <span class="sd">&quot;&quot;&quot;Take particular elements along an axis.</span>
@@ -439,7 +441,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Wessel Bruinsma.
+        &copy; Copyright 2017, Wessel Bruinsma
 
     </p>
   </div>
@@ -456,33 +458,16 @@
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'0.1.0',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

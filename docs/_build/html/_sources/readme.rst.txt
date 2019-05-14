@@ -47,10 +47,16 @@ Example:
 .. code:: python
 
     import lab as B
+    import lab.torch       # Load the PyTorch extension.
+    import lab.tensorflow  # Load the TensorFlow extension.
 
     def objective(matrix):
         outer_product = B.matmul(matrix, matrix, tr_b=True)
         return B.mean(outer_product)
+
+By default, the PyTorch and TensorFlow extensions are not loaded to save
+startup time. Alternatively, one can directly ``import lab.torch as B``
+or ``import lab.tensorflow as B``.
 
 Run it with NumPy and AutoGrad:
 
@@ -58,11 +64,8 @@ Run it with NumPy and AutoGrad:
 
     >>> import autograd.numpy as np
 
-    >>> from autograd import grad
-
-    >>> grad(objective)(B.randn((2, 2), np.float64))
-    array([[-0.35247881, -0.4144402 ],
-           [-0.35247881, -0.4144402 ]])
+    >>> objective(B.randn(np.float64, 2, 2))
+    0.15772589216756833
 
 Run it with TensorFlow:
 
@@ -70,7 +73,7 @@ Run it with TensorFlow:
 
     >>> import tensorflow as tf
 
-    >>> objective(B.randn((2, 2), tf.float64))
+    >>> objective(B.randn(tf.float64, 2, 2))
     <tf.Tensor 'Mean:0' shape=() dtype=float64>
 
 Run it with PyTorch:
@@ -79,7 +82,7 @@ Run it with PyTorch:
 
     >>> import torch
 
-    >>> objective(B.randn((2, 2), torch.float64))
+    >>> objective(B.randn(torch.float64, 2, 2))
     tensor(1.9557, dtype=torch.float64)
 
 List of Types
@@ -94,17 +97,21 @@ Example:
 
     >>> import lab as B
 
+    >>> from plum import List, Tuple
+
     >>> import numpy as np
 
-    >>> isinstance([1., np.array([1., 2.])], B.NPList)
+    >>> isinstance([1., np.array([1., 2.])], List(B.NPNumeric))
     True
 
-    >>> isinstance([1., np.array([1., 2.])], B.TFList)
+    >>> isinstance([1., np.array([1., 2.])], List(B.TFNumeric))
     False
 
     >>> import tensorflow as tf
 
-    >>> isinstance((tf.constant(1.), tf.ones(5)), B.TFTuple)
+    >>> import lab.tensorflow
+
+    >>> isinstance((tf.constant(1.), tf.ones(5)), Tuple(B.TFNumeric))
     True
 
 General
@@ -117,9 +124,8 @@ General
     Bool         # Booleans
     Number       # Numbers
     Numeric      # Numerical objects, including booleans
-    ListOrTuple  # Lists or tuples
-    Shape        # Shapes
-    DType        # Data typse
+    Dimension    # Dimensions of shapes
+    DType        # Data type
     Framework    # Anything accepted by supported frameworks
 
 NumPy
@@ -128,14 +134,10 @@ NumPy
 ::
 
     NPNumeric
-    NPList
-    NPTuple
-    NPList
-    NPListOrTuple
-    NPShape
+    NPDimension
     NPDType
      
-    NP             # Anything NumPy
+    NP           # Anything NumPy
 
 TensorFlow
 ~~~~~~~~~~
@@ -143,14 +145,10 @@ TensorFlow
 ::
 
     TFNumeric
-    TFList
-    TFTuple
-    TFList
-    TFListOrTuple
-    TFShape
+    TFDimension
     TFDType
      
-    TF             # Anything TensorFlow
+    TF           # Anything TensorFlow
 
 PyTorch
 ~~~~~~~
@@ -158,14 +156,10 @@ PyTorch
 ::
 
     TorchNumeric
-    TorchList
-    TorchTuple
-    TorchList
-    TorchListOrTuple
-    TorchShape
+    TorchDimension
     TorchDType
      
-    Torch             # Anything PyTorch
+    Torch        # Anything PyTorch
 
 List of Methods
 ---------------
@@ -181,10 +175,11 @@ This section lists all available constants and methods.
 
    -  ``a``, ``b``, and ``c`` indicate general tensors.
    -  ``dtype`` indicates a data type. E.g, ``np.float32`` or
-      ``tf.float64``, and ``rand(np.float32)`` creates a NumPy random
+      ``tf.float64``; and ``rand(np.float32)`` creates a NumPy random
       number, whereas ``rand(tf.float64)`` creates a TensorFlow random
       number.
-   -  ``shape`` indicates a shape. E.g., ``(2, 2)`` or ``[2, 2]``.
+   -  ``shape`` indicates a shape. The dimensions of a shape as always
+      given as separate arguments to the function.
    -  ``axis`` indicates an axis over which the function may perform its
       action.
    -  ``ref`` indicates a *reference tensor* from which a property (like
@@ -192,7 +187,7 @@ This section lists all available constants and methods.
       tensor full or zeros of the same shape and data type as
       ``tensor``.
 
-See the documentation for more detailled descriptions of each function.
+See the documentation for more detailed descriptions of each function.
 
 Constants
 ~~~~~~~~~
@@ -210,22 +205,16 @@ Generic
 
 ::
 
-    zeros(shape, dtype)
-    zeros(shape)
-    zeros(shape, ref)
-    zeros(ref, dtype)
+    zeros(dtype, *shape)
+    zeros(*shape)
     zeros(ref)
 
-    ones(shape, dtype)
-    ones(shape)
-    ones(shape, ref)
-    ones(ref, dtype)
+    ones(dtype, *shape)
+    ones(*shape)
     ones(ref)
 
-    eye(shape, dtype)
-    eye(shape)
-    eye(shape, ref)
-    eye(ref, dtype)
+    eye(dtype, *shape)
+    eye(*shape)
     eye(ref)
 
     linspace(a, b, num)
@@ -274,7 +263,7 @@ Linear Algebra
 
 ::
 
-    transpose(a, perm=None) (alias: T)
+    transpose(a, perm=None) (alias: t, T)
     matmul(a, b, tr_a=False, tr_b=False) (alias: mm, dot)
     trace(a, axis1=0, axis2=1)
     kron(a, b)
@@ -312,13 +301,13 @@ Random
 
     set_random_seed(seed) 
 
-    rand(shape, dtype)
-    rand(shape)
+    rand(dtype, *shape)
+    rand(*shape)
     rand(dtype)
     rand()
 
-    randn(shape, dtype)
-    randn(shape)
+    randn(dtype, *shape)
+    randn(*shape)
     randn(dtype)
     randn()
 
@@ -340,11 +329,11 @@ Shaping
     flatten(a)
     vec_to_tril(a)
     tril_to_vec(a)
-    stack(a, axis=0)
+    stack(*elements, axis=0)
     unstack(a, axis=0)
-    reshape(a, shape=(-1,))
-    concat(a, axis=0)
-    concat2d(a)
+    reshape(a, *shape)
+    concat(*elements, axis=0)
+    concat2d(*rows)
     take(a, indices, axis=0)
 
 .. |Build| image:: https://travis-ci.org/wesselb/lab.svg?branch=master

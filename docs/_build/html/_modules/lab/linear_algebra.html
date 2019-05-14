@@ -17,32 +17,34 @@
   
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -150,14 +152,12 @@
 
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
 
-<span class="kn">from</span> <span class="nn">plum</span> <span class="k">import</span> <span class="n">promote</span>
-
 <span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">dispatch</span><span class="p">,</span> <span class="n">B</span>
 <span class="kn">from</span> <span class="nn">.types</span> <span class="k">import</span> <span class="n">Numeric</span>
 <span class="kn">from</span> <span class="nn">.util</span> <span class="k">import</span> <span class="n">abstract</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;epsilon&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;transpose&#39;</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;transpose&#39;</span><span class="p">,</span> <span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">,</span>
            <span class="s1">&#39;matmul&#39;</span><span class="p">,</span> <span class="s1">&#39;mm&#39;</span><span class="p">,</span> <span class="s1">&#39;dot&#39;</span><span class="p">,</span>
            <span class="s1">&#39;kron&#39;</span><span class="p">,</span>
            <span class="s1">&#39;trace&#39;</span><span class="p">,</span>
@@ -192,6 +192,7 @@
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
 
+<span class="n">t</span> <span class="o">=</span> <span class="n">transpose</span>  <span class="c1">#: Shorthand for `transpose`.</span>
 <span class="n">T</span> <span class="o">=</span> <span class="n">transpose</span>  <span class="c1">#: Shorthand for `transpose`.</span>
 
 
@@ -344,7 +345,7 @@
     <span class="c1"># will not be tracked.</span>
     <span class="k">if</span> <span class="n">diag</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">diag</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">epsilon</span>
-    <span class="k">if</span> <span class="n">clip</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">clip</span> <span class="ow">and</span> <span class="n">diag</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">B</span><span class="o">.</span><span class="n">epsilon</span><span class="p">:</span>
         <span class="n">diag</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">diag</span><span class="p">,</span> <span class="n">B</span><span class="o">.</span><span class="n">epsilon</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">diag</span> <span class="o">*</span> <span class="n">B</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">a</span><span class="p">)</span></div>
 
@@ -363,6 +364,9 @@
 <span class="sd">        matrix: Square of the Euclidean norm of the pairwise differences</span>
 <span class="sd">            between the elements of `a` and `b`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Optimise the one-dimensional case.</span>
+    <span class="k">if</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">a</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">b</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">B</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">b</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span>
     <span class="n">norms_a</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">a</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">]</span>
     <span class="n">norms_b</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">b</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
     <span class="k">return</span> <span class="n">norms_a</span> <span class="o">+</span> <span class="n">norms_b</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">B</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">tr_b</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -386,6 +390,9 @@
 <span class="sd">        matrix: Euclidean norm of the pairwise differences between the</span>
 <span class="sd">            elements of `a` and `b`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Optimise the one-dimensional case.</span>
+    <span class="k">if</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">a</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">b</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">B</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">pw_dists2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span>
                             <span class="n">B</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="mf">1e-30</span><span class="p">,</span> <span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">a</span><span class="p">))))</span>
 
@@ -430,6 +437,9 @@
 <span class="sd">        matrix: Euclidean norm of the element-wise differences between the</span>
 <span class="sd">            elements of `a` and `b`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Optimise the one-dimensional case.</span>
+    <span class="k">if</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">a</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">b</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">ew_dists2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span>
                             <span class="n">B</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="mf">1e-30</span><span class="p">,</span> <span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">a</span><span class="p">))))</span>
 
@@ -453,6 +463,9 @@
 <span class="sd">        matrix: Square of the Euclidean norm of the pairwise sums</span>
 <span class="sd">            between the elements of `a` and `b`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Optimise the one-dimensional case.</span>
+    <span class="k">if</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">a</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">b</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">B</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">b</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span>
     <span class="n">norms_a</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">a</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">]</span>
     <span class="n">norms_b</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">b</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
     <span class="k">return</span> <span class="n">norms_a</span> <span class="o">+</span> <span class="n">norms_b</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">B</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">tr_b</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -476,6 +489,9 @@
 <span class="sd">        matrix: Euclidean norm of the pairwise sums between the</span>
 <span class="sd">            elements of `a` and `b`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Optimise the one-dimensional case.</span>
+    <span class="k">if</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">a</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">b</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">B</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">pw_sums2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span>
                             <span class="n">B</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="mf">1e-30</span><span class="p">,</span> <span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">a</span><span class="p">))))</span>
 
@@ -520,6 +536,9 @@
 <span class="sd">        matrix: Euclidean norm of the element-wise sums between the</span>
 <span class="sd">            elements of `a` and `b`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Optimise the one-dimensional case.</span>
+    <span class="k">if</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">a</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">b</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">ew_sums2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span>
                             <span class="n">B</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="mf">1e-30</span><span class="p">,</span> <span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">a</span><span class="p">))))</span>
 
@@ -539,7 +558,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Wessel Bruinsma.
+        &copy; Copyright 2017, Wessel Bruinsma
 
     </p>
   </div>
@@ -556,33 +575,16 @@
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'0.1.0',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

@@ -17,34 +17,36 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="lab.numpy package" href="lab.numpy.html" />
     <link rel="prev" title="lab.generic module" href="lab.generic.html" /> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -186,25 +188,27 @@
 <dt id="lab.linear_algebra.transpose">
 <code class="descclassname">lab.linear_algebra.</code><code class="descname">transpose</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#transpose"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.transpose" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transpose a matrix.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>a</strong> (<em>tensor</em>) – Matrix to transpose.</li>
-<li><strong>perm</strong> (<em>list</em><em>[</em><em>int</em><em>] or </em><em>tuple</em><em>[</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – Permutation. Defaults to
-reversing the ordering of all axes.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – Matrix to transpose.</p></li>
+<li><p><strong>perm</strong> (<em>list</em><em>[</em><em>int</em><em>] or </em><em>tuple</em><em>[</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – Permutation. Defaults to
+reversing the ordering of all axes.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Transposition of <cite>a</cite>.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tensor</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Transposition of <cite>a</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lab.linear_algebra.t">
+<code class="descclassname">lab.linear_algebra.</code><code class="descname">t</code><a class="headerlink" href="#lab.linear_algebra.t" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shorthand for <cite>transpose</cite>.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -217,26 +221,22 @@ reversing the ordering of all axes.</li>
 <dt id="lab.linear_algebra.matmul">
 <code class="descclassname">lab.linear_algebra.</code><code class="descname">matmul</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#matmul"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.matmul" title="Permalink to this definition">¶</a></dt>
 <dd><p>Matrix multiplication.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>a</strong> (<em>tensor</em>) – First matrix.</li>
-<li><strong>b</strong> (<em>tensor</em>) – Second matrix.</li>
-<li><strong>tr_a</strong> (<em>bool</em><em>, </em><em>optional</em>) – Transpose first matrix. Defaults to <cite>False</cite>.</li>
-<li><strong>tr_b</strong> (<em>bool</em><em>, </em><em>optional</em>) – Transpose second matrix. Defaults to <cite>False</cite>.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – First matrix.</p></li>
+<li><p><strong>b</strong> (<em>tensor</em>) – Second matrix.</p></li>
+<li><p><strong>tr_a</strong> (<em>bool</em><em>, </em><em>optional</em>) – Transpose first matrix. Defaults to <cite>False</cite>.</p></li>
+<li><p><strong>tr_b</strong> (<em>bool</em><em>, </em><em>optional</em>) – Transpose second matrix. Defaults to <cite>False</cite>.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Matrix product of <cite>a</cite> and <cite>b</cite>.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tensor</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Matrix product of <cite>a</cite> and <cite>b</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
@@ -255,94 +255,81 @@ reversing the ordering of all axes.</li>
 <dt id="lab.linear_algebra.kron">
 <code class="descclassname">lab.linear_algebra.</code><code class="descname">kron</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#kron"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.kron" title="Permalink to this definition">¶</a></dt>
 <dd><p>Kronecker product.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>a</strong> (<em>tensor</em>) – First matrix.</li>
-<li><strong>b</strong> (<em>tensor</em>) – Second matrix.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – First matrix.</p></li>
+<li><p><strong>b</strong> (<em>tensor</em>) – Second matrix.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Kronecker product of <cite>a</cite> and <cite>b</cite>.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tensor</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Kronecker product of <cite>a</cite> and <cite>b</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="lab.linear_algebra.trace">
 <code class="descclassname">lab.linear_algebra.</code><code class="descname">trace</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#trace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.trace" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the trace of a tensor.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>a</strong> (<em>tensor</em>) – Tensor to compute trace of.</li>
-<li><strong>axis1</strong> (<em>int</em><em>, </em><em>optional</em>) – First dimension to compute trace over. Defaults
-to <cite>0</cite>.</li>
-<li><strong>axis2</strong> (<em>int</em><em>, </em><em>optional</em>) – Second dimension to compute trace over. Defaults
-to <cite>1</cite>.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – Tensor to compute trace of.</p></li>
+<li><p><strong>axis1</strong> (<em>int</em><em>, </em><em>optional</em>) – First dimension to compute trace over. Defaults
+to <cite>0</cite>.</p></li>
+<li><p><strong>axis2</strong> (<em>int</em><em>, </em><em>optional</em>) – Second dimension to compute trace over. Defaults
+to <cite>1</cite>.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Trace.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tensor</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Trace.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="lab.linear_algebra.svd">
 <code class="descclassname">lab.linear_algebra.</code><code class="descname">svd</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#svd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.svd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the singular value decomposition.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>a</strong> (<em>tensor</em>) – Matrix to decompose.</li>
-<li><strong>compute_uv</strong> (<em>bool</em><em>, </em><em>optional</em>) – Also compute <cite>U</cite> and <cite>V</cite>. Defaults to
-<cite>True</cite>.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – Matrix to decompose.</p></li>
+<li><p><strong>compute_uv</strong> (<em>bool</em><em>, </em><em>optional</em>) – Also compute <cite>U</cite> and <cite>V</cite>. Defaults to
+<cite>True</cite>.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><cite>(U, S, V)</cite> is <cite>compute_uv</cite> is <cite>True</cite> and just <cite>S</cite> otherwise.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tuple</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>(U, S, V)</cite> is <cite>compute_uv</cite> is <cite>True</cite> and just <cite>S</cite> otherwise.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="lab.linear_algebra.cholesky">
 <code class="descclassname">lab.linear_algebra.</code><code class="descname">cholesky</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#cholesky"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.cholesky" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the Cholesky decomposition.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>a</strong> (<em>tensor</em>) – Matrix to decompose.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Cholesky decomposition.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tensor</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Matrix to decompose.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Cholesky decomposition.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
@@ -350,101 +337,85 @@ to <cite>1</cite>.</li>
 <code class="descclassname">lab.linear_algebra.</code><code class="descname">cholesky_solve</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#cholesky_solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.cholesky_solve" title="Permalink to this definition">¶</a></dt>
 <dd><p>Solve the linear system <cite>a x = b</cite> given the Cholesky factorisation of
 <cite>a</cite>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>a</strong> (<em>tensor</em>) – Cholesky factorisation of <cite>a</cite>.</li>
-<li><strong>b</strong> (<em>tensor</em>) – RHS <cite>b</cite>.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – Cholesky factorisation of <cite>a</cite>.</p></li>
+<li><p><strong>b</strong> (<em>tensor</em>) – RHS <cite>b</cite>.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Solution <cite>x</cite>.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tensor</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Solution <cite>x</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="lab.linear_algebra.trisolve">
 <code class="descclassname">lab.linear_algebra.</code><code class="descname">trisolve</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#trisolve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.trisolve" title="Permalink to this definition">¶</a></dt>
 <dd><p>Solve the linear system <cite>a x = b</cite> where <cite>a</cite> is triangular.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>a</strong> (<em>tensor</em>) – Triangular matrix <cite>a</cite>.</li>
-<li><strong>b</strong> (<em>tensor</em>) – RHS <cite>b</cite>.</li>
-<li><strong>lower_a</strong> (<em>bool</em><em>, </em><em>optional</em>) – Indicate that <cite>a</cite> is lower triangular
-instead of upper triangular. Defaults to <cite>True</cite>.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – Triangular matrix <cite>a</cite>.</p></li>
+<li><p><strong>b</strong> (<em>tensor</em>) – RHS <cite>b</cite>.</p></li>
+<li><p><strong>lower_a</strong> (<em>bool</em><em>, </em><em>optional</em>) – Indicate that <cite>a</cite> is lower triangular
+instead of upper triangular. Defaults to <cite>True</cite>.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Solution <cite>x</cite>.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tensor</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Solution <cite>x</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="lab.linear_algebra.outer">
 <code class="descclassname">lab.linear_algebra.</code><code class="descname">outer</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#outer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.outer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the outer product between two vectors.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>a</strong> (<em>vector</em>) – First vector.</li>
-<li><strong>b</strong> (<em>vector</em>) – Second vector.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>vector</em>) – First vector.</p></li>
+<li><p><strong>b</strong> (<em>vector</em>) – Second vector.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Outer product of <cite>a</cite> and <cite>b</cite>.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tensor</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Outer product of <cite>a</cite> and <cite>b</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="lab.linear_algebra.reg">
 <code class="descclassname">lab.linear_algebra.</code><code class="descname">reg</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#reg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.reg" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a diagonal to a matrix.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>a</strong> (<em>matrix</em>) – Matrix to add a diagonal to.</li>
-<li><strong>diag</strong> (<em>float</em><em>, </em><em>optional</em>) – Magnitude of the diagonal to add. Defaults to
-<cite>.linear_algebra.epsilon</cite>.</li>
-<li><strong>clip</strong> (<em>bool</em><em>, </em><em>optional</em>) – Let <cite>diag</cite> be at least <cite>.linear_algebra.epsilon</cite>.
-Defaults to <cite>True</cite>.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>matrix</em>) – Matrix to add a diagonal to.</p></li>
+<li><p><strong>diag</strong> (<em>float</em><em>, </em><em>optional</em>) – Magnitude of the diagonal to add. Defaults to
+<cite>.linear_algebra.epsilon</cite>.</p></li>
+<li><p><strong>clip</strong> (<em>bool</em><em>, </em><em>optional</em>) – Let <cite>diag</cite> be at least <cite>.linear_algebra.epsilon</cite>.
+Defaults to <cite>True</cite>.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Regularised version of <cite>a</cite>.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">matrix</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Regularised version of <cite>a</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>matrix</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
@@ -453,29 +424,24 @@ Defaults to <cite>True</cite>.</li>
 <dd><p>Compute the square the Euclidean norm of the pairwise
 differences between two matrices where rows correspond to elements and
 columns to features.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>a</strong> (<em>matrix</em>) – First matrix.</li>
-<li><strong>b</strong> (<em>matrix</em><em>, </em><em>optional</em>) – Second matrix. Defaults to <cite>a</cite>.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>matrix</em>) – First matrix.</p></li>
+<li><p><strong>b</strong> (<em>matrix</em><em>, </em><em>optional</em>) – Second matrix. Defaults to <cite>a</cite>.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><dl class="docutils">
-<dt>Square of the Euclidean norm of the pairwise differences</dt>
-<dd><p class="first last">between the elements of <cite>a</cite> and <cite>b</cite>.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Square of the Euclidean norm of the pairwise differences</dt><dd><p>between the elements of <cite>a</cite> and <cite>b</cite>.</p>
 </dd>
 </dl>
 </p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">matrix</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>matrix</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
@@ -483,29 +449,24 @@ columns to features.</p>
 <code class="descclassname">lab.linear_algebra.</code><code class="descname">pw_dists</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#pw_dists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.pw_dists" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the Euclidean norm of the pairwise differences between two
 matrices where rows correspond to elements and columns to features.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>a</strong> (<em>matrix</em>) – First matrix.</li>
-<li><strong>b</strong> (<em>matrix</em><em>, </em><em>optional</em>) – Second matrix. Defaults to <cite>a</cite>.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>matrix</em>) – First matrix.</p></li>
+<li><p><strong>b</strong> (<em>matrix</em><em>, </em><em>optional</em>) – Second matrix. Defaults to <cite>a</cite>.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><dl class="docutils">
-<dt>Euclidean norm of the pairwise differences between the</dt>
-<dd><p class="first last">elements of <cite>a</cite> and <cite>b</cite>.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Euclidean norm of the pairwise differences between the</dt><dd><p>elements of <cite>a</cite> and <cite>b</cite>.</p>
 </dd>
 </dl>
 </p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">matrix</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>matrix</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
@@ -514,29 +475,24 @@ matrices where rows correspond to elements and columns to features.</p>
 <dd><p>Compute the square the Euclidean norm of the element-wise
 differences between two matrices where rows correspond to elements and
 columns to features.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>a</strong> (<em>matrix</em>) – First matrix.</li>
-<li><strong>b</strong> (<em>matrix</em><em>, </em><em>optional</em>) – Second matrix. Defaults to <cite>a</cite>.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>matrix</em>) – First matrix.</p></li>
+<li><p><strong>b</strong> (<em>matrix</em><em>, </em><em>optional</em>) – Second matrix. Defaults to <cite>a</cite>.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><dl class="docutils">
-<dt>Square of the Euclidean norm of the element-wise differences</dt>
-<dd><p class="first last">between the elements of <cite>a</cite> and <cite>b</cite>.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Square of the Euclidean norm of the element-wise differences</dt><dd><p>between the elements of <cite>a</cite> and <cite>b</cite>.</p>
 </dd>
 </dl>
 </p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">matrix</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>matrix</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
@@ -544,29 +500,24 @@ columns to features.</p>
 <code class="descclassname">lab.linear_algebra.</code><code class="descname">ew_dists</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#ew_dists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.ew_dists" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the Euclidean norm of the element-wise differences between two
 matrices where rows correspond to elements and columns to features.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>a</strong> (<em>matrix</em>) – First matrix.</li>
-<li><strong>b</strong> (<em>matrix</em><em>, </em><em>optional</em>) – Second matrix. Defaults to <cite>a</cite>.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>matrix</em>) – First matrix.</p></li>
+<li><p><strong>b</strong> (<em>matrix</em><em>, </em><em>optional</em>) – Second matrix. Defaults to <cite>a</cite>.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><dl class="docutils">
-<dt>Euclidean norm of the element-wise differences between the</dt>
-<dd><p class="first last">elements of <cite>a</cite> and <cite>b</cite>.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Euclidean norm of the element-wise differences between the</dt><dd><p>elements of <cite>a</cite> and <cite>b</cite>.</p>
 </dd>
 </dl>
 </p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">matrix</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>matrix</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
@@ -575,29 +526,24 @@ matrices where rows correspond to elements and columns to features.</p>
 <dd><p>Compute the square the Euclidean norm of the pairwise
 sums between two matrices where rows correspond to elements and
 columns to features.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>a</strong> (<em>matrix</em>) – First matrix.</li>
-<li><strong>b</strong> (<em>matrix</em><em>, </em><em>optional</em>) – Second matrix. Defaults to <cite>a</cite>.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>matrix</em>) – First matrix.</p></li>
+<li><p><strong>b</strong> (<em>matrix</em><em>, </em><em>optional</em>) – Second matrix. Defaults to <cite>a</cite>.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><dl class="docutils">
-<dt>Square of the Euclidean norm of the pairwise sums</dt>
-<dd><p class="first last">between the elements of <cite>a</cite> and <cite>b</cite>.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Square of the Euclidean norm of the pairwise sums</dt><dd><p>between the elements of <cite>a</cite> and <cite>b</cite>.</p>
 </dd>
 </dl>
 </p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">matrix</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>matrix</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
@@ -605,29 +551,24 @@ columns to features.</p>
 <code class="descclassname">lab.linear_algebra.</code><code class="descname">pw_sums</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#pw_sums"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.pw_sums" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the Euclidean norm of the pairwise sums between two
 matrices where rows correspond to elements and columns to features.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>a</strong> (<em>matrix</em>) – First matrix.</li>
-<li><strong>b</strong> (<em>matrix</em><em>, </em><em>optional</em>) – Second matrix. Defaults to <cite>a</cite>.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>matrix</em>) – First matrix.</p></li>
+<li><p><strong>b</strong> (<em>matrix</em><em>, </em><em>optional</em>) – Second matrix. Defaults to <cite>a</cite>.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><dl class="docutils">
-<dt>Euclidean norm of the pairwise sums between the</dt>
-<dd><p class="first last">elements of <cite>a</cite> and <cite>b</cite>.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Euclidean norm of the pairwise sums between the</dt><dd><p>elements of <cite>a</cite> and <cite>b</cite>.</p>
 </dd>
 </dl>
 </p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">matrix</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>matrix</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
@@ -636,29 +577,24 @@ matrices where rows correspond to elements and columns to features.</p>
 <dd><p>Compute the square the Euclidean norm of the element-wise
 sums between two matrices where rows correspond to elements and
 columns to features.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>a</strong> (<em>matrix</em>) – First matrix.</li>
-<li><strong>b</strong> (<em>matrix</em><em>, </em><em>optional</em>) – Second matrix. Defaults to <cite>a</cite>.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>matrix</em>) – First matrix.</p></li>
+<li><p><strong>b</strong> (<em>matrix</em><em>, </em><em>optional</em>) – Second matrix. Defaults to <cite>a</cite>.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><dl class="docutils">
-<dt>Square of the Euclidean norm of the element-wise sums</dt>
-<dd><p class="first last">between the elements of <cite>a</cite> and <cite>b</cite>.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Square of the Euclidean norm of the element-wise sums</dt><dd><p>between the elements of <cite>a</cite> and <cite>b</cite>.</p>
 </dd>
 </dl>
 </p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">matrix</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>matrix</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
@@ -666,29 +602,24 @@ columns to features.</p>
 <code class="descclassname">lab.linear_algebra.</code><code class="descname">ew_sums</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#ew_sums"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.ew_sums" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the Euclidean norm of the element-wise sums between two
 matrices where rows correspond to elements and columns to features.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>a</strong> (<em>matrix</em>) – First matrix.</li>
-<li><strong>b</strong> (<em>matrix</em><em>, </em><em>optional</em>) – Second matrix. Defaults to <cite>a</cite>.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>matrix</em>) – First matrix.</p></li>
+<li><p><strong>b</strong> (<em>matrix</em><em>, </em><em>optional</em>) – Second matrix. Defaults to <cite>a</cite>.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><dl class="docutils">
-<dt>Euclidean norm of the element-wise sums between the</dt>
-<dd><p class="first last">elements of <cite>a</cite> and <cite>b</cite>.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Euclidean norm of the element-wise sums between the</dt><dd><p>elements of <cite>a</cite> and <cite>b</cite>.</p>
 </dd>
 </dl>
 </p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">matrix</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>matrix</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -704,7 +635,7 @@ matrices where rows correspond to elements and columns to features.</p>
         <a href="lab.numpy.html" class="btn btn-neutral float-right" title="lab.numpy package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="lab.generic.html" class="btn btn-neutral" title="lab.generic module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="lab.generic.html" class="btn btn-neutral float-left" title="lab.generic module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -713,7 +644,7 @@ matrices where rows correspond to elements and columns to features.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Wessel Bruinsma.
+        &copy; Copyright 2017, Wessel Bruinsma
 
     </p>
   </div>
@@ -730,33 +661,16 @@ matrices where rows correspond to elements and columns to features.</p>
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../',
-            VERSION:'0.1.0',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../_static/jquery.js"></script>
-      <script type="text/javascript" src="../_static/underscore.js"></script>
-      <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  <script type="text/javascript" src="../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

@@ -17,34 +17,36 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Application Programming Interface" href="api.html" />
     <link rel="prev" title="Welcome" href="index.html" /> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -174,21 +176,23 @@
 <p>A generic interface for linear algebra backends: code it once, run it on
 any backend</p>
 <ul class="simple">
-<li><a class="reference external" href="#installation">Installation</a></li>
-<li><a class="reference external" href="#basic-usage">Basic Usage</a></li>
-<li><a class="reference external" href="#list-of-types">List of Types</a><ul>
-<li><a class="reference external" href="#general">General</a></li>
-<li><a class="reference external" href="#numpy">NumPy</a></li>
-<li><a class="reference external" href="#tensorflow">TensorFlow</a></li>
-<li><a class="reference external" href="#pytorch">PyTorch</a></li>
+<li><p><a class="reference external" href="#installation">Installation</a></p></li>
+<li><p><a class="reference external" href="#basic-usage">Basic Usage</a></p></li>
+<li><p><a class="reference external" href="#list-of-types">List of Types</a></p>
+<ul>
+<li><p><a class="reference external" href="#general">General</a></p></li>
+<li><p><a class="reference external" href="#numpy">NumPy</a></p></li>
+<li><p><a class="reference external" href="#tensorflow">TensorFlow</a></p></li>
+<li><p><a class="reference external" href="#pytorch">PyTorch</a></p></li>
 </ul>
 </li>
-<li><a class="reference external" href="#list-of-methods">List of Methods</a><ul>
-<li><a class="reference external" href="#constants">Constants</a></li>
-<li><a class="reference external" href="#generic">Generic</a></li>
-<li><a class="reference external" href="#linear-algebra">Linear Algebra</a></li>
-<li><a class="reference external" href="#random">Random</a></li>
-<li><a class="reference external" href="#shaping">Shaping</a></li>
+<li><p><a class="reference external" href="#list-of-methods">List of Methods</a></p>
+<ul>
+<li><p><a class="reference external" href="#constants">Constants</a></p></li>
+<li><p><a class="reference external" href="#generic">Generic</a></p></li>
+<li><p><a class="reference external" href="#linear-algebra">Linear Algebra</a></p></li>
+<li><p><a class="reference external" href="#random">Random</a></p></li>
+<li><p><a class="reference external" href="#shaping">Shaping</a></p></li>
 </ul>
 </li>
 </ul>
@@ -208,34 +212,36 @@ sequence of commands:</p>
 <p>The basic use case for the package is to write code that automatically
 determines the backend to use depending on the types of its arguments.</p>
 <p>Example:</p>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">lab</span> <span class="k">as</span> <span class="nn">B</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">lab</span> <span class="kn">as</span> <span class="nn">B</span>
+<span class="kn">import</span> <span class="nn">lab.torch</span>       <span class="c1"># Load the PyTorch extension.</span>
+<span class="kn">import</span> <span class="nn">lab.tensorflow</span>  <span class="c1"># Load the TensorFlow extension.</span>
 
 <span class="k">def</span> <span class="nf">objective</span><span class="p">(</span><span class="n">matrix</span><span class="p">):</span>
-    <span class="n">outer_product</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">matrix</span><span class="p">,</span> <span class="n">tr_b</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">outer_product</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">matrix</span><span class="p">,</span> <span class="n">tr_b</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">outer_product</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>By default, the PyTorch and TensorFlow extensions are not loaded to save
+startup time. Alternatively, one can directly <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">lab.torch</span> <span class="pre">as</span> <span class="pre">B</span></code>
+or <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">lab.tensorflow</span> <span class="pre">as</span> <span class="pre">B</span></code>.</p>
 <p>Run it with NumPy and AutoGrad:</p>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">autograd.numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">autograd.numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">autograd</span> <span class="k">import</span> <span class="n">grad</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">grad</span><span class="p">(</span><span class="n">objective</span><span class="p">)(</span><span class="n">B</span><span class="o">.</span><span class="n">randn</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">))</span>
-<span class="go">array([[-0.35247881, -0.4144402 ],</span>
-<span class="go">       [-0.35247881, -0.4144402 ]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">objective</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="go">0.15772589216756833</span>
 </pre></div>
 </div>
 <p>Run it with TensorFlow:</p>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="kn">as</span> <span class="nn">tf</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">objective</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">randn</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">tf</span><span class="o">.</span><span class="n">float64</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">objective</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 <span class="go">&lt;tf.Tensor &#39;Mean:0&#39; shape=() dtype=float64&gt;</span>
 </pre></div>
 </div>
 <p>Run it with PyTorch:</p>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">torch</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">torch</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">objective</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">randn</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">float64</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">objective</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 <span class="go">tensor(1.9557, dtype=torch.float64)</span>
 </pre></div>
 </div>
@@ -245,19 +251,23 @@ determines the backend to use depending on the types of its arguments.</p>
 <p>This section lists all available types, which can be used to check types
 of objects or extend functions.</p>
 <p>Example:</p>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">lab</span> <span class="k">as</span> <span class="nn">B</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">lab</span> <span class="kn">as</span> <span class="nn">B</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">plum</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">])],</span> <span class="n">B</span><span class="o">.</span><span class="n">NPList</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">])],</span> <span class="n">List</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">NPNumeric</span><span class="p">))</span>
 <span class="go">True</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">])],</span> <span class="n">B</span><span class="o">.</span><span class="n">TFList</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">])],</span> <span class="n">List</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">TFNumeric</span><span class="p">))</span>
 <span class="go">False</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="kn">as</span> <span class="nn">tf</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">((</span><span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">(</span><span class="mf">1.</span><span class="p">),</span> <span class="n">tf</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">5</span><span class="p">)),</span> <span class="n">B</span><span class="o">.</span><span class="n">TFTuple</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">lab.tensorflow</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">((</span><span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">(</span><span class="mf">1.</span><span class="p">),</span> <span class="n">tf</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">5</span><span class="p">)),</span> <span class="n">Tuple</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">TFNumeric</span><span class="p">))</span>
 <span class="go">True</span>
 </pre></div>
 </div>
@@ -268,9 +278,8 @@ of objects or extend functions.</p>
 <span class="n">Bool</span>         <span class="c1"># Booleans</span>
 <span class="n">Number</span>       <span class="c1"># Numbers</span>
 <span class="n">Numeric</span>      <span class="c1"># Numerical objects, including booleans</span>
-<span class="n">ListOrTuple</span>  <span class="c1"># Lists or tuples</span>
-<span class="n">Shape</span>        <span class="c1"># Shapes</span>
-<span class="n">DType</span>        <span class="c1"># Data typse</span>
+<span class="n">Dimension</span>    <span class="c1"># Dimensions of shapes</span>
+<span class="n">DType</span>        <span class="c1"># Data type</span>
 <span class="n">Framework</span>    <span class="c1"># Anything accepted by supported frameworks</span>
 </pre></div>
 </div>
@@ -278,42 +287,30 @@ of objects or extend functions.</p>
 <div class="section" id="numpy">
 <h3>NumPy<a class="headerlink" href="#numpy" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">NPNumeric</span>
-<span class="n">NPList</span>
-<span class="n">NPTuple</span>
-<span class="n">NPList</span>
-<span class="n">NPListOrTuple</span>
-<span class="n">NPShape</span>
+<span class="n">NPDimension</span>
 <span class="n">NPDType</span>
 
-<span class="n">NP</span>             <span class="c1"># Anything NumPy</span>
+<span class="n">NP</span>           <span class="c1"># Anything NumPy</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="tensorflow">
 <h3>TensorFlow<a class="headerlink" href="#tensorflow" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TFNumeric</span>
-<span class="n">TFList</span>
-<span class="n">TFTuple</span>
-<span class="n">TFList</span>
-<span class="n">TFListOrTuple</span>
-<span class="n">TFShape</span>
+<span class="n">TFDimension</span>
 <span class="n">TFDType</span>
 
-<span class="n">TF</span>             <span class="c1"># Anything TensorFlow</span>
+<span class="n">TF</span>           <span class="c1"># Anything TensorFlow</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="pytorch">
 <h3>PyTorch<a class="headerlink" href="#pytorch" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TorchNumeric</span>
-<span class="n">TorchList</span>
-<span class="n">TorchTuple</span>
-<span class="n">TorchList</span>
-<span class="n">TorchListOrTuple</span>
-<span class="n">TorchShape</span>
+<span class="n">TorchDimension</span>
 <span class="n">TorchDType</span>
 
-<span class="n">Torch</span>             <span class="c1"># Anything PyTorch</span>
+<span class="n">Torch</span>        <span class="c1"># Anything PyTorch</span>
 </pre></div>
 </div>
 </div>
@@ -322,27 +319,29 @@ of objects or extend functions.</p>
 <h2>List of Methods<a class="headerlink" href="#list-of-methods" title="Permalink to this headline">¶</a></h2>
 <p>This section lists all available constants and methods.</p>
 <ul class="simple">
-<li>Arguments <em>must</em> be given as arguments and keyword arguments <em>must</em>
+<li><p>Arguments <em>must</em> be given as arguments and keyword arguments <em>must</em>
 be given as keyword arguments. For example, <code class="docutils literal notranslate"><span class="pre">zeros((2,</span> <span class="pre">2))</span></code> is
 valid, but <code class="docutils literal notranslate"><span class="pre">zeros(shape=(2,</span> <span class="pre">2))</span></code> is not; and
-<code class="docutils literal notranslate"><span class="pre">sum(tensor,</span> <span class="pre">axis=1)</span></code> is valid, but <code class="docutils literal notranslate"><span class="pre">sum(tensor,</span> <span class="pre">1)</span></code> is not.</li>
-<li>The names of arguments are indicative of their function:<ul>
-<li><code class="docutils literal notranslate"><span class="pre">a</span></code>, <code class="docutils literal notranslate"><span class="pre">b</span></code>, and <code class="docutils literal notranslate"><span class="pre">c</span></code> indicate general tensors.</li>
-<li><code class="docutils literal notranslate"><span class="pre">dtype</span></code> indicates a data type. E.g, <code class="docutils literal notranslate"><span class="pre">np.float32</span></code> or
-<code class="docutils literal notranslate"><span class="pre">tf.float64</span></code>, and <code class="docutils literal notranslate"><span class="pre">rand(np.float32)</span></code> creates a NumPy random
+<code class="docutils literal notranslate"><span class="pre">sum(tensor,</span> <span class="pre">axis=1)</span></code> is valid, but <code class="docutils literal notranslate"><span class="pre">sum(tensor,</span> <span class="pre">1)</span></code> is not.</p></li>
+<li><p>The names of arguments are indicative of their function:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">a</span></code>, <code class="docutils literal notranslate"><span class="pre">b</span></code>, and <code class="docutils literal notranslate"><span class="pre">c</span></code> indicate general tensors.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dtype</span></code> indicates a data type. E.g, <code class="docutils literal notranslate"><span class="pre">np.float32</span></code> or
+<code class="docutils literal notranslate"><span class="pre">tf.float64</span></code>; and <code class="docutils literal notranslate"><span class="pre">rand(np.float32)</span></code> creates a NumPy random
 number, whereas <code class="docutils literal notranslate"><span class="pre">rand(tf.float64)</span></code> creates a TensorFlow random
-number.</li>
-<li><code class="docutils literal notranslate"><span class="pre">shape</span></code> indicates a shape. E.g., <code class="docutils literal notranslate"><span class="pre">(2,</span> <span class="pre">2)</span></code> or <code class="docutils literal notranslate"><span class="pre">[2,</span> <span class="pre">2]</span></code>.</li>
-<li><code class="docutils literal notranslate"><span class="pre">axis</span></code> indicates an axis over which the function may perform its
-action.</li>
-<li><code class="docutils literal notranslate"><span class="pre">ref</span></code> indicates a <em>reference tensor</em> from which a property (like
+number.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">shape</span></code> indicates a shape. The dimensions of a shape as always
+given as separate arguments to the function.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">axis</span></code> indicates an axis over which the function may perform its
+action.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ref</span></code> indicates a <em>reference tensor</em> from which a property (like
 its data type) will be inferred. E.g., <code class="docutils literal notranslate"><span class="pre">zeros(tensor)</span></code> creates a
 tensor full or zeros of the same shape and data type as
-<code class="docutils literal notranslate"><span class="pre">tensor</span></code>.</li>
+<code class="docutils literal notranslate"><span class="pre">tensor</span></code>.</p></li>
 </ul>
 </li>
 </ul>
-<p>See the documentation for more detailled descriptions of each function.</p>
+<p>See the documentation for more detailed descriptions of each function.</p>
 <div class="section" id="constants">
 <h3>Constants<a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nan</span>
@@ -355,22 +354,16 @@ tensor full or zeros of the same shape and data type as
 </div>
 <div class="section" id="generic">
 <h3>Generic<a class="headerlink" href="#generic" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)</span>
-<span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
-<span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">ref</span><span class="p">)</span>
-<span class="n">zeros</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">zeros</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">zeros</span><span class="p">(</span><span class="o">*</span><span class="n">shape</span><span class="p">)</span>
 <span class="n">zeros</span><span class="p">(</span><span class="n">ref</span><span class="p">)</span>
 
-<span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)</span>
-<span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
-<span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">ref</span><span class="p">)</span>
-<span class="n">ones</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)</span>
+<span class="n">ones</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">ones</span><span class="p">(</span><span class="o">*</span><span class="n">shape</span><span class="p">)</span>
 <span class="n">ones</span><span class="p">(</span><span class="n">ref</span><span class="p">)</span>
 
-<span class="n">eye</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)</span>
-<span class="n">eye</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
-<span class="n">eye</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">ref</span><span class="p">)</span>
-<span class="n">eye</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)</span>
+<span class="n">eye</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">eye</span><span class="p">(</span><span class="o">*</span><span class="n">shape</span><span class="p">)</span>
 <span class="n">eye</span><span class="p">(</span><span class="n">ref</span><span class="p">)</span>
 
 <span class="n">linspace</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span>
@@ -418,7 +411,7 @@ tensor full or zeros of the same shape and data type as
 </div>
 <div class="section" id="linear-algebra">
 <h3>Linear Algebra<a class="headerlink" href="#linear-algebra" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">transpose</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">perm</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="p">(</span><span class="n">alias</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">transpose</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">perm</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="p">(</span><span class="n">alias</span><span class="p">:</span> <span class="n">t</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
 <span class="n">matmul</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">tr_a</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tr_b</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="p">(</span><span class="n">alias</span><span class="p">:</span> <span class="n">mm</span><span class="p">,</span> <span class="n">dot</span><span class="p">)</span>
 <span class="n">trace</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">axis2</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">kron</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
@@ -455,13 +448,13 @@ tensor full or zeros of the same shape and data type as
 <h3>Random<a class="headerlink" href="#random" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_random_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
 
-<span class="n">rand</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)</span>
-<span class="n">rand</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">rand</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">rand</span><span class="p">(</span><span class="o">*</span><span class="n">shape</span><span class="p">)</span>
 <span class="n">rand</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
 <span class="n">rand</span><span class="p">()</span>
 
-<span class="n">randn</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)</span>
-<span class="n">randn</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">randn</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">randn</span><span class="p">(</span><span class="o">*</span><span class="n">shape</span><span class="p">)</span>
 <span class="n">randn</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
 <span class="n">randn</span><span class="p">()</span>
 </pre></div>
@@ -482,11 +475,11 @@ tensor full or zeros of the same shape and data type as
 <span class="n">flatten</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 <span class="n">vec_to_tril</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 <span class="n">tril_to_vec</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-<span class="n">stack</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">stack</span><span class="p">(</span><span class="o">*</span><span class="n">elements</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">unstack</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">reshape</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,))</span>
-<span class="n">concat</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">concat2d</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">reshape</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">concat</span><span class="p">(</span><span class="o">*</span><span class="n">elements</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">concat2d</span><span class="p">(</span><span class="o">*</span><span class="n">rows</span><span class="p">)</span>
 <span class="n">take</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -505,7 +498,7 @@ tensor full or zeros of the same shape and data type as
         <a href="api.html" class="btn btn-neutral float-right" title="Application Programming Interface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="index.html" class="btn btn-neutral" title="Welcome" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -514,7 +507,7 @@ tensor full or zeros of the same shape and data type as
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Wessel Bruinsma.
+        &copy; Copyright 2017, Wessel Bruinsma
 
     </p>
   </div>
@@ -531,33 +524,16 @@ tensor full or zeros of the same shape and data type as
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'0.1.0',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

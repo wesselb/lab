@@ -17,32 +17,34 @@
   
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -151,8 +153,9 @@
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
 <span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">dispatch</span><span class="p">,</span> <span class="n">B</span>
-<span class="kn">from</span> <span class="nn">.types</span> <span class="k">import</span> <span class="n">Numeric</span><span class="p">,</span> <span class="n">DType</span><span class="p">,</span> <span class="n">Shape</span><span class="p">,</span> <span class="n">default_dtype</span><span class="p">,</span> <span class="n">Number</span><span class="p">,</span> <span class="n">Int</span>
+<span class="kn">from</span> <span class="nn">.types</span> <span class="k">import</span> <span class="n">Numeric</span><span class="p">,</span> <span class="n">DType</span><span class="p">,</span> <span class="n">default_dtype</span><span class="p">,</span> <span class="n">Dimension</span>
 <span class="kn">from</span> <span class="nn">.util</span> <span class="k">import</span> <span class="n">abstract</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;nan&#39;</span><span class="p">,</span>
@@ -215,175 +218,104 @@
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
 
-<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Shape</span><span class="p">,</span> <span class="n">DType</span><span class="p">)</span>
-<span class="nd">@abstract</span><span class="p">()</span>
-<span class="k">def</span> <span class="nf">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">DType</span><span class="p">,</span> <span class="p">[</span><span class="n">Dimension</span><span class="p">])</span>
+<span class="nd">@abstract</span><span class="p">(</span><span class="n">promote</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">zeros</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
     <span class="sd">&quot;&quot;&quot;Create a tensor of zeros.</span>
 
+<span class="sd">    Can also give a reference tensor whose data type and shape will be used to</span>
+<span class="sd">    construct a tensor of zeros.</span>
+
 <span class="sd">    Args:</span>
-<span class="sd">        shape (shape or tensor): Shape of the tensor.</span>
-<span class="sd">        dtype (dtype or tensor, optional): Data type. Defaults to</span>
-<span class="sd">            `.types.default_dtype` or the data type of the provided tensor.</span>
+<span class="sd">        dtype (dtype, optional): Data type. Defaults to</span>
+<span class="sd">            `.types.default_dtype`.</span>
+<span class="sd">        *shape (shape): Shape of the tensor.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        tensor: Matrix of zeros of shape `shape` and data type `dtype`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 
-<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Int</span><span class="p">,</span> <span class="n">DType</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">zeros</span><span class="p">((</span><span class="n">shape</span><span class="p">,),</span> <span class="n">dtype</span><span class="p">)</span>
-
-
-<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Shape</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">default_dtype</span><span class="p">)</span>
-
-
-<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Int</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">zeros</span><span class="p">((</span><span class="n">shape</span><span class="p">,),</span> <span class="n">default_dtype</span><span class="p">)</span>
-
-
-<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Shape</span><span class="p">,</span> <span class="n">Numeric</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">ref</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">ref</span><span class="p">))</span>
-
-
-<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Int</span><span class="p">,</span> <span class="n">Numeric</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">ref</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">zeros</span><span class="p">((</span><span class="n">shape</span><span class="p">,),</span> <span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">ref</span><span class="p">))</span>
-
-
-<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Int</span><span class="p">,</span> <span class="n">Number</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">ref</span><span class="p">):</span>
-    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Called &quot;zeros&quot; as &quot;zeros(shape, ref)&quot; where &quot;ref&quot; is &#39;</span>
-                       <span class="s1">&#39;an integer. Did you mean to call &quot;zeros(shape)&quot;?&#39;</span><span class="p">)</span>
-
-
-<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">,</span> <span class="n">DType</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">zeros</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">dtype</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">zeros</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">ref</span><span class="p">),</span> <span class="n">dtype</span><span class="p">)</span>
+<span class="nd">@dispatch</span><span class="o">.</span><span class="n">multi</span><span class="p">((</span><span class="nb">int</span><span class="p">,),</span>  <span class="c1"># Single integer is not a reference.</span>
+                <span class="p">([</span><span class="n">Dimension</span><span class="p">],))</span>
+<span class="k">def</span> <span class="nf">zeros</span><span class="p">(</span><span class="o">*</span><span class="n">shape</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">zeros</span><span class="p">(</span><span class="n">default_dtype</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="zeros"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.zeros">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">zeros</span><span class="p">(</span><span class="n">ref</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">zeros</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">ref</span><span class="p">),</span> <span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">ref</span><span class="p">))</span></div>
+    <span class="k">return</span> <span class="n">zeros</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">ref</span><span class="p">),</span> <span class="o">*</span><span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">ref</span><span class="p">))</span></div>
 
 
-<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Shape</span><span class="p">,</span> <span class="n">DType</span><span class="p">)</span>
-<span class="nd">@abstract</span><span class="p">()</span>
-<span class="k">def</span> <span class="nf">ones</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">DType</span><span class="p">,</span> <span class="p">[</span><span class="n">Dimension</span><span class="p">])</span>
+<span class="nd">@abstract</span><span class="p">(</span><span class="n">promote</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">ones</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
     <span class="sd">&quot;&quot;&quot;Create a tensor of ones.</span>
 
+<span class="sd">    Can also give a reference tensor whose data type and shape will be used to</span>
+<span class="sd">    construct a tensor of ones.</span>
+
 <span class="sd">    Args:</span>
-<span class="sd">        shape (shape or tensor): Shape of the tensor.</span>
-<span class="sd">        dtype (dtype or tensor, optional): Data type. Defaults to</span>
-<span class="sd">            `.types.default_dtype` or the data type of the provided tensor.</span>
+<span class="sd">        dtype (dtype, optional): Data type. Defaults to</span>
+<span class="sd">            `.types.default_dtype`.</span>
+<span class="sd">        *shape (shape or ): Shape of the tensor.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        tensor: Matrix of ones of shape `shape` and data type `dtype`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 
-<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Int</span><span class="p">,</span> <span class="n">DType</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">ones</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">ones</span><span class="p">((</span><span class="n">shape</span><span class="p">,),</span> <span class="n">dtype</span><span class="p">)</span>
-
-
-<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Shape</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">ones</span><span class="p">(</span><span class="n">shape</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">default_dtype</span><span class="p">)</span>
-
-
-<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Int</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">ones</span><span class="p">(</span><span class="n">shape</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">ones</span><span class="p">((</span><span class="n">shape</span><span class="p">,),</span> <span class="n">default_dtype</span><span class="p">)</span>
-
-
-<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Shape</span><span class="p">,</span> <span class="n">Numeric</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">ones</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">ref</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">ref</span><span class="p">))</span>
-
-
-<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Int</span><span class="p">,</span> <span class="n">Numeric</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">ones</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">ref</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">ones</span><span class="p">((</span><span class="n">shape</span><span class="p">,),</span> <span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">ref</span><span class="p">))</span>
-
-
-<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Int</span><span class="p">,</span> <span class="n">Number</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">ones</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">ref</span><span class="p">):</span>
-    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Called &quot;ones&quot; as &quot;ones(shape, ref)&quot; where &quot;ref&quot; is &#39;</span>
-                       <span class="s1">&#39;an integer. Did you mean to call &quot;ones(shape)&quot;?&#39;</span><span class="p">)</span>
-
-
-<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">,</span> <span class="n">DType</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">ones</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">dtype</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">ones</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">ref</span><span class="p">),</span> <span class="n">dtype</span><span class="p">)</span>
+<span class="nd">@dispatch</span><span class="o">.</span><span class="n">multi</span><span class="p">((</span><span class="nb">int</span><span class="p">,),</span>  <span class="c1"># Single integer is not a reference.</span>
+                <span class="p">([</span><span class="n">Dimension</span><span class="p">],))</span>
+<span class="k">def</span> <span class="nf">ones</span><span class="p">(</span><span class="o">*</span><span class="n">shape</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">ones</span><span class="p">(</span><span class="n">default_dtype</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="ones"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.ones">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">ones</span><span class="p">(</span><span class="n">ref</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">ones</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">ref</span><span class="p">),</span> <span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">ref</span><span class="p">))</span></div>
+    <span class="k">return</span> <span class="n">ones</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">ref</span><span class="p">),</span> <span class="o">*</span><span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">ref</span><span class="p">))</span></div>
 
 
-<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Shape</span><span class="p">,</span> <span class="n">DType</span><span class="p">)</span>
-<span class="nd">@abstract</span><span class="p">()</span>
-<span class="k">def</span> <span class="nf">eye</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">DType</span><span class="p">,</span> <span class="n">Dimension</span><span class="p">,</span> <span class="n">Dimension</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">(</span><span class="n">promote</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">eye</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
     <span class="sd">&quot;&quot;&quot;Create an identity matrix.</span>
 
+<span class="sd">    Can also give a reference tensor whose data type and shape will be used to</span>
+<span class="sd">    construct an identity matrix.</span>
+
 <span class="sd">    Args:</span>
-<span class="sd">        shape (int or shape or tensor): Shape of the matrix.</span>
-<span class="sd">        dtype (dtype or tensor, optional): Data type. Defaults to</span>
-<span class="sd">            `.types.default_dtype` or the data type of the provided tensor.</span>
+<span class="sd">        dtype (dtype, optional): Data type. Defaults to</span>
+<span class="sd">            `.types.default_dtype`.</span>
+<span class="sd">        *shape (shape): Shape of the matrix.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        tensor: Identity matrix of shape `shape` and data type `dtype`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 
-<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Int</span><span class="p">,</span> <span class="n">DType</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">eye</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">eye</span><span class="p">((</span><span class="n">shape</span><span class="p">,</span> <span class="n">shape</span><span class="p">),</span> <span class="n">dtype</span><span class="p">)</span>
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">DType</span><span class="p">,</span> <span class="n">Dimension</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">eye</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">eye</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
 
-<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Shape</span><span class="p">)</span>
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Dimension</span><span class="p">,</span> <span class="p">[</span><span class="n">Dimension</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">eye</span><span class="p">(</span><span class="o">*</span><span class="n">shape</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">eye</span><span class="p">(</span><span class="n">default_dtype</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">)</span>
+
+
+<span class="nd">@dispatch</span><span class="o">.</span><span class="n">multi</span><span class="p">((</span><span class="nb">int</span><span class="p">,),</span>  <span class="c1"># Single integer is not a reference.</span>
+                <span class="p">(</span><span class="n">Dimension</span><span class="p">,))</span>
 <span class="k">def</span> <span class="nf">eye</span><span class="p">(</span><span class="n">shape</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">eye</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">default_dtype</span><span class="p">)</span>
-
-
-<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Int</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">eye</span><span class="p">(</span><span class="n">shape</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">eye</span><span class="p">((</span><span class="n">shape</span><span class="p">,</span> <span class="n">shape</span><span class="p">),</span> <span class="n">default_dtype</span><span class="p">)</span>
-
-
-<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Shape</span><span class="p">,</span> <span class="n">Numeric</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">eye</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">ref</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">eye</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">ref</span><span class="p">))</span>
-
-
-<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Int</span><span class="p">,</span> <span class="n">Numeric</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">eye</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">ref</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">eye</span><span class="p">((</span><span class="n">shape</span><span class="p">,</span> <span class="n">shape</span><span class="p">),</span> <span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">ref</span><span class="p">))</span>
-
-
-<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Int</span><span class="p">,</span> <span class="n">Number</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">eye</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">ref</span><span class="p">):</span>
-    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Called &quot;eye&quot; as &quot;eye(shape, ref)&quot; where &quot;ref&quot; is &#39;</span>
-                       <span class="s1">&#39;an integer. Did you mean to call &quot;eye(shape)&quot;?&#39;</span><span class="p">)</span>
-
-
-<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">,</span> <span class="n">DType</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">eye</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">dtype</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">eye</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">ref</span><span class="p">),</span> <span class="n">dtype</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">eye</span><span class="p">(</span><span class="n">default_dtype</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">shape</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="eye"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.eye">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">eye</span><span class="p">(</span><span class="n">ref</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">eye</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">ref</span><span class="p">),</span> <span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">ref</span><span class="p">))</span></div>
+    <span class="k">return</span> <span class="n">eye</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">ref</span><span class="p">),</span> <span class="o">*</span><span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">ref</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="linspace"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.linspace">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">Int</span><span class="p">)</span>
+<div class="viewcode-block" id="linspace"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.linspace">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
 <span class="nd">@abstract</span><span class="p">(</span><span class="n">promote</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">linspace</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Create a vector of `c` numbers ranging from `a` to `c`, distributed</span>
@@ -885,7 +817,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Wessel Bruinsma.
+        &copy; Copyright 2017, Wessel Bruinsma
 
     </p>
   </div>
@@ -902,33 +834,16 @@
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'0.1.0',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>
