@@ -162,6 +162,7 @@
            <span class="s1">&#39;kron&#39;</span><span class="p">,</span>
            <span class="s1">&#39;trace&#39;</span><span class="p">,</span>
            <span class="s1">&#39;svd&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;solve&#39;</span><span class="p">,</span>
            <span class="s1">&#39;cholesky&#39;</span><span class="p">,</span>
            <span class="s1">&#39;cholesky_solve&#39;</span><span class="p">,</span>
            <span class="s1">&#39;trisolve&#39;</span><span class="p">,</span>
@@ -259,6 +260,20 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        tuple: `(U, S, V)` is `compute_uv` is `True` and just `S` otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="solve"><a class="viewcode-back" href="../../source/lab.linear_algebra.html#lab.linear_algebra.solve">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">(</span><span class="n">promote</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">solve</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Solve the linear system `a x = b`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): LHS `a`.</span>
+<span class="sd">        b (tensor): RHS `b`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Solution `x`.</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
 

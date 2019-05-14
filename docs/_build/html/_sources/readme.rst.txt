@@ -275,6 +275,7 @@ Linear Algebra
     trace(a, axis1=0, axis2=1)
     kron(a, b)
     svd(a, compute_uv=True)
+    solve(a, b)
     cholesky(a)
     cholesky_solve(a, b)
     trisolve(a, b, lower_a=True)
