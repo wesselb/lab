@@ -12,6 +12,7 @@ __all__ = ['epsilon',
            'kron',
            'trace',
            'svd',
+           'solve',
            'cholesky',
            'cholesky_solve',
            'trisolve',
@@ -109,6 +110,20 @@ def svd(a, compute_uv=True):  # pragma: no cover
 
     Returns:
         tuple: `(U, S, V)` is `compute_uv` is `True` and just `S` otherwise.
+    """
+
+
+@dispatch(object, object)
+@abstract(promote=2)
+def solve(a, b):  # pragma: no cover
+    """Solve the linear system `a x = b`.
+
+    Args:
+        a (tensor): LHS `a`.
+        b (tensor): RHS `b`.
+
+    Returns:
+        tensor: Solution `x`.
     """
 
 

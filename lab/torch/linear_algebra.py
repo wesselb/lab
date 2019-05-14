@@ -50,6 +50,11 @@ def svd(a, compute_uv=True):
     return (u, s, v) if compute_uv else s
 
 
+@dispatch(TorchNumeric, TorchNumeric)
+def solve(a, b):
+    return torch.solve(b, a)[0]
+
+
 @dispatch(TorchNumeric)
 def cholesky(a):
     return torch.cholesky(a, upper=False)

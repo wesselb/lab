@@ -42,6 +42,11 @@ def svd(a, compute_uv=True):
     return (res[0], res[1], res[2].T.conj()) if compute_uv else res
 
 
+@dispatch(NPNumeric, NPNumeric)
+def solve(a, b):
+    return np.linalg.solve(a, b)
+
+
 @dispatch(NPNumeric)
 def cholesky(a):
     return np.linalg.cholesky(a)

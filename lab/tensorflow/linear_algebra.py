@@ -52,6 +52,11 @@ def svd(a, compute_uv=True):
     return (res[1], res[0], res[2]) if compute_uv else res
 
 
+@dispatch(TFNumeric, TFNumeric)
+def solve(a, b):
+    return tf.matrix_solve(a, b)
+
+
 @dispatch(TFNumeric)
 def cholesky(a):
     return tf.cholesky(a)

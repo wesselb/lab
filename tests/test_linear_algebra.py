@@ -69,6 +69,10 @@ def test_svd():
     yield check_function, svd, (Matrix(),), {'compute_uv': Bool()}
 
 
+def test_solve():
+    yield check_function, B.solve, (Matrix(), Matrix()), {}
+
+
 def test_cholesky():
     yield check_function, B.cholesky, (PSD(),), {}
 
