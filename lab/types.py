@@ -107,7 +107,7 @@ add_conversion_method(NPNumeric, TorchNumeric,
 
 # Dimension types:
 
-NPDimension = Union(int, alias='NPDimension')
+NPDimension = Union(Int, alias='NPDimension')
 TFDimension = Union(NPDimension, _tf_dimension, alias='TFDimension')
 TorchDimension = Union(NPDimension, alias='TorchDimension')
 Dimension = Union(NPDimension, TFDimension, TorchDimension, alias='Dimension')
