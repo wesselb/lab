@@ -158,8 +158,7 @@ This section lists all available constants and methods.
 *
     Arguments *must* be given as arguments and keyword arguments *must* be 
     given as keyword arguments.
-    For example, `zeros((2, 2))` is valid, but `zeros(shape=(2, 2))` is not;
-    and `sum(tensor, axis=1)` is valid, but `sum(tensor, 1)` is not.
+    For example, `sum(tensor, axis=1)` is valid, but `sum(tensor, 1)` is not.
     
 * The names of arguments are indicative of their function:
     - `a`, `b`, and `c` indicate general tensors.
@@ -167,11 +166,16 @@ This section lists all available constants and methods.
         `dtype` indicates a data type. E.g, `np.float32` or `tf.float64`; and
         `rand(np.float32)` creates a NumPy random number, whereas
         `rand(tf.float64)` creates a TensorFlow random number.
+        Data types are always given as the first argument.
     -
         `shape` indicates a shape.
         The dimensions of a shape as always given as separate arguments to 
         the function.
-    - `axis` indicates an axis over which the function may perform its action.
+        E.g., `reshape(tensor, 2, 2)` is valid, but `reshape(tensor, (2, 2))`
+        is not.
+    -
+        `axis` indicates an axis over which the function may perform its action.
+        An axis is always given as a keyword argument.
     -
         `ref` indicates a *reference tensor* from which a property (like its
         data type) will be inferred. E.g., `zeros(tensor)` creates a tensor
