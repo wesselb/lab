@@ -48,6 +48,21 @@ def solve(a, b):
 
 
 @dispatch(NPNumeric)
+def inv(a):
+    return np.linalg.inv(a)
+
+
+@dispatch(NPNumeric)
+def det(a):
+    return np.linalg.det(a)
+
+
+@dispatch(NPNumeric)
+def logdet(a):
+    return np.linalg.slogdet(a)[1]
+
+
+@dispatch(NPNumeric)
 def cholesky(a):
     return np.linalg.cholesky(a)
 

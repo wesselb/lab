@@ -13,6 +13,9 @@ __all__ = ['epsilon',
            'trace',
            'svd',
            'solve',
+           'inv',
+           'det',
+           'logdet',
            'cholesky',
            'cholesky_solve',
            'trisolve',
@@ -124,6 +127,45 @@ def solve(a, b):  # pragma: no cover
 
     Returns:
         tensor: Solution `x`.
+    """
+
+
+@dispatch(object)
+@abstract()
+def inv(a):  # pragma: no cover
+    """Compute the inverse of `a`.
+
+    Args:
+        a (tensor): Matrix to compute inverse of.
+
+    Returns:
+        tensor: Inverse of `a`.
+    """
+
+
+@dispatch(object)
+@abstract()
+def det(a):  # pragma: no cover
+    """Compute the determinant of `a`.
+
+    Args:
+        a (tensor): Matrix to compute determinant of.
+
+    Returns:
+        scalar: Determinant of `a`
+    """
+
+
+@dispatch(object)
+@abstract()
+def logdet(a):  # pragma: no cover
+    """Compute the log-determinant of `a`.
+
+    Args:
+        a (tensor): Matrix to compute log-determinant of.
+
+    Returns:
+        scalar: Log-determinant of `a`
     """
 
 

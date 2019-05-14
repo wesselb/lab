@@ -56,6 +56,21 @@ def solve(a, b):
 
 
 @dispatch(TorchNumeric)
+def inv(a):
+    return torch.inverse(a)
+
+
+@dispatch(TorchNumeric)
+def det(a):
+    return torch.det(a)
+
+
+@dispatch(TorchNumeric)
+def logdet(a):
+    return torch.logdet(a)
+
+
+@dispatch(TorchNumeric)
 def cholesky(a):
     return torch.cholesky(a, upper=False)
 

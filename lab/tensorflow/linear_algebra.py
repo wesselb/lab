@@ -58,6 +58,21 @@ def solve(a, b):
 
 
 @dispatch(TFNumeric)
+def inv(a):
+    return tf.matrix_inverse(a)
+
+
+@dispatch(TFNumeric)
+def det(a):
+    return tf.matrix_determinant(a)
+
+
+@dispatch(TFNumeric)
+def logdet(a):
+    return tf.linalg.logdet(a)
+
+
+@dispatch(TFNumeric)
 def cholesky(a):
     return tf.cholesky(a)
 

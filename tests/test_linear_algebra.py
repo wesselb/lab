@@ -73,6 +73,18 @@ def test_solve():
     yield check_function, B.solve, (Matrix(), Matrix()), {}
 
 
+def test_inv():
+    yield check_function, B.inv, (Matrix(),), {}
+
+
+def test_det():
+    yield check_function, B.det, (Matrix(),), {}
+
+
+def test_logdet():
+    yield check_function, B.logdet, (PSD(),), {}
+
+
 def test_cholesky():
     yield check_function, B.cholesky, (PSD(),), {}
 
