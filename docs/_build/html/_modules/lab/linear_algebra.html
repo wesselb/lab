@@ -163,6 +163,9 @@
            <span class="s1">&#39;trace&#39;</span><span class="p">,</span>
            <span class="s1">&#39;svd&#39;</span><span class="p">,</span>
            <span class="s1">&#39;solve&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;inv&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;det&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;logdet&#39;</span><span class="p">,</span>
            <span class="s1">&#39;cholesky&#39;</span><span class="p">,</span>
            <span class="s1">&#39;cholesky_solve&#39;</span><span class="p">,</span>
            <span class="s1">&#39;trisolve&#39;</span><span class="p">,</span>
@@ -274,6 +277,45 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        tensor: Solution `x`.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="inv"><a class="viewcode-back" href="../../source/lab.linear_algebra.html#lab.linear_algebra.inv">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">inv</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Compute the inverse of `a`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Matrix to compute inverse of.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Inverse of `a`.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="det"><a class="viewcode-back" href="../../source/lab.linear_algebra.html#lab.linear_algebra.det">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">det</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Compute the determinant of `a`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Matrix to compute determinant of.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        scalar: Determinant of `a`</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="logdet"><a class="viewcode-back" href="../../source/lab.linear_algebra.html#lab.linear_algebra.logdet">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">logdet</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Compute the log-determinant of `a`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Matrix to compute log-determinant of.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        scalar: Log-determinant of `a`</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
 
