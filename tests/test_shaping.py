@@ -10,7 +10,7 @@ from . import eq, neq, lt, le, ge, gt, raises, call, ok, allclose, approx
 
 
 def test_sizing():
-    for f in [B.shape, B.shape_int, B.rank, B.length]:
+    for f in [B.shape, B.shape_int, B.rank, B.length, B.size]:
         yield check_function, f, (Tensor(),), {}, False
         yield check_function, f, (Tensor(3, ),), {}, False
         yield check_function, f, (Tensor(3, 4),), {}, False

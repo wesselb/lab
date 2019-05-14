@@ -15,7 +15,7 @@ def test_constants():
 
 
 def test_transpose():
-    for f in [B.transpose, B.T]:
+    for f in [B.transpose, B.T, B.t]:
         # Check consistency.
         yield check_function, f, (Tensor(2),), {'perm': Value(None, (0,))}
         yield check_function, f, \

@@ -9,7 +9,7 @@ from .util import abstract
 __all__ = ['shape',
            'shape_int',
            'rank',
-           'length',
+           'length', 'size',
            'isscalar',
            'expand_dims',
            'squeeze',
