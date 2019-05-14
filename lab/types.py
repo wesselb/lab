@@ -7,7 +7,7 @@ import sys
 import numpy as np
 from autograd.tracer import Box
 from plum import Union, add_conversion_method, convert, add_promotion_rule, \
-    ResolvableType, as_type, parametric, Dispatcher
+    ResolvableType, as_type, parametric, Dispatcher, clear_all_cache
 
 from . import dispatch
 
@@ -50,7 +50,7 @@ class ModuleType(ResolvableType):
         Clears all cache after retrieval.
         """
         self._type = as_type(getattr(sys.modules[self.module], self.name))
-        Dispatcher.clear_all_cache()
+        clear_all_cache()
 
     def resolve(self):
         if self._type:
