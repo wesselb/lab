@@ -74,27 +74,26 @@ def to_np(lst):
     return to_np(tuple(lst))
 
 
-@_dispatch(object, object)
-def allclose(x, y):
+@_dispatch(object, object, [bool])
+def allclose(x, y, assert_dtype=False):
     """Assert that two numeric objects are close."""
     x, y = to_np(x), to_np(y)
 
     # Assert that data types are equal if it concerns floats.
-    dtype_x, dtype_y = np.array(x).dtype, np.array(y).dtype
-    if np.issubdtype(dtype_x, np.floating):
+    if assert_dtype:
         eq(np.array(x).dtype, np.array(y).dtype)
 
     np.testing.assert_allclose(x, y)
 
 
-@_dispatch(tuple, tuple)
-def allclose(x, y):
+@_dispatch(tuple, tuple, [bool])
+def allclose(x, y, assert_dtype=False):
     eq(len(x), len(y))
     for xi, yi in zip(x, y):
-        allclose(xi, yi)
+        allclose(xi, yi, assert_dtype)
 
 
-def check_function(f, args_spec, kw_args_spec):
+def check_function(f, args_spec, kw_args_spec, assert_dtype=True):
     """Check that a function produces consistent output."""
     # Construct product of keyword arguments.
     kw_args_prod = list(product(*[[(k, v) for v in vs.forms()]
@@ -131,7 +130,7 @@ def check_function(f, args_spec, kw_args_spec):
 
             log.debug('Call with arguments {} and keyword arguments {}.'
                       ''.format(args, kw_args))
-            allclose(first_result, f(*args, **kw_args))
+            allclose(first_result, f(*args, **kw_args), assert_dtype)
 
 
 class Tensor(object):

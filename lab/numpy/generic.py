@@ -5,7 +5,7 @@ from __future__ import absolute_import, division, print_function
 import autograd.numpy as np
 
 from . import dispatch, B
-from ..types import NPNumeric, NPDType, NPDimension
+from ..types import NPNumeric, NPDType, NPDimension, Int
 
 __all__ = []
 
@@ -30,13 +30,18 @@ def eye(dtype, *shape):
     return np.eye(shape[0], shape[1], dtype=dtype)
 
 
-@dispatch(NPNumeric, NPNumeric, int)
-def linspace(a, b, num):
-    return np.linspace(a, b, num, dtype=B.dtype(a))
+@dispatch(NPDType, object, object, Int)
+def linspace(dtype, a, b, num):
+    return np.linspace(a, b, num, dtype=dtype)
 
 
-@dispatch(NPNumeric, NPDType)
-def cast(a, dtype):
+@dispatch(NPDType, object, object, object)
+def range(dtype, start, stop, step):
+    return np.arange(start, stop, step, dtype=dtype)
+
+
+@dispatch(NPDType, NPNumeric)
+def cast(dtype, a):
     if hasattr(a, 'astype'):
         return a.astype(dtype)
     else:

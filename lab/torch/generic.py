@@ -5,7 +5,8 @@ from __future__ import absolute_import, division, print_function
 import torch
 
 from . import dispatch, B
-from ..types import TorchNumeric, TorchDType, TorchDimension, NPNumeric
+from ..types import TorchNumeric, TorchDType, TorchDimension, NPNumeric, \
+    Number, Int
 
 __all__ = []
 
@@ -30,18 +31,23 @@ def eye(dtype, *shape):
     return torch.eye(shape[0], shape[1], dtype=dtype)
 
 
-@dispatch(TorchNumeric, TorchNumeric, int)
-def linspace(a, b, num):
-    return torch.linspace(a, b, num, dtype=B.dtype(a))
+@dispatch(TorchDType, object, object, Int)
+def linspace(dtype, a, b, num):
+    return torch.linspace(a, b, num, dtype=dtype)
 
 
-@dispatch(TorchNumeric, TorchDType)
-def cast(a, dtype):
+@dispatch(TorchDType, object, object, object)
+def range(dtype, start, stop, step):
+    return torch.arange(start, stop, step, dtype=dtype)
+
+
+@dispatch(TorchDType, TorchNumeric)
+def cast(dtype, a):
     return a.type(dtype)
 
 
-@dispatch(NPNumeric, TorchDType)
-def cast(a, dtype):
+@dispatch(TorchDType, {NPNumeric, Number})
+def cast(dtype, a):
     return torch.tensor(a, dtype=dtype)
 
 

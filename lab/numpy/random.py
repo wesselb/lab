@@ -21,10 +21,10 @@ def _warn_dtype(dtype):
 @dispatch(NPDType, [NPDimension])
 def rand(dtype, *shape):
     _warn_dtype(dtype)
-    return B.cast(np.random.rand(*shape), dtype)
+    return B.cast(dtype, np.random.rand(*shape))
 
 
 @dispatch(NPDType, [NPDimension])
 def randn(dtype, *shape):
     _warn_dtype(dtype)
-    return B.cast(np.random.randn(*shape), dtype)
+    return B.cast(dtype, np.random.randn(*shape))

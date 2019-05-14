@@ -244,7 +244,7 @@ def pw_dists(a, b):
     if B.shape(a)[1] == 1 and B.shape(b)[1] == 1:
         return B.abs(a - B.transpose(b))
     return B.sqrt(B.maximum(B.pw_dists2(a, b),
-                            B.cast(1e-30, B.dtype(a))))
+                            B.cast(B.dtype(a), 1e-30)))
 
 
 @dispatch(object)
@@ -291,7 +291,7 @@ def ew_dists(a, b):
     if B.shape(a)[1] == 1 and B.shape(b)[1] == 1:
         return B.abs(a - b)
     return B.sqrt(B.maximum(B.ew_dists2(a, b),
-                            B.cast(1e-30, B.dtype(a))))
+                            B.cast(B.dtype(a), 1e-30)))
 
 
 @dispatch(object)
@@ -343,7 +343,7 @@ def pw_sums(a, b):
     if B.shape(a)[1] == 1 and B.shape(b)[1] == 1:
         return B.abs(a + B.transpose(b))
     return B.sqrt(B.maximum(B.pw_sums2(a, b),
-                            B.cast(1e-30, B.dtype(a))))
+                            B.cast(B.dtype(a), 1e-30)))
 
 
 @dispatch(object)
@@ -390,7 +390,7 @@ def ew_sums(a, b):
     if B.shape(a)[1] == 1 and B.shape(b)[1] == 1:
         return B.abs(a + b)
     return B.sqrt(B.maximum(B.ew_sums2(a, b),
-                            B.cast(1e-30, B.dtype(a))))
+                            B.cast(B.dtype(a), 1e-30)))
 
 
 @dispatch(object)

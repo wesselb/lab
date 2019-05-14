@@ -6,8 +6,8 @@ import sys
 
 import numpy as np
 
-from . import dispatch
-from .types import Dimension, DType, default_dtype, Int
+from . import dispatch, B
+from .types import Dimension, DType, Int
 from .util import abstract
 
 __all__ = ['set_random_seed', 'rand', 'randn']
@@ -50,7 +50,7 @@ def rand(dtype, *shape):  # pragma: no cover
 
 @dispatch([Dimension])
 def rand(*shape):
-    return rand(default_dtype, *shape)
+    return rand(B.default_dtype, *shape)
 
 
 @dispatch(DType, [Dimension])
@@ -69,4 +69,4 @@ def randn(dtype, *shape):  # pragma: no cover
 
 @dispatch([Dimension])
 def randn(*shape):
-    return randn(default_dtype, *shape)
+    return randn(B.default_dtype, *shape)

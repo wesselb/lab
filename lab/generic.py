@@ -5,7 +5,7 @@ from __future__ import absolute_import, division, print_function
 import numpy as np
 
 from . import dispatch, B
-from .types import Numeric, DType, default_dtype, Dimension
+from .types import Numeric, DType, Dimension, Int
 from .util import abstract
 
 __all__ = ['nan',
@@ -16,6 +16,7 @@ __all__ = ['nan',
            'ones',
            'eye',
            'linspace',
+           'range',
            'cast',
            'identity',
            'abs',
@@ -86,10 +87,10 @@ def zeros(dtype, *shape):  # pragma: no cover
     """
 
 
-@dispatch.multi((int,),  # Single integer is not a reference.
+@dispatch.multi((Int,),  # Single integer is not a reference.
                 ([Dimension],))
 def zeros(*shape):
-    return zeros(default_dtype, *shape)
+    return zeros(B.default_dtype, *shape)
 
 
 @dispatch(Numeric)
@@ -115,10 +116,10 @@ def ones(dtype, *shape):  # pragma: no cover
     """
 
 
-@dispatch.multi((int,),  # Single integer is not a reference.
+@dispatch.multi((Int,),  # Single integer is not a reference.
                 ([Dimension],))
 def ones(*shape):
-    return ones(default_dtype, *shape)
+    return ones(B.default_dtype, *shape)
 
 
 @dispatch(Numeric)
@@ -151,13 +152,13 @@ def eye(dtype, *shape):
 
 @dispatch(Dimension, [Dimension])
 def eye(*shape):
-    return eye(default_dtype, *shape)
+    return eye(B.default_dtype, *shape)
 
 
-@dispatch.multi((int,),  # Single integer is not a reference.
+@dispatch.multi((Int,),  # Single integer is not a reference.
                 (Dimension,))
 def eye(shape):
-    return eye(default_dtype, shape, shape)
+    return eye(B.default_dtype, shape, shape)
 
 
 @dispatch(Numeric)
@@ -165,13 +166,14 @@ def eye(ref):
     return eye(B.dtype(ref), *B.shape(ref))
 
 
-@dispatch(object, object, int)
-@abstract(promote=2)
-def linspace(a, b, num):
+@dispatch(DType, object, object, Int)
+@abstract(promote=None)
+def linspace(dtype, a, b, num):
     """Create a vector of `c` numbers ranging from `a` to `c`, distributed
     linearly.
 
     Args:
+        dtype (dtype, optional): Data type. Defaults to `.types.default_dtype`.
         a (number): Lower bound.
         b (number): Upper bound.
         num (int): Number of numbers.
@@ -181,23 +183,65 @@ def linspace(a, b, num):
     """
 
 
+@dispatch(object, object, Int)
+def linspace(a, b, num):
+    return linspace(B.default_dtype, a, b, num)
+
+
+@dispatch(DType, object, object, object)
+@abstract(promote=None)
+def range(dtype, start, stop, step):
+    """Create a vector of numbers ranging from `start` to `stop` with step
+    size `step`.
+
+    Args:
+        dtype (dtype, optional): Data type. Defaults to `int`.
+        start (number, optional): Start of range. Defaults to `0`.
+        stop (number): End of range.
+        step (number, optional): Step size. Defaults to `1`.
+
+    Returns:
+        vector: Numbers ranging from `start` to `stop` with step size `step`.
+    """
+
+
+@dispatch(object, object, object)
+def range(start, stop, step):
+    return range(int, start, stop, step)
+
+
+@dispatch(DType, object, object)
+def range(dtype, start, stop):
+    return range(dtype, start, stop, 1)
+
+
+@dispatch(object, object)
+def range(start, stop):
+    return range(int, start, stop, 1)
+
+
+@dispatch(DType, object)
+def range(dtype, stop):
+    return range(dtype, 0, stop, 1)
+
+
+@dispatch(object)
+def range(stop):
+    return range(int, 0, stop, 1)
+
+
 @dispatch(Numeric, DType)
-@abstract()
-def cast(a, dtype):  # pragma: no cover
+@abstract(promote=None)
+def cast(dtype, a):  # pragma: no cover
     """Cast an object to another data type.
 
     Args:
-        a (tensor): Tensor to cast.
         dtype (dtype or tensor): New data type.
+        a (tensor): Tensor to cast.
 
     Returns:
         tensor: `a`, but of data type `dtype`.
     """
-
-
-@dispatch(Numeric, Numeric)
-def cast(a, ref):
-    return cast(a, B.dtype(ref))
 
 
 # Unary functions:

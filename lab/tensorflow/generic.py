@@ -6,7 +6,7 @@ import tensorflow as tf
 from plum import convert
 
 from . import dispatch, B
-from ..types import TFNumeric, TFDType, TFDimension, NPNumeric
+from ..types import TFNumeric, TFDType, TFDimension, NPNumeric, Number, Int
 
 __all__ = []
 
@@ -26,7 +26,7 @@ def ones(dtype, *shape):
     return tf.ones(shape, dtype=dtype)
 
 
-@dispatch(TFDType, int, int)
+@dispatch(TFDType, Int, Int)
 def eye(dtype, *shape):
     return tf.eye(shape[0], shape[1], dtype=dtype)
 
@@ -37,13 +37,18 @@ def eye(dtype, *shape):
     return eye(dtype, *(convert(x, int) for x in shape))
 
 
-@dispatch(TFNumeric, TFNumeric, int)
-def linspace(a, b, num):
-    return tf.linspace(a, b, num)
+@dispatch(TFDType, object, object, Int)
+def linspace(dtype, a, b, num):
+    return tf.linspace(cast(dtype, a), cast(dtype, b), num)
 
 
-@dispatch({TFNumeric, NPNumeric}, TFDType)
-def cast(a, dtype):
+@dispatch(TFDType, object, object, object)
+def range(dtype, start, stop, step):
+    return tf.range(start, stop, step, dtype=dtype)
+
+
+@dispatch(TFDType, {TFNumeric, NPNumeric, Number})
+def cast(dtype, a):
     return tf.cast(a, dtype=dtype)
 
 

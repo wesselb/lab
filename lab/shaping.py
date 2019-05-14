@@ -78,6 +78,9 @@ def length(a):  # pragma: no cover
     """
 
 
+size = length  #: Alias for `length`.
+
+
 @dispatch(Numeric)
 def isscalar(a):
     """Check whether a tensor is a scalar.

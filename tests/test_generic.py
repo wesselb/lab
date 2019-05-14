@@ -9,8 +9,8 @@ import torch
 from plum import NotFoundLookupError
 
 import lab as B
-from . import check_function, Tensor, Value, default_dtype, PositiveTensor, \
-    BoolTensor, NaNTensor
+from . import check_function, Tensor, Value, PositiveTensor, BoolTensor, \
+    NaNTensor, List
 # noinspection PyUnresolvedReferences
 from . import eq, neq, lt, le, ge, gt, raises, call, ok, allclose, approx, eeq
 
@@ -22,9 +22,9 @@ def test_constants():
 
 
 def test_isnan():
-    yield check_function, B.isnan, (NaNTensor(),), {}
-    yield check_function, B.isnan, (NaNTensor(2),), {}
-    yield check_function, B.isnan, (NaNTensor(2, 3),), {}
+    yield check_function, B.isnan, (NaNTensor(),), {}, False
+    yield check_function, B.isnan, (NaNTensor(2),), {}, False
+    yield check_function, B.isnan, (NaNTensor(2, 3),), {}, False
 
 
 def test_zeros_ones_eye():
@@ -65,28 +65,58 @@ def test_zeros_ones_eye():
 
 
 def test_linspace():
-    for num in [10, 20]:
-        yield check_function, B.linspace, (Tensor(), Tensor(), Value(num)), {}
+    # Check correctness.
+    yield allclose, \
+          B.linspace(0, 1, 10), np.linspace(0, 1, 10, dtype=B.default_dtype)
+
+    # Check consistency
+    yield check_function, B.linspace, \
+          (Value(np.float32, tf.float32, torch.float32),
+           Value(0),
+           Value(10),
+           Value(20)), {}
+
+
+def test_range():
+    # Check correctness.
+    yield allclose, B.range(5), np.arange(5)
+    yield allclose, B.range(2, 5), np.arange(2, 5)
+    yield allclose, B.range(2, 5, 2), np.arange(2, 5, 2)
+
+    # Check def
+
+    # Check various step sizes.
+    for step in [1, 1.0, 0.25]:
+        yield check_function, B.range, \
+              (Value(np.float32, tf.float32, torch.float32),
+               Value(0),
+               Value(5),
+               Value(step)), {}
+
+    # Check two-argument specification.
+    yield check_function, B.range, \
+          (Value(np.float32, tf.float32, torch.float32),
+           Value(0),
+           Value(5)), {}
+
+    # Check one-argument specification.
+    yield check_function, B.range, \
+          (Value(np.float32, tf.float32, torch.float32),
+           Value(5)), {}
 
 
 def test_cast():
     # Test casting to a given data type.
-    yield eeq, B.dtype(B.cast(1, np.float64)), np.float64
-    yield eeq, B.dtype(B.cast(np.array(1), np.float64)), np.float64
-    yield eeq, B.dtype(B.cast(tf.constant(1), tf.float64)), tf.float64
-    yield eeq, B.dtype(B.cast(1, torch.float64)), torch.float64
-    yield eeq, B.dtype(B.cast(torch.tensor(1), torch.float64)), torch.float64
+    yield eeq, B.dtype(B.cast(np.float64, 1)), np.float64
+    yield eeq, B.dtype(B.cast(np.float64, np.array(1))), np.float64
 
-    # Test casting to the data type of a reference object.
-    yield eeq, B.dtype(B.cast(1, np.ones(5, dtype=np.float64))), np.float64
-    yield eeq, B.dtype(B.cast(np.array(1),
-                              np.ones(5, dtype=np.float64))), np.float64
-    yield eeq, B.dtype(B.cast(tf.constant(1),
-                              tf.ones(5, dtype=tf.float64))), tf.float64
-    yield eeq, \
-          B.dtype(B.cast(torch.tensor(1),
-                         torch.ones(5, dtype=torch.float64))), \
-          torch.float64
+    yield eeq, B.dtype(B.cast(tf.float64, 1)), tf.float64
+    yield eeq, B.dtype(B.cast(tf.float64, np.array(1))), tf.float64
+    yield eeq, B.dtype(B.cast(tf.float64, tf.constant(1))), tf.float64
+
+    yield eeq, B.dtype(B.cast(torch.float64, 1)), torch.float64
+    yield eeq, B.dtype(B.cast(torch.float64, np.array(1))), torch.float64
+    yield eeq, B.dtype(B.cast(torch.float64, torch.tensor(1))), torch.float64
 
 
 def test_unary():
@@ -136,15 +166,16 @@ def test_reductions():
 
 def test_logical_reductions():
     for f in [B.all, B.any]:
-        yield check_function, f, (BoolTensor(),), {}
-        yield check_function, f, (BoolTensor(2),), {}
-        yield check_function, f, (BoolTensor(2),), {'axis': Value(0)}
-        yield check_function, f, (BoolTensor(2, 3),), {}
-        yield check_function, f, (BoolTensor(2, 3),), {'axis': Value(0, 1)}
+        yield check_function, f, (BoolTensor(),), {}, False
+        yield check_function, f, (BoolTensor(2),), {}, False
+        yield check_function, f, (BoolTensor(2),), {'axis': Value(0)}, False
+        yield check_function, f, (BoolTensor(2, 3),), {}, False
+        yield check_function, f,\
+              (BoolTensor(2, 3),), {'axis': Value(0, 1)}, False
 
 
 def test_logical_comparisons():
     for f in [B.lt, B.le, B.gt, B.ge]:
-        yield check_function, f, (Tensor(), Tensor()), {}
-        yield check_function, f, (Tensor(2), Tensor(2)), {}
-        yield check_function, f, (Tensor(2, 3), Tensor(2, 3)), {}
+        yield check_function, f, (Tensor(), Tensor()), {}, False
+        yield check_function, f, (Tensor(2), Tensor(2)), {}, False
+        yield check_function, f, (Tensor(2, 3), Tensor(2, 3)), {}, False
