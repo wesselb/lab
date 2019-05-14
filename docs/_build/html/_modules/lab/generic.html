@@ -155,7 +155,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">dispatch</span><span class="p">,</span> <span class="n">B</span>
-<span class="kn">from</span> <span class="nn">.types</span> <span class="k">import</span> <span class="n">Numeric</span><span class="p">,</span> <span class="n">DType</span><span class="p">,</span> <span class="n">default_dtype</span><span class="p">,</span> <span class="n">Dimension</span>
+<span class="kn">from</span> <span class="nn">.types</span> <span class="k">import</span> <span class="n">Numeric</span><span class="p">,</span> <span class="n">DType</span><span class="p">,</span> <span class="n">Dimension</span><span class="p">,</span> <span class="n">Int</span>
 <span class="kn">from</span> <span class="nn">.util</span> <span class="k">import</span> <span class="n">abstract</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;nan&#39;</span><span class="p">,</span>
@@ -166,6 +166,7 @@
            <span class="s1">&#39;ones&#39;</span><span class="p">,</span>
            <span class="s1">&#39;eye&#39;</span><span class="p">,</span>
            <span class="s1">&#39;linspace&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;range&#39;</span><span class="p">,</span>
            <span class="s1">&#39;cast&#39;</span><span class="p">,</span>
            <span class="s1">&#39;identity&#39;</span><span class="p">,</span>
            <span class="s1">&#39;abs&#39;</span><span class="p">,</span>
@@ -236,10 +237,10 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 
-<span class="nd">@dispatch</span><span class="o">.</span><span class="n">multi</span><span class="p">((</span><span class="nb">int</span><span class="p">,),</span>  <span class="c1"># Single integer is not a reference.</span>
+<span class="nd">@dispatch</span><span class="o">.</span><span class="n">multi</span><span class="p">((</span><span class="n">Int</span><span class="p">,),</span>  <span class="c1"># Single integer is not a reference.</span>
                 <span class="p">([</span><span class="n">Dimension</span><span class="p">],))</span>
 <span class="k">def</span> <span class="nf">zeros</span><span class="p">(</span><span class="o">*</span><span class="n">shape</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">zeros</span><span class="p">(</span><span class="n">default_dtype</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">zeros</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">default_dtype</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="zeros"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.zeros">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
@@ -265,10 +266,10 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 
-<span class="nd">@dispatch</span><span class="o">.</span><span class="n">multi</span><span class="p">((</span><span class="nb">int</span><span class="p">,),</span>  <span class="c1"># Single integer is not a reference.</span>
+<span class="nd">@dispatch</span><span class="o">.</span><span class="n">multi</span><span class="p">((</span><span class="n">Int</span><span class="p">,),</span>  <span class="c1"># Single integer is not a reference.</span>
                 <span class="p">([</span><span class="n">Dimension</span><span class="p">],))</span>
 <span class="k">def</span> <span class="nf">ones</span><span class="p">(</span><span class="o">*</span><span class="n">shape</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">ones</span><span class="p">(</span><span class="n">default_dtype</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ones</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">default_dtype</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="ones"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.ones">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
@@ -301,13 +302,13 @@
 
 <span class="nd">@dispatch</span><span class="p">(</span><span class="n">Dimension</span><span class="p">,</span> <span class="p">[</span><span class="n">Dimension</span><span class="p">])</span>
 <span class="k">def</span> <span class="nf">eye</span><span class="p">(</span><span class="o">*</span><span class="n">shape</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">eye</span><span class="p">(</span><span class="n">default_dtype</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">eye</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">default_dtype</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">)</span>
 
 
-<span class="nd">@dispatch</span><span class="o">.</span><span class="n">multi</span><span class="p">((</span><span class="nb">int</span><span class="p">,),</span>  <span class="c1"># Single integer is not a reference.</span>
+<span class="nd">@dispatch</span><span class="o">.</span><span class="n">multi</span><span class="p">((</span><span class="n">Int</span><span class="p">,),</span>  <span class="c1"># Single integer is not a reference.</span>
                 <span class="p">(</span><span class="n">Dimension</span><span class="p">,))</span>
 <span class="k">def</span> <span class="nf">eye</span><span class="p">(</span><span class="n">shape</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">eye</span><span class="p">(</span><span class="n">default_dtype</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">shape</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">eye</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">default_dtype</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">shape</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="eye"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.eye">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
@@ -315,39 +316,82 @@
     <span class="k">return</span> <span class="n">eye</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">ref</span><span class="p">),</span> <span class="o">*</span><span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">ref</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="linspace"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.linspace">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
-<span class="nd">@abstract</span><span class="p">(</span><span class="n">promote</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">linspace</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">DType</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">Int</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">(</span><span class="n">promote</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">linspace</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Create a vector of `c` numbers ranging from `a` to `c`, distributed</span>
 <span class="sd">    linearly.</span>
 
 <span class="sd">    Args:</span>
+<span class="sd">        dtype (dtype, optional): Data type. Defaults to `.types.default_dtype`.</span>
 <span class="sd">        a (number): Lower bound.</span>
 <span class="sd">        b (number): Upper bound.</span>
 <span class="sd">        num (int): Number of numbers.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        vector: `c` numbers ranging from `a` to `c`, distributed linearly.</span>
-<span class="sd">    &quot;&quot;&quot;</span></div>
-
-
-<span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">,</span> <span class="n">DType</span><span class="p">)</span>
-<span class="nd">@abstract</span><span class="p">()</span>
-<span class="k">def</span> <span class="nf">cast</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">dtype</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
-    <span class="sd">&quot;&quot;&quot;Cast an object to another data type.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        a (tensor): Tensor to cast.</span>
-<span class="sd">        dtype (dtype or tensor): New data type.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        tensor: `a`, but of data type `dtype`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 
-<div class="viewcode-block" id="cast"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.cast">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">,</span> <span class="n">Numeric</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">cast</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">ref</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">ref</span><span class="p">))</span></div>
+<div class="viewcode-block" id="linspace"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.linspace">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">Int</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">linspace</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">linspace</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">default_dtype</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span></div>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">DType</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">(</span><span class="n">promote</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">range</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">step</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a vector of numbers ranging from `start` to `stop` with step</span>
+<span class="sd">    size `step`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dtype (dtype, optional): Data type. Defaults to `int`.</span>
+<span class="sd">        start (number, optional): Start of range. Defaults to `0`.</span>
+<span class="sd">        stop (number): End of range.</span>
+<span class="sd">        step (number, optional): Step size. Defaults to `1`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        vector: Numbers ranging from `start` to `stop` with step size `step`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">step</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">DType</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">range</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">range</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">DType</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">range</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="n">stop</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">range</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="range"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.range">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">range</span><span class="p">(</span><span class="n">stop</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="cast"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.cast">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">,</span> <span class="n">DType</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">(</span><span class="n">promote</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">cast</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Cast an object to another data type.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dtype (dtype or tensor): New data type.</span>
+<span class="sd">        a (tensor): Tensor to cast.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: `a`, but of data type `dtype`.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
 
 
 <span class="c1"># Unary functions:</span>

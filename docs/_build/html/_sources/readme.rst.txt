@@ -217,10 +217,17 @@ Generic
     eye(*shape)
     eye(ref)
 
+    linspace(dtype, a, b, num)
     linspace(a, b, num)
 
-    cast(a, dtype)
-    cast(a, ref)
+    range(dtype, start, stop, step)
+    range(dtype, stop)
+    range(dtype, start, stop)
+    range(start, stop, step)
+    range(start, stop)
+    range(stop)
+
+    cast(dtype, a)
 
     identity(a)
     abs(a)
@@ -319,7 +326,7 @@ Shaping
     shape(a)
     shape_int(a)
     rank(a)
-    length(a)
+    length(a) (alias: size)
     isscalar(a)
     expand_dims(a, axis=0)
     squeeze(a)
