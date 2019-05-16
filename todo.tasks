@@ -1,10 +1,12 @@
 TODO:
-    ☐ Port bvn_cdf.
-        ☐ Check Python 2 and Python 3 compatibility.
     ☐ Reuse Plum's error message.
+    ☐ Fix output data types of custom gradients in TensorFlow.
+    ☐ `bvn_cdf` and `toeplitz_solve` always output `float64`s. Issue?
 
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✓ Port bvn_cdf. @done (19-05-16 18:06) @project(TODO)
+ ✓ Check Python 2 and Python 3 compatibility. @done (19-05-16 18:06) @project(TODO)
  ✓ Documentation. @critical @done (19-05-02 13:29) @project(TODO)
  ✓ Add support for AutoGrad. @done (19-05-01 13:25) @project(TODO)
