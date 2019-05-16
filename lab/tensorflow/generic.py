@@ -6,6 +6,8 @@ import tensorflow as tf
 from plum import convert
 
 from . import dispatch, B
+from .custom import tensorflow_register
+from ..custom import bvn_cdf, s_bvn_cdf
 from ..types import TFNumeric, TFDType, TFDimension, NPNumeric, Number, Int
 
 __all__ = []
@@ -195,3 +197,7 @@ def gt(a, b):
 @dispatch(TFNumeric, TFNumeric)
 def ge(a, b):
     return tf.greater_equal(a, b)
+
+
+f = tensorflow_register(bvn_cdf, s_bvn_cdf)
+dispatch(TFNumeric, TFNumeric, TFNumeric)(f)

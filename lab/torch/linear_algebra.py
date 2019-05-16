@@ -5,10 +5,10 @@ from __future__ import absolute_import, division, print_function
 import torch
 
 from . import dispatch, B
-from ..linear_algebra import _default_perm
-from ..types import TorchNumeric
 from .custom import torch_register
 from ..custom import toeplitz_solve, s_toeplitz_solve
+from ..linear_algebra import _default_perm
+from ..types import TorchNumeric
 
 __all__ = []
 

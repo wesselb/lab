@@ -5,10 +5,10 @@ from __future__ import absolute_import, division, print_function
 import tensorflow as tf
 
 from . import dispatch, B
+from .custom import tensorflow_register
+from ..custom import toeplitz_solve, s_toeplitz_solve
 from ..linear_algebra import _default_perm
 from ..types import TFNumeric
-from ..custom import toeplitz_solve, s_toeplitz_solve
-from .custom import tensorflow_register
 
 __all__ = []
 

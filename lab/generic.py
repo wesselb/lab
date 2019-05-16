@@ -49,7 +49,8 @@ __all__ = ['nan',
            'lt',
            'le',
            'gt',
-           'ge']
+           'ge',
+           'bvn_cdf']
 
 nan = np.nan  #: NaN.
 pi = np.pi  #: Value of pi.
@@ -83,7 +84,7 @@ def zeros(dtype, *shape):  # pragma: no cover
         *shape (shape): Shape of the tensor.
 
     Returns:
-        tensor: Matrix of zeros of shape `shape` and data type `dtype`.
+        tensor: Tensor of zeros of shape `shape` and data type `dtype`.
     """
 
 
@@ -112,7 +113,7 @@ def ones(dtype, *shape):  # pragma: no cover
         *shape (shape or ): Shape of the tensor.
 
     Returns:
-        tensor: Matrix of ones of shape `shape` and data type `dtype`.
+        tensor: Tensor of ones of shape `shape` and data type `dtype`.
     """
 
 
@@ -698,4 +699,21 @@ def ge(a, b):  # pragma: no cover
 
     Returns:
         tensor[bool]: `a` is greater than or equal to `b`.
+    """
+
+
+@dispatch(object, object, object)
+@abstract(promote=3)
+def bvn_cdf(a, b, c):
+    """Standard bivariate normal CDF. Computes the probability that `X < a`
+    and `Y < b` if `X ~ N(0, 1)`, `Y ~ N(0, 1)`, and `X` and `Y` have
+    correlation `c`.
+
+    Args:
+        a (tensor): First upper limit. Must be a rank-one tensor.
+        b (tensor): Second upper limit. Must be a rank-one tensor.
+        c (tensor): Correlation coefficient. Must be a rank-one tensor.
+
+    Returns:
+        tensor: Probabilities of the same shape as the input.
     """

@@ -6,13 +6,23 @@ import lab as B
 import tensorflow as tf
 from autograd import grad
 from fdm import check_sensitivity, gradient
-from lab.custom import toeplitz_solve, s_toeplitz_solve
+from lab.custom import (
+    toeplitz_solve, s_toeplitz_solve,
+    bvn_cdf, s_bvn_cdf
+)
+from lab.autograd.custom import as_tuple
 from lab.tensorflow.custom import as_tf
 from lab.torch.custom import as_torch, as_np
 
 # noinspection PyUnresolvedReferences
 from . import eq, neq, lt, le, ge, gt, raises, call, ok, allclose, approx, \
     eeq, assert_isinstance
+
+
+def test_as_tuple():
+    yield eq, as_tuple(1), (1,)
+    yield eq, as_tuple((1,)), (1,)
+    yield eq, as_tuple((1, 2)), (1, 2)
 
 
 def test_as_tf():
@@ -88,4 +98,6 @@ def test_toeplitz_solve():
 
 
 def test_bvn_cdf():
-    pass
+    yield check_sensitivity, bvn_cdf, s_bvn_cdf, \
+          (B.rand(3), B.rand(3), B.rand(3))
+    yield check_grad, bvn_cdf, (B.rand(3), B.rand(3), B.rand(3))

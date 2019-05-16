@@ -4,7 +4,9 @@ from __future__ import absolute_import, division, print_function
 
 import torch
 
-from . import dispatch, B
+from . import dispatch
+from .custom import torch_register
+from ..custom import bvn_cdf, s_bvn_cdf
 from ..types import TorchNumeric, TorchDType, TorchDimension, NPNumeric, \
     Number, Int
 
@@ -210,3 +212,7 @@ def gt(a, b):
 @dispatch(TorchNumeric, TorchNumeric)
 def ge(a, b):
     return torch.ge(a, b)
+
+
+f = torch_register(bvn_cdf, s_bvn_cdf)
+dispatch(TorchNumeric, TorchNumeric, TorchNumeric)(f)
