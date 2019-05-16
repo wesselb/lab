@@ -16,9 +16,10 @@ __all__ = ['epsilon',
            'inv',
            'det',
            'logdet',
-           'cholesky',
-           'cholesky_solve',
-           'trisolve',
+           'cholesky', 'chol',
+           'cholesky_solve', 'cholsolve',
+           'triangular_solve', 'trisolve',
+           'toeplitz_solve', 'toepsolve',
            'outer',
            'reg',
            'pw_dists2', 'pw_dists', 'ew_dists2', 'ew_dists',
@@ -182,6 +183,9 @@ def cholesky(a):  # pragma: no cover
     """
 
 
+chol = cholesky  #: Shorthand for `cholesky`.
+
+
 @dispatch(object, object)
 @abstract(promote=2)
 def cholesky_solve(a, b):  # pragma: no cover
@@ -197,9 +201,12 @@ def cholesky_solve(a, b):  # pragma: no cover
     """
 
 
+cholsolve = cholesky_solve  #: Shorthand for `cholesky_solve`.
+
+
 @dispatch(object, object)
 @abstract(promote=2)
-def trisolve(a, b, lower_a=True):  # pragma: no cover
+def triangular_solve(a, b, lower_a=True):  # pragma: no cover
     """Solve the linear system `a x = b` where `a` is triangular.
 
     Args:
@@ -211,6 +218,34 @@ def trisolve(a, b, lower_a=True):  # pragma: no cover
     Returns:
         tensor: Solution `x`.
     """
+
+
+trisolve = triangular_solve  #: Shorthand for `triangular_solve`.
+
+
+@dispatch(object, object, object)
+@abstract(promote=3)
+def toeplitz_solve(a, b, c):  # pragma: no cover
+    """Solve the linear system `toep(a, b) x = c` where `toep(a, b)` is a
+    Toeplitz matrix.
+
+    Args:
+        a (tensor): First column of the Toeplitz matrix.
+        b (tensor, optional): *Except for the first element*, first row of the
+            Toeplitz matrix. Defaults to `a[1:]`.
+        c (tensor): RHS `c`.
+
+    Returns:
+        tensor: Solution `x`.
+    """
+
+
+@dispatch(object, object)
+def toeplitz_solve(a, c):
+    return toeplitz_solve(a, a[1:], c)
+
+
+toepsolve = toeplitz_solve  #: Shorthand for `toeplitz_solve`.
 
 
 @dispatch(object, object)

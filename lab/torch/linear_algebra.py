@@ -7,6 +7,8 @@ import torch
 from . import dispatch, B
 from ..linear_algebra import _default_perm
 from ..types import TorchNumeric
+from .custom import torch_register
+from ..custom import toeplitz_solve, s_toeplitz_solve
 
 __all__ = []
 
@@ -81,5 +83,9 @@ def cholesky_solve(a, b):
 
 
 @dispatch(TorchNumeric, TorchNumeric)
-def trisolve(a, b, lower_a=True):
+def triangular_solve(a, b, lower_a=True):
     return torch.triangular_solve(b, a, upper=not lower_a)[0]
+
+
+f = torch_register(toeplitz_solve, s_toeplitz_solve)
+dispatch(TorchNumeric, TorchNumeric, TorchNumeric)(f)

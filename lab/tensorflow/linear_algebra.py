@@ -7,6 +7,8 @@ import tensorflow as tf
 from . import dispatch, B
 from ..linear_algebra import _default_perm
 from ..types import TFNumeric
+from ..custom import toeplitz_solve, s_toeplitz_solve
+from .custom import tensorflow_register
 
 __all__ = []
 
@@ -83,5 +85,9 @@ def cholesky_solve(a, b):
 
 
 @dispatch(TFNumeric, TFNumeric)
-def trisolve(a, b, lower_a=True):
+def triangular_solve(a, b, lower_a=True):
     return tf.matrix_triangular_solve(a, b, lower=lower_a)
+
+
+f = tensorflow_register(toeplitz_solve, s_toeplitz_solve)
+dispatch(TFNumeric, TFNumeric, TFNumeric)(f)

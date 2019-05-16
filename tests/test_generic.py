@@ -33,7 +33,7 @@ def test_zeros_ones_eye():
         yield check_function, f, \
               (Value(np.float32, tf.float32, torch.float32),
                Value(2),
-               Value(3)), {}
+               Value(3))
 
         # Check shape of calls.
         yield eq, B.shape_int(f(2)), (2, 2) if f is B.eye else (2,)
@@ -74,7 +74,7 @@ def test_linspace():
           (Value(np.float32, tf.float32, torch.float32),
            Value(0),
            Value(10),
-           Value(20)), {}
+           Value(20))
 
 
 def test_range():
@@ -91,18 +91,18 @@ def test_range():
               (Value(np.float32, tf.float32, torch.float32),
                Value(0),
                Value(5),
-               Value(step)), {}
+               Value(step))
 
     # Check two-argument specification.
     yield check_function, B.range, \
           (Value(np.float32, tf.float32, torch.float32),
            Value(0),
-           Value(5)), {}
+           Value(5))
 
     # Check one-argument specification.
     yield check_function, B.range, \
           (Value(np.float32, tf.float32, torch.float32),
-           Value(5)), {}
+           Value(5))
 
 
 def test_cast():
@@ -123,39 +123,39 @@ def test_unary():
     # Test functions using signed arguments.
     for f in [B.identity, B.abs, B.sign, B.exp, B.sin, B.cos, B.tan, B.tanh,
               B.sigmoid, B.relu]:
-        yield check_function, f, (Tensor(),), {}
-        yield check_function, f, (Tensor(2),), {}
-        yield check_function, f, (Tensor(2, 3),), {}
+        yield check_function, f, (Tensor(),)
+        yield check_function, f, (Tensor(2),)
+        yield check_function, f, (Tensor(2, 3),)
 
     # Test functions using positive arguments.
     for f in [B.log, B.sqrt]:
-        yield check_function, f, (PositiveTensor(),), {}
-        yield check_function, f, (PositiveTensor(2),), {}
-        yield check_function, f, (PositiveTensor(2, 3),), {}
+        yield check_function, f, (PositiveTensor(),)
+        yield check_function, f, (PositiveTensor(2),)
+        yield check_function, f, (PositiveTensor(2, 3),)
 
 
 def test_binary():
     # Test functions using signed arguments.
     for f in [B.add, B.subtract, B.multiply, B.divide,
               B.minimum, B.maximum, B.leaky_relu]:
-        yield check_function, f, (Tensor(), Tensor()), {}
-        yield check_function, f, (Tensor(2), Tensor(2)), {}
-        yield check_function, f, (Tensor(2, 3), Tensor(2, 3)), {}
+        yield check_function, f, (Tensor(), Tensor())
+        yield check_function, f, (Tensor(2), Tensor(2))
+        yield check_function, f, (Tensor(2, 3), Tensor(2, 3))
 
     # Test functions using a positive first argument, but signed second
     # argument.
     for f in [B.power]:
-        yield check_function, f, (PositiveTensor(), Tensor()), {}
-        yield check_function, f, (PositiveTensor(2), Tensor(2)), {}
-        yield check_function, f, (PositiveTensor(2, 3), Tensor(2, 3)), {}
+        yield check_function, f, (PositiveTensor(), Tensor())
+        yield check_function, f, (PositiveTensor(2), Tensor(2))
+        yield check_function, f, (PositiveTensor(2, 3), Tensor(2, 3))
 
 
 def test_reductions():
     for f in [B.min, B.max, B.sum, B.mean, B.std, B.logsumexp]:
-        yield check_function, f, (Tensor(),), {}
-        yield check_function, f, (Tensor(2),), {}
+        yield check_function, f, (Tensor(),)
+        yield check_function, f, (Tensor(2),)
         yield check_function, f, (Tensor(2),), {'axis': Value(0)}
-        yield check_function, f, (Tensor(2, 3),), {}
+        yield check_function, f, (Tensor(2, 3),)
         yield check_function, f, (Tensor(2, 3),), {'axis': Value(0, 1)}
 
     # Check correctness of `logsumexp`.
@@ -170,7 +170,7 @@ def test_logical_reductions():
         yield check_function, f, (BoolTensor(2),), {}, False
         yield check_function, f, (BoolTensor(2),), {'axis': Value(0)}, False
         yield check_function, f, (BoolTensor(2, 3),), {}, False
-        yield check_function, f,\
+        yield check_function, f, \
               (BoolTensor(2, 3),), {'axis': Value(0, 1)}, False
 
 

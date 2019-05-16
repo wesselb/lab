@@ -266,9 +266,13 @@ solve(a, b)
 inv(a)
 det(a) 
 logdet(a) 
-cholesky(a)
-cholesky_solve(a, b)
-trisolve(a, b, lower_a=True)
+cholesky(a) (alias: chol)
+
+cholesky_solve(a, b)  (alias: cholsolve)
+triangular_solve(a, b, lower_a=True) (alias: trisolve)
+toeplitz_solve(a, b, c) (alias: toepsolve)
+toeplitz_solve(a, c)
+
 outer(a, b)
 reg(a, diag=None, clip=True)
 

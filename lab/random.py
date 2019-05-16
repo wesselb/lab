@@ -7,7 +7,7 @@ import sys
 import numpy as np
 
 from . import dispatch, B
-from .types import Dimension, DType, Int
+from .types import Dimension, DType, Int, Numeric
 from .util import abstract
 
 __all__ = ['set_random_seed', 'rand', 'randn']
@@ -48,9 +48,15 @@ def rand(dtype, *shape):  # pragma: no cover
     """
 
 
-@dispatch([Dimension])
+@dispatch.multi((Int,),  # Single integer is a not a reference.
+                ([Dimension],))
 def rand(*shape):
     return rand(B.default_dtype, *shape)
+
+
+@dispatch(Numeric)
+def rand(ref):
+    return rand(B.dtype(ref), *B.shape(ref))
 
 
 @dispatch(DType, [Dimension])
@@ -67,6 +73,12 @@ def randn(dtype, *shape):  # pragma: no cover
     """
 
 
-@dispatch([Dimension])
+@dispatch.multi((Int,),  # Single integer is a not a reference.
+                ([Dimension],))
 def randn(*shape):
     return randn(B.default_dtype, *shape)
+
+
+@dispatch(Numeric)
+def randn(ref):
+    return randn(B.dtype(ref), *B.shape(ref))

@@ -5,4 +5,5 @@ scipy
 autograd
 tensorflow
 torch
+git+git://github.com/wesselb/fdm@master#egg=fdm
 git+git://github.com/wesselb/plum@master#egg=plum

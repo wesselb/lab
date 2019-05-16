@@ -60,7 +60,7 @@ def test_trace():
 
 
 def test_kron():
-    yield check_function, B.kron, (Tensor(2, 3), Tensor(4, 5)), {}
+    yield check_function, B.kron, (Tensor(2, 3), Tensor(4, 5))
     yield raises, ValueError, \
           lambda: B.kron(Tensor(2).tf(), Tensor(4, 5).tf())
     yield raises, ValueError, \
@@ -80,36 +80,45 @@ def test_svd():
 
 
 def test_solve():
-    yield check_function, B.solve, (Matrix(), Matrix()), {}
+    yield check_function, B.solve, (Matrix(), Matrix())
 
 
 def test_inv():
-    yield check_function, B.inv, (Matrix(),), {}
+    yield check_function, B.inv, (Matrix(),)
 
 
 def test_det():
-    yield check_function, B.det, (Matrix(),), {}
+    yield check_function, B.det, (Matrix(),)
 
 
 def test_logdet():
-    yield check_function, B.logdet, (PSD(),), {}
+    yield check_function, B.logdet, (PSD(),)
 
 
 def test_cholesky():
-    yield check_function, B.cholesky, (PSD(),), {}
+    for f in [B.cholesky, B.chol]:
+        yield check_function, f, (PSD(),)
 
 
 def test_cholesky_solve():
     chol = B.cholesky(PSD().np())
-    yield check_function, B.cholesky_solve, (Matrix(mat=chol), Matrix()), {}
+    for f in [B.cholesky_solve, B.cholsolve]:
+        yield check_function, f, (Matrix(mat=chol), Matrix())
 
 
-def test_trisolve():
+def test_triangular_solve():
     chol = B.cholesky(PSD().np())
-    yield check_function, B.trisolve, \
-          (Matrix(mat=chol), Matrix()), {'lower_a': Value(True)}
-    yield check_function, B.trisolve, \
-          (Matrix(mat=chol.T), Matrix()), {'lower_a': Value(False)}
+    for f in [B.triangular_solve, B.trisolve]:
+        yield check_function, f, \
+              (Matrix(mat=chol), Matrix()), {'lower_a': Value(True)}
+        yield check_function, f, \
+              (Matrix(mat=chol.T), Matrix()), {'lower_a': Value(False)}
+
+
+def test_toeplitz_solve():
+    for f in [B.toeplitz_solve, B.toepsolve]:
+        yield check_function, f, (Tensor(3), Matrix(3))
+        yield check_function, f, (Tensor(3), Matrix(3))
 
 
 def test_outer():

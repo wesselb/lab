@@ -28,10 +28,10 @@ def test_expand_dims():
 
 
 def test_squeeze():
-    yield check_function, B.squeeze, (Tensor(3, 4, 5),), {}
-    yield check_function, B.squeeze, (Tensor(1, 4, 5),), {}
-    yield check_function, B.squeeze, (Tensor(3, 1, 5),), {}
-    yield check_function, B.squeeze, (Tensor(1, 4, 1),), {}
+    yield check_function, B.squeeze, (Tensor(3, 4, 5),)
+    yield check_function, B.squeeze, (Tensor(1, 4, 5),)
+    yield check_function, B.squeeze, (Tensor(3, 1, 5),)
+    yield check_function, B.squeeze, (Tensor(1, 4, 1),)
 
 
 def test_uprank():
@@ -42,19 +42,19 @@ def test_uprank():
 
 
 def test_diag():
-    yield check_function, B.diag, (Tensor(3),), {}
-    yield check_function, B.diag, (Tensor(3, 3),), {}
+    yield check_function, B.diag, (Tensor(3),)
+    yield check_function, B.diag, (Tensor(3, 3),)
     yield raises, ValueError, lambda: B.diag(Tensor().tf())
 
 
 def test_flatten():
-    yield check_function, B.flatten, (Tensor(3),), {}
-    yield check_function, B.flatten, (Tensor(3, 4),), {}
+    yield check_function, B.flatten, (Tensor(3),)
+    yield check_function, B.flatten, (Tensor(3, 4),)
 
 
 def test_vec_to_tril_and_back():
-    yield check_function, B.vec_to_tril, (Tensor(6),), {}
-    yield check_function, B.tril_to_vec, (Matrix(3),), {}
+    yield check_function, B.vec_to_tril, (Tensor(6),)
+    yield check_function, B.tril_to_vec, (Matrix(3),)
 
     # Check correctness.
     mat = Tensor(6).np()
@@ -79,8 +79,8 @@ def test_unstack():
 
 
 def test_reshape():
-    yield check_function, B.reshape, (Tensor(3, 4, 5), Value(3), Value(20)), {}
-    yield check_function, B.reshape, (Tensor(3, 4, 5), Value(12), Value(5)), {}
+    yield check_function, B.reshape, (Tensor(3, 4, 5), Value(3), Value(20))
+    yield check_function, B.reshape, (Tensor(3, 4, 5), Value(12), Value(5))
 
 
 def test_concat():
@@ -90,9 +90,9 @@ def test_concat():
 
 def test_concat2d():
     yield check_function, B.concat2d, \
-          (List(Matrix(3), Matrix(3)), List(Matrix(3), Matrix(3))), {}
+          (List(Matrix(3), Matrix(3)), List(Matrix(3), Matrix(3)))
     yield check_function, B.concat2d, \
-          (Tuple(Matrix(3), Matrix(3)), Tuple(Matrix(3), Matrix(3))), {}
+          (Tuple(Matrix(3), Matrix(3)), Tuple(Matrix(3), Matrix(3)))
 
 
 def test_take():
