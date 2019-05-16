@@ -3,7 +3,6 @@ import numpy as np
 
 cimport cython
 from cython.parallel import prange
-from cpython.mem import PyMem_Free
 
 cdef extern from './tvpack.h' nogil:
     extern double bvnd_(double* x, double* y, double* rho);
@@ -30,11 +29,5 @@ def bvn_cdf(np.ndarray[np.float64_t, ndim=1] x,
         neg_x = -x_view[i]
         neg_y = -y_view[i]
         out_view[i] = bvnd_(&neg_x, &neg_y, &rho_view[i])
-
-    # Free views.
-    PyMem_Free(x_view)
-    PyMem_Free(y_view)
-    PyMem_Free(rho_view)
-    PyMem_Free(out_view)
 
     return out
