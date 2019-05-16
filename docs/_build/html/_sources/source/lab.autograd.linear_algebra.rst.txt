@@ -1,0 +1,7 @@
+lab.autograd.linear\_algebra module
+===================================
+
+.. automodule:: lab.autograd.linear_algebra
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -157,7 +157,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">dispatch</span><span class="p">,</span> <span class="n">B</span>
-<span class="kn">from</span> <span class="nn">.types</span> <span class="k">import</span> <span class="n">Dimension</span><span class="p">,</span> <span class="n">DType</span><span class="p">,</span> <span class="n">Int</span>
+<span class="kn">from</span> <span class="nn">.types</span> <span class="k">import</span> <span class="n">Dimension</span><span class="p">,</span> <span class="n">DType</span><span class="p">,</span> <span class="n">Int</span><span class="p">,</span> <span class="n">Numeric</span>
 <span class="kn">from</span> <span class="nn">.util</span> <span class="k">import</span> <span class="n">abstract</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;set_random_seed&#39;</span><span class="p">,</span> <span class="s1">&#39;rand&#39;</span><span class="p">,</span> <span class="s1">&#39;randn&#39;</span><span class="p">]</span>
@@ -198,9 +198,15 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 
-<div class="viewcode-block" id="rand"><a class="viewcode-back" href="../../source/lab.random.html#lab.random.rand">[docs]</a><span class="nd">@dispatch</span><span class="p">([</span><span class="n">Dimension</span><span class="p">])</span>
+<span class="nd">@dispatch</span><span class="o">.</span><span class="n">multi</span><span class="p">((</span><span class="n">Int</span><span class="p">,),</span>  <span class="c1"># Single integer is a not a reference.</span>
+                <span class="p">([</span><span class="n">Dimension</span><span class="p">],))</span>
 <span class="k">def</span> <span class="nf">rand</span><span class="p">(</span><span class="o">*</span><span class="n">shape</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">rand</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">default_dtype</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">rand</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">default_dtype</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="rand"><a class="viewcode-back" href="../../source/lab.random.html#lab.random.rand">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">rand</span><span class="p">(</span><span class="n">ref</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">rand</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">ref</span><span class="p">),</span> <span class="o">*</span><span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">ref</span><span class="p">))</span></div>
 
 
 <span class="nd">@dispatch</span><span class="p">(</span><span class="n">DType</span><span class="p">,</span> <span class="p">[</span><span class="n">Dimension</span><span class="p">])</span>
@@ -217,9 +223,15 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 
-<div class="viewcode-block" id="randn"><a class="viewcode-back" href="../../source/lab.random.html#lab.random.randn">[docs]</a><span class="nd">@dispatch</span><span class="p">([</span><span class="n">Dimension</span><span class="p">])</span>
+<span class="nd">@dispatch</span><span class="o">.</span><span class="n">multi</span><span class="p">((</span><span class="n">Int</span><span class="p">,),</span>  <span class="c1"># Single integer is a not a reference.</span>
+                <span class="p">([</span><span class="n">Dimension</span><span class="p">],))</span>
 <span class="k">def</span> <span class="nf">randn</span><span class="p">(</span><span class="o">*</span><span class="n">shape</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">randn</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">default_dtype</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">randn</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">default_dtype</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="randn"><a class="viewcode-back" href="../../source/lab.random.html#lab.random.randn">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">randn</span><span class="p">(</span><span class="n">ref</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">randn</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">ref</span><span class="p">),</span> <span class="o">*</span><span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">ref</span><span class="p">))</span></div>
 </pre></div>
 
            </div>

@@ -199,7 +199,8 @@
            <span class="s1">&#39;lt&#39;</span><span class="p">,</span>
            <span class="s1">&#39;le&#39;</span><span class="p">,</span>
            <span class="s1">&#39;gt&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;ge&#39;</span><span class="p">]</span>
+           <span class="s1">&#39;ge&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;bvn_cdf&#39;</span><span class="p">]</span>
 
 <span class="n">nan</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>  <span class="c1">#: NaN.</span>
 <span class="n">pi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>  <span class="c1">#: Value of pi.</span>
@@ -233,7 +234,7 @@
 <span class="sd">        *shape (shape): Shape of the tensor.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        tensor: Matrix of zeros of shape `shape` and data type `dtype`.</span>
+<span class="sd">        tensor: Tensor of zeros of shape `shape` and data type `dtype`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 
@@ -262,7 +263,7 @@
 <span class="sd">        *shape (shape or ): Shape of the tensor.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        tensor: Matrix of ones of shape `shape` and data type `dtype`.</span>
+<span class="sd">        tensor: Tensor of ones of shape `shape` and data type `dtype`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 
@@ -848,6 +849,23 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        tensor[bool]: `a` is greater than or equal to `b`.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="bvn_cdf"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.bvn_cdf">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">(</span><span class="n">promote</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">bvn_cdf</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Standard bivariate normal CDF. Computes the probability that `X &lt; a`</span>
+<span class="sd">    and `Y &lt; b` if `X ~ N(0, 1)`, `Y ~ N(0, 1)`, and `X` and `Y` have</span>
+<span class="sd">    correlation `c`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): First upper limit. Must be a rank-one tensor.</span>
+<span class="sd">        b (tensor): Second upper limit. Must be a rank-one tensor.</span>
+<span class="sd">        c (tensor): Correlation coefficient. Must be a rank-one tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Probabilities of the same shape as the input.</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
 </pre></div>
 

@@ -11,6 +11,7 @@ Submodules
 
 .. toctree::
 
+   lab.tensorflow.custom
    lab.tensorflow.generic
    lab.tensorflow.linear_algebra
    lab.tensorflow.random

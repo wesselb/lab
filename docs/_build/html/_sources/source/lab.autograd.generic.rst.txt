@@ -1,0 +1,7 @@
+lab.autograd.generic module
+===========================
+
+.. automodule:: lab.autograd.generic
+    :members:
+    :undoc-members:
+    :show-inheritance:

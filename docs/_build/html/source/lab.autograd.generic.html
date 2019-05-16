@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>lab.torch.linear_algebra module &mdash; lab 0.1.0 documentation</title>
+  <title>lab.autograd.generic module &mdash; lab 0.1.0 documentation</title>
   
 
   
@@ -35,8 +35,8 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="lab.torch.random module" href="lab.torch.random.html" />
-    <link rel="prev" title="lab.torch.generic module" href="lab.torch.generic.html" /> 
+    <link rel="next" title="lab.autograd.linear_algebra module" href="lab.autograd.linear_algebra.html" />
+    <link rel="prev" title="lab.autograd.custom module" href="lab.autograd.custom.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -87,9 +87,19 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../readme.html">LAB</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">Application Programming Interface</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="lab.autograd.html">lab.autograd package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="lab.autograd.html">lab.autograd package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="lab.autograd.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="lab.autograd.custom.html">lab.autograd.custom module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">lab.autograd.generic module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="lab.autograd.linear_algebra.html">lab.autograd.linear_algebra module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="lab.autograd.random.html">lab.autograd.random module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="lab.autograd.shaping.html">lab.autograd.shaping module</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="lab.autograd.custom.html">lab.autograd.custom module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lab.autograd.generic.html">lab.autograd.generic module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">lab.autograd.generic module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.autograd.linear_algebra.html">lab.autograd.linear_algebra module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.autograd.random.html">lab.autograd.random module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.autograd.shaping.html">lab.autograd.shaping module</a></li>
@@ -104,20 +114,10 @@
 <li class="toctree-l2"><a class="reference internal" href="lab.tensorflow.linear_algebra.html">lab.tensorflow.linear_algebra module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.tensorflow.random.html">lab.tensorflow.random module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.tensorflow.shaping.html">lab.tensorflow.shaping module</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="lab.torch.html">lab.torch package</a><ul class="current">
-<li class="toctree-l3 current"><a class="reference internal" href="lab.torch.html#submodules">Submodules</a><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="lab.torch.custom.html">lab.torch.custom module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="lab.torch.generic.html">lab.torch.generic module</a></li>
-<li class="toctree-l4 current"><a class="current reference internal" href="#">lab.torch.linear_algebra module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="lab.torch.random.html">lab.torch.random module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="lab.torch.shaping.html">lab.torch.shaping module</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="lab.torch.html">lab.torch package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.torch.custom.html">lab.torch.custom module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.torch.generic.html">lab.torch.generic module</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">lab.torch.linear_algebra module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.torch.linear_algebra.html">lab.torch.linear_algebra module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.torch.random.html">lab.torch.random module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.torch.shaping.html">lab.torch.shaping module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.types.html">lab.types module</a></li>
@@ -171,15 +171,15 @@
         
           <li><a href="../api.html">Application Programming Interface</a> &raquo;</li>
         
-          <li><a href="lab.torch.html">lab.torch package</a> &raquo;</li>
+          <li><a href="lab.autograd.html">lab.autograd package</a> &raquo;</li>
         
-      <li>lab.torch.linear_algebra module</li>
+      <li>lab.autograd.generic module</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/source/lab.torch.linear_algebra.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/source/lab.autograd.generic.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -192,8 +192,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-lab.torch.linear_algebra">
-<span id="lab-torch-linear-algebra-module"></span><h1>lab.torch.linear_algebra module<a class="headerlink" href="#module-lab.torch.linear_algebra" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-lab.autograd.generic">
+<span id="lab-autograd-generic-module"></span><h1>lab.autograd.generic module<a class="headerlink" href="#module-lab.autograd.generic" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -204,10 +204,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="lab.torch.random.html" class="btn btn-neutral float-right" title="lab.torch.random module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="lab.autograd.linear_algebra.html" class="btn btn-neutral float-right" title="lab.autograd.linear_algebra module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="lab.torch.generic.html" class="btn btn-neutral float-left" title="lab.torch.generic module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="lab.autograd.custom.html" class="btn btn-neutral float-left" title="lab.autograd.custom module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

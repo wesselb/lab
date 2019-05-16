@@ -11,6 +11,7 @@ Submodules
 
 .. toctree::
 
+   lab.torch.custom
    lab.torch.generic
    lab.torch.linear_algebra
    lab.torch.random

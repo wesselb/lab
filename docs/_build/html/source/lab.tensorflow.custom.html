@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>lab.numpy package &mdash; lab 0.1.0 documentation</title>
+  <title>lab.tensorflow.custom module &mdash; lab 0.1.0 documentation</title>
   
 
   
@@ -35,8 +35,8 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="lab.numpy.generic module" href="lab.numpy.generic.html" />
-    <link rel="prev" title="lab.linear_algebra module" href="lab.linear_algebra.html" /> 
+    <link rel="next" title="lab.tensorflow.generic module" href="lab.tensorflow.generic.html" />
+    <link rel="prev" title="lab.tensorflow package" href="lab.tensorflow.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -87,30 +87,35 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../readme.html">LAB</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">Application Programming Interface</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="lab.autograd.html">lab.autograd package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.autograd.custom.html">lab.autograd.custom module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.autograd.generic.html">lab.autograd.generic module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.autograd.linear_algebra.html">lab.autograd.linear_algebra module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.autograd.random.html">lab.autograd.random module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.autograd.shaping.html">lab.autograd.shaping module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.custom.html">lab.custom module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.generic.html">lab.generic module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.linear_algebra.html">lab.linear_algebra module</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">lab.numpy package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="lab.numpy.generic.html">lab.numpy.generic module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="lab.numpy.linear_algebra.html">lab.numpy.linear_algebra module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="lab.numpy.random.html">lab.numpy.random module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="lab.numpy.shaping.html">lab.numpy.shaping module</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="lab.numpy.generic.html">lab.numpy.generic module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lab.numpy.linear_algebra.html">lab.numpy.linear_algebra module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lab.numpy.random.html">lab.numpy.random module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lab.numpy.shaping.html">lab.numpy.shaping module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.random.html">lab.random module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.shaping.html">lab.shaping module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lab.tensorflow.html">lab.tensorflow package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="lab.tensorflow.html">lab.tensorflow package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="lab.tensorflow.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">lab.tensorflow.custom module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="lab.tensorflow.generic.html">lab.tensorflow.generic module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="lab.tensorflow.linear_algebra.html">lab.tensorflow.linear_algebra module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="lab.tensorflow.random.html">lab.tensorflow.random module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="lab.tensorflow.shaping.html">lab.tensorflow.shaping module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">lab.tensorflow.custom module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.tensorflow.generic.html">lab.tensorflow.generic module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.tensorflow.linear_algebra.html">lab.tensorflow.linear_algebra module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.tensorflow.random.html">lab.tensorflow.random module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.tensorflow.shaping.html">lab.tensorflow.shaping module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.torch.html">lab.torch package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.torch.custom.html">lab.torch.custom module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.torch.generic.html">lab.torch.generic module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.torch.linear_algebra.html">lab.torch.linear_algebra module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.torch.random.html">lab.torch.random module</a></li>
@@ -166,13 +171,15 @@
         
           <li><a href="../api.html">Application Programming Interface</a> &raquo;</li>
         
-      <li>lab.numpy package</li>
+          <li><a href="lab.tensorflow.html">lab.tensorflow package</a> &raquo;</li>
+        
+      <li>lab.tensorflow.custom module</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/source/lab.numpy.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/source/lab.tensorflow.custom.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -185,19 +192,45 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-lab.numpy">
-<span id="lab-numpy-package"></span><h1>lab.numpy package<a class="headerlink" href="#module-lab.numpy" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="lab.numpy.generic.html">lab.numpy.generic module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lab.numpy.linear_algebra.html">lab.numpy.linear_algebra module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lab.numpy.random.html">lab.numpy.random module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lab.numpy.shaping.html">lab.numpy.shaping module</a></li>
+  <div class="section" id="module-lab.tensorflow.custom">
+<span id="lab-tensorflow-custom-module"></span><h1>lab.tensorflow.custom module<a class="headerlink" href="#module-lab.tensorflow.custom" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="lab.tensorflow.custom.tensorflow_register">
+<code class="descclassname">lab.tensorflow.custom.</code><code class="descname">tensorflow_register</code><span class="sig-paren">(</span><em>f</em>, <em>s_f</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lab/tensorflow/custom.html#tensorflow_register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.tensorflow.custom.tensorflow_register" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a function and its sensitivity for TensorFlow.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> (<em>function</em>) – Function to register.</p></li>
+<li><p><strong>s_f</strong> (<em>function</em>) – Sensitivity of <cite>f</cite>.</p></li>
 </ul>
-</div>
-</div>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>TensorFlow primitive.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lab.tensorflow.custom.as_tf">
+<code class="descclassname">lab.tensorflow.custom.</code><code class="descname">as_tf</code><a class="reference internal" href="../_modules/lab/tensorflow/custom.html#as_tf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.tensorflow.custom.as_tf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert object to TensorFlow.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>object</em>) – Object to convert.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>x</cite> as a TensorFlow object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 
 
@@ -208,10 +241,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="lab.numpy.generic.html" class="btn btn-neutral float-right" title="lab.numpy.generic module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="lab.tensorflow.generic.html" class="btn btn-neutral float-right" title="lab.tensorflow.generic module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="lab.linear_algebra.html" class="btn btn-neutral float-left" title="lab.linear_algebra module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="lab.tensorflow.html" class="btn btn-neutral float-left" title="lab.tensorflow package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

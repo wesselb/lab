@@ -1,7 +1,7 @@
-lab.numpy.random module
+lab.torch.custom module
 =======================
 
-.. automodule:: lab.numpy.random
+.. automodule:: lab.torch.custom
     :members:
     :undoc-members:
     :show-inheritance:

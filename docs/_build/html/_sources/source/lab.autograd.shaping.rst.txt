@@ -1,0 +1,7 @@
+lab.autograd.shaping module
+===========================
+
+.. automodule:: lab.autograd.shaping
+    :members:
+    :undoc-members:
+    :show-inheritance:

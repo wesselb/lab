@@ -1,0 +1,19 @@
+lab.autograd package
+====================
+
+.. automodule:: lab.autograd
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+
+   lab.autograd.custom
+   lab.autograd.generic
+   lab.autograd.linear_algebra
+   lab.autograd.random
+   lab.autograd.shaping
+

@@ -1,7 +1,0 @@
-lab.numpy.linear\_algebra module
-================================
-
-.. automodule:: lab.numpy.linear_algebra
-    :members:
-    :undoc-members:
-    :show-inheritance:

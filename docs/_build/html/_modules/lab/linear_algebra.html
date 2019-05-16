@@ -166,9 +166,10 @@
            <span class="s1">&#39;inv&#39;</span><span class="p">,</span>
            <span class="s1">&#39;det&#39;</span><span class="p">,</span>
            <span class="s1">&#39;logdet&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;cholesky&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;cholesky_solve&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;trisolve&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;cholesky&#39;</span><span class="p">,</span> <span class="s1">&#39;chol&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;cholesky_solve&#39;</span><span class="p">,</span> <span class="s1">&#39;cholsolve&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;triangular_solve&#39;</span><span class="p">,</span> <span class="s1">&#39;trisolve&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;toeplitz_solve&#39;</span><span class="p">,</span> <span class="s1">&#39;toepsolve&#39;</span><span class="p">,</span>
            <span class="s1">&#39;outer&#39;</span><span class="p">,</span>
            <span class="s1">&#39;reg&#39;</span><span class="p">,</span>
            <span class="s1">&#39;pw_dists2&#39;</span><span class="p">,</span> <span class="s1">&#39;pw_dists&#39;</span><span class="p">,</span> <span class="s1">&#39;ew_dists2&#39;</span><span class="p">,</span> <span class="s1">&#39;ew_dists&#39;</span><span class="p">,</span>
@@ -178,7 +179,7 @@
 
 
 <span class="k">def</span> <span class="nf">_default_perm</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
-    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
 
 
 <div class="viewcode-block" id="transpose"><a class="viewcode-back" href="../../source/lab.linear_algebra.html#lab.linear_algebra.transpose">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
@@ -332,6 +333,9 @@
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
 
+<span class="n">chol</span> <span class="o">=</span> <span class="n">cholesky</span>  <span class="c1">#: Shorthand for `cholesky`.</span>
+
+
 <div class="viewcode-block" id="cholesky_solve"><a class="viewcode-back" href="../../source/lab.linear_algebra.html#lab.linear_algebra.cholesky_solve">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
 <span class="nd">@abstract</span><span class="p">(</span><span class="n">promote</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">cholesky_solve</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
@@ -347,9 +351,12 @@
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
 
-<div class="viewcode-block" id="trisolve"><a class="viewcode-back" href="../../source/lab.linear_algebra.html#lab.linear_algebra.trisolve">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="n">cholsolve</span> <span class="o">=</span> <span class="n">cholesky_solve</span>  <span class="c1">#: Shorthand for `cholesky_solve`.</span>
+
+
+<div class="viewcode-block" id="triangular_solve"><a class="viewcode-back" href="../../source/lab.linear_algebra.html#lab.linear_algebra.triangular_solve">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
 <span class="nd">@abstract</span><span class="p">(</span><span class="n">promote</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">trisolve</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">lower_a</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+<span class="k">def</span> <span class="nf">triangular_solve</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">lower_a</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
     <span class="sd">&quot;&quot;&quot;Solve the linear system `a x = b` where `a` is triangular.</span>
 
 <span class="sd">    Args:</span>
@@ -361,6 +368,34 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        tensor: Solution `x`.</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<span class="n">trisolve</span> <span class="o">=</span> <span class="n">triangular_solve</span>  <span class="c1">#: Shorthand for `triangular_solve`.</span>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">(</span><span class="n">promote</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">toeplitz_solve</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Solve the linear system `toep(a, b) x = c` where `toep(a, b)` is a</span>
+<span class="sd">    Toeplitz matrix.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): First column of the Toeplitz matrix.</span>
+<span class="sd">        b (tensor, optional): *Except for the first element*, first row of the</span>
+<span class="sd">            Toeplitz matrix. Defaults to `a[1:]`.</span>
+<span class="sd">        c (tensor): RHS `c`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Solution `x`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="toeplitz_solve"><a class="viewcode-back" href="../../source/lab.linear_algebra.html#lab.linear_algebra.toeplitz_solve">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">toeplitz_solve</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">toeplitz_solve</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">c</span><span class="p">)</span></div>
+
+
+<span class="n">toepsolve</span> <span class="o">=</span> <span class="n">toeplitz_solve</span>  <span class="c1">#: Shorthand for `toeplitz_solve`.</span>
 
 
 <span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
