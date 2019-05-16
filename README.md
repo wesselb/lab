@@ -177,9 +177,9 @@ This section lists all available constants and methods.
         `axis` indicates an axis over which the function may perform its action.
         An axis is always given as a keyword argument.
     -
-        `ref` indicates a *reference tensor* from which a property (like its
-        data type) will be inferred. E.g., `zeros(tensor)` creates a tensor
-        full or zeros of the same shape and data type as `tensor`.
+        `ref` indicates a *reference tensor* from which properties, like its
+        shape and data type, will be used. E.g., `zeros(tensor)` creates a 
+        tensor full of zeros of the same shape and data type as `tensor`.
     
 See the documentation for more detailed descriptions of each function. 
 
