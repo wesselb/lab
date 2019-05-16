@@ -4,7 +4,9 @@ from __future__ import absolute_import, division, print_function
 
 import autograd.numpy as anp
 
-from . import dispatch, B
+from . import dispatch
+from .custom import autograd_register
+from ..custom import bvn_cdf, s_bvn_cdf
 from ..types import NPNumeric, NPDType, NPDimension, Int
 
 __all__ = []
@@ -186,3 +188,7 @@ def gt(a, b):
 @dispatch(NPNumeric, NPNumeric)
 def ge(a, b):
     return anp.greater_equal(a, b)
+
+
+f = autograd_register(bvn_cdf, s_bvn_cdf)
+dispatch(NPNumeric, NPNumeric, NPNumeric)(f)
