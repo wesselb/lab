@@ -38,7 +38,7 @@ def _np_apply(f, out_dtypes, *args, **kw_args):
 
     Args:
         f (function): NumPy function.
-        out_dtypes (list[dtype]): List of data types the output.
+        out_dtypes (list[dtype]): List of data types of the output.
         *args (object): Argument to `f`.
         **kw_args (object): Keyword arguments to `f`.
 
