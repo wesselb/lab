@@ -15,7 +15,7 @@ with open('LICENSE') as f:
     license = f.read()
 
 # Compile FORTRAN modules.
-os.system('gfortran -c lab/bvn_cdf/tvpack.f -o lab/bvn_cdf/tvpack.o')
+os.system('gfortran -fPIC -O2 -c lab/bvn_cdf/tvpack.f -o lab/bvn_cdf/tvpack.o')
 
 # Use gcc as the compiler.
 os.environ['CC'] = 'gcc'
@@ -34,7 +34,7 @@ setup(name='lab',
                              sources=['lab/bvn_cdf/bvn_cdf.pyx'],
                              include_dirs=[np.get_include()],
                              extra_compile_args=['-fPIC',
-                                                 '-O3',
+                                                 '-O2',
                                                  '-fopenmp'],
                              extra_link_args=['lab/bvn_cdf/tvpack.o',
                                               '-fopenmp'])])
