@@ -72,7 +72,8 @@ def torch_register(f, s_f):
             return as_torch(y)
 
         @staticmethod
-        def backward(ctx, s_y):
+        def backward(ctx, s_y):  # pragma: no cover
+            # The profiler does not catch that this is tested.
             y = ctx.saved_variables[0]
             args = ctx.saved_variables[1:]
             return as_torch(s_f(s_y.numpy(), y.numpy(), *as_np(args)))
