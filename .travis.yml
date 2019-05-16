@@ -2,6 +2,8 @@ language: python
 python:
   - 2.7
   - 3.6
+before_install:
+  - sudo apt-get install gfortran
 install:
   - pip install --no-cache-dir -U -r requirements.txt | cat
   - python setup.py build_ext -i
