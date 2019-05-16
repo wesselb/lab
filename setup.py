@@ -14,8 +14,10 @@ with open('README.md') as f:
 with open('LICENSE') as f:
     license = f.read()
 
-# Compile FORTRAN modules.
-os.system('gfortran -fPIC -O2 -c lab/bvn_cdf/tvpack.f -o lab/bvn_cdf/tvpack.o')
+# Compile TVPACK.
+command = 'gfortran -fPIC -O2 -c lab/bvn_cdf/tvpack.f -o lab/bvn_cdf/tvpack.o'
+print(command)
+os.system(command)
 
 # Use gcc as the compiler.
 os.environ['CC'] = 'gcc'
@@ -37,4 +39,6 @@ setup(name='lab',
                                                  '-O2',
                                                  '-fopenmp'],
                              extra_link_args=['lab/bvn_cdf/tvpack.o',
+                                              '-lgfortran',
+                                              '-L/usr/local/gfortran/lib',
                                               '-fopenmp'])])
