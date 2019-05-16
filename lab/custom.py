@@ -99,9 +99,4 @@ def s_bvn_cdf(s_y, y, a, b, c):
     s_b = s_y * norm.pdf(b) * norm.cdf(a, c * b, q)
     s_c = s_y * pdfs
 
-    print('s_y')
-    print('s_a', s_a)
-    print('s_b', s_b)
-    print('s_c', s_c)
-
     return s_a, s_b, s_c
