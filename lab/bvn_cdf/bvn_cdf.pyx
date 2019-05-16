@@ -7,7 +7,6 @@ from cython.parallel import prange
 cdef extern from './tvpack.h' nogil:
     extern double bvnd_(double* x, double* y, double* rho);
 
-@cython.boundscheck(False)
 @cython.wraparound(False)
 def bvn_cdf(np.ndarray[np.float64_t, ndim=1] x,
             np.ndarray[np.float64_t, ndim=1] y,
