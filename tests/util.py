@@ -93,8 +93,11 @@ def allclose(x, y, assert_dtype=False):
         allclose(xi, yi, assert_dtype)
 
 
-def check_function(f, args_spec, kw_args_spec, assert_dtype=True):
+def check_function(f, args_spec, kw_args_spec=None, assert_dtype=True):
     """Check that a function produces consistent output."""
+    if kw_args_spec is None:
+        kw_args_spec = {}
+
     # Construct product of keyword arguments.
     kw_args_prod = list(product(*[[(k, v) for v in vs.forms()]
                                   for k, vs in kw_args_spec.items()]))
