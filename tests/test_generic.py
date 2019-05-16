@@ -119,6 +119,10 @@ def test_cast():
     yield deq, B.dtype(B.cast(torch.float64, np.array(1))), torch.float64
     yield deq, B.dtype(B.cast(torch.float64, torch.tensor(1))), torch.float64
 
+    # Test that casting to its own data type does nothing.
+    for x in [B.randn(np.float32), B.randn(tf.float32), B.randn(torch.float32)]:
+        yield is_, x, B.cast(B.dtype(x), x)
+
 
 def test_unary():
     # Test functions using signed arguments.
