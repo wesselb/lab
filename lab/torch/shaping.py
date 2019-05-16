@@ -5,7 +5,7 @@ from __future__ import absolute_import, division, print_function
 import numpy as np
 import torch
 
-from . import dispatch
+from . import dispatch, B
 from ..shaping import _vec_to_tril_shape
 from ..types import TorchNumeric, TorchDimension
 
@@ -13,19 +13,8 @@ __all__ = []
 
 
 @dispatch(TorchNumeric)
-def shape(a):
-    s = a.shape
-    return tuple(s[i] for i in range(rank(a)))
-
-
-@dispatch(TorchNumeric)
 def shape_int(a):
-    return shape(a)
-
-
-@dispatch(TorchNumeric)
-def rank(a):
-    return len(a.shape)
+    return tuple(B.shape(a))
 
 
 @dispatch(TorchNumeric)
@@ -50,7 +39,7 @@ def diag(a):
 
 @dispatch(TorchNumeric)
 def vec_to_tril(a):
-    if rank(a) != 1:
+    if B.rank(a) != 1:
         raise ValueError('Input must be rank 1.')
     m = _vec_to_tril_shape(a)
     out = torch.zeros(m, m, dtype=a.dtype)
@@ -60,7 +49,7 @@ def vec_to_tril(a):
 
 @dispatch(TorchNumeric)
 def tril_to_vec(a):
-    if rank(a) != 2:
+    if B.rank(a) != 2:
         raise ValueError('Input must be rank 2.')
     n, m = shape_int(a)
     if n != m:
@@ -92,7 +81,7 @@ def concat(*elements, **kw_args):
 def take(a, indices, axis=0):
     if axis > 0:
         a = torch.transpose(a, 0, axis)
-    a = a[(indices,) + (slice(None),) * (rank(a) - 1)]
+    a = a[(indices,) + (slice(None),) * (B.rank(a) - 1)]
     if axis > 0:
         a = torch.transpose(a, 0, axis)
     return a

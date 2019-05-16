@@ -27,7 +27,6 @@ __all__ = ['shape',
 
 
 @dispatch(Numeric)
-@abstract()
 def shape(a):  # pragma: no cover
     """Get the shape of a tensor.
 
@@ -37,10 +36,14 @@ def shape(a):  # pragma: no cover
     Returns:
         object: Shape of `a`.
     """
+    try:
+        return a.shape
+    except AttributeError:
+        # `a` must be a number.
+        return ()
 
 
 @dispatch(Numeric)
-@abstract()
 def shape_int(a):  # pragma: no cover
     """Get the shape of a tensor as a tuple of integers.
 
@@ -50,10 +53,10 @@ def shape_int(a):  # pragma: no cover
     Returns:
         tuple: Shape of `a` as a tuple of integers.
     """
+    return shape(a)
 
 
 @dispatch(Numeric)
-@abstract()
 def rank(a):  # pragma: no cover
     """Get the shape of a tensor.
 
@@ -63,6 +66,7 @@ def rank(a):  # pragma: no cover
     Returns:
         int: Rank of `a`.
     """
+    return len(shape(a))
 
 
 @dispatch(Numeric)

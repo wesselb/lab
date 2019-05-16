@@ -75,7 +75,7 @@ def to_np(x):
     return x.value
 
 
-@_dispatch(tuple)
+@_dispatch({tuple, tf.TensorShape, torch.Size})
 def to_np(tup):
     return tuple(to_np(x) for x in tup)
 
