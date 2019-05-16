@@ -4,6 +4,7 @@ python:
   - 3.6
 install:
   - pip install --no-cache-dir -U -r requirements.txt | cat
+  - python setup.py build_ext -i
 script:
   - nosetests tests --with-coverage --cover-package=lab
 after_success:

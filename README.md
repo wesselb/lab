@@ -253,6 +253,8 @@ lt(a, b)
 le(a, b)
 gt(a, b)
 ge(a, b)
+
+bvn_cdf(a, b, c)
 ```
 
 ### Linear Algebra
