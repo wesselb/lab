@@ -12,6 +12,7 @@ from .bvn_cdf import bvn_cdf
 
 __all__ = ['toeplitz_solve', 's_toeplitz_solve',
            'bvn_cdf', 's_bvn_cdf']
+
 log = logging.getLogger(__name__)
 
 
@@ -75,7 +76,6 @@ def s_toeplitz_solve(s_y, y, a, b, c):
 
     # Compute the sensitivity w.r.t. the transposed inverse of the Toeplitz
     # matrix.
-    log.debug(s_c)
     s_inv = -_mm(_uprank(s_c), _t(y))
 
     # Finally, compute the sensitivities w.r.t. `a` and `c`.
