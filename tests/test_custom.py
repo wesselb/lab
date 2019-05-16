@@ -16,7 +16,7 @@ from lab.torch.custom import as_torch, as_np
 
 # noinspection PyUnresolvedReferences
 from . import eq, neq, lt, le, ge, gt, raises, call, ok, allclose, approx, \
-    eeq, assert_isinstance
+    deq, assert_isinstance
 
 
 def test_as_tuple():

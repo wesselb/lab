@@ -7,7 +7,7 @@ import sys
 import numpy as np
 from autograd.tracer import Box
 from plum import Union, add_conversion_method, convert, add_promotion_rule, \
-    ResolvableType, as_type, parametric, Dispatcher, clear_all_cache
+    ResolvableType, as_type, parametric, clear_all_cache
 
 from . import dispatch
 
@@ -117,7 +117,7 @@ add_conversion_method(_tf_dimension, int, lambda x: x.value)
 
 # Data types:
 
-NPDType = Union(type(np.float64), alias='NPDType')
+NPDType = Union(type, np.dtype, alias='NPDType')
 TFDType = Union(_tf_dtype, alias='TFDType')
 TorchDType = Union(_torch_dtype, alias='TorchDType')
 DType = Union(NPDType, TFDType, TorchDType, alias='DType')
@@ -147,26 +147,33 @@ def _torch_lookup(dtype):
 
 
 # Add conversions between data types.
+def _name(x):
+    try:
+        return x.name
+    except AttributeError:
+        return x.__name__
+
+
 add_conversion_method(NPDType, TFDType,
-                      lambda x: _module_attr('tensorflow', x.__name__))
+                      lambda x: _module_attr('tensorflow', _name(x)))
 add_conversion_method(NPDType, TorchDType,
-                      lambda x: _module_attr('torch', x.__name__))
+                      lambda x: _module_attr('torch', _name(x)))
 add_conversion_method(TorchDType, NPDType, _torch_lookup)
 add_conversion_method(TorchDType, TFDType,
                       lambda x: _module_attr('tensorflow',
-                                             _torch_lookup(x).__name__))
+                                             _name(_torch_lookup(x))))
 add_conversion_method(TFDType, NPDType, lambda x: x.as_numpy_dtype)
 add_conversion_method(TFDType, TorchDType,
                       lambda x: _module_attr('torch',
-                                             x.as_numpy_dtype.__name__))
+                                             _name(x.as_numpy_dtype)))
 
-# NumPy data types can be of type `np.dtype`. Convert to the proper types.
-add_conversion_method(np.dtype, DType, lambda x: x.type)
+# # NumPy data types can be of type `np.dtype`. Convert to the proper types.
+# add_conversion_method(np.dtype, DType, lambda x: x.type)
 
 default_dtype = np.float64  #: Default dtype.
 
 
-@dispatch(type, type)
+@dispatch(NPDType, NPDType)
 def issubdtype(dtype1, dtype2):
     """Check whether one data type is a subtype of another.
 
@@ -182,7 +189,7 @@ def issubdtype(dtype1, dtype2):
 
 @dispatch(object, object)
 def issubdtype(dtype1, dtype2):
-    return issubdtype(convert(dtype1, type), convert(dtype2, type))
+    return issubdtype(convert(dtype1, NPDType), convert(dtype2, NPDType))
 
 
 @dispatch(object)
@@ -192,9 +199,9 @@ def dtype(a):
     Args:
         a (tensor): Object to determine data type of.
     """
-    if hasattr(a, 'dtype'):
-        return convert(a.dtype, DType)
-    else:
+    try:
+        return a.dtype
+    except AttributeError:
         return type(a)
 
 

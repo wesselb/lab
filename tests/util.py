@@ -29,8 +29,19 @@ ok = nose.tools.ok_
 approx = np.testing.assert_array_almost_equal
 
 
-def eeq(x, y):
+def is_(x, y):
     assert x is y
+
+
+def deq(x, y):
+    # NumPy has two representations of data types, and TensorFlow data types
+    # equal to NumPy data types.
+    if isinstance(x, (type, np.dtype)) and isinstance(y, (type, np.dtype)):
+        # We are safe to equate, because `x` nor `y` can be a TensorFlow or
+        # PyTorch data type.
+        assert x == y
+    else:
+        assert x is y
 
 
 def assert_isinstance(x, y):

@@ -11,7 +11,7 @@ from plum.promotion import _promotion_rule, convert
 
 # noinspection PyUnresolvedReferences
 from . import eq, neq, lt, le, ge, gt, raises, call, ok, allclose, approx, \
-    assert_isinstance, eeq
+    assert_isinstance, deq
 
 
 def test_numeric():
@@ -92,15 +92,15 @@ def test_data_type():
     yield assert_isinstance, torch.float32, B.DType
 
     # Test conversion between data types.
-    yield eeq, convert(np.float32, B.TFDType), tf.float32
-    yield eeq, convert(np.float32, B.TorchDType), torch.float32
-    yield eeq, convert(tf.float32, B.NPDType), np.float32
-    yield eeq, convert(tf.float32, B.TorchDType), torch.float32
-    yield eeq, convert(torch.float32, B.NPDType), np.float32
-    yield eeq, convert(torch.float32, B.TFDType), tf.float32
+    yield deq, convert(np.float32, B.TFDType), tf.float32
+    yield deq, convert(np.float32, B.TorchDType), torch.float32
+    yield deq, convert(tf.float32, B.NPDType), np.float32
+    yield deq, convert(tf.float32, B.TorchDType), torch.float32
+    yield deq, convert(torch.float32, B.NPDType), np.float32
+    yield deq, convert(torch.float32, B.TFDType), tf.float32
 
     # Test conversion of `np.dtype`.
-    yield eeq, convert(np.dtype('float32'), B.DType), np.float32
+    yield deq, convert(np.dtype('float32'), B.DType), np.float32
 
 
 def test_issubdtype():

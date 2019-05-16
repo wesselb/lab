@@ -12,13 +12,14 @@ import lab as B
 from . import check_function, Tensor, Value, PositiveTensor, BoolTensor, \
     NaNTensor, List
 # noinspection PyUnresolvedReferences
-from . import eq, neq, lt, le, ge, gt, raises, call, ok, allclose, approx, eeq
+from . import eq, neq, lt, le, ge, gt, raises, call, ok, allclose, approx, \
+    deq, is_
 
 
 def test_constants():
     yield eq, B.pi, np.pi
     yield eq, B.log_2_pi, np.log(2 * np.pi)
-    yield eeq, B.nan, np.nan
+    yield is_, B.nan, np.nan
 
 
 def test_isnan():
@@ -107,16 +108,16 @@ def test_range():
 
 def test_cast():
     # Test casting to a given data type.
-    yield eeq, B.dtype(B.cast(np.float64, 1)), np.float64
-    yield eeq, B.dtype(B.cast(np.float64, np.array(1))), np.float64
+    yield deq, B.dtype(B.cast(np.float64, 1)), np.float64
+    yield deq, B.dtype(B.cast(np.float64, np.array(1))), np.float64
 
-    yield eeq, B.dtype(B.cast(tf.float64, 1)), tf.float64
-    yield eeq, B.dtype(B.cast(tf.float64, np.array(1))), tf.float64
-    yield eeq, B.dtype(B.cast(tf.float64, tf.constant(1))), tf.float64
+    yield deq, B.dtype(B.cast(tf.float64, 1)), tf.float64
+    yield deq, B.dtype(B.cast(tf.float64, np.array(1))), tf.float64
+    yield deq, B.dtype(B.cast(tf.float64, tf.constant(1))), tf.float64
 
-    yield eeq, B.dtype(B.cast(torch.float64, 1)), torch.float64
-    yield eeq, B.dtype(B.cast(torch.float64, np.array(1))), torch.float64
-    yield eeq, B.dtype(B.cast(torch.float64, torch.tensor(1))), torch.float64
+    yield deq, B.dtype(B.cast(torch.float64, 1)), torch.float64
+    yield deq, B.dtype(B.cast(torch.float64, np.array(1))), torch.float64
+    yield deq, B.dtype(B.cast(torch.float64, torch.tensor(1))), torch.float64
 
 
 def test_unary():
