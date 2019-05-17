@@ -2,6 +2,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+from itertools import product
 import numpy as np
 
 import lab as B
@@ -122,11 +123,12 @@ def test_toeplitz_solve():
 
 
 def test_outer():
-    yield raises, ValueError, lambda: B.outer(B.eye(5), B.ones(5))
-    yield raises, ValueError, lambda: B.outer(B.ones(5), B.eye(5))
-    a, b = Tensor(5).np(), Tensor(5).np()
-    yield allclose, B.outer(a, b), np.outer(a, b)
-    yield allclose, B.outer(a), np.outer(a, a)
+    for a, b in list(product(*([[Tensor(5).np(), Tensor(5, 1).np()]] * 2))) + \
+                [(Tensor(5, 3).np(), Tensor(5, 3).np())]:
+        yield allclose, \
+              B.outer(a, b), B.matmul(B.uprank(a), B.uprank(b), tr_b=True)
+        yield allclose, B.outer(a), B.outer(a, a)
+        yield allclose, B.outer(b), B.outer(b, b)
 
 
 def test_reg():

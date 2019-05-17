@@ -2,6 +2,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+import logging
 from . import dispatch, B
 from .types import Numeric
 from .util import abstract
@@ -24,6 +25,8 @@ __all__ = ['epsilon',
            'reg',
            'pw_dists2', 'pw_dists', 'ew_dists2', 'ew_dists',
            'pw_sums2', 'pw_sums', 'ew_sums2', 'ew_sums']
+
+log = logging.getLogger(__name__)
 
 epsilon = 1e-12  #: Magnitude of diagonal to regularise matrices with.
 
@@ -250,18 +253,24 @@ toepsolve = toeplitz_solve  #: Shorthand for `toeplitz_solve`.
 
 @dispatch(object, object)
 def outer(a, b):
-    """Compute the outer product between two vectors.
+    """Compute the outer product between two vectors or matrices.
 
     Args:
-        a (vector): First vector.
-        b (vector): Second vector.
+        a (tensor): First tensor.
+        b (tensor): Second tensor.
 
     Returns:
         tensor: Outer product of `a` and `b`.
     """
-    if B.rank(a) != 1 or B.rank(b) != 1:
-        raise ValueError('Arguments must have rank 1.')
-    return B.expand_dims(a, axis=1) * B.expand_dims(b, axis=0)
+    a = B.uprank(a)
+    b = B.uprank(b)
+
+    # Optimise the case that both are column vectors.
+    ranks_are_one = B.rank(a) == 1 and B.rank(b) == 1
+    if ranks_are_one and B.shape(a)[1] == 1 and B.shape(b)[1] == 1:
+        return a * b
+
+    return B.matmul(a, b, tr_b=True)
 
 
 @dispatch(object)
