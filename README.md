@@ -24,7 +24,8 @@ backend
 ## Installation
 The package is tested for Python 2.7 and Python 3.6, which are the versions 
 recommended to use.
-To install the package, use the following sequence of commands:
+To install the package, please ensure that `gcc` and `gfortran` are 
+available, and then run the following commands:
 
 ```
 git clone https://github.com/wesselb/lab
@@ -304,13 +305,11 @@ set_random_seed(seed)
 
 rand(dtype, *shape)
 rand(*shape)
-rand(dtype)
-rand()
+rand(ref)
 
 randn(dtype, *shape)
 randn(*shape)
-randn(dtype)
-randn()
+randn(ref)
 ```
 
 ### Shaping
