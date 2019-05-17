@@ -26,6 +26,10 @@ def matmul(a, b, tr_a=False, tr_b=False):
 
 @dispatch(NPNumeric)
 def transpose(a, perm=None):
+    # Optimise the case that `rank(a) < 2`.
+    if B.rank(a) < 2:
+        return a
+
     if perm is None:
         perm = _default_perm(a)
     return anp.transpose(a, axes=perm)

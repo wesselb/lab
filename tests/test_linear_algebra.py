@@ -8,7 +8,7 @@ import numpy as np
 import lab as B
 from . import check_function, Matrix, Bool, Value, PSD, Tensor
 # noinspection PyUnresolvedReferences
-from . import eq, neq, lt, le, ge, gt, raises, call, ok, allclose, approx
+from . import eq, neq, lt, le, ge, gt, raises, call, ok, allclose, approx, is_
 
 
 def test_constants():
@@ -18,6 +18,7 @@ def test_constants():
 def test_transpose():
     for f in [B.transpose, B.T, B.t]:
         # Check consistency.
+        yield check_function, f, (Tensor(),)
         yield check_function, f, (Tensor(2),), {'perm': Value(None, (0,))}
         yield check_function, f, \
               (Tensor(2, 3),), {'perm': Value(None, (0, 1), (1, 0))}
@@ -32,9 +33,14 @@ def test_transpose():
 
         # Check correctness.
         a = Tensor(2, 3, 4, 5).np()
-        yield allclose, f(a), np.transpose(a)
+        yield allclose, f(a), np.transpose(a, axes=(0, 1, 3, 2))
         yield allclose, \
               f(a, perm=(1, 2, 0, 3)), np.transpose(a, axes=(1, 2, 0, 3))
+
+        # Check that the zero-dimensional and one-dimensional cases are
+        # optimised.
+        for x in Tensor().forms() + Tensor(2).forms():
+            yield is_, f(x), x
 
 
 def test_matmul():

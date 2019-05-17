@@ -32,7 +32,14 @@ epsilon = 1e-12  #: Magnitude of diagonal to regularise matrices with.
 
 
 def _default_perm(a):
-    return list(range(B.rank(a) - 1, -1, -1))
+    rank_a = B.rank(a)
+    perm = list(range(rank_a))
+
+    # Switch the last two dimensions if `rank_a >= 2`.
+    if len(perm) >= 2:
+        perm[-2], perm[-1] = perm[-1], perm[-2]
+
+    return perm
 
 
 @dispatch(Numeric)
