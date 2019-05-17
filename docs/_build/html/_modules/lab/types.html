@@ -157,7 +157,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">autograd.tracer</span> <span class="k">import</span> <span class="n">Box</span>
 <span class="kn">from</span> <span class="nn">plum</span> <span class="k">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">add_conversion_method</span><span class="p">,</span> <span class="n">convert</span><span class="p">,</span> <span class="n">add_promotion_rule</span><span class="p">,</span> \
-    <span class="n">ResolvableType</span><span class="p">,</span> <span class="n">as_type</span><span class="p">,</span> <span class="n">parametric</span><span class="p">,</span> <span class="n">Dispatcher</span><span class="p">,</span> <span class="n">clear_all_cache</span>
+    <span class="n">ResolvableType</span><span class="p">,</span> <span class="n">as_type</span><span class="p">,</span> <span class="n">parametric</span><span class="p">,</span> <span class="n">clear_all_cache</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">dispatch</span>
 
@@ -267,7 +267,7 @@
 
 <span class="c1"># Data types:</span>
 
-<span class="n">NPDType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;NPDType&#39;</span><span class="p">)</span>
+<span class="n">NPDType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="nb">type</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;NPDType&#39;</span><span class="p">)</span>
 <span class="n">TFDType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">_tf_dtype</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;TFDType&#39;</span><span class="p">)</span>
 <span class="n">TorchDType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">_torch_dtype</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;TorchDType&#39;</span><span class="p">)</span>
 <span class="n">DType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">NPDType</span><span class="p">,</span> <span class="n">TFDType</span><span class="p">,</span> <span class="n">TorchDType</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;DType&#39;</span><span class="p">)</span>
@@ -297,26 +297,33 @@
 
 
 <span class="c1"># Add conversions between data types.</span>
+<span class="k">def</span> <span class="nf">_name</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="vm">__name__</span>
+
+
 <span class="n">add_conversion_method</span><span class="p">(</span><span class="n">NPDType</span><span class="p">,</span> <span class="n">TFDType</span><span class="p">,</span>
-                      <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">_module_attr</span><span class="p">(</span><span class="s1">&#39;tensorflow&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
+                      <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">_module_attr</span><span class="p">(</span><span class="s1">&#39;tensorflow&#39;</span><span class="p">,</span> <span class="n">_name</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
 <span class="n">add_conversion_method</span><span class="p">(</span><span class="n">NPDType</span><span class="p">,</span> <span class="n">TorchDType</span><span class="p">,</span>
-                      <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">_module_attr</span><span class="p">(</span><span class="s1">&#39;torch&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
+                      <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">_module_attr</span><span class="p">(</span><span class="s1">&#39;torch&#39;</span><span class="p">,</span> <span class="n">_name</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
 <span class="n">add_conversion_method</span><span class="p">(</span><span class="n">TorchDType</span><span class="p">,</span> <span class="n">NPDType</span><span class="p">,</span> <span class="n">_torch_lookup</span><span class="p">)</span>
 <span class="n">add_conversion_method</span><span class="p">(</span><span class="n">TorchDType</span><span class="p">,</span> <span class="n">TFDType</span><span class="p">,</span>
                       <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">_module_attr</span><span class="p">(</span><span class="s1">&#39;tensorflow&#39;</span><span class="p">,</span>
-                                             <span class="n">_torch_lookup</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
+                                             <span class="n">_name</span><span class="p">(</span><span class="n">_torch_lookup</span><span class="p">(</span><span class="n">x</span><span class="p">))))</span>
 <span class="n">add_conversion_method</span><span class="p">(</span><span class="n">TFDType</span><span class="p">,</span> <span class="n">NPDType</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">as_numpy_dtype</span><span class="p">)</span>
 <span class="n">add_conversion_method</span><span class="p">(</span><span class="n">TFDType</span><span class="p">,</span> <span class="n">TorchDType</span><span class="p">,</span>
                       <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">_module_attr</span><span class="p">(</span><span class="s1">&#39;torch&#39;</span><span class="p">,</span>
-                                             <span class="n">x</span><span class="o">.</span><span class="n">as_numpy_dtype</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
+                                             <span class="n">_name</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">as_numpy_dtype</span><span class="p">)))</span>
 
-<span class="c1"># NumPy data types can be of type `np.dtype`. Convert to the proper types.</span>
-<span class="n">add_conversion_method</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">DType</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
+<span class="c1"># # NumPy data types can be of type `np.dtype`. Convert to the proper types.</span>
+<span class="c1"># add_conversion_method(np.dtype, DType, lambda x: x.type)</span>
 
 <span class="n">default_dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span>  <span class="c1">#: Default dtype.</span>
 
 
-<span class="nd">@dispatch</span><span class="p">(</span><span class="nb">type</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span>
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">NPDType</span><span class="p">,</span> <span class="n">NPDType</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">issubdtype</span><span class="p">(</span><span class="n">dtype1</span><span class="p">,</span> <span class="n">dtype2</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Check whether one data type is a subtype of another.</span>
 
@@ -332,7 +339,7 @@
 
 <div class="viewcode-block" id="issubdtype"><a class="viewcode-back" href="../../source/lab.types.html#lab.types.issubdtype">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">issubdtype</span><span class="p">(</span><span class="n">dtype1</span><span class="p">,</span> <span class="n">dtype2</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">issubdtype</span><span class="p">(</span><span class="n">convert</span><span class="p">(</span><span class="n">dtype1</span><span class="p">,</span> <span class="nb">type</span><span class="p">),</span> <span class="n">convert</span><span class="p">(</span><span class="n">dtype2</span><span class="p">,</span> <span class="nb">type</span><span class="p">))</span></div>
+    <span class="k">return</span> <span class="n">issubdtype</span><span class="p">(</span><span class="n">convert</span><span class="p">(</span><span class="n">dtype1</span><span class="p">,</span> <span class="n">NPDType</span><span class="p">),</span> <span class="n">convert</span><span class="p">(</span><span class="n">dtype2</span><span class="p">,</span> <span class="n">NPDType</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="dtype"><a class="viewcode-back" href="../../source/lab.types.html#lab.types.dtype">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
@@ -342,9 +349,9 @@
 <span class="sd">    Args:</span>
 <span class="sd">        a (tensor): Object to determine data type of.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s1">&#39;dtype&#39;</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">convert</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">DType</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">a</span><span class="o">.</span><span class="n">dtype</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">a</span><span class="p">)</span></div>
 
 

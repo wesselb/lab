@@ -152,6 +152,7 @@
 
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
 
+<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">dispatch</span><span class="p">,</span> <span class="n">B</span>
 <span class="kn">from</span> <span class="nn">.types</span> <span class="k">import</span> <span class="n">Numeric</span>
 <span class="kn">from</span> <span class="nn">.util</span> <span class="k">import</span> <span class="n">abstract</span>
@@ -175,11 +176,20 @@
            <span class="s1">&#39;pw_dists2&#39;</span><span class="p">,</span> <span class="s1">&#39;pw_dists&#39;</span><span class="p">,</span> <span class="s1">&#39;ew_dists2&#39;</span><span class="p">,</span> <span class="s1">&#39;ew_dists&#39;</span><span class="p">,</span>
            <span class="s1">&#39;pw_sums2&#39;</span><span class="p">,</span> <span class="s1">&#39;pw_sums&#39;</span><span class="p">,</span> <span class="s1">&#39;ew_sums2&#39;</span><span class="p">,</span> <span class="s1">&#39;ew_sums&#39;</span><span class="p">]</span>
 
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
 <span class="n">epsilon</span> <span class="o">=</span> <span class="mf">1e-12</span>  <span class="c1">#: Magnitude of diagonal to regularise matrices with.</span>
 
 
 <span class="k">def</span> <span class="nf">_default_perm</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
-    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">rank_a</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">perm</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">rank_a</span><span class="p">))</span>
+
+    <span class="c1"># Switch the last two dimensions if `rank_a &gt;= 2`.</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">perm</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">perm</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="n">perm</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">perm</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">perm</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">perm</span>
 
 
 <div class="viewcode-block" id="transpose"><a class="viewcode-back" href="../../source/lab.linear_algebra.html#lab.linear_algebra.transpose">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
@@ -400,18 +410,23 @@
 
 <span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">outer</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Compute the outer product between two vectors.</span>
+    <span class="sd">&quot;&quot;&quot;Compute the outer product between two vectors or matrices.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        a (vector): First vector.</span>
-<span class="sd">        b (vector): Second vector.</span>
+<span class="sd">        a (tensor): First tensor.</span>
+<span class="sd">        b (tensor): Second tensor.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        tensor: Outer product of `a` and `b`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">B</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">B</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Arguments must have rank 1.&#39;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">B</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">uprank</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">uprank</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+
+    <span class="c1"># Optimise the case that both are column vectors.</span>
+    <span class="k">if</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">a</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">b</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="n">B</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">tr_b</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="outer"><a class="viewcode-back" href="../../source/lab.linear_algebra.html#lab.linear_algebra.outer">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>

@@ -162,6 +162,7 @@
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;toeplitz_solve&#39;</span><span class="p">,</span> <span class="s1">&#39;s_toeplitz_solve&#39;</span><span class="p">,</span>
            <span class="s1">&#39;bvn_cdf&#39;</span><span class="p">,</span> <span class="s1">&#39;s_bvn_cdf&#39;</span><span class="p">]</span>
+
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
@@ -225,7 +226,6 @@
 
     <span class="c1"># Compute the sensitivity w.r.t. the transposed inverse of the Toeplitz</span>
     <span class="c1"># matrix.</span>
-    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">s_c</span><span class="p">)</span>
     <span class="n">s_inv</span> <span class="o">=</span> <span class="o">-</span><span class="n">_mm</span><span class="p">(</span><span class="n">_uprank</span><span class="p">(</span><span class="n">s_c</span><span class="p">),</span> <span class="n">_t</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
 
     <span class="c1"># Finally, compute the sensitivities w.r.t. `a` and `c`.</span>
@@ -248,11 +248,6 @@
     <span class="n">s_a</span> <span class="o">=</span> <span class="n">s_y</span> <span class="o">*</span> <span class="n">norm</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
     <span class="n">s_b</span> <span class="o">=</span> <span class="n">s_y</span> <span class="o">*</span> <span class="n">norm</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">*</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">c</span> <span class="o">*</span> <span class="n">b</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
     <span class="n">s_c</span> <span class="o">=</span> <span class="n">s_y</span> <span class="o">*</span> <span class="n">pdfs</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;s_y&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;s_a&#39;</span><span class="p">,</span> <span class="n">s_a</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;s_b&#39;</span><span class="p">,</span> <span class="n">s_b</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;s_c&#39;</span><span class="p">,</span> <span class="n">s_c</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">s_a</span><span class="p">,</span> <span class="n">s_b</span><span class="p">,</span> <span class="n">s_c</span></div>
 </pre></div>

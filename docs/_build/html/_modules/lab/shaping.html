@@ -177,7 +177,6 @@
 
 
 <div class="viewcode-block" id="shape"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.shape">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
-<span class="nd">@abstract</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
     <span class="sd">&quot;&quot;&quot;Get the shape of a tensor.</span>
 
@@ -186,11 +185,15 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        object: Shape of `a`.</span>
-<span class="sd">    &quot;&quot;&quot;</span></div>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="c1"># `a` must be a number.</span>
+        <span class="k">return</span> <span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="shape_int"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.shape_int">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
-<span class="nd">@abstract</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">shape_int</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
     <span class="sd">&quot;&quot;&quot;Get the shape of a tensor as a tuple of integers.</span>
 
@@ -199,11 +202,11 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        tuple: Shape of `a` as a tuple of integers.</span>
-<span class="sd">    &quot;&quot;&quot;</span></div>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">shape</span><span class="p">(</span><span class="n">a</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="rank"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.rank">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
-<span class="nd">@abstract</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">rank</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
     <span class="sd">&quot;&quot;&quot;Get the shape of a tensor.</span>
 
@@ -212,7 +215,8 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        int: Rank of `a`.</span>
-<span class="sd">    &quot;&quot;&quot;</span></div>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">(</span><span class="n">a</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="length"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.length">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
