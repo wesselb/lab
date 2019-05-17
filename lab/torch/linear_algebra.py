@@ -22,9 +22,12 @@ def matmul(a, b, tr_a=False, tr_b=False):
 
 @dispatch(TorchNumeric)
 def transpose(a, perm=None):
-    # Optimise the case that `rank(a) < 2`.
-    if B.rank(a) < 2:
+    # Correctly handle special cases.
+    rank_a = B.rank(a)
+    if rank_a == 0:
         return a
+    elif rank_a == 1 and perm is None:
+        return a[None, :]
 
     if perm is None:
         perm = _default_perm(a)

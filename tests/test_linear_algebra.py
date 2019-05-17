@@ -31,16 +31,18 @@ def test_transpose():
                                                  (2, 1, 0),
                                                  (2, 0, 1))}
 
-        # Check correctness.
-        a = Tensor(2, 3, 4, 5).np()
-        yield allclose, f(a), np.transpose(a, axes=(0, 1, 3, 2))
-        yield allclose, \
-              f(a, perm=(1, 2, 0, 3)), np.transpose(a, axes=(1, 2, 0, 3))
+        # Check correctness of zero-dimensional case.
+        yield is_, f(1), 1
 
-        # Check that the zero-dimensional and one-dimensional cases are
-        # optimised.
-        for x in Tensor().forms() + Tensor(2).forms():
-            yield is_, f(x), x
+        # Check correctness of one-dimensional case.
+        a = Tensor(2).np()
+        yield allclose, f(a, perm=None), a[None, :]
+        yield allclose, f(a, perm=(0,)), a
+
+        # Check correctness of three-dimensional case.
+        a = Tensor(2, 3, 4).np()
+        yield allclose, f(a), np.transpose(a, axes=(0, 2, 1))
+        yield allclose, f(a, perm=(1, 2, 0)), np.transpose(a, axes=(1, 2, 0))
 
 
 def test_matmul():
