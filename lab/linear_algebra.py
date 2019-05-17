@@ -266,9 +266,8 @@ def outer(a, b):
     b = B.uprank(b)
 
     # Optimise the case that both are column vectors.
-    ranks_are_one = B.rank(a) == 1 and B.rank(b) == 1
-    if ranks_are_one and B.shape(a)[1] == 1 and B.shape(b)[1] == 1:
-        return a * b
+    if B.shape(a)[1] == 1 and B.shape(b)[1] == 1:
+        return a * B.transpose(b)
 
     return B.matmul(a, b, tr_b=True)
 
