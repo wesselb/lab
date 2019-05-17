@@ -11,8 +11,8 @@ from setuptools import find_packages, setup, Extension
 with open('README.md') as f:
     readme = f.read()
 
-with open('LICENSE') as f:
-    license = f.read()
+with open('LICENCE') as f:
+    licence = f.read()
 
 # Compile TVPACK.
 command = 'gfortran -fPIC -O2 -c lab/bvn_cdf/tvpack.f -o lab/bvn_cdf/tvpack.o'
@@ -29,7 +29,7 @@ setup(name='lab',
       author='Wessel Bruinsma',
       author_email='wessel.p.bruinsma@gmail.com',
       url='https://github.com/wesselb/lab',
-      license=license,
+      license=licence,
       packages=find_packages(exclude=('tests', 'docs')),
       cmdclass={'build_ext': build_ext},
       ext_modules=[Extension('lab.bvn_cdf',
