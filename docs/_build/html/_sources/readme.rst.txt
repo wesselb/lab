@@ -269,6 +269,8 @@ Generic
 
     bvn_cdf(a, b, c)
 
+    scan(f, xs, *init_state)
+
 Linear Algebra
 ~~~~~~~~~~~~~~
 
