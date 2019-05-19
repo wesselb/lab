@@ -181,14 +181,18 @@ def test_pw_2d():
 
 def test_pw_1d():
     a, b = Matrix(5, 1).np(), Matrix(10, 1).np()
-    yield allclose, B.pw_dists2(a, b), np.abs(a - b.T) ** 2
-    yield allclose, B.pw_dists2(a), np.abs(a - a.T) ** 2
-    yield allclose, B.pw_dists(a, b), np.abs(a - b.T)
-    yield allclose, B.pw_dists(a), np.abs(a - a.T)
-    yield allclose, B.pw_sums2(a, b), np.abs(a + b.T) ** 2
-    yield allclose, B.pw_sums2(a), np.abs(a + a.T) ** 2
-    yield allclose, B.pw_sums(a, b), np.abs(a + b.T)
-    yield allclose, B.pw_sums(a), np.abs(a + a.T)
+
+    # Check that we can feed both rank 1 and rank 2 tensors.
+    for f, g in product(*([[lambda x: x, lambda x: x[:, 0]]] * 2)):
+        
+        yield allclose, B.pw_dists2(f(a), g(b)), np.abs(a - b.T) ** 2
+        yield allclose, B.pw_dists2(f(a)), np.abs(a - a.T) ** 2
+        yield allclose, B.pw_dists(f(a), g(b)), np.abs(a - b.T)
+        yield allclose, B.pw_dists(f(a)), np.abs(a - a.T)
+        yield allclose, B.pw_sums2(f(a), g(b)), np.abs(a + b.T) ** 2
+        yield allclose, B.pw_sums2(f(a)), np.abs(a + a.T) ** 2
+        yield allclose, B.pw_sums(f(a), g(b)), np.abs(a + b.T)
+        yield allclose, B.pw_sums(f(a)), np.abs(a + a.T)
 
 
 def test_ew_2d():
@@ -213,11 +217,15 @@ def test_ew_2d():
 
 def test_ew_1d():
     a, b = Matrix(10, 1).np(), Matrix(10, 1).np()
-    yield allclose, B.ew_dists2(a, b), np.abs(a - b) ** 2
-    yield allclose, B.ew_dists2(a), np.zeros((10, 1))
-    yield allclose, B.ew_dists(a, b), np.abs(a - b)
-    yield allclose, B.ew_dists(a), np.zeros((10, 1))
-    yield allclose, B.ew_sums2(a, b), np.abs(a + b) ** 2
-    yield allclose, B.ew_sums2(a), np.abs(a + a) ** 2
-    yield allclose, B.ew_sums(a, b), np.abs(a + b)
-    yield allclose, B.ew_sums(a), np.abs(a + a)
+
+    # Check that we can feed both rank 1 and rank 2 tensors.
+    for f, g in product(*([[lambda x: x, lambda x: x[:, 0]]] * 2)):
+
+        yield allclose, B.ew_dists2(f(a), g(b)), np.abs(a - b) ** 2
+        yield allclose, B.ew_dists2(f(a)), np.zeros((10, 1))
+        yield allclose, B.ew_dists(f(a), g(b)), np.abs(a - b)
+        yield allclose, B.ew_dists(f(a)), np.zeros((10, 1))
+        yield allclose, B.ew_sums2(f(a), g(b)), np.abs(a + b) ** 2
+        yield allclose, B.ew_sums2(f(a)), np.abs(a + a) ** 2
+        yield allclose, B.ew_sums(f(a), g(b)), np.abs(a + b)
+        yield allclose, B.ew_sums(f(a)), np.abs(a + a)
