@@ -471,9 +471,13 @@
 <span class="sd">        matrix: Square of the Euclidean norm of the pairwise differences</span>
 <span class="sd">            between the elements of `a` and `b`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">uprank</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">uprank</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+
     <span class="c1"># Optimise the one-dimensional case.</span>
     <span class="k">if</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">a</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">b</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">B</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">b</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span>
+
     <span class="n">norms_a</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">a</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">]</span>
     <span class="n">norms_b</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">b</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
     <span class="k">return</span> <span class="n">norms_a</span> <span class="o">+</span> <span class="n">norms_b</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">B</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">tr_b</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -497,9 +501,13 @@
 <span class="sd">        matrix: Euclidean norm of the pairwise differences between the</span>
 <span class="sd">            elements of `a` and `b`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">uprank</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">uprank</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+
     <span class="c1"># Optimise the one-dimensional case.</span>
     <span class="k">if</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">a</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">b</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">B</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
+
     <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">pw_dists2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span>
                             <span class="n">B</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="mf">1e-30</span><span class="p">)))</span>
 
@@ -523,6 +531,8 @@
 <span class="sd">        matrix: Square of the Euclidean norm of the element-wise differences</span>
 <span class="sd">            between the elements of `a` and `b`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">uprank</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">uprank</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">]</span>
 
 
@@ -544,9 +554,13 @@
 <span class="sd">        matrix: Euclidean norm of the element-wise differences between the</span>
 <span class="sd">            elements of `a` and `b`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">uprank</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">uprank</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+
     <span class="c1"># Optimise the one-dimensional case.</span>
     <span class="k">if</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">a</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">b</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">ew_dists2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span>
                             <span class="n">B</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="mf">1e-30</span><span class="p">)))</span>
 
@@ -570,9 +584,13 @@
 <span class="sd">        matrix: Square of the Euclidean norm of the pairwise sums</span>
 <span class="sd">            between the elements of `a` and `b`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">uprank</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">uprank</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+
     <span class="c1"># Optimise the one-dimensional case.</span>
     <span class="k">if</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">a</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">b</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">B</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">b</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span>
+
     <span class="n">norms_a</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">a</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">]</span>
     <span class="n">norms_b</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">b</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
     <span class="k">return</span> <span class="n">norms_a</span> <span class="o">+</span> <span class="n">norms_b</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">B</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">tr_b</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -596,9 +614,13 @@
 <span class="sd">        matrix: Euclidean norm of the pairwise sums between the</span>
 <span class="sd">            elements of `a` and `b`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">uprank</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">uprank</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+
     <span class="c1"># Optimise the one-dimensional case.</span>
     <span class="k">if</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">a</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">b</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">B</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
+
     <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">pw_sums2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span>
                             <span class="n">B</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="mf">1e-30</span><span class="p">)))</span>
 
@@ -622,6 +644,8 @@
 <span class="sd">        matrix: Square of the Euclidean norm of the element-wise sums</span>
 <span class="sd">            between the elements of `a` and `b`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">uprank</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">uprank</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">]</span>
 
 
@@ -643,9 +667,13 @@
 <span class="sd">        matrix: Euclidean norm of the element-wise sums between the</span>
 <span class="sd">            elements of `a` and `b`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">uprank</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">uprank</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+
     <span class="c1"># Optimise the one-dimensional case.</span>
     <span class="k">if</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">a</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">b</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">ew_sums2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span>
                             <span class="n">B</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="mf">1e-30</span><span class="p">)))</span>
 

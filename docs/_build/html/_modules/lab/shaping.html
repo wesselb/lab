@@ -157,7 +157,6 @@
 <span class="kn">from</span> <span class="nn">.util</span> <span class="k">import</span> <span class="n">abstract</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;shape&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;shape_int&#39;</span><span class="p">,</span>
            <span class="s1">&#39;rank&#39;</span><span class="p">,</span>
            <span class="s1">&#39;length&#39;</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">,</span>
            <span class="s1">&#39;isscalar&#39;</span><span class="p">,</span>
@@ -191,19 +190,6 @@
     <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
         <span class="c1"># `a` must be a number.</span>
         <span class="k">return</span> <span class="p">()</span></div>
-
-
-<div class="viewcode-block" id="shape_int"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.shape_int">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">shape_int</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
-    <span class="sd">&quot;&quot;&quot;Get the shape of a tensor as a tuple of integers.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        a (tensor): Tensor.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        tuple: Shape of `a` as a tuple of integers.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">shape</span><span class="p">(</span><span class="n">a</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="rank"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.rank">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
@@ -323,7 +309,7 @@
 
 
 <span class="k">def</span> <span class="nf">_vec_to_tril_shape</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
-    <span class="n">n</span> <span class="o">=</span> <span class="n">shape_int</span><span class="p">(</span><span class="n">a</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">shape</span><span class="p">(</span><span class="n">a</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># Dimensions are not necessarily integers!</span>
     <span class="k">return</span> <span class="nb">int</span><span class="p">(((</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">8</span> <span class="o">*</span> <span class="n">n</span><span class="p">)</span> <span class="o">**</span> <span class="o">.</span><span class="mi">5</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
 
 

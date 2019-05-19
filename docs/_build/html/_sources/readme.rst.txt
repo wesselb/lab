@@ -334,7 +334,6 @@ Shaping
 ::
 
     shape(a)
-    shape_int(a)
     rank(a)
     length(a) (alias: size)
     isscalar(a)
