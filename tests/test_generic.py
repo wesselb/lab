@@ -184,3 +184,45 @@ def test_logical_comparisons():
         yield check_function, f, (Tensor(), Tensor()), {}, False
         yield check_function, f, (Tensor(2), Tensor(2)), {}, False
         yield check_function, f, (Tensor(2, 3), Tensor(2, 3)), {}, False
+
+
+def test_scan():
+    # Check consistency by inputting various shapes for a simple scanning
+    # function.
+
+    def scan_f(prev, x):
+        return prev
+
+    yield check_function, B.scan, (Value(scan_f), Tensor(4), Tensor())
+    yield check_function, B.scan, (Value(scan_f), Tensor(4), Tensor(2))
+    yield check_function, B.scan, (Value(scan_f), Tensor(4), Tensor(2, 3))
+    yield check_function, B.scan, (Value(scan_f), Tensor(4, 5), Tensor())
+    yield check_function, B.scan, (Value(scan_f), Tensor(4, 5), Tensor(2))
+    yield check_function, B.scan, (Value(scan_f), Tensor(4, 5), Tensor(2, 3))
+
+    # Check correctness by comparing NumPy against TensorFlow for more
+    # complicated scanning function.
+
+    def scan_f(prev, x):
+        prev_h, _ = prev
+        h = prev_h * x + 1
+        y = 2 * h + x
+        return h, y
+
+    xs = Tensor(10, 3, 4)
+    init_h = Tensor(3, 4)
+    init_y = Tensor(3, 4)
+    yield allclose, \
+          B.scan(scan_f, xs.np(), init_h.np(), init_y.np()), \
+          B.scan(scan_f, xs.tf(), init_h.tf(), init_y.tf())
+
+    # Check shape checking.
+
+    def incorrect_scan_f(prev, x):
+        return prev + prev
+
+    yield raises, RuntimeError, \
+          lambda: B.scan(incorrect_scan_f,
+                         Tensor(4).np(),
+                         Tensor().np(),
+                         Tensor().np())

@@ -256,6 +256,8 @@ gt(a, b)
 ge(a, b)
 
 bvn_cdf(a, b, c)
+
+scan(f, xs, *init_state)
 ```
 
 ### Linear Algebra

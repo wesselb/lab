@@ -2,6 +2,8 @@
 
 from __future__ import absolute_import, division, print_function
 
+from typing import Callable
+
 import tensorflow as tf
 from plum import convert
 
@@ -201,3 +203,8 @@ def ge(a, b):
 
 f = tensorflow_register(bvn_cdf, s_bvn_cdf)
 dispatch(TFNumeric, TFNumeric, TFNumeric)(f)
+
+
+@dispatch(Callable, TFNumeric, [TFNumeric])
+def scan(f, xs, *init_state):
+    return tf.scan(f, xs, initializer=init_state)

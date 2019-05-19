@@ -3,8 +3,9 @@
 from __future__ import absolute_import, division, print_function
 
 import numpy as np
+from typing import Callable
 
-from . import dispatch, B
+from . import dispatch, B, Dispatcher
 from .types import Numeric, DType, Dimension, Int
 from .util import abstract
 
@@ -50,7 +51,10 @@ __all__ = ['nan',
            'le',
            'gt',
            'ge',
-           'bvn_cdf']
+           'bvn_cdf',
+           'scan']
+
+_dispatch = Dispatcher()
 
 nan = np.nan  #: NaN.
 pi = np.pi  #: Value of pi.
@@ -717,3 +721,55 @@ def bvn_cdf(a, b, c):
     Returns:
         tensor: Probabilities of the same shape as the input.
     """
+
+
+@_dispatch(object)
+def _as_tuple(x):
+    return x,
+
+
+@_dispatch(tuple)
+def _as_tuple(x):
+    return x
+
+
+@_dispatch(tuple)
+def _compress(x):
+    if len(x) == 1:
+        return x[0]
+    else:
+        return x
+
+
+@dispatch(Callable, object, [object])
+def scan(f, xs, *init_state):
+    """Perform a TensorFlow-style scanning operation.
+
+    Args:
+        f (function): Scanning function.
+        xs (tensor): Tensor to scan over.
+        *init_state (tensor): Initial state.
+    """
+    state = init_state
+    state_shape = [B.shape(s) for s in state]
+    states = []
+
+    # Cannot simply iterate, because that breaks TensorFlow.
+    for i in range(int(B.shape(xs)[0])):
+
+        state = _as_tuple(f(_compress(state), xs[i]))
+        new_state_shape = [B.shape(s) for s in state]
+
+        # Check that the state shape remained constant.
+        if new_state_shape != state_shape:
+            raise RuntimeError('Shape of state changed from {} to {}.'
+                               ''.format(state_shape, new_state_shape))
+
+        # Record the state, stacked over the various elements.
+        states.append(B.stack(*state, axis=0))
+
+    # Stack states over iterations.
+    states = B.stack(*states, axis=0)
+
+    # Put the elements dimension first and return.
+    return B.transpose(states, perm=(1, 0) + tuple(range(2, B.rank(states))))
