@@ -45,7 +45,7 @@ def vec_to_tril(a):
 def tril_to_vec(a):
     if B.rank(a) != 2:
         raise ValueError('Ianput must be rank 2.')
-    n, m = B.shape_int(a)
+    n, m = B.shape(a)
     if n != m:
         raise ValueError('Ianput must be square.')
     return a[anp.tril_indices(n)]

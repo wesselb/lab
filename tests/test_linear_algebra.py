@@ -184,7 +184,7 @@ def test_pw_1d():
 
     # Check that we can feed both rank 1 and rank 2 tensors.
     for f, g in product(*([[lambda x: x, lambda x: x[:, 0]]] * 2)):
-        
+
         yield allclose, B.pw_dists2(f(a), g(b)), np.abs(a - b.T) ** 2
         yield allclose, B.pw_dists2(f(a)), np.abs(a - a.T) ** 2
         yield allclose, B.pw_dists(f(a), g(b)), np.abs(a - b.T)

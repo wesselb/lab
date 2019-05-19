@@ -13,11 +13,6 @@ __all__ = []
 
 
 @dispatch(TorchNumeric)
-def shape_int(a):
-    return tuple(B.shape(a))
-
-
-@dispatch(TorchNumeric)
 def length(a):
     return a.numel()
 
@@ -51,7 +46,7 @@ def vec_to_tril(a):
 def tril_to_vec(a):
     if B.rank(a) != 2:
         raise ValueError('Input must be rank 2.')
-    n, m = shape_int(a)
+    n, m = B.shape(a)
     if n != m:
         raise ValueError('Input must be square.')
     return a[np.tril_indices(n)]

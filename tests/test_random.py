@@ -29,29 +29,29 @@ def test_random_generators():
     for f in [B.rand, B.randn]:
         # Test without specifying data type.
         yield deq, B.dtype(f()), B.default_dtype
-        yield allclose, B.shape_int(f()), (), False
+        yield eq, B.shape(f()), ()
         yield deq, B.dtype(f(2)), B.default_dtype
-        yield allclose, B.shape_int(f(2)), (2,)
+        yield allclose, B.shape(f(2)), (2,)
         yield deq, B.dtype(f(2, 3)), B.default_dtype
-        yield allclose, B.shape_int(f(2, 3)), (2, 3)
+        yield eq, B.shape(f(2, 3)), (2, 3)
 
         # Test with specifying data type.
         for t in [np.float32, tf.float32, torch.float32]:
             # Test direct specification.
             yield deq, B.dtype(f(t)), t
-            yield allclose, B.shape_int(f(t)), (), False
+            yield eq, B.shape(f(t)), ()
             yield deq, B.dtype(f(t, 2)), t
-            yield allclose, B.shape_int(f(t, 2)), (2,), False
+            yield eq, B.shape(f(t, 2)), (2,)
             yield deq, B.dtype(f(t, 2, 3)), t
-            yield allclose, B.shape_int(f(t, 2, 3)), (2, 3), False
+            yield eq, B.shape(f(t, 2, 3)), (2, 3)
 
             # Test reference specification.
             yield deq, B.dtype(f(f(t))), t
-            yield allclose, B.shape_int(f(f())), (), False
+            yield eq, B.shape(f(f())), ()
             yield deq, B.dtype(f(f(t, 2))), t
-            yield allclose, B.shape_int(f(f(t, 2))), (2,), False
+            yield eq, B.shape(f(f(t, 2))), (2,)
             yield deq, B.dtype(f(f(t, 2, 3))), t
-            yield allclose, B.shape_int(f(f(t, 2, 3))), (2, 3), False
+            yield eq, B.shape(f(f(t, 2, 3))), (2, 3)
 
 
 def test_conversion_warnings():

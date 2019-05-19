@@ -42,8 +42,8 @@ def trace(a, axis1=0, axis2=1):
 
 @dispatch(TFNumeric, TFNumeric)
 def kron(a, b):
-    shape_a = B.shape_int(a)
-    shape_b = B.shape_int(b)
+    shape_a = B.shape(a)
+    shape_b = B.shape(b)
 
     # Check that ranks are equal.
     if len(shape_a) != len(shape_b):

@@ -37,8 +37,8 @@ def test_zeros_ones_eye():
                Value(3))
 
         # Check shape of calls.
-        yield eq, B.shape_int(f(2)), (2, 2) if f is B.eye else (2,)
-        yield eq, B.shape_int(f(2, 3)), (2, 3)
+        yield eq, B.shape(f(2)), (2, 2) if f is B.eye else (2,)
+        yield eq, B.shape(f(2, 3)), (2, 3)
 
         # Check shape type of calls.
         yield eq, B.dtype(f(2)), B.default_dtype
@@ -50,9 +50,9 @@ def test_zeros_ones_eye():
             ref = B.randn(t1, 4, 5)
 
             # Check shape of calls.
-            yield eq, B.shape_int(f(t2, 2)), (2, 2) if f is B.eye else (2,)
-            yield eq, B.shape_int(f(t2, 2, 3)), (2, 3)
-            yield eq, B.shape_int(f(ref)), (4, 5)
+            yield eq, B.shape(f(t2, 2)), (2, 2) if f is B.eye else (2,)
+            yield eq, B.shape(f(t2, 2, 3)), (2, 3)
+            yield eq, B.shape(f(ref)), (4, 5)
 
             # Check shape type of calls.
             yield eq, B.dtype(f(t2, 2)), t2

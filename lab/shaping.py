@@ -7,7 +7,6 @@ from .types import Numeric, Dimension
 from .util import abstract
 
 __all__ = ['shape',
-           'shape_int',
            'rank',
            'length', 'size',
            'isscalar',
@@ -41,19 +40,6 @@ def shape(a):  # pragma: no cover
     except AttributeError:
         # `a` must be a number.
         return ()
-
-
-@dispatch(Numeric)
-def shape_int(a):  # pragma: no cover
-    """Get the shape of a tensor as a tuple of integers.
-
-    Args:
-        a (tensor): Tensor.
-
-    Returns:
-        tuple: Shape of `a` as a tuple of integers.
-    """
-    return shape(a)
 
 
 @dispatch(Numeric)
@@ -173,7 +159,7 @@ def flatten(a):  # pragma: no cover
 
 
 def _vec_to_tril_shape(a):
-    n = shape_int(a)[0]
+    n = int(shape(a)[0])  # Dimensions are not necessarily integers!
     return int(((1 + 8 * n) ** .5 - 1) / 2)
 
 
