@@ -170,7 +170,7 @@ This section lists all available constants and methods.
         Data types are always given as the first argument.
     -
         `shape` indicates a shape.
-        The dimensions of a shape as always given as separate arguments to 
+        The dimensions of a shape are always given as separate arguments to 
         the function.
         E.g., `reshape(tensor, 2, 2)` is valid, but `reshape(tensor, (2, 2))`
         is not.
