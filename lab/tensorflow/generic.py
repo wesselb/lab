@@ -2,15 +2,14 @@
 
 from __future__ import absolute_import, division, print_function
 
-from typing import Callable
-
 import tensorflow as tf
 from plum import convert
 
 from . import dispatch, B
 from .custom import tensorflow_register
 from ..custom import bvn_cdf, s_bvn_cdf
-from ..types import TFNumeric, TFDType, TFDimension, NPNumeric, Number, Int
+from ..types import TFNumeric, TFDType, TFDimension, NPNumeric, Number, Int, \
+    Callable
 
 __all__ = []
 

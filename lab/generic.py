@@ -3,10 +3,9 @@
 from __future__ import absolute_import, division, print_function
 
 import numpy as np
-from typing import Callable
 
 from . import dispatch, B, Dispatcher
-from .types import Numeric, DType, Dimension, Int
+from .types import Numeric, DType, Dimension, Int, Callable
 from .util import abstract
 
 __all__ = ['nan',
