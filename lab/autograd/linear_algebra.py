@@ -65,7 +65,7 @@ def kron(a, b):
 
 @dispatch(NPNumeric)
 def svd(a, compute_uv=True):
-    res = anp.linalg.svd(a, full_matrices=True, compute_uv=compute_uv)
+    res = anp.linalg.svd(a, full_matrices=False, compute_uv=compute_uv)
     return (res[0], res[1], res[2].T.conj()) if compute_uv else res
 
 

@@ -85,7 +85,7 @@ def test_svd():
         else:
             return B.svd(a, compute_uv=False)
 
-    yield check_function, svd, (Matrix(),), {'compute_uv': Bool()}
+    yield check_function, svd, (Matrix(3, 2),), {'compute_uv': Bool()}
 
 
 def test_solve():
@@ -184,7 +184,6 @@ def test_pw_1d():
 
     # Check that we can feed both rank 1 and rank 2 tensors.
     for f, g in product(*([[lambda x: x, lambda x: x[:, 0]]] * 2)):
-
         yield allclose, B.pw_dists2(f(a), g(b)), np.abs(a - b.T) ** 2
         yield allclose, B.pw_dists2(f(a)), np.abs(a - a.T) ** 2
         yield allclose, B.pw_dists(f(a), g(b)), np.abs(a - b.T)
@@ -220,7 +219,6 @@ def test_ew_1d():
 
     # Check that we can feed both rank 1 and rank 2 tensors.
     for f, g in product(*([[lambda x: x, lambda x: x[:, 0]]] * 2)):
-
         yield allclose, B.ew_dists2(f(a), g(b)), np.abs(a - b) ** 2
         yield allclose, B.ew_dists2(f(a)), np.zeros((10, 1))
         yield allclose, B.ew_dists(f(a), g(b)), np.abs(a - b)
