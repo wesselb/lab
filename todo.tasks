@@ -2,6 +2,7 @@ TODO:
     ☐ Reuse Plum's error message.
     ☐ Fix output data types of custom gradients in TensorFlow.
     ☐ `bvn_cdf` and `toeplitz_solve` always output `float64`s. Issue?
+    ☐ Refactor scan once TF2.0 is integrated.
 
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
