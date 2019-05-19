@@ -350,6 +350,7 @@ Shaping
     reshape(a, *shape)
     concat(*elements, axis=0)
     concat2d(*rows)
+    tile(a, *repeats)
     take(a, indices, axis=0)
 
 .. |Build| image:: https://travis-ci.org/wesselb/lab.svg?branch=master
