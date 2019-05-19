@@ -72,6 +72,11 @@ def concat(*elements, **kw_args):
     return anp.concatenate(elements, axis=kw_args.get('axis', 0))
 
 
+@dispatch(NPNumeric, [NPDimension])
+def tile(a, *repeats):
+    return anp.tile(a, repeats)
+
+
 @dispatch(NPNumeric, object)
 def take(a, indices, axis=0):
     return anp.take(a, indices, axis=axis)

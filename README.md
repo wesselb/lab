@@ -331,5 +331,6 @@ unstack(a, axis=0)
 reshape(a, *shape)
 concat(*elements, axis=0)
 concat2d(*rows)
+tile(a, *repeats)
 take(a, indices, axis=0)
 ```

@@ -22,6 +22,7 @@ __all__ = ['shape',
            'reshape',
            'concat',
            'concat2d',
+           'tile',
            'take']
 
 
@@ -257,6 +258,20 @@ def concat2d(*rows):
         tensor: Assembled matrix.
     """
     return concat(*[concat(*row, axis=1) for row in rows], axis=0)
+
+
+@dispatch(Numeric, [Dimension])
+@abstract()
+def tile(a, *repeats):  # pragma: no cover
+    """Tile a tensor.
+
+    Args:
+        a (tensor): Tensor to tile.
+        *repeats (shape): Repetitions per dimension
+
+    Returns:
+        tensor: Tiled tensor.
+    """
 
 
 @dispatch(Numeric, object)

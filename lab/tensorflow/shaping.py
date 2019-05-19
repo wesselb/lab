@@ -77,6 +77,11 @@ def concat(*elements, **kw_args):
     return tf.concat(elements, axis=kw_args.get('axis', 0))
 
 
+@dispatch(TFNumeric, [TFDimension])
+def tile(a, *repeats):
+    return tf.tile(a, repeats)
+
+
 @dispatch(TFNumeric, object)
 def take(a, indices, axis=0):
     # Optimise the case where `axis` equals `0`.

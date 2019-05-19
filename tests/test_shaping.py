@@ -2,6 +2,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+from itertools import product
 import numpy as np
 import lab as B
 from . import check_function, Tensor, Value, Matrix, List, Tuple
@@ -93,6 +94,11 @@ def test_concat2d():
           (List(Matrix(3), Matrix(3)), List(Matrix(3), Matrix(3)))
     yield check_function, B.concat2d, \
           (Tuple(Matrix(3), Matrix(3)), Tuple(Matrix(3), Matrix(3)))
+
+
+def test_tile():
+    for r1, r2 in product(*([[1, 2]] * 2)):
+        yield check_function, B.tile, (Tensor(3, 4), Value(r1), Value(r2))
 
 
 def test_take():

@@ -72,6 +72,11 @@ def concat(*elements, **kw_args):
     return torch.cat(elements, dim=kw_args.get('axis', 0))
 
 
+@dispatch(TorchNumeric, [TorchDimension])
+def tile(a, *repeats):
+    return a.repeat(*repeats)
+
+
 @dispatch(TorchNumeric, object)
 def take(a, indices, axis=0):
     if axis > 0:
