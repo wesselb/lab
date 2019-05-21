@@ -29,7 +29,7 @@ def batch_computation(f, *xs):
     # Check that all batch shapes are the same.
     if not all(s == batch_shapes[0] for s in batch_shapes[1:]):
         raise ValueError('Inconsistent batch shapes.')
-    
+
     batch_shape = batch_shapes[0]
 
     # Loop over batches.
