@@ -178,7 +178,7 @@ This section lists all available constants and methods.
       ``tf.float64``; and ``rand(np.float32)`` creates a NumPy random
       number, whereas ``rand(tf.float64)`` creates a TensorFlow random
       number. Data types are always given as the first argument.
-   -  ``shape`` indicates a shape. The dimensions of a shape as always
+   -  ``shape`` indicates a shape. The dimensions of a shape are always
       given as separate arguments to the function. E.g.,
       ``reshape(tensor, 2, 2)`` is valid, but
       ``reshape(tensor, (2, 2))`` is not.
