@@ -4,6 +4,13 @@ TODO:
     ☐ `bvn_cdf` and `toeplitz_solve` always output `float64`s. Issue?
     ☐ Refactor scan once TF2.0 is integrated.
 
+    ☐ Test and implement batched bahaviour for linear algebra operations.
+        ☐ svd
+        ☐ toeplitz_solve
+        ☐ outer
+        ☐ reg
+        ☐ pw/ew
+
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:

@@ -78,7 +78,7 @@ def matmul(a, b, tr_a=False, tr_b=False):  # pragma: no cover
 
 
 mm = matmul  #: Shorthand for `matmul`.
-dot = matmul  #: Also a shorthand for `matmul`.
+dot = matmul  #: Shorthand for `matmul`.
 
 
 @dispatch(Numeric)
