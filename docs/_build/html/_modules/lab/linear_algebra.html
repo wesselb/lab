@@ -267,6 +267,9 @@
 <span class="k">def</span> <span class="nf">svd</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">compute_uv</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
     <span class="sd">&quot;&quot;&quot;Compute the singular value decomposition.</span>
 
+<span class="sd">    Note:</span>
+<span class="sd">        PyTorch does not allow batch computation.</span>
+
 <span class="sd">    Args:</span>
 <span class="sd">        a (tensor): Matrix to decompose.</span>
 <span class="sd">        compute_uv (bool, optional): Also compute `U` and `V`. Defaults to</span>

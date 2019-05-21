@@ -182,6 +182,24 @@
   <div class="section" id="module-lab.util">
 <span id="lab-util-module"></span><h1>lab.util module<a class="headerlink" href="#module-lab.util" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
+<dt id="lab.util.batch_computation">
+<code class="descclassname">lab.util.</code><code class="descname">batch_computation</code><span class="sig-paren">(</span><em>f</em>, <em>*xs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lab/util.html#batch_computation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.util.batch_computation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply a function over all the batches of the arguments, where the
+arguments are assumed to be matrices or batches of matrices.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>*xs</strong> (<em>tensor</em>) – Matrices or batches of matrices.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Result in batched form.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
 <dt id="lab.util.abstract">
 <code class="descclassname">lab.util.</code><code class="descname">abstract</code><span class="sig-paren">(</span><em>promote=-1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lab/util.html#abstract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.util.abstract" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a decorator for an abstract function.</p>

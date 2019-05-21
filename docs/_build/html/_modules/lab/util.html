@@ -152,13 +152,43 @@
 
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
 
-<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">wraps</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">wraps</span><span class="p">,</span> <span class="n">reduce</span>
+<span class="kn">from</span> <span class="nn">operator</span> <span class="k">import</span> <span class="n">mul</span>
 
 <span class="kn">import</span> <span class="nn">plum</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">B</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;abstract&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;batch_computation&#39;</span><span class="p">,</span> <span class="s1">&#39;abstract&#39;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="batch_computation"><a class="viewcode-back" href="../../source/lab.util.html#lab.util.batch_computation">[docs]</a><span class="k">def</span> <span class="nf">batch_computation</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="o">*</span><span class="n">xs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Apply a function over all the batches of the arguments, where the</span>
+<span class="sd">    arguments are assumed to be matrices or batches of matrices.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        *xs (tensor): Matrices or batches of matrices.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Result in batched form.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Reshape arguments for batched computation.</span>
+    <span class="n">batch_shapes</span> <span class="o">=</span> <span class="p">[</span><span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">x</span><span class="p">)[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xs</span><span class="p">]</span>
+    <span class="n">xs</span> <span class="o">=</span> <span class="p">[</span><span class="n">B</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">*</span><span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="o">-</span><span class="mi">2</span><span class="p">:])</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xs</span><span class="p">]</span>
+
+    <span class="c1"># Check that all batch shapes are the same.</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">s</span> <span class="o">==</span> <span class="n">batch_shapes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">batch_shapes</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Inconsistent batch shapes.&#39;</span><span class="p">)</span>
+    <span class="n">batch_shape</span> <span class="o">=</span> <span class="n">batch_shapes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Loop over batches.</span>
+    <span class="n">batches</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">reduce</span><span class="p">(</span><span class="n">mul</span><span class="p">,</span> <span class="n">batch_shape</span><span class="p">,</span> <span class="mi">1</span><span class="p">)):</span>
+        <span class="n">batches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xs</span><span class="p">]))</span>
+
+    <span class="c1"># Construct result, reshape, and return.</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="o">*</span><span class="n">batches</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="o">*</span><span class="p">(</span><span class="n">batch_shape</span> <span class="o">+</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">res</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]))</span></div>
 
 
 <div class="viewcode-block" id="abstract"><a class="viewcode-back" href="../../source/lab.util.html#lab.util.abstract">[docs]</a><span class="k">def</span> <span class="nf">abstract</span><span class="p">(</span><span class="n">promote</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
