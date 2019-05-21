@@ -87,7 +87,11 @@ def cholesky(a):
 
 @dispatch(TorchNumeric, TorchNumeric)
 def cholesky_solve(a, b):
-    return torch.cholesky_solve(b, a, upper=False)
+    # The sensitivity for `torch.cholesky_solve` is not implemented,
+    # so instead we use `triangular_solve` and `transpose`. This should
+    # be reverted once the sensitivity is implemented.
+    # return torch.cholesky_solve(b, a, upper=False)
+    return triangular_solve(transpose(a), triangular_solve(a, b), lower_a=False)
 
 
 @dispatch(TorchNumeric, TorchNumeric)
