@@ -11,6 +11,12 @@ TODO:
         ☐ reg
         ☐ pw/ew
 
+    ☐ eig
+    ☐ eigvals
+
+
+Future:
+    ☐ Let `cholesky_solve` for PyTorch use `torch.cholesky_solve` once the derivative is implemented.
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
