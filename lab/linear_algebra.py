@@ -50,7 +50,7 @@ def transpose(a, perm=None):  # pragma: no cover
     Args:
         a (tensor): Matrix to transpose.
         perm (list[int] or tuple[int], optional): Permutation. Defaults to
-            reversing the ordering of all axes.
+            switching the last two axes.
 
     Returns:
         tensor: Transposition of `a`.
