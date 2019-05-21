@@ -240,7 +240,7 @@ def cast(dtype, a):  # pragma: no cover
     """Cast an object to another data type.
 
     Args:
-        dtype (dtype or tensor): New data type.
+        dtype (dtype): New data type.
         a (tensor): Tensor to cast.
 
     Returns:
