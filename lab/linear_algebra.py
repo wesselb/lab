@@ -117,6 +117,9 @@ def kron(a, b):  # pragma: no cover
 def svd(a, compute_uv=True):  # pragma: no cover
     """Compute the singular value decomposition.
 
+    Note:
+        PyTorch does not allow batch computation.
+
     Args:
         a (tensor): Matrix to decompose.
         compute_uv (bool, optional): Also compute `U` and `V`. Defaults to

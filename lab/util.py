@@ -2,13 +2,43 @@
 
 from __future__ import absolute_import, division, print_function
 
-from functools import wraps
+from functools import wraps, reduce
+from operator import mul
 
 import plum
 
 from . import B
 
-__all__ = ['abstract']
+__all__ = ['batch_computation', 'abstract']
+
+
+def batch_computation(f, *xs):
+    """Apply a function over all the batches of the arguments, where the
+    arguments are assumed to be matrices or batches of matrices.
+
+    Args:
+        *xs (tensor): Matrices or batches of matrices.
+
+    Returns:
+        tensor: Result in batched form.
+    """
+    # Reshape arguments for batched computation.
+    batch_shapes = [B.shape(x)[:-2] for x in xs]
+    xs = [B.reshape(x, -1, *B.shape(x)[-2:]) for x in xs]
+
+    # Check that all batch shapes are the same.
+    if not all(s == batch_shapes[0] for s in batch_shapes[1:]):
+        raise ValueError('Inconsistent batch shapes.')
+    batch_shape = batch_shapes[0]
+
+    # Loop over batches.
+    batches = []
+    for i in range(reduce(mul, batch_shape, 1)):
+        batches.append(f(*[x[i, :, :] for x in xs]))
+
+    # Construct result, reshape, and return.
+    res = B.stack(*batches, axis=0)
+    return B.reshape(res, *(batch_shape + B.shape(res)[1:]))
 
 
 def abstract(promote=-1):

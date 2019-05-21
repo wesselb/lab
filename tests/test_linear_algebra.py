@@ -6,7 +6,7 @@ from itertools import product
 import numpy as np
 
 import lab as B
-from . import check_function, Matrix, Bool, Value, PSD, Tensor
+from . import check_function, Matrix, Bool, Value, PSD, Tensor, PSDTriangular
 # noinspection PyUnresolvedReferences
 from . import eq, neq, lt, le, ge, gt, raises, call, ok, allclose, approx, is_
 
@@ -48,7 +48,10 @@ def test_transpose():
 def test_matmul():
     for f in [B.matmul, B.mm, B.dot]:
         yield check_function, f, \
-              (Matrix(), Matrix()), {'tr_a': Bool(), 'tr_b': Bool()}
+              (Tensor(3, 3), Tensor(3, 3)), {'tr_a': Bool(), 'tr_b': Bool()}
+        yield check_function, f, \
+              (Tensor(4, 3, 3), Tensor(4, 3, 3)), \
+              {'tr_a': Bool(), 'tr_b': Bool()}
 
 
 def test_trace():
@@ -70,6 +73,8 @@ def test_trace():
 
 def test_kron():
     yield check_function, B.kron, (Tensor(2, 3), Tensor(4, 5))
+    # Cannot test tensors of higher rank, because TensorFlows broadcasting
+    # behaviour does not allow that.
     yield raises, ValueError, \
           lambda: B.kron(Tensor(2).tf(), Tensor(4, 5).tf())
     yield raises, ValueError, \
@@ -85,49 +90,62 @@ def test_svd():
         else:
             return B.svd(a, compute_uv=False)
 
-    yield check_function, svd, (Matrix(3, 2),), {'compute_uv': Bool()}
+    yield check_function, svd, (Tensor(3, 2),), {'compute_uv': Bool()}
+    # Torch does not allow batch computation.
 
 
 def test_solve():
-    yield check_function, B.solve, (Matrix(), Matrix())
+    yield check_function, B.solve, (Matrix(3, 3), Matrix(3, 4))
+    yield check_function, B.solve, (Matrix(5, 3, 3), Matrix(5, 3, 4))
 
 
 def test_inv():
     yield check_function, B.inv, (Matrix(),)
+    yield check_function, B.inv, (Matrix(4, 3, 3),)
 
 
 def test_det():
     yield check_function, B.det, (Matrix(),)
+    yield check_function, B.det, (Matrix(4, 3, 3),)
 
 
 def test_logdet():
     yield check_function, B.logdet, (PSD(),)
+    yield check_function, B.logdet, (PSD(4, 3, 3),)
 
 
 def test_cholesky():
     for f in [B.cholesky, B.chol]:
         yield check_function, f, (PSD(),)
+        yield check_function, f, (PSD(4, 3, 3),)
 
 
 def test_cholesky_solve():
-    chol = B.cholesky(PSD().np())
     for f in [B.cholesky_solve, B.cholsolve]:
-        yield check_function, f, (Matrix(mat=chol), Matrix())
+        yield check_function, f, (PSDTriangular(3, 3), Matrix(3, 4))
+        yield check_function, f, (PSDTriangular(5, 3, 3), Matrix(5, 3, 4))
 
 
 def test_triangular_solve():
-    chol = B.cholesky(PSD().np())
     for f in [B.triangular_solve, B.trisolve]:
         yield check_function, f, \
-              (Matrix(mat=chol), Matrix()), {'lower_a': Value(True)}
+              (PSDTriangular(3, 3), Matrix(3, 4)), \
+              {'lower_a': Value(True)}
         yield check_function, f, \
-              (Matrix(mat=chol.T), Matrix()), {'lower_a': Value(False)}
+              (PSDTriangular(5, 3, 3), Matrix(5, 3, 4)), \
+              {'lower_a': Value(True)}
+        yield check_function, f, \
+              (PSDTriangular(3, 3, upper=True), Matrix(3, 4)), \
+              {'lower_a': Value(False)}
+        yield check_function, f, \
+              (PSDTriangular(5, 3, 3, upper=True), Matrix(5, 3, 4)), \
+              {'lower_a': Value(False)}
 
 
 def test_toeplitz_solve():
     for f in [B.toeplitz_solve, B.toepsolve]:
-        yield check_function, f, (Tensor(3), Matrix(3))
-        yield check_function, f, (Tensor(3), Matrix(3))
+        yield check_function, f, (Tensor(3), Tensor(2), Matrix(3, 4))
+        yield check_function, f, (Tensor(3), Matrix(3, 4))
 
 
 def test_outer():

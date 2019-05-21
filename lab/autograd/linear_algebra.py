@@ -12,6 +12,7 @@ from .custom import autograd_register
 from ..custom import toeplitz_solve, s_toeplitz_solve
 from ..linear_algebra import _default_perm
 from ..types import NPNumeric
+from ..util import batch_computation
 
 __all__ = []
 log = logging.getLogger(__name__)
@@ -19,8 +20,8 @@ log = logging.getLogger(__name__)
 
 @dispatch(NPNumeric, NPNumeric)
 def matmul(a, b, tr_a=False, tr_b=False):
-    a = a.T if tr_a else a
-    b = b.T if tr_b else b
+    a = transpose(a) if tr_a else a
+    b = transpose(b) if tr_b else b
     return anp.matmul(a, b)
 
 
@@ -66,7 +67,7 @@ def kron(a, b):
 @dispatch(NPNumeric)
 def svd(a, compute_uv=True):
     res = anp.linalg.svd(a, full_matrices=False, compute_uv=compute_uv)
-    return (res[0], res[1], res[2].T.conj()) if compute_uv else res
+    return (res[0], res[1], transpose(res[2]).conj()) if compute_uv else res
 
 
 @dispatch(NPNumeric, NPNumeric)
@@ -96,12 +97,15 @@ def cholesky(a):
 
 @dispatch(NPNumeric, NPNumeric)
 def cholesky_solve(a, b):
-    return triangular_solve(a.T, triangular_solve(a, b), lower_a=False)
+    return triangular_solve(transpose(a), triangular_solve(a, b), lower_a=False)
 
 
 @dispatch(NPNumeric, NPNumeric)
 def triangular_solve(a, b, lower_a=True):
-    return asla.solve_triangular(a, b, trans='N', lower=lower_a)
+    def _triangular_solve(a_, b_):
+        return asla.solve_triangular(a_, b_, trans='N', lower=lower_a)
+
+    return batch_computation(_triangular_solve, a, b)
 
 
 f = autograd_register(toeplitz_solve, s_toeplitz_solve)

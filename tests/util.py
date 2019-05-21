@@ -210,18 +210,50 @@ class NaNTensor(Tensor):
 class Matrix(Tensor):
     """Matrix placeholder."""
 
-    def __init__(self, rows=3, cols=None, mat=None):
-        # Default the number of columns to the number of rows.
-        cols = rows if cols is None else cols
-        Tensor.__init__(self, rows, cols, mat=mat)
+    def __init__(self, *shape, **kw_args):
+        # Handle shorthands.
+        if shape == ():
+            shape = (3, 3)
+        elif len(shape) == 1:
+            shape = shape * 2
+
+        Tensor.__init__(self, *shape, **kw_args)
 
 
 class PSD(Matrix):
-    """Positive-definite matrix placeholder."""
+    """Positive-definite tensor placeholder."""
 
-    def __init__(self, rows=3):
-        a = np.random.randn(rows, rows)
-        Matrix.__init__(self, mat=np.matmul(a, np.transpose(a)))
+    def __init__(self, *shape):
+        # Handle shorthands.
+        if shape == ():
+            shape = (3, 3)
+        elif len(shape) == 1:
+            shape = shape * 2
+
+        if not shape[-2] == shape[-1]:
+            raise ValueError('PSD matrix must be square.')
+
+        a = np.random.randn(*shape)
+        perm = list(range(len(a.shape)))
+        perm[-2], perm[-1] = perm[-1], perm[-2]
+        a_t = np.transpose(a, perm)
+        Matrix.__init__(self, mat=np.matmul(a, a_t))
+
+
+class PSDTriangular(PSD):
+    def __init__(self, *shape, **kw_args):
+        PSD.__init__(self, *shape)
+
+        # Zero upper triangular part.
+        for i in range(self.mat.shape[0]):
+            for j in range(i + 1, self.mat.shape[1]):
+                self.mat[..., i, j] = 0
+
+        # Create upper-triangular matrices, if asked for.
+        if kw_args.get('upper', False):
+            perm = list(range(len(self.mat.shape)))
+            perm[-2], perm[-1] = perm[-1], perm[-2]
+            self.mat = np.transpose(self.mat, perm)
 
 
 class Tuple(object):

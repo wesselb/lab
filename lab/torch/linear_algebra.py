@@ -9,14 +9,15 @@ from .custom import torch_register
 from ..custom import toeplitz_solve, s_toeplitz_solve
 from ..linear_algebra import _default_perm
 from ..types import TorchNumeric
+from ..util import batch_computation
 
 __all__ = []
 
 
 @dispatch(TorchNumeric, TorchNumeric)
 def matmul(a, b, tr_a=False, tr_b=False):
-    a = a.t() if tr_a else a
-    b = b.t() if tr_b else b
+    a = transpose(a) if tr_a else a
+    b = transpose(b) if tr_b else b
     return torch.matmul(a, b)
 
 
@@ -71,12 +72,12 @@ def inv(a):
 
 @dispatch(TorchNumeric)
 def det(a):
-    return torch.det(a)
+    return batch_computation(torch.det, a)
 
 
 @dispatch(TorchNumeric)
 def logdet(a):
-    return torch.logdet(a)
+    return batch_computation(torch.logdet, a)
 
 
 @dispatch(TorchNumeric)

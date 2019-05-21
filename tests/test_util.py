@@ -6,9 +6,18 @@ import plum
 from plum import NotFoundLookupError
 
 import lab as B
-from lab.util import abstract
+from lab.util import abstract, batch_computation
 # noinspection PyUnresolvedReferences
 from . import eq, neq, lt, le, ge, gt, raises, call, ok, allclose, approx
+
+
+def test_batch_computation():
+    # Correctness is already checked by usage in linear algebra functions. Here
+    # we test the check of batch shapes.
+    yield raises, ValueError, \
+          lambda: batch_computation(None, B.randn(3, 4, 4), B.randn(2, 4, 4))
+    yield raises, ValueError, \
+          lambda: batch_computation(None, B.randn(2, 2, 4, 4), B.randn(2, 4, 4))
 
 
 def test_metadata():
