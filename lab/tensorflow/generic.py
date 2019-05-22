@@ -207,3 +207,21 @@ dispatch(TFNumeric, TFNumeric, TFNumeric)(f)
 @dispatch(Callable, TFNumeric, [TFNumeric])
 def scan(f, xs, *init_state):
     return tf.scan(f, xs, initializer=init_state)
+
+
+@dispatch(TFNumeric)
+def sort(a, axis=-1, descending=False):
+    if descending:
+        direction = 'DESCENDING'
+    else:
+        direction = 'ASCENDING'
+    return tf.sort(a, axis=axis, direction=direction)
+
+
+@dispatch(TFNumeric)
+def argsort(a, axis=-1, descending=False):
+    if descending:
+        direction = 'DESCENDING'
+    else:
+        direction = 'ASCENDING'
+    return tf.argsort(a, axis=axis, direction=direction)

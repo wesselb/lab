@@ -258,6 +258,9 @@ ge(a, b)
 bvn_cdf(a, b, c)
 
 scan(f, xs, *init_state)
+
+sort(a, axis=-1, descending=False)
+argsort(a, axis=-1, descending=False)
 ```
 
 ### Linear Algebra

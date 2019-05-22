@@ -10,7 +10,7 @@ from plum import NotFoundLookupError
 
 import lab as B
 from . import check_function, Tensor, Value, PositiveTensor, BoolTensor, \
-    NaNTensor, List
+    NaNTensor, List, Bool
 # noinspection PyUnresolvedReferences
 from . import eq, neq, lt, le, ge, gt, raises, call, ok, allclose, approx, \
     deq, is_
@@ -226,3 +226,15 @@ def test_scan():
                          Tensor(4).np(),
                          Tensor().np(),
                          Tensor().np())
+
+
+def test_sort():
+    yield check_function, B.sort, \
+          (Tensor(2, 3, 4),), {'axis': Value(-1, 0, 1, 2),
+                               'descending': Bool()}
+
+
+def test_argsort():
+    yield check_function, B.argsort, \
+          (Tensor(2, 3, 4),), {'axis': Value(-1, 0, 1, 2),
+                               'descending': Bool()}, False

@@ -216,3 +216,13 @@ def ge(a, b):
 
 f = torch_register(bvn_cdf, s_bvn_cdf)
 dispatch(TorchNumeric, TorchNumeric, TorchNumeric)(f)
+
+
+@dispatch(TorchNumeric)
+def sort(a, axis=-1, descending=False):
+    return torch.sort(a, dim=axis, descending=descending)[0]
+
+
+@dispatch(TorchNumeric)
+def argsort(a, axis=-1, descending=False):
+    return torch.argsort(a, dim=axis, descending=descending)

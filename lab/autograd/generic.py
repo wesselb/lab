@@ -192,3 +192,19 @@ def ge(a, b):
 
 f = autograd_register(bvn_cdf, s_bvn_cdf)
 dispatch(NPNumeric, NPNumeric, NPNumeric)(f)
+
+
+@dispatch(NPNumeric)
+def sort(a, axis=-1, descending=False):
+    if descending:
+        return -anp.sort(-a, axis=axis)
+    else:
+        return anp.sort(a, axis=axis)
+
+
+@dispatch(NPNumeric)
+def argsort(a, axis=-1, descending=False):
+    if descending:
+        return anp.argsort(-a, axis=axis)
+    else:
+        return anp.argsort(a, axis=axis)

@@ -51,7 +51,9 @@ __all__ = ['nan',
            'gt',
            'ge',
            'bvn_cdf',
-           'scan']
+           'scan',
+           'sort',
+           'argsort']
 
 _dispatch = Dispatcher()
 
@@ -772,3 +774,33 @@ def scan(f, xs, *init_state):
 
     # Put the elements dimension first and return.
     return B.transpose(states, perm=(1, 0) + tuple(range(2, B.rank(states))))
+
+
+@dispatch(Numeric)
+@abstract(promote=None)
+def sort(a, axis=-1, descending=False):
+    """Sort a tensor along an axis in ascending order.
+
+    Args:
+        a (tensor): Tensor to sort.
+        axis (int, optional): Axis to sort along. Defaults to `-1`.
+        descending (bool, optional): Sort in descending order. Defaults to
+            `False`.
+    Returns:
+        tensor: `a`, but sorted.
+    """
+
+
+@dispatch(Numeric)
+@abstract(promote=None)
+def argsort(a, axis=-1, descending=False):
+    """Get the indices that would a tensor along an axis in ascending order.
+
+    Args:
+        a (tensor): Tensor to sort.
+        axis (int, optional): Axis to sort along. Defaults to `-1`.
+        descending (bool, optional): Sort in descending order. Defaults to
+            `False`.
+    Returns:
+        tensor: The indices that would sort `a`.
+    """
