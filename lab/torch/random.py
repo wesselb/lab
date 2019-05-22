@@ -5,7 +5,7 @@ from __future__ import absolute_import, division, print_function
 import torch
 
 from . import dispatch
-from ..types import TorchDimension, TorchDType
+from ..types import TorchDimension, TorchDType, TorchNumeric, Int
 
 __all__ = []
 
@@ -18,3 +18,9 @@ def rand(dtype, *shape):
 @dispatch(TorchDType, [TorchDimension])
 def randn(dtype, *shape):
     return torch.randn(shape, dtype=dtype)
+
+
+@dispatch(TorchNumeric, Int)
+def choice(a, n):
+    choices = a[torch.randint(a.shape[0], (n,))]
+    return choices[0] if n == 1 else choices

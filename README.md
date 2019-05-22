@@ -315,6 +315,9 @@ rand(ref)
 randn(dtype, *shape)
 randn(*shape)
 randn(ref)
+
+choice(a, n)
+choice(a)
 ```
 
 ### Shaping

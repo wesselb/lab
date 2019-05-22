@@ -8,6 +8,7 @@ import tensorflow as tf
 import torch
 
 import lab as B
+from . import Tensor, to_np
 # noinspection PyUnresolvedReferences
 from . import eq, neq, lt, le, ge, gt, raises, call, ok, allclose, approx, \
     assert_isinstance, deq, to_np
@@ -63,3 +64,17 @@ def test_conversion_warnings():
             f(int, 5)
 
             yield eq, len(w), 1
+
+
+def test_choice():
+    for x in Tensor(2).forms() + Tensor(2, 3).forms() + Tensor(2, 3, 4).forms():
+        # Check shape.
+        yield eq, B.shape(B.choice(x)), B.shape(x)[1:]
+        yield eq, B.shape(B.choice(x, 1)), B.shape(x)[1:]
+        yield eq, B.shape(B.choice(x, 5))[0], 5
+        yield eq, B.shape(B.choice(x, 5))[1:], B.shape(x)[1:]
+
+        # Check correctness.
+        dtype = B.dtype(x)
+        choices = set(to_np(B.choice(B.range(dtype, 5), 1000)))
+        yield eq, choices, set(to_np(B.range(dtype, 5)))

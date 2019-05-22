@@ -10,7 +10,7 @@ from . import dispatch, B
 from .types import Dimension, DType, Int, Numeric
 from .util import abstract
 
-__all__ = ['set_random_seed', 'rand', 'randn']
+__all__ = ['set_random_seed', 'rand', 'randn', 'choice']
 
 
 @dispatch(Int)
@@ -82,3 +82,22 @@ def randn(*shape):
 @dispatch(Numeric)
 def randn(ref):
     return randn(B.dtype(ref), *B.shape(ref))
+
+
+@dispatch(Numeric, Int)
+@abstract(promote=None)
+def choice(a, n):
+    """Randomly choose from a tensor *with* replacement.
+
+    Args:
+        a (tensor): Tensor to choose from.
+        n (int, optional): Number of samples. Defaults to `1`.
+
+    Returns:
+        tensor: Samples.
+    """
+
+
+@dispatch(Numeric)
+def choice(a):
+    return choice(a, 1)

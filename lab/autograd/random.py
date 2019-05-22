@@ -8,7 +8,7 @@ import autograd.numpy as anp
 import numpy as np
 
 from . import dispatch, B
-from ..types import NPDimension, NPDType
+from ..types import NPDimension, NPDType, NPNumeric, Int
 
 __all__ = []
 
@@ -28,3 +28,10 @@ def rand(dtype, *shape):
 def randn(dtype, *shape):
     _warn_dtype(dtype)
     return B.cast(dtype, anp.random.randn(*shape))
+
+
+@dispatch(NPNumeric, Int)
+def choice(a, n):
+    inds = np.random.choice(a.shape[0], n, replace=True)
+    choices = a[inds]
+    return choices[0] if n == 1 else choices

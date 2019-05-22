@@ -6,7 +6,7 @@ import logging
 import tensorflow as tf
 
 from . import dispatch
-from ..types import TFDimension, TFDType, Int
+from ..types import TFDimension, TFDType, TFNumeric, Int
 from plum import convert
 
 __all__ = []
@@ -33,3 +33,10 @@ def randn(dtype, *shape):
 def randn(dtype, *shape):
     # `tf.random_normal` requires integers!
     return randn(dtype, *[convert(s, int) for s in shape])
+
+
+@dispatch(TFNumeric, Int)
+def choice(a, n):
+    inds = tf.random_uniform([n], minval=0, maxval=a.shape[0], dtype=tf.int64)
+    choices = tf.gather(a, inds)
+    return choices[0] if n == 1 else choices
