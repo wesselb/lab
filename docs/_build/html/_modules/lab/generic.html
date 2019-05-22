@@ -201,7 +201,9 @@
            <span class="s1">&#39;gt&#39;</span><span class="p">,</span>
            <span class="s1">&#39;ge&#39;</span><span class="p">,</span>
            <span class="s1">&#39;bvn_cdf&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;scan&#39;</span><span class="p">]</span>
+           <span class="s1">&#39;scan&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;sort&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;argsort&#39;</span><span class="p">]</span>
 
 <span class="n">_dispatch</span> <span class="o">=</span> <span class="n">Dispatcher</span><span class="p">()</span>
 
@@ -922,6 +924,36 @@
 
     <span class="c1"># Put the elements dimension first and return.</span>
     <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="n">perm</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">B</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">states</span><span class="p">))))</span></div>
+
+
+<div class="viewcode-block" id="sort"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.sort">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">(</span><span class="n">promote</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">sort</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">descending</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Sort a tensor along an axis in ascending order.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor to sort.</span>
+<span class="sd">        axis (int, optional): Axis to sort along. Defaults to `-1`.</span>
+<span class="sd">        descending (bool, optional): Sort in descending order. Defaults to</span>
+<span class="sd">            `False`.</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: `a`, but sorted.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="argsort"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.argsort">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">(</span><span class="n">promote</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">argsort</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">descending</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get the indices that would a tensor along an axis in ascending order.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor to sort.</span>
+<span class="sd">        axis (int, optional): Axis to sort along. Defaults to `-1`.</span>
+<span class="sd">        descending (bool, optional): Sort in descending order. Defaults to</span>
+<span class="sd">            `False`.</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: The indices that would sort `a`.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
 </pre></div>
 
            </div>

@@ -271,6 +271,9 @@ Generic
 
     scan(f, xs, *init_state)
 
+    sort(a, axis=-1, descending=False)
+    argsort(a, axis=-1, descending=False)
+
 Linear Algebra
 ~~~~~~~~~~~~~~
 
@@ -329,6 +332,9 @@ Random
     randn(dtype, *shape)
     randn(*shape)
     randn(ref)
+
+    choice(a, n)
+    choice(a)
 
 Shaping
 ~~~~~~~

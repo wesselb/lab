@@ -241,18 +241,25 @@
 <span class="n">_torch_retrievables</span> <span class="o">=</span> <span class="p">[</span><span class="n">_torch_tensor</span><span class="p">,</span>
                        <span class="n">_torch_dtype</span><span class="p">]</span>
 
-<span class="c1"># Numeric types:</span>
-
+<span class="c1"># Basic numeric types:</span>
 <span class="n">Int</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="o">*</span><span class="p">([</span><span class="nb">int</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sctypes</span><span class="p">[</span><span class="s1">&#39;int&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sctypes</span><span class="p">[</span><span class="s1">&#39;uint&#39;</span><span class="p">]),</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;Int&#39;</span><span class="p">)</span>
 <span class="n">Float</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="o">*</span><span class="p">([</span><span class="nb">float</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sctypes</span><span class="p">[</span><span class="s1">&#39;float&#39;</span><span class="p">]),</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;Float&#39;</span><span class="p">)</span>
 <span class="n">Bool</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">bool_</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;Bool&#39;</span><span class="p">)</span>
-<span class="n">Number</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">Int</span><span class="p">,</span> <span class="n">Float</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;Number&#39;</span><span class="p">)</span>
+
+<span class="c1"># Dimension types:</span>
+<span class="n">NPDimension</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">Int</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;NPDimension&#39;</span><span class="p">)</span>
+<span class="n">TFDimension</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">NPDimension</span><span class="p">,</span> <span class="n">_tf_dimension</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;TFDimension&#39;</span><span class="p">)</span>
+<span class="n">TorchDimension</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">NPDimension</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;TorchDimension&#39;</span><span class="p">)</span>
+<span class="n">Dimension</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">NPDimension</span><span class="p">,</span> <span class="n">TFDimension</span><span class="p">,</span> <span class="n">TorchDimension</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;Dimension&#39;</span><span class="p">)</span>
+
+<span class="c1"># Advanced numeric types:</span>
+<span class="n">Number</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">Dimension</span><span class="p">,</span> <span class="n">Int</span><span class="p">,</span> <span class="n">Float</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;Number&#39;</span><span class="p">)</span>
 <span class="n">NPNumeric</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">Number</span><span class="p">,</span> <span class="n">Bool</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Box</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;NPNumeric&#39;</span><span class="p">)</span>
 <span class="n">TFNumeric</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">_tf_tensor</span><span class="p">,</span> <span class="n">_tf_variable</span><span class="p">,</span> <span class="n">_tf_refvariable</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;TFNumeric&#39;</span><span class="p">)</span>
 <span class="n">TorchNumeric</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">_torch_tensor</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;TorchNumeric&#39;</span><span class="p">)</span>
 <span class="n">Numeric</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">NPNumeric</span><span class="p">,</span> <span class="n">TFNumeric</span><span class="p">,</span> <span class="n">TorchNumeric</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;Numeric&#39;</span><span class="p">)</span>
 
-<span class="c1"># Define promotion rules and the corresponding conversion methods.</span>
+<span class="c1"># Define corresponding promotion rules and conversion methods.</span>
 <span class="n">add_promotion_rule</span><span class="p">(</span><span class="n">NPNumeric</span><span class="p">,</span> <span class="n">TFNumeric</span><span class="p">,</span> <span class="n">TFNumeric</span><span class="p">)</span>
 <span class="n">add_promotion_rule</span><span class="p">(</span><span class="n">NPNumeric</span><span class="p">,</span> <span class="n">TorchNumeric</span><span class="p">,</span> <span class="n">TorchNumeric</span><span class="p">)</span>
 <span class="n">add_promotion_rule</span><span class="p">(</span><span class="n">_tf_tensor</span><span class="p">,</span> <span class="n">_tf_variable</span><span class="p">,</span> <span class="n">TFNumeric</span><span class="p">)</span>
@@ -261,18 +268,10 @@
 <span class="n">add_conversion_method</span><span class="p">(</span><span class="n">NPNumeric</span><span class="p">,</span> <span class="n">TorchNumeric</span><span class="p">,</span>
                       <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">_module_call</span><span class="p">(</span><span class="s1">&#39;torch&#39;</span><span class="p">,</span> <span class="s1">&#39;tensor&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>
 
-<span class="c1"># Dimension types:</span>
-
-<span class="n">NPDimension</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">Int</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;NPDimension&#39;</span><span class="p">)</span>
-<span class="n">TFDimension</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">NPDimension</span><span class="p">,</span> <span class="n">_tf_dimension</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;TFDimension&#39;</span><span class="p">)</span>
-<span class="n">TorchDimension</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">NPDimension</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;TorchDimension&#39;</span><span class="p">)</span>
-<span class="n">Dimension</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">NPDimension</span><span class="p">,</span> <span class="n">TFDimension</span><span class="p">,</span> <span class="n">TorchDimension</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;Dimension&#39;</span><span class="p">)</span>
-
 <span class="c1"># Define corresponding conversion methods.</span>
 <span class="n">add_conversion_method</span><span class="p">(</span><span class="n">_tf_dimension</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
 <span class="c1"># Data types:</span>
-
 <span class="n">NPDType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="nb">type</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;NPDType&#39;</span><span class="p">)</span>
 <span class="n">TFDType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">_tf_dtype</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;TFDType&#39;</span><span class="p">)</span>
 <span class="n">TorchDType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">_torch_dtype</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;TorchDType&#39;</span><span class="p">)</span>
@@ -323,9 +322,6 @@
                       <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">_module_attr</span><span class="p">(</span><span class="s1">&#39;torch&#39;</span><span class="p">,</span>
                                              <span class="n">_name</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">as_numpy_dtype</span><span class="p">)))</span>
 
-<span class="c1"># # NumPy data types can be of type `np.dtype`. Convert to the proper types.</span>
-<span class="c1"># add_conversion_method(np.dtype, DType, lambda x: x.type)</span>
-
 <span class="n">default_dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span>  <span class="c1">#: Default dtype.</span>
 
 
@@ -362,7 +358,6 @@
 
 
 <span class="c1"># Framework types:</span>
-
 <span class="n">NP</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">NPNumeric</span><span class="p">,</span> <span class="n">NPDimension</span><span class="p">,</span> <span class="n">NPDType</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;NP&#39;</span><span class="p">)</span>
 <span class="n">TF</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">TFNumeric</span><span class="p">,</span> <span class="n">TFDimension</span><span class="p">,</span> <span class="n">TFDType</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;TF&#39;</span><span class="p">)</span>
 <span class="n">Torch</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">TorchNumeric</span><span class="p">,</span> <span class="n">TorchDimension</span><span class="p">,</span> <span class="n">TorchDType</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;Torch&#39;</span><span class="p">)</span>

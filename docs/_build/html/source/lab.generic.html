@@ -995,6 +995,50 @@ correlation <cite>c</cite>.</p>
 </dl>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="lab.generic.sort">
+<code class="descclassname">lab.generic.</code><code class="descname">sort</code><a class="reference internal" href="../_modules/lab/generic.html#sort"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sort a tensor along an axis in ascending order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – Tensor to sort.</p></li>
+<li><p><strong>axis</strong> (<em>int</em><em>, </em><em>optional</em>) – Axis to sort along. Defaults to <cite>-1</cite>.</p></li>
+<li><p><strong>descending</strong> (<em>bool</em><em>, </em><em>optional</em>) – Sort in descending order. Defaults to
+<cite>False</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>a</cite>, but sorted.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lab.generic.argsort">
+<code class="descclassname">lab.generic.</code><code class="descname">argsort</code><a class="reference internal" href="../_modules/lab/generic.html#argsort"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.argsort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the indices that would a tensor along an axis in ascending order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – Tensor to sort.</p></li>
+<li><p><strong>axis</strong> (<em>int</em><em>, </em><em>optional</em>) – Axis to sort along. Defaults to <cite>-1</cite>.</p></li>
+<li><p><strong>descending</strong> (<em>bool</em><em>, </em><em>optional</em>) – Sort in descending order. Defaults to
+<cite>False</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The indices that would sort <cite>a</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 
 
