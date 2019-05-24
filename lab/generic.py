@@ -802,7 +802,7 @@ def argsort(a, axis=-1, descending=False):
         axis (int, optional): Axis to sort along. Defaults to `-1`.
         descending (bool, optional): Sort in descending order. Defaults to
             `False`.
-            
+
     Returns:
         tensor: The indices that would sort `a`.
     """
