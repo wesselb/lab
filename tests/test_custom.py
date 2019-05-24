@@ -2,39 +2,39 @@
 
 from __future__ import absolute_import, division, print_function
 
-import lab as B
 import tensorflow as tf
 from autograd import grad
 from fdm import check_sensitivity, gradient
-from lab.custom import (
-    toeplitz_solve, s_toeplitz_solve,
-    bvn_cdf, s_bvn_cdf
-)
+
+import lab as B
 from lab.autograd.custom import as_tuple
+from lab.custom import (
+    toeplitz_solve,
+    s_toeplitz_solve,
+    bvn_cdf,
+    s_bvn_cdf
+)
 from lab.tensorflow.custom import as_tf
 from lab.torch.custom import as_torch, as_np
-
-# noinspection PyUnresolvedReferences
-from . import eq, neq, lt, le, ge, gt, raises, call, ok, allclose, approx, \
-    deq, assert_isinstance
+from .util import approx
 
 
 def test_as_tuple():
-    yield eq, as_tuple(1), (1,)
-    yield eq, as_tuple((1,)), (1,)
-    yield eq, as_tuple((1, 2)), (1, 2)
+    assert as_tuple(1) == (1,)
+    assert as_tuple((1,)) == (1,)
+    assert as_tuple((1, 2)) == (1, 2)
 
 
 def test_as_tf():
-    yield assert_isinstance, as_tf(B.randn()), B.TFNumeric
-    yield assert_isinstance, as_tf((B.randn(),))[0], B.TFNumeric
+    assert isinstance(as_tf(B.randn()), B.TFNumeric)
+    assert isinstance(as_tf((B.randn(),))[0], B.TFNumeric)
 
 
 def test_as_torch_and_as_np():
-    yield assert_isinstance, as_torch(B.randn()), B.TorchNumeric
-    yield assert_isinstance, as_torch((B.randn(),))[0], B.TorchNumeric
-    yield assert_isinstance, as_np(as_torch(B.randn())), B.NPNumeric
-    yield assert_isinstance, as_np(as_torch((B.randn(),)))[0], B.NPNumeric
+    assert isinstance(as_torch(B.randn()), B.TorchNumeric)
+    assert isinstance(as_torch((B.randn(),))[0], B.TorchNumeric)
+    assert isinstance(as_np(as_torch(B.randn())), B.NPNumeric)
+    assert isinstance(as_np(as_torch((B.randn(),)))[0], B.NPNumeric)
 
 
 def check_grad(f, args, kw_args=None, digits=6):
@@ -87,17 +87,14 @@ def check_grad(f, args, kw_args=None, digits=6):
 
 
 def test_toeplitz_solve():
-    yield check_sensitivity, toeplitz_solve, s_toeplitz_solve, \
-          (B.randn(3), B.randn(2), B.randn(3))
-    yield check_sensitivity, toeplitz_solve, s_toeplitz_solve, \
-          (B.randn(3), B.randn(2), B.randn(3, 4))
-    yield check_grad, toeplitz_solve, \
-          (B.randn(3), B.randn(2), B.randn(3))
-    yield check_grad, toeplitz_solve, \
-          (B.randn(3), B.randn(2), B.randn(3, 4))
+    check_sensitivity(toeplitz_solve, s_toeplitz_solve,
+                      (B.randn(3), B.randn(2), B.randn(3)))
+    check_sensitivity(toeplitz_solve, s_toeplitz_solve,
+                      (B.randn(3), B.randn(2), B.randn(3, 4)))
+    check_grad(toeplitz_solve, (B.randn(3), B.randn(2), B.randn(3)))
+    check_grad(toeplitz_solve, (B.randn(3), B.randn(2), B.randn(3, 4)))
 
 
 def test_bvn_cdf():
-    yield check_sensitivity, bvn_cdf, s_bvn_cdf, \
-          (B.rand(3), B.rand(3), B.rand(3))
-    yield check_grad, bvn_cdf, (B.rand(3), B.rand(3), B.rand(3))
+    check_sensitivity(bvn_cdf, s_bvn_cdf, (B.rand(3), B.rand(3), B.rand(3)))
+    check_grad(bvn_cdf, (B.rand(3), B.rand(3), B.rand(3)))

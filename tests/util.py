@@ -5,32 +5,27 @@ from __future__ import absolute_import, division, print_function
 import logging
 from itertools import product
 
-import nose.tools
 import numpy as np
+import plum
 import tensorflow as tf
 import torch
-import plum
 from plum import Dispatcher
 
-from . import B
+import lab as B
+
+__all__ = ['deq',
+           'to_np',
+           'allclose',
+           'check_function',
+           'Tensor', 'PositiveTensor', 'BoolTensor', 'NaNTensor',
+           'Matrix', 'PSD', 'PSDTriangular',
+           'Tuple', 'List', 'Value', 'Bool']
 
 log = logging.getLogger('lab.' + __name__)
+
 _dispatch = Dispatcher()
 
-# Define some handy shorthands.
-le = nose.tools.assert_less_equal
-lt = nose.tools.assert_less
-eq = nose.tools.assert_equal
-neq = nose.tools.assert_not_equal
-ge = nose.tools.assert_greater_equal
-gt = nose.tools.assert_greater
-raises = nose.tools.assert_raises
-ok = nose.tools.ok_
 approx = np.testing.assert_array_almost_equal
-
-
-def is_(x, y):
-    assert x is y
 
 
 def deq(x, y):
@@ -42,15 +37,6 @@ def deq(x, y):
         assert x == y
     else:
         assert x is y
-
-
-def assert_isinstance(x, y):
-    assert isinstance(x, y)
-
-
-def call(f, args=(), kw_args=None, res=True):
-    kw_args = {} if kw_args is None else kw_args
-    eq(f(*args, **kw_args), res)
 
 
 @_dispatch({B.NPNumeric, B.Number, B.Bool})
@@ -92,14 +78,14 @@ def allclose(x, y, assert_dtype=False):
 
     # Assert that data types are equal if it concerns floats.
     if assert_dtype:
-        eq(np.array(x).dtype, np.array(y).dtype)
+        assert np.array(x).dtype == np.array(y).dtype
 
     np.testing.assert_allclose(x, y)
 
 
 @_dispatch(tuple, tuple, [bool])
 def allclose(x, y, assert_dtype=False):
-    eq(len(x), len(y))
+    assert len(x) == len(y)
     for xi, yi in zip(x, y):
         allclose(xi, yi, assert_dtype)
 

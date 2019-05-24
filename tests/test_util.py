@@ -3,27 +3,26 @@
 from __future__ import absolute_import, division, print_function
 
 import plum
+import pytest
 from plum import NotFoundLookupError
 
 import lab as B
 from lab.util import abstract, batch_computation
-# noinspection PyUnresolvedReferences
-from . import eq, neq, lt, le, ge, gt, raises, call, ok, allclose, approx
 
 
 def test_batch_computation():
     # Correctness is already checked by usage in linear algebra functions. Here
     # we test the check of batch shapes.
-    yield raises, ValueError, \
-          lambda: batch_computation(None, B.randn(3, 4, 4), B.randn(2, 4, 4))
-    yield raises, ValueError, \
-          lambda: batch_computation(None, B.randn(2, 2, 4, 4), B.randn(2, 4, 4))
+    with pytest.raises(ValueError):
+        batch_computation(None, B.randn(3, 4, 4), B.randn(2, 4, 4))
+    with pytest.raises(ValueError):
+        batch_computation(None, B.randn(2, 2, 4, 4), B.randn(2, 4, 4))
 
 
 def test_metadata():
     # Test that the name and docstrings for functions are available.
-    yield eq, B.transpose.__name__, 'transpose'
-    yield neq, B.transpose.__doc__, ''
+    assert B.transpose.__name__ == 'transpose'
+    assert B.transpose.__doc__ != ''
 
 
 def test_abstract():
@@ -104,14 +103,16 @@ def test_abstract():
     B.f6 = f6
 
     # Test promotion.
-    yield eq, f1(a, a, a), (b, b, b)
-    yield raises, NotFoundLookupError, lambda: f2(a, a, a)
-    yield eq, f3(a, a, a), (b, b, b)
-    yield raises, NotFoundLookupError, lambda: f4(a, a, a)
-    yield eq, f5(a, a, a), (b, a, a)
-    yield eq, f5(a), (b,)
-    yield eq, f6(a, a, a), (b, b, a)
-    yield eq, f6(a, a), (b, b)
+    assert f1(a, a, a) == (b, b, b)
+    with pytest.raises(NotFoundLookupError):
+        f2(a, a, a)
+    assert f3(a, a, a) == (b, b, b)
+    with pytest.raises(NotFoundLookupError):
+        f4(a, a, a)
+    assert f5(a, a, a) == (b, a, a)
+    assert f5(a) == (b,)
+    assert f6(a, a, a) == (b, b, a)
+    assert f6(a, a) == (b, b)
 
     # Put back promotion function.
     plum.promote = plum_promote

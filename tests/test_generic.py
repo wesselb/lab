@@ -2,47 +2,53 @@
 
 from __future__ import absolute_import, division, print_function
 
-import scipy.special
 import numpy as np
+import pytest
+import scipy.special
 import tensorflow as tf
 import torch
 from plum import NotFoundLookupError
 
 import lab as B
-from . import check_function, Tensor, Value, PositiveTensor, BoolTensor, \
-    NaNTensor, List, Bool
-# noinspection PyUnresolvedReferences
-from . import eq, neq, lt, le, ge, gt, raises, call, ok, allclose, approx, \
-    deq, is_
+from .util import (
+    check_function,
+    Tensor,
+    Value,
+    PositiveTensor,
+    BoolTensor,
+    NaNTensor,
+    Bool,
+    allclose,
+    deq
+)
 
 
 def test_constants():
-    yield eq, B.pi, np.pi
-    yield eq, B.log_2_pi, np.log(2 * np.pi)
-    yield is_, B.nan, np.nan
+    assert B.pi == np.pi
+    assert B.log_2_pi == np.log(2 * np.pi)
+    assert B.nan is np.nan
 
 
 def test_isnan():
-    yield check_function, B.isnan, (NaNTensor(),), {}, False
-    yield check_function, B.isnan, (NaNTensor(2),), {}, False
-    yield check_function, B.isnan, (NaNTensor(2, 3),), {}, False
+    check_function(B.isnan, (NaNTensor(),), {}, assert_dtype=False)
+    check_function(B.isnan, (NaNTensor(2),), {}, assert_dtype=False)
+    check_function(B.isnan, (NaNTensor(2, 3),), {}, assert_dtype=False)
 
 
 def test_zeros_ones_eye():
     for f in [B.zeros, B.ones, B.eye]:
         # Check consistency.
-        yield check_function, f, \
-              (Value(np.float32, tf.float32, torch.float32),
-               Value(2),
-               Value(3))
+        check_function(f, (Value(np.float32, tf.float32, torch.float32),
+                           Value(2),
+                           Value(3)))
 
         # Check shape of calls.
-        yield eq, B.shape(f(2)), (2, 2) if f is B.eye else (2,)
-        yield eq, B.shape(f(2, 3)), (2, 3)
+        assert B.shape(f(2)) == (2, 2) if f is B.eye else (2,)
+        assert B.shape(f(2, 3)) == (2, 3)
 
         # Check shape type of calls.
-        yield eq, B.dtype(f(2)), B.default_dtype
-        yield eq, B.dtype(f(2, 3)), B.default_dtype
+        assert B.dtype(f(2)) == B.default_dtype
+        assert B.dtype(f(2, 3)) == B.default_dtype
 
         for t1, t2 in [(np.float32, np.int64),
                        (tf.float32, tf.int64),
@@ -50,140 +56,137 @@ def test_zeros_ones_eye():
             ref = B.randn(t1, 4, 5)
 
             # Check shape of calls.
-            yield eq, B.shape(f(t2, 2)), (2, 2) if f is B.eye else (2,)
-            yield eq, B.shape(f(t2, 2, 3)), (2, 3)
-            yield eq, B.shape(f(ref)), (4, 5)
+            assert B.shape(f(t2, 2)) == (2, 2) if f is B.eye else (2,)
+            assert B.shape(f(t2, 2, 3)) == (2, 3)
+            assert B.shape(f(ref)) == (4, 5)
 
             # Check shape type of calls.
-            yield eq, B.dtype(f(t2, 2)), t2
-            yield eq, B.dtype(f(t2, 2, 3)), t2
-            yield eq, B.dtype(f(ref)), t1
+            assert B.dtype(f(t2, 2)) == t2
+            assert B.dtype(f(t2, 2, 3)) == t2
+            assert B.dtype(f(ref)) == t1
 
     # Check exceptions.
-    yield raises, NotFoundLookupError, lambda: B.eye(3, 4, 5)
+    with pytest.raises(NotFoundLookupError):
+        B.eye(3, 4, 5)
     for t in [np.float32, tf.float32, torch.float32]:
-        yield raises, NotFoundLookupError, lambda: B.eye(t, 3, 4, 5)
+        with pytest.raises(NotFoundLookupError):
+            B.eye(t, 3, 4, 5)
 
 
 def test_linspace():
     # Check correctness.
-    yield allclose, \
-          B.linspace(0, 1, 10), np.linspace(0, 1, 10, dtype=B.default_dtype)
+    allclose(B.linspace(0, 1, 10), np.linspace(0, 1, 10, dtype=B.default_dtype))
 
     # Check consistency
-    yield check_function, B.linspace, \
-          (Value(np.float32, tf.float32, torch.float32),
-           Value(0),
-           Value(10),
-           Value(20))
+    check_function(B.linspace, (Value(np.float32, tf.float32, torch.float32),
+                                Value(0),
+                                Value(10),
+                                Value(20)))
 
 
 def test_range():
     # Check correctness.
-    yield allclose, B.range(5), np.arange(5)
-    yield allclose, B.range(2, 5), np.arange(2, 5)
-    yield allclose, B.range(2, 5, 2), np.arange(2, 5, 2)
+    allclose(B.range(5), np.arange(5))
+    allclose(B.range(2, 5), np.arange(2, 5))
+    allclose(B.range(2, 5, 2), np.arange(2, 5, 2))
 
     # Check def
 
     # Check various step sizes.
     for step in [1, 1.0, 0.25]:
-        yield check_function, B.range, \
-              (Value(np.float32, tf.float32, torch.float32),
-               Value(0),
-               Value(5),
-               Value(step))
+        check_function(B.range, (Value(np.float32, tf.float32, torch.float32),
+                                 Value(0),
+                                 Value(5),
+                                 Value(step)))
 
     # Check two-argument specification.
-    yield check_function, B.range, \
-          (Value(np.float32, tf.float32, torch.float32),
-           Value(0),
-           Value(5))
+    check_function(B.range, (Value(np.float32, tf.float32, torch.float32),
+                             Value(0),
+                             Value(5)))
 
     # Check one-argument specification.
-    yield check_function, B.range, \
-          (Value(np.float32, tf.float32, torch.float32),
-           Value(5))
+    check_function(B.range, (Value(np.float32, tf.float32, torch.float32),
+                             Value(5)))
 
 
 def test_cast():
     # Test casting to a given data type.
-    yield deq, B.dtype(B.cast(np.float64, 1)), np.float64
-    yield deq, B.dtype(B.cast(np.float64, np.array(1))), np.float64
+    deq(B.dtype(B.cast(np.float64, 1)), np.float64)
+    deq(B.dtype(B.cast(np.float64, np.array(1))), np.float64)
 
-    yield deq, B.dtype(B.cast(tf.float64, 1)), tf.float64
-    yield deq, B.dtype(B.cast(tf.float64, np.array(1))), tf.float64
-    yield deq, B.dtype(B.cast(tf.float64, tf.constant(1))), tf.float64
+    deq(B.dtype(B.cast(tf.float64, 1)), tf.float64)
+    deq(B.dtype(B.cast(tf.float64, np.array(1))), tf.float64)
+    deq(B.dtype(B.cast(tf.float64, tf.constant(1))), tf.float64)
 
-    yield deq, B.dtype(B.cast(torch.float64, 1)), torch.float64
-    yield deq, B.dtype(B.cast(torch.float64, np.array(1))), torch.float64
-    yield deq, B.dtype(B.cast(torch.float64, torch.tensor(1))), torch.float64
+    deq(B.dtype(B.cast(torch.float64, 1)), torch.float64)
+    deq(B.dtype(B.cast(torch.float64, np.array(1))), torch.float64)
+    deq(B.dtype(B.cast(torch.float64, torch.tensor(1))), torch.float64)
 
     # Test that casting to its own data type does nothing.
     for x in [B.randn(np.float32), B.randn(tf.float32), B.randn(torch.float32)]:
-        yield is_, x, B.cast(B.dtype(x), x)
+        assert x is B.cast(B.dtype(x), x)
 
 
 def test_unary():
     # Test functions using signed arguments.
     for f in [B.identity, B.abs, B.sign, B.exp, B.sin, B.cos, B.tan, B.tanh,
               B.sigmoid, B.relu]:
-        yield check_function, f, (Tensor(),)
-        yield check_function, f, (Tensor(2),)
-        yield check_function, f, (Tensor(2, 3),)
+        check_function(f, (Tensor(),))
+        check_function(f, (Tensor(2),))
+        check_function(f, (Tensor(2, 3),))
 
     # Test functions using positive arguments.
     for f in [B.log, B.sqrt]:
-        yield check_function, f, (PositiveTensor(),)
-        yield check_function, f, (PositiveTensor(2),)
-        yield check_function, f, (PositiveTensor(2, 3),)
+        check_function(f, (PositiveTensor(),))
+        check_function(f, (PositiveTensor(2),))
+        check_function(f, (PositiveTensor(2, 3),))
 
 
 def test_binary():
     # Test functions using signed arguments.
     for f in [B.add, B.subtract, B.multiply, B.divide,
               B.minimum, B.maximum, B.leaky_relu]:
-        yield check_function, f, (Tensor(), Tensor())
-        yield check_function, f, (Tensor(2), Tensor(2))
-        yield check_function, f, (Tensor(2, 3), Tensor(2, 3))
+        check_function(f, (Tensor(), Tensor()))
+        check_function(f, (Tensor(2), Tensor(2)))
+        check_function(f, (Tensor(2, 3), Tensor(2, 3)))
 
     # Test functions using a positive first argument, but signed second
     # argument.
     for f in [B.power]:
-        yield check_function, f, (PositiveTensor(), Tensor())
-        yield check_function, f, (PositiveTensor(2), Tensor(2))
-        yield check_function, f, (PositiveTensor(2, 3), Tensor(2, 3))
+        check_function(f, (PositiveTensor(), Tensor()))
+        check_function(f, (PositiveTensor(2), Tensor(2)))
+        check_function(f, (PositiveTensor(2, 3), Tensor(2, 3)))
 
 
 def test_reductions():
     for f in [B.min, B.max, B.sum, B.mean, B.std, B.logsumexp]:
-        yield check_function, f, (Tensor(),)
-        yield check_function, f, (Tensor(2),)
-        yield check_function, f, (Tensor(2),), {'axis': Value(0)}
-        yield check_function, f, (Tensor(2, 3),)
-        yield check_function, f, (Tensor(2, 3),), {'axis': Value(0, 1)}
+        check_function(f, (Tensor(),))
+        check_function(f, (Tensor(2),))
+        check_function(f, (Tensor(2),), {'axis': Value(0)})
+        check_function(f, (Tensor(2, 3),))
+        check_function(f, (Tensor(2, 3),), {'axis': Value(0, 1)})
 
     # Check correctness of `logsumexp`.
     mat = PositiveTensor(3, 4).np()
-    yield allclose, \
-          B.logsumexp(mat, axis=1), scipy.special.logsumexp(mat, axis=1)
+    allclose(B.logsumexp(mat, axis=1), scipy.special.logsumexp(mat, axis=1))
 
 
 def test_logical_reductions():
     for f in [B.all, B.any]:
-        yield check_function, f, (BoolTensor(),), {}, False
-        yield check_function, f, (BoolTensor(2),), {}, False
-        yield check_function, f, (BoolTensor(2),), {'axis': Value(0)}, False
-        yield check_function, f, (BoolTensor(2, 3),), {}, False
-        yield check_function, f, \
-              (BoolTensor(2, 3),), {'axis': Value(0, 1)}, False
+        check_function(f, (BoolTensor(),), {}, assert_dtype=False)
+        check_function(f, (BoolTensor(2),), {}, assert_dtype=False)
+        check_function(f, (BoolTensor(2),), {'axis': Value(0)},
+                       assert_dtype=False)
+        check_function(f, (BoolTensor(2, 3),), {}, assert_dtype=False)
+        check_function(f, (BoolTensor(2, 3),), {'axis': Value(0, 1)},
+                       assert_dtype=False)
 
 
 def test_logical_comparisons():
     for f in [B.lt, B.le, B.gt, B.ge]:
-        yield check_function, f, (Tensor(), Tensor()), {}, False
-        yield check_function, f, (Tensor(2), Tensor(2)), {}, False
-        yield check_function, f, (Tensor(2, 3), Tensor(2, 3)), {}, False
+        check_function(f, (Tensor(), Tensor()), {}, assert_dtype=False)
+        check_function(f, (Tensor(2), Tensor(2)), {}, assert_dtype=False)
+        check_function(f, (Tensor(2, 3), Tensor(2, 3)), {}, assert_dtype=False)
 
 
 def test_scan():
@@ -193,12 +196,12 @@ def test_scan():
     def scan_f(prev, x):
         return prev
 
-    yield check_function, B.scan, (Value(scan_f), Tensor(4), Tensor())
-    yield check_function, B.scan, (Value(scan_f), Tensor(4), Tensor(2))
-    yield check_function, B.scan, (Value(scan_f), Tensor(4), Tensor(2, 3))
-    yield check_function, B.scan, (Value(scan_f), Tensor(4, 5), Tensor())
-    yield check_function, B.scan, (Value(scan_f), Tensor(4, 5), Tensor(2))
-    yield check_function, B.scan, (Value(scan_f), Tensor(4, 5), Tensor(2, 3))
+    check_function(B.scan, (Value(scan_f), Tensor(4), Tensor()))
+    check_function(B.scan, (Value(scan_f), Tensor(4), Tensor(2)))
+    check_function(B.scan, (Value(scan_f), Tensor(4), Tensor(2, 3)))
+    check_function(B.scan, (Value(scan_f), Tensor(4, 5), Tensor()))
+    check_function(B.scan, (Value(scan_f), Tensor(4, 5), Tensor(2)))
+    check_function(B.scan, (Value(scan_f), Tensor(4, 5), Tensor(2, 3)))
 
     # Check correctness by comparing NumPy against TensorFlow for more
     # complicated scanning function.
@@ -212,29 +215,27 @@ def test_scan():
     xs = Tensor(10, 3, 4)
     init_h = Tensor(3, 4)
     init_y = Tensor(3, 4)
-    yield allclose, \
-          B.scan(scan_f, xs.np(), init_h.np(), init_y.np()), \
-          B.scan(scan_f, xs.tf(), init_h.tf(), init_y.tf())
+    allclose(B.scan(scan_f, xs.np(), init_h.np(), init_y.np()),
+             B.scan(scan_f, xs.tf(), init_h.tf(), init_y.tf()))
 
     # Check shape checking.
 
     def incorrect_scan_f(prev, x):
         return prev + prev
 
-    yield raises, RuntimeError, \
-          lambda: B.scan(incorrect_scan_f,
-                         Tensor(4).np(),
-                         Tensor().np(),
-                         Tensor().np())
+    with pytest.raises(RuntimeError):
+        B.scan(incorrect_scan_f,
+               Tensor(4).np(),
+               Tensor().np(),
+               Tensor().np())
 
 
 def test_sort():
-    yield check_function, B.sort, \
-          (Tensor(2, 3, 4),), {'axis': Value(-1, 0, 1, 2),
-                               'descending': Bool()}
+    check_function(B.sort, (Tensor(2, 3, 4),),
+                   {'axis': Value(-1, 0, 1, 2), 'descending': Bool()})
 
 
 def test_argsort():
-    yield check_function, B.argsort, \
-          (Tensor(2, 3, 4),), {'axis': Value(-1, 0, 1, 2),
-                               'descending': Bool()}, False
+    check_function(B.argsort, (Tensor(2, 3, 4),),
+                   {'axis': Value(-1, 0, 1, 2), 'descending': Bool()},
+                   assert_dtype=False)
