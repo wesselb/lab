@@ -24,41 +24,41 @@ def test_constants():
     assert B.epsilon == 1e-12
 
 
-def test_transpose():
-    for f in [B.transpose, B.T, B.t]:
-        # Check consistency.
-        check_function(f, (Tensor(),))
-        check_function(f, (Tensor(2),), {'perm': Value(None, (0,))})
-        check_function(f, (Tensor(2, 3),),
-                       {'perm': Value(None, (0, 1), (1, 0))})
-        check_function(f, (Tensor(2, 3, 4),), {'perm': Value(None,
-                                                             (0, 1, 2),
-                                                             (0, 2, 1),
-                                                             (1, 0, 2),
-                                                             (1, 2, 0),
-                                                             (2, 1, 0),
-                                                             (2, 0, 1))})
+@pytest.mark.parametrize('f', [B.transpose, B.T, B.t])
+def test_transpose(f):
+    # Check consistency.
+    check_function(f, (Tensor(),))
+    check_function(f, (Tensor(2),), {'perm': Value(None, (0,))})
+    check_function(f, (Tensor(2, 3),),
+                   {'perm': Value(None, (0, 1), (1, 0))})
+    check_function(f, (Tensor(2, 3, 4),), {'perm': Value(None,
+                                                         (0, 1, 2),
+                                                         (0, 2, 1),
+                                                         (1, 0, 2),
+                                                         (1, 2, 0),
+                                                         (2, 1, 0),
+                                                         (2, 0, 1))})
 
-        # Check correctness of zero-dimensional case.
-        assert f(1) is 1
+    # Check correctness of zero-dimensional case.
+    assert f(1) is 1
 
-        # Check correctness of one-dimensional case.
-        a = Tensor(2).np()
-        allclose(f(a, perm=None), a[None, :])
-        allclose(f(a, perm=(0,)), a)
+    # Check correctness of one-dimensional case.
+    a = Tensor(2).np()
+    allclose(f(a, perm=None), a[None, :])
+    allclose(f(a, perm=(0,)), a)
 
-        # Check correctness of three-dimensional case.
-        a = Tensor(2, 3, 4).np()
-        allclose(f(a), np.transpose(a, axes=(0, 2, 1)))
-        allclose(f(a, perm=(1, 2, 0)), np.transpose(a, axes=(1, 2, 0)))
+    # Check correctness of three-dimensional case.
+    a = Tensor(2, 3, 4).np()
+    allclose(f(a), np.transpose(a, axes=(0, 2, 1)))
+    allclose(f(a, perm=(1, 2, 0)), np.transpose(a, axes=(1, 2, 0)))
 
 
-def test_matmul():
-    for f in [B.matmul, B.mm, B.dot]:
-        check_function(f, (Tensor(3, 3), Tensor(3, 3)),
-                       {'tr_a': Bool(), 'tr_b': Bool()})
-        check_function(f, (Tensor(4, 3, 3), Tensor(4, 3, 3)),
-                       {'tr_a': Bool(), 'tr_b': Bool()})
+@pytest.mark.parametrize('f', [B.matmul, B.mm, B.dot])
+def test_matmul(f):
+    check_function(f, (Tensor(3, 3), Tensor(3, 3)),
+                   {'tr_a': Bool(), 'tr_b': Bool()})
+    check_function(f, (Tensor(4, 3, 3), Tensor(4, 3, 3)),
+                   {'tr_a': Bool(), 'tr_b': Bool()})
 
 
 def test_trace():
@@ -122,42 +122,49 @@ def test_logdet():
     check_function(B.logdet, (PSD(4, 3, 3),))
 
 
-def test_cholesky():
-    for f in [B.cholesky, B.chol]:
-        check_function(f, (PSD(),))
-        check_function(f, (PSD(4, 3, 3),))
+@pytest.mark.parametrize('f', [B.cholesky, B.chol])
+def test_cholesky(f):
+    check_function(f, (PSD(),))
+    check_function(f, (PSD(4, 3, 3),))
 
 
-def test_cholesky_solve():
-    for f in [B.cholesky_solve, B.cholsolve]:
-        check_function(f, (PSDTriangular(3, 3), Matrix(3, 4)))
-        check_function(f, (PSDTriangular(5, 3, 3), Matrix(5, 3, 4)))
+@pytest.mark.parametrize('f', [B.cholesky_solve, B.cholsolve])
+def test_cholesky_solve(f):
+    check_function(f, (PSDTriangular(3, 3), Matrix(3, 4)))
+    check_function(f, (PSDTriangular(5, 3, 3), Matrix(5, 3, 4)))
 
 
-def test_triangular_solve():
-    for f in [B.triangular_solve, B.trisolve]:
-        check_function(f, (PSDTriangular(3, 3), Matrix(3, 4)),
-                       {'lower_a': Value(True)})
-        check_function(f, (PSDTriangular(5, 3, 3), Matrix(5, 3, 4)),
-                       {'lower_a': Value(True)})
-        check_function(f, (PSDTriangular(3, 3, upper=True), Matrix(3, 4)),
-                       {'lower_a': Value(False)})
-        check_function(f, (PSDTriangular(5, 3, 3, upper=True), Matrix(5, 3, 4)),
-                       {'lower_a': Value(False)})
+@pytest.mark.parametrize('f', [B.triangular_solve, B.trisolve])
+def test_triangular_solve(f):
+    check_function(f, (PSDTriangular(3, 3), Matrix(3, 4)),
+                   {'lower_a': Value(True)})
+    check_function(f, (PSDTriangular(5, 3, 3), Matrix(5, 3, 4)),
+                   {'lower_a': Value(True)})
+    check_function(f, (PSDTriangular(3, 3, upper=True), Matrix(3, 4)),
+                   {'lower_a': Value(False)})
+    check_function(f, (PSDTriangular(5, 3, 3, upper=True), Matrix(5, 3, 4)),
+                   {'lower_a': Value(False)})
 
 
-def test_toeplitz_solve():
-    for f in [B.toeplitz_solve, B.toepsolve]:
-        check_function(f, (Tensor(3), Tensor(2), Matrix(3, 4)))
-        check_function(f, (Tensor(3), Matrix(3, 4)))
+@pytest.mark.parametrize('f', [B.toeplitz_solve, B.toepsolve])
+def test_toeplitz_solve(f):
+    check_function(f, (Tensor(3), Tensor(2), Matrix(3, 4)))
+    check_function(f, (Tensor(3), Matrix(3, 4)))
 
 
-def test_outer():
-    for a, b in list(product(*([[Tensor(5).np(), Tensor(5, 1).np()]] * 2))) + \
-                [(Tensor(5, 3).np(), Tensor(5, 3).np())]:
-        allclose(B.outer(a, b), B.matmul(B.uprank(a), B.uprank(b), tr_b=True))
-        allclose(B.outer(a), B.outer(a, a))
-        allclose(B.outer(b), B.outer(b, b))
+@pytest.mark.parametrize('a', [Tensor(5).np(), Tensor(5, 1).np()])
+@pytest.mark.parametrize('b', [Tensor(5).np(), Tensor(5, 1).np()])
+def test_outer(a, b):
+    allclose(B.outer(a, b), B.matmul(B.uprank(a), B.uprank(b), tr_b=True))
+    allclose(B.outer(a), B.outer(a, a))
+    allclose(B.outer(b), B.outer(b, b))
+
+
+def test_outer_high_rank():
+    a = Tensor(5, 3).np()
+    b = Tensor(5, 3).np()
+    allclose(B.outer(a), B.outer(a, a))
+    allclose(B.outer(b), B.outer(b, b))
 
 
 def test_reg():

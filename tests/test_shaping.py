@@ -19,12 +19,12 @@ from .util import (
 )
 
 
-def test_sizing():
-    for f in [B.shape, B.rank, B.length, B.size]:
-        check_function(f, (Tensor(),), {}, assert_dtype=False)
-        check_function(f, (Tensor(3, ),), {}, assert_dtype=False)
-        check_function(f, (Tensor(3, 4),), {}, assert_dtype=False)
-        check_function(f, (Tensor(3, 4, 5),), {}, assert_dtype=False)
+@pytest.mark.parametrize('f', [B.shape, B.rank, B.length, B.size])
+def test_sizing(f):
+    check_function(f, (Tensor(),), {}, assert_dtype=False)
+    check_function(f, (Tensor(3, ),), {}, assert_dtype=False)
+    check_function(f, (Tensor(3, 4),), {}, assert_dtype=False)
+    check_function(f, (Tensor(3, 4, 5),), {}, assert_dtype=False)
 
 
 def test_isscalar():
@@ -108,9 +108,10 @@ def test_concat2d():
                    (Tuple(Matrix(3), Matrix(3)), Tuple(Matrix(3), Matrix(3))))
 
 
-def test_tile():
-    for r1, r2 in product(*([[1, 2]] * 2)):
-        check_function(B.tile, (Tensor(3, 4), Value(r1), Value(r2)))
+@pytest.mark.parametrize('r1', [1, 2])
+@pytest.mark.parametrize('r2', [1, 2])
+def test_tile(r1, r2):
+    check_function(B.tile, (Tensor(3, 4), Value(r1), Value(r2)))
 
 
 def test_take():

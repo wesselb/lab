@@ -4,11 +4,12 @@ from __future__ import absolute_import, division, print_function
 
 import warnings
 
+import lab as B
 import numpy  as np
+import pytest
 import tensorflow as tf
 import torch
 
-import lab as B
 from .util import (
     Tensor,
     allclose,
@@ -17,59 +18,60 @@ from .util import (
 )
 
 
-def test_set_seed():
+@pytest.mark.parametrize('dtype', [np.float32, tf.float32, torch.float32])
+def test_set_seed(dtype):
+    # Careful with TensorFlow's graph!
+    tf.reset_default_graph()
+    B.set_random_seed(0)
+    x = to_np(B.rand(dtype))
+    tf.reset_default_graph()
+    B.set_random_seed(0)
+    y = to_np(B.rand(dtype))
+    assert x == y
+
+
+@pytest.mark.parametrize('f', [B.rand, B.randn])
+def test_random_generators(f):
+    # Test without specifying data type.
+    deq(B.dtype(f()), B.default_dtype)
+    assert B.shape(f()) == ()
+    deq(B.dtype(f(2)), B.default_dtype)
+    allclose(B.shape(f(2)), (2,))
+    deq(B.dtype(f(2, 3)), B.default_dtype)
+    assert B.shape(f(2, 3)) == (2, 3)
+
+    # Test with specifying data type.
     for t in [np.float32, tf.float32, torch.float32]:
-        # Careful with TensorFlow's graph!
-        tf.reset_default_graph()
-        B.set_random_seed(0)
-        x = to_np(B.rand(t))
-        tf.reset_default_graph()
-        B.set_random_seed(0)
-        y = to_np(B.rand(t))
-        assert x == y
+        # Test direct specification.
+        deq(B.dtype(f(t)), t)
+        assert B.shape(f(t)) == ()
+        deq(B.dtype(f(t, 2)), t)
+        assert B.shape(f(t, 2)) == (2,)
+        deq(B.dtype(f(t, 2, 3)), t)
+        assert B.shape(f(t, 2, 3)) == (2, 3)
+
+        # Test reference specification.
+        deq(B.dtype(f(f(t))), t)
+        assert B.shape(f(f())) == ()
+        deq(B.dtype(f(f(t, 2))), t)
+        assert B.shape(f(f(t, 2))) == (2,)
+        deq(B.dtype(f(f(t, 2, 3))), t)
+        assert B.shape(f(f(t, 2, 3))) == (2, 3)
 
 
-def test_random_generators():
-    for f in [B.rand, B.randn]:
-        # Test without specifying data type.
-        deq(B.dtype(f()), B.default_dtype)
-        assert B.shape(f()) == ()
-        deq(B.dtype(f(2)), B.default_dtype)
-        allclose(B.shape(f(2)), (2,))
-        deq(B.dtype(f(2, 3)), B.default_dtype)
-        assert B.shape(f(2, 3)) == (2, 3)
+@pytest.mark.parametrize('f', [B.rand, B.randn])
+def test_conversion_warnings(f):
+    with warnings.catch_warnings(record=True) as w:
+        warnings.simplefilter('always')
 
-        # Test with specifying data type.
-        for t in [np.float32, tf.float32, torch.float32]:
-            # Test direct specification.
-            deq(B.dtype(f(t)), t)
-            assert B.shape(f(t)) == ()
-            deq(B.dtype(f(t, 2)), t)
-            assert B.shape(f(t, 2)) == (2,)
-            deq(B.dtype(f(t, 2, 3)), t)
-            assert B.shape(f(t, 2, 3)) == (2, 3)
+        # Trigger the warning!
+        f(int, 5)
 
-            # Test reference specification.
-            deq(B.dtype(f(f(t))), t)
-            assert B.shape(f(f())) == ()
-            deq(B.dtype(f(f(t, 2))), t)
-            assert B.shape(f(f(t, 2))) == (2,)
-            deq(B.dtype(f(f(t, 2, 3))), t)
-            assert B.shape(f(f(t, 2, 3))) == (2, 3)
-
-
-def test_conversion_warnings():
-    for f in [B.rand, B.randn]:
-        with warnings.catch_warnings(record=True) as w:
-            warnings.simplefilter('always')
-
-            # Trigger the warning!
-            f(int, 5)
-
-            assert len(w) == 1
+        assert len(w) == 1
 
 
 def test_choice():
+    # TODO: Can we use a parametrised test here?
     for x in Tensor(2).forms() + Tensor(2, 3).forms() + Tensor(2, 3, 4).forms():
         # Check shape.
         assert B.shape(B.choice(x)) == B.shape(x)[1:]

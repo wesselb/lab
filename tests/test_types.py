@@ -121,19 +121,23 @@ def test_dtype():
     assert B.dtype(torch.tensor(1.0, dtype=torch.float32)) == torch.float32
 
 
-def test_framework():
-    for t in [B.NP, B.Framework]:
-        assert isinstance(np.array(1), t)
-        assert isinstance(1, t)
-        assert isinstance(np.float32, t)
+@pytest.mark.parametrize('t', [B.NP, B.Framework])
+def test_framework_np(t):
+    assert isinstance(np.array(1), t)
+    assert isinstance(1, t)
+    assert isinstance(np.float32, t)
 
-    for t in [B.TF, B.Framework]:
-        assert isinstance(tf.constant(1), t)
-        assert isinstance(1, t)
-        assert isinstance(tf.ones((1, 1)).shape[0], t)
-        assert isinstance(tf.float32, t)
 
-    for t in [B.Torch, B.Framework]:
-        assert isinstance(torch.tensor(1), t)
-        assert isinstance(1, t)
-        assert isinstance(torch.float32, t)
+@pytest.mark.parametrize('t', [B.TF, B.Framework])
+def test_framework_tf(t):
+    assert isinstance(tf.constant(1), t)
+    assert isinstance(1, t)
+    assert isinstance(tf.ones((1, 1)).shape[0], t)
+    assert isinstance(tf.float32, t)
+
+
+@pytest.mark.parametrize('t', [B.Torch, B.Framework])
+def test_framework_torch(t):
+    assert isinstance(torch.tensor(1), t)
+    assert isinstance(1, t)
+    assert isinstance(torch.float32, t)

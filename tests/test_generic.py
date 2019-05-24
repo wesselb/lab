@@ -35,37 +35,38 @@ def test_isnan():
     check_function(B.isnan, (NaNTensor(2, 3),), {}, assert_dtype=False)
 
 
-def test_zeros_ones_eye():
-    for f in [B.zeros, B.ones, B.eye]:
-        # Check consistency.
-        check_function(f, (Value(np.float32, tf.float32, torch.float32),
-                           Value(2),
-                           Value(3)))
+@pytest.mark.parametrize('f', [B.zeros, B.ones, B.eye])
+def test_zeros_ones_eye(f):
+    # Check consistency.
+    check_function(f, (Value(np.float32, tf.float32, torch.float32),
+                       Value(2),
+                       Value(3)))
+
+    # Check shape of calls.
+    assert B.shape(f(2)) == (2, 2) if f is B.eye else (2,)
+    assert B.shape(f(2, 3)) == (2, 3)
+
+    # Check shape type of calls.
+    assert B.dtype(f(2)) == B.default_dtype
+    assert B.dtype(f(2, 3)) == B.default_dtype
+
+    for t1, t2 in [(np.float32, np.int64),
+                   (tf.float32, tf.int64),
+                   (torch.float32, torch.int64)]:
+        ref = B.randn(t1, 4, 5)
 
         # Check shape of calls.
-        assert B.shape(f(2)) == (2, 2) if f is B.eye else (2,)
-        assert B.shape(f(2, 3)) == (2, 3)
+        assert B.shape(f(t2, 2)) == (2, 2) if f is B.eye else (2,)
+        assert B.shape(f(t2, 2, 3)) == (2, 3)
+        assert B.shape(f(ref)) == (4, 5)
 
         # Check shape type of calls.
-        assert B.dtype(f(2)) == B.default_dtype
-        assert B.dtype(f(2, 3)) == B.default_dtype
+        assert B.dtype(f(t2, 2)) == t2
+        assert B.dtype(f(t2, 2, 3)) == t2
+        assert B.dtype(f(ref)) == t1
 
-        for t1, t2 in [(np.float32, np.int64),
-                       (tf.float32, tf.int64),
-                       (torch.float32, torch.int64)]:
-            ref = B.randn(t1, 4, 5)
 
-            # Check shape of calls.
-            assert B.shape(f(t2, 2)) == (2, 2) if f is B.eye else (2,)
-            assert B.shape(f(t2, 2, 3)) == (2, 3)
-            assert B.shape(f(ref)) == (4, 5)
-
-            # Check shape type of calls.
-            assert B.dtype(f(t2, 2)) == t2
-            assert B.dtype(f(t2, 2, 3)) == t2
-            assert B.dtype(f(ref)) == t1
-
-    # Check exceptions.
+def test_eye_exceptions():
     with pytest.raises(NotFoundLookupError):
         B.eye(3, 4, 5)
     for t in [np.float32, tf.float32, torch.float32]:
@@ -127,66 +128,78 @@ def test_cast():
         assert x is B.cast(B.dtype(x), x)
 
 
-def test_unary():
-    # Test functions using signed arguments.
-    for f in [B.identity, B.abs, B.sign, B.exp, B.sin, B.cos, B.tan, B.tanh,
-              B.sigmoid, B.relu]:
-        check_function(f, (Tensor(),))
-        check_function(f, (Tensor(2),))
-        check_function(f, (Tensor(2, 3),))
-
-    # Test functions using positive arguments.
-    for f in [B.log, B.sqrt]:
-        check_function(f, (PositiveTensor(),))
-        check_function(f, (PositiveTensor(2),))
-        check_function(f, (PositiveTensor(2, 3),))
-
-
-def test_binary():
-    # Test functions using signed arguments.
-    for f in [B.add, B.subtract, B.multiply, B.divide,
-              B.minimum, B.maximum, B.leaky_relu]:
-        check_function(f, (Tensor(), Tensor()))
-        check_function(f, (Tensor(2), Tensor(2)))
-        check_function(f, (Tensor(2, 3), Tensor(2, 3)))
-
-    # Test functions using a positive first argument, but signed second
-    # argument.
-    for f in [B.power]:
-        check_function(f, (PositiveTensor(), Tensor()))
-        check_function(f, (PositiveTensor(2), Tensor(2)))
-        check_function(f, (PositiveTensor(2, 3), Tensor(2, 3)))
+@pytest.mark.parametrize('f', [B.identity,
+                               B.abs,
+                               B.sign,
+                               B.exp,
+                               B.sin,
+                               B.cos,
+                               B.tan,
+                               B.tanh,
+                               B.sigmoid,
+                               B.relu])
+def test_unary_signed(f):
+    check_function(f, (Tensor(),))
+    check_function(f, (Tensor(2),))
+    check_function(f, (Tensor(2, 3),))
 
 
-def test_reductions():
-    for f in [B.min, B.max, B.sum, B.mean, B.std, B.logsumexp]:
-        check_function(f, (Tensor(),))
-        check_function(f, (Tensor(2),))
-        check_function(f, (Tensor(2),), {'axis': Value(0)})
-        check_function(f, (Tensor(2, 3),))
-        check_function(f, (Tensor(2, 3),), {'axis': Value(0, 1)})
+@pytest.mark.parametrize('f', [B.log, B.sqrt])
+def test_unary_positive(f):
+    check_function(f, (PositiveTensor(),))
+    check_function(f, (PositiveTensor(2),))
+    check_function(f, (PositiveTensor(2, 3),))
 
-    # Check correctness of `logsumexp`.
+
+@pytest.mark.parametrize('f', [B.add,
+                               B.subtract,
+                               B.multiply,
+                               B.divide,
+                               B.minimum,
+                               B.maximum,
+                               B.leaky_relu])
+def test_binary_signed(f):
+    check_function(f, (Tensor(), Tensor()))
+    check_function(f, (Tensor(2), Tensor(2)))
+    check_function(f, (Tensor(2, 3), Tensor(2, 3)))
+
+
+@pytest.mark.parametrize('f', [B.power])
+def test_binary_positive_first(f):
+    check_function(f, (PositiveTensor(), Tensor()))
+    check_function(f, (PositiveTensor(2), Tensor(2)))
+    check_function(f, (PositiveTensor(2, 3), Tensor(2, 3)))
+
+
+@pytest.mark.parametrize('f', [B.min, B.max, B.sum, B.mean, B.std, B.logsumexp])
+def test_reductions(f):
+    check_function(f, (Tensor(),))
+    check_function(f, (Tensor(2),))
+    check_function(f, (Tensor(2),), {'axis': Value(0)})
+    check_function(f, (Tensor(2, 3),))
+    check_function(f, (Tensor(2, 3),), {'axis': Value(0, 1)})
+
+
+def test_logsumexp_correctness():
     mat = PositiveTensor(3, 4).np()
     allclose(B.logsumexp(mat, axis=1), scipy.special.logsumexp(mat, axis=1))
 
 
-def test_logical_reductions():
-    for f in [B.all, B.any]:
-        check_function(f, (BoolTensor(),), {}, assert_dtype=False)
-        check_function(f, (BoolTensor(2),), {}, assert_dtype=False)
-        check_function(f, (BoolTensor(2),), {'axis': Value(0)},
-                       assert_dtype=False)
-        check_function(f, (BoolTensor(2, 3),), {}, assert_dtype=False)
-        check_function(f, (BoolTensor(2, 3),), {'axis': Value(0, 1)},
-                       assert_dtype=False)
+@pytest.mark.parametrize('f', [B.all, B.any])
+def test_logical_reductions(f):
+    check_function(f, (BoolTensor(),), {}, assert_dtype=False)
+    check_function(f, (BoolTensor(2),), {}, assert_dtype=False)
+    check_function(f, (BoolTensor(2),), {'axis': Value(0)}, assert_dtype=False)
+    check_function(f, (BoolTensor(2, 3),), {}, assert_dtype=False)
+    check_function(f, (BoolTensor(2, 3),), {'axis': Value(0, 1)},
+                   assert_dtype=False)
 
 
-def test_logical_comparisons():
-    for f in [B.lt, B.le, B.gt, B.ge]:
-        check_function(f, (Tensor(), Tensor()), {}, assert_dtype=False)
-        check_function(f, (Tensor(2), Tensor(2)), {}, assert_dtype=False)
-        check_function(f, (Tensor(2, 3), Tensor(2, 3)), {}, assert_dtype=False)
+@pytest.mark.parametrize('f', [B.lt, B.le, B.gt, B.ge])
+def test_logical_comparisons(f):
+    check_function(f, (Tensor(), Tensor()), {}, assert_dtype=False)
+    check_function(f, (Tensor(2), Tensor(2)), {}, assert_dtype=False)
+    check_function(f, (Tensor(2, 3), Tensor(2, 3)), {}, assert_dtype=False)
 
 
 def test_scan():
