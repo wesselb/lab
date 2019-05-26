@@ -83,14 +83,28 @@ def tile(a, *repeats):
 
 
 @dispatch(TFNumeric, object)
-def take(a, indices, axis=0):
-    # Optimise the case where `axis` equals `0`.
-    if axis == 0:
-        return tf.gather(a, indices)
+def take(a, indices_or_mask, axis=0):
+    # Put axis `axis` first.
+    if axis > 0:
+        # Create a permutation to switch `axis` and `0`.
+        perm = list(range(B.rank(a)))
+        perm[0], perm[axis] = perm[axis], perm[0]
+        a = tf.transpose(a, perm)
 
-    # Create a permutation to switch `axis` and `0`.
-    perm = [i for i in range(B.rank(a))]
-    perm[axis], perm[0] = 0, axis
+    # Figure out whether we're given indices or a mask.
+    if isinstance(indices_or_mask, B.TF):
+        mask = indices_or_mask.dtype == bool
+    else:
+        mask = len(indices_or_mask) > 0 and B.dtype(indices_or_mask[0]) == bool
 
-    # Perform gathering.
-    return tf.transpose(tf.gather(tf.transpose(a, perm), indices), perm)
+    # Take the relevant part.
+    if mask:
+        a = tf.boolean_mask(a, indices_or_mask)
+    else:
+        a = tf.gather(a, indices_or_mask)
+
+    # Put axis `axis` back again.
+    if axis > 0:
+        a = tf.transpose(a, perm)
+
+    return a

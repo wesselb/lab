@@ -276,12 +276,13 @@ def tile(a, *repeats):  # pragma: no cover
 
 @dispatch(Numeric, object)
 @abstract(promote=None)
-def take(a, indices, axis=0):  # pragma: no cover
+def take(a, indices_or_mask, axis=0):  # pragma: no cover
     """Take particular elements along an axis.
 
     Args:
         a (tensor): Tensor.
-        indices (list): List of indices to take.
+        indices_or_mask (list): List of indices or boolean indicating which
+            elements to take.
         axis (int, optional): Axis along which to take indices. Defaults to `0`.
 
     Returns:

@@ -78,10 +78,16 @@ def tile(a, *repeats):
 
 
 @dispatch(TorchNumeric, object)
-def take(a, indices, axis=0):
+def take(a, indices_or_mask, axis=0):
+    # Put axis `axis` first.
     if axis > 0:
         a = torch.transpose(a, 0, axis)
-    a = a[(indices,) + (slice(None),) * (B.rank(a) - 1)]
+
+    # Take the relevant part.
+    a = a[(indices_or_mask,) + (slice(None),) * (B.rank(a) - 1)]
+
+    # Put axis `axis` back again.
     if axis > 0:
         a = torch.transpose(a, 0, axis)
+
     return a

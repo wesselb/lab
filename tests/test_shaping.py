@@ -2,12 +2,11 @@
 
 from __future__ import absolute_import, division, print_function
 
-from itertools import product
-
+import lab as B
 import numpy as np
 import pytest
+import tensorflow as tf
 
-import lab as B
 from .util import (
     check_function,
     Tensor,
@@ -115,5 +114,20 @@ def test_tile(r1, r2):
 
 
 def test_take():
-    check_function(B.take, (Matrix(3, 4), Value([0, 1])), {'axis': Value(0, 1)})
+    # Check consistency between indices and mask.
+    check_function(B.take,
+                   (Matrix(3, 3), Value([0, 1], [True, True, False])),
+                   {'axis': Value(0, 1)})
+
+    # Check order of indices.
     check_function(B.take, (Matrix(3, 4), Value([2, 1])), {'axis': Value(0, 1)})
+
+    # Check empty list.
+    check_function(B.take, (Matrix(3, 4), Value([])), {'axis': Value(0, 1)})
+
+    # Check that TensorFlow also takes in tensors.
+    a = Matrix(3, 4, 5)
+    ref = Tensor(3)
+    allclose(B.take(a.tf(), ref.tf() > 0), B.take(a.np(), ref.np() > 0))
+    allclose(B.take(a.tf(), B.range(tf.int64, 2)),
+             B.take(a.np(), B.range(2)))

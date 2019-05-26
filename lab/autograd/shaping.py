@@ -78,5 +78,19 @@ def tile(a, *repeats):
 
 
 @dispatch(NPNumeric, object)
-def take(a, indices, axis=0):
-    return anp.take(a, indices, axis=axis)
+def take(a, indices_or_mask, axis=0):
+    # Put axis `axis` first.
+    if axis > 0:
+        # Create a permutation to switch `axis` and `0`.
+        perm = list(range(B.rank(a)))
+        perm[0], perm[axis] = perm[axis], perm[0]
+        a = anp.transpose(a, perm)
+
+    # Take the relevant part.
+    a = a[(indices_or_mask,) + (slice(None),) * (B.rank(a) - 1)]
+
+    # Put axis `axis` back again.
+    if axis > 0:
+        a = anp.transpose(a, perm)
+
+    return a
