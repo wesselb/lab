@@ -10,7 +10,7 @@ from autograd import grad
 from plum.promotion import _promotion_rule, convert
 
 import lab as B
-from .util import deq
+from .util import dtype_equal
 
 
 def test_numeric():
@@ -90,15 +90,15 @@ def test_data_type():
     assert isinstance(torch.float32, B.DType)
 
     # Test conversion between data types.
-    deq(convert(np.float32, B.TFDType), tf.float32)
-    deq(convert(np.float32, B.TorchDType), torch.float32)
-    deq(convert(tf.float32, B.NPDType), np.float32)
-    deq(convert(tf.float32, B.TorchDType), torch.float32)
-    deq(convert(torch.float32, B.NPDType), np.float32)
-    deq(convert(torch.float32, B.TFDType), tf.float32)
+    dtype_equal(convert(np.float32, B.TFDType), tf.float32)
+    dtype_equal(convert(np.float32, B.TorchDType), torch.float32)
+    dtype_equal(convert(tf.float32, B.NPDType), np.float32)
+    dtype_equal(convert(tf.float32, B.TorchDType), torch.float32)
+    dtype_equal(convert(torch.float32, B.NPDType), np.float32)
+    dtype_equal(convert(torch.float32, B.TFDType), tf.float32)
 
     # Test conversion of `np.dtype`.
-    deq(convert(np.dtype('float32'), B.DType), np.float32)
+    dtype_equal(convert(np.dtype('float32'), B.DType), np.float32)
 
 
 def test_issubdtype():

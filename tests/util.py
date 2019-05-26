@@ -13,7 +13,7 @@ from plum import Dispatcher
 
 import lab as B
 
-__all__ = ['deq',
+__all__ = ['dtype_equal',
            'to_np',
            'allclose',
            'check_function',
@@ -28,7 +28,7 @@ _dispatch = Dispatcher()
 approx = np.testing.assert_array_almost_equal
 
 
-def deq(x, y):
+def dtype_equal(x, y):
     # NumPy has two representations of data types, and TensorFlow data types
     # equal to NumPy data types.
     if isinstance(x, (type, np.dtype)) and isinstance(y, (type, np.dtype)):
@@ -186,7 +186,7 @@ class NaNTensor(Tensor):
     def __init__(self, *dims, **kw_args):
         if 'mat' not in kw_args or kw_args['mat'] is None:
             mat = np.array(np.random.randn(*dims))
-            set_nan = np.array(np.random.randn(*dims) > .5)
+            set_nan = np.array(np.random.rand(*dims) > .5)
             mat[set_nan] = np.nan
         else:
             mat = kw_args['mat']

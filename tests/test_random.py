@@ -13,7 +13,7 @@ import torch
 from .util import (
     Tensor,
     allclose,
-    deq,
+    dtype_equal,
     to_np
 )
 
@@ -33,29 +33,29 @@ def test_set_seed(dtype):
 @pytest.mark.parametrize('f', [B.rand, B.randn])
 def test_random_generators(f):
     # Test without specifying data type.
-    deq(B.dtype(f()), B.default_dtype)
+    dtype_equal(B.dtype(f()), B.default_dtype)
     assert B.shape(f()) == ()
-    deq(B.dtype(f(2)), B.default_dtype)
+    dtype_equal(B.dtype(f(2)), B.default_dtype)
     allclose(B.shape(f(2)), (2,))
-    deq(B.dtype(f(2, 3)), B.default_dtype)
+    dtype_equal(B.dtype(f(2, 3)), B.default_dtype)
     assert B.shape(f(2, 3)) == (2, 3)
 
     # Test with specifying data type.
     for t in [np.float32, tf.float32, torch.float32]:
         # Test direct specification.
-        deq(B.dtype(f(t)), t)
+        dtype_equal(B.dtype(f(t)), t)
         assert B.shape(f(t)) == ()
-        deq(B.dtype(f(t, 2)), t)
+        dtype_equal(B.dtype(f(t, 2)), t)
         assert B.shape(f(t, 2)) == (2,)
-        deq(B.dtype(f(t, 2, 3)), t)
+        dtype_equal(B.dtype(f(t, 2, 3)), t)
         assert B.shape(f(t, 2, 3)) == (2, 3)
 
         # Test reference specification.
-        deq(B.dtype(f(f(t))), t)
+        dtype_equal(B.dtype(f(f(t))), t)
         assert B.shape(f(f())) == ()
-        deq(B.dtype(f(f(t, 2))), t)
+        dtype_equal(B.dtype(f(f(t, 2))), t)
         assert B.shape(f(f(t, 2))) == (2,)
-        deq(B.dtype(f(f(t, 2, 3))), t)
+        dtype_equal(B.dtype(f(f(t, 2, 3))), t)
         assert B.shape(f(f(t, 2, 3))) == (2, 3)
 
 

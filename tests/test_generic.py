@@ -19,7 +19,7 @@ from .util import (
     NaNTensor,
     Bool,
     allclose,
-    deq
+    dtype_equal
 )
 
 
@@ -112,16 +112,16 @@ def test_range():
 
 def test_cast():
     # Test casting to a given data type.
-    deq(B.dtype(B.cast(np.float64, 1)), np.float64)
-    deq(B.dtype(B.cast(np.float64, np.array(1))), np.float64)
+    dtype_equal(B.dtype(B.cast(np.float64, 1)), np.float64)
+    dtype_equal(B.dtype(B.cast(np.float64, np.array(1))), np.float64)
 
-    deq(B.dtype(B.cast(tf.float64, 1)), tf.float64)
-    deq(B.dtype(B.cast(tf.float64, np.array(1))), tf.float64)
-    deq(B.dtype(B.cast(tf.float64, tf.constant(1))), tf.float64)
+    dtype_equal(B.dtype(B.cast(tf.float64, 1)), tf.float64)
+    dtype_equal(B.dtype(B.cast(tf.float64, np.array(1))), tf.float64)
+    dtype_equal(B.dtype(B.cast(tf.float64, tf.constant(1))), tf.float64)
 
-    deq(B.dtype(B.cast(torch.float64, 1)), torch.float64)
-    deq(B.dtype(B.cast(torch.float64, np.array(1))), torch.float64)
-    deq(B.dtype(B.cast(torch.float64, torch.tensor(1))), torch.float64)
+    dtype_equal(B.dtype(B.cast(torch.float64, 1)), torch.float64)
+    dtype_equal(B.dtype(B.cast(torch.float64, np.array(1))), torch.float64)
+    dtype_equal(B.dtype(B.cast(torch.float64, torch.tensor(1))), torch.float64)
 
     # Test that casting to its own data type does nothing.
     for x in [B.randn(np.float32), B.randn(tf.float32), B.randn(torch.float32)]:
