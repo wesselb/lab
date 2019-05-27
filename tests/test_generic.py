@@ -91,8 +91,6 @@ def test_range():
     allclose(B.range(2, 5), np.arange(2, 5))
     allclose(B.range(2, 5, 2), np.arange(2, 5, 2))
 
-    # Check def
-
     # Check various step sizes.
     for step in [1, 1.0, 0.25]:
         check_function(B.range, (Value(np.float32, tf.float32, torch.float32),
