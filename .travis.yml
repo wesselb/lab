@@ -1,14 +1,15 @@
 language: python
 python:
-  - 2.7.15
+  - 2.7
   - 3.6
 before_install:
-  - sudo apt-get install gfortran
+  - sudo apt-get install gfortran google-perftools
+  - export LD_PRELOAD="/usr/lib/libtcmalloc.so.4"
   - pip install --upgrade pip
   - pip install --upgrade cython pytest pytest-cov coveralls
 install:
-  - CC=gcc pip install --no-cache-dir -U -r requirements.txt | cat
-  - CC=gcc python setup.py build_ext -i
+  - pip install --no-cache-dir -U -r requirements.txt | cat
+  - python setup.py build_ext -i
 script:
   - pytest -v --cov=lab --cov-report term-missing
 after_success:
