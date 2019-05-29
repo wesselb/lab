@@ -19,8 +19,9 @@ command = 'gfortran -fPIC -O2 -c lab/bvn_cdf/tvpack.f -o lab/bvn_cdf/tvpack.o'
 print(command)
 os.system(command)
 
-# Use gcc as the compiler.
-os.environ['CC'] = 'gcc'
+# Default to use gcc as the compiler.
+if not 'CC' in os.environ or not os.environ['CC']:
+    os.environ['CC'] = 'gcc'
 
 setup(name='lab',
       version='0.1.0',
