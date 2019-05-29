@@ -7,8 +7,8 @@ before_install:
   - pip install --upgrade pip
   - pip install --upgrade cython pytest pytest-cov coveralls
 install:
-  - pip install --no-cache-dir -U -r requirements.txt | cat
-  - python setup.py build_ext -i
+  - CC=gcc pip install --no-cache-dir -U -r requirements.txt | cat
+  - CC=gcc python setup.py build_ext -i
 script:
   - pytest -v --cov=lab --cov-report term-missing
 after_success:
