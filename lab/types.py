@@ -4,11 +4,6 @@ from __future__ import absolute_import, division, print_function
 
 import sys
 
-try:  # pragma: no cover
-    from typing import Callable
-except ImportError:  # pragma: no cover
-    from types import FunctionType as Callable
-
 import numpy as np
 from autograd.tracer import Box
 from plum import (
@@ -24,8 +19,7 @@ from plum import (
 
 from . import dispatch
 
-__all__ = ['Callable',
-           'Int', 'Float', 'Bool', 'Number',
+__all__ = ['Int', 'Float', 'Bool', 'Number',
            'NPNumeric', 'TFNumeric', 'TorchNumeric', 'Numeric',
            'NPDimension', 'TorchDimension', 'TFDimension', 'Dimension',
            'NPDType', 'TFDType', 'TorchDType', 'DType',

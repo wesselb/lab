@@ -3,13 +3,12 @@
 from __future__ import absolute_import, division, print_function
 
 import tensorflow as tf
-from plum import convert
+from plum import convert, Callable
 
 from . import dispatch, B
 from .custom import tensorflow_register
 from ..custom import bvn_cdf, s_bvn_cdf
-from ..types import TFNumeric, TFDType, TFDimension, NPNumeric, Number, Int, \
-    Callable
+from ..types import TFNumeric, TFDType, TFDimension, NPNumeric, Number, Int
 
 __all__ = []
 
