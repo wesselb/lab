@@ -1,10 +1,15 @@
 TODO:
+    Support:
+        ☐ TF2.0
+        ☐ Jax
+            ☐ Design with AutoGrad as well?
+
     ☐ Reuse Plum's error message.
     ☐ Fix output data types of custom gradients in TensorFlow.
     ☐ `bvn_cdf` and `toeplitz_solve` always output `float64`s. Issue?
     ☐ Refactor scan once TF2.0 is integrated.
 
-    ☐ Test and implement batched bahaviour for linear algebra operations.
+    ☐ Test and implement batched behaviour for linear algebra operations:
         ☐ svd
         ☐ toeplitz_solve
         ☐ outer
@@ -14,6 +19,7 @@ TODO:
     ☐ eig
     ☐ eigvals
 
+    ☐ Refactor tests to use PyTest: remove raises, fixtures, and parametrisation. @high
 
 Future:
     ☐ Let `cholesky_solve` for PyTorch use `torch.cholesky_solve` once the derivative is implemented.
