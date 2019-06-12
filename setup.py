@@ -21,8 +21,8 @@ os.system('gfortran -fPIC -O2 -c lab/bvn_cdf/tvpack.f -o lab/bvn_cdf/tvpack.o')
 if not 'CC' in os.environ or not os.environ['CC']:
     os.environ['CC'] = 'gcc'
 
-# Ensure that `$CC` is not symlinked to `clang`, because the defaults shipped
-# ensure often does not support OpenMP, but `gcc` does.
+# Ensure that `$CC` is not symlinked to `clang`, because the default shipped
+# one often does not support OpenMP, but `gcc` does.
 out = subprocess.check_output('$CC --version', shell=True)
 if 'clang' in out.decode('ascii'):
     # It is. Now try to find a `gcc` to replace it with.
