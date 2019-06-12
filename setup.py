@@ -4,7 +4,6 @@ from __future__ import absolute_import, division, print_function
 
 import os
 import subprocess
-import warnings
 
 import numpy as np
 from Cython.Build import build_ext
@@ -18,19 +17,22 @@ if subprocess.call(['which', 'gfortran']) != 0:
 # Compile TVPACK.
 os.system('gfortran -fPIC -O2 -c lab/bvn_cdf/tvpack.f -o lab/bvn_cdf/tvpack.o')
 
-# Default to use gcc as the compiler.
+# Default to use gcc as the compiler if `$CC` is not set.
 if not 'CC' in os.environ or not os.environ['CC']:
     os.environ['CC'] = 'gcc'
 
-# Ensure that `gcc` is not symlinked to `clang`.
+# Ensure that `$CC` is not symlinked to `clang`, because the defaults shipped
+# ensure often does not support OpenMP, but `gcc` does.
 out = subprocess.check_output('$CC --version', shell=True)
 if 'clang' in out.decode('ascii'):
-    # It is. Now try to find a `gcc`.
+    # It is. Now try to find a `gcc` to replace it with.
     found = False
     for i in range(9, 3, -1):
         gcci = 'gcc-{}'.format(i)
         if subprocess.call(['which', gcci]) == 0:
+            # Set both `$CC` and `$CXX` in this case, just to be sure.
             os.environ['CC'] = gcci
+            os.environ['CXX'] = 'g++-{}'.format(i)
             found = True
             break
 
@@ -60,5 +62,5 @@ setup(packages=find_packages(exclude=['docs']),
                                                  '-fopenmp'],
                              extra_link_args=['lab/bvn_cdf/tvpack.o',
                                               '-lgfortran',
-                                              '-L/usr/local/gfortran/lib',
-                                              '-fopenmp'])])
+                                              '-fopenmp'])],
+      include_package_data=True)
