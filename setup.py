@@ -47,7 +47,7 @@ requirements = ['numpy',
                 'torch',
 
                 'fdm',
-                'plum']
+                'plum-dispatch']
 
 setup(packages=find_packages(exclude=['docs']),
       install_requires=requirements,
