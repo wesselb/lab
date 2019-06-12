@@ -22,22 +22,18 @@ backend
     - [Shaping](#shaping)
 
 ## Installation
-The package is tested for Python 2.7 and Python 3.6, which are the versions 
-recommended to use.
-To install the package, please ensure that `gcc` and `gfortran` are 
-available, and then run the following commands:
+Before installing the package, please ensure that `gcc` and `gfortran` are 
+available.
+On OS X, these are both installed with `brew install gcc`.
 
 ```
-git clone https://github.com/wesselb/lab
-cd lab
-make install
+pip install la-backends
 ```
 
 ## Basic Usage
 
 The basic use case for the package is to write code that automatically 
 determines the backend to use depending on the types of its arguments.
-
 
 Example:
 

@@ -1,8 +1,7 @@
-cython
-numpy
-scipy<=1.2.1
-autograd
-tensorflow
-torch
-git+git://github.com/wesselb/fdm@master#egg=fdm
-git+git://github.com/wesselb/plum@master#egg=plum
+# Requirements for development, testing, and documentation.
+-e .
+sphinx
+sphinx-rtd-theme
+pytest
+pytest-cov
+coveralls
