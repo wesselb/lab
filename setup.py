@@ -62,5 +62,5 @@ setup(packages=find_packages(exclude=['docs']),
                              include_dirs=[np.get_include()],
                              extra_compile_args=['-fPIC', '-O2', '-fopenmp'],
                              extra_objects=['lab/bvn_cdf/tvpack.o'],
-                             extra_link_args=['-fopenmp'])],
+                             extra_link_args=['-lgfortran', '-fopenmp'])],
       include_package_data=True)
