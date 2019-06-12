@@ -61,6 +61,5 @@ setup(packages=find_packages(exclude=['docs']),
                                                  '-O2',
                                                  '-fopenmp'],
                              extra_link_args=['lab/bvn_cdf/tvpack.o',
-                                              '-lgfortran',
                                               '-fopenmp'])],
       include_package_data=True)
