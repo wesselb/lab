@@ -15,7 +15,10 @@ if subprocess.call(['which', 'gfortran']) != 0:
                        'On OS X, this can be done with "brew install gcc".')
 
 # Compile TVPACK.
-os.system('gfortran -fPIC -O2 -c lab/bvn_cdf/tvpack.f -o lab/bvn_cdf/tvpack.o')
+if subprocess.call('gfortran -fPIC -O2 '
+                   '-c lab/bvn_cdf/tvpack.f '
+                   '-o lab/bvn_cdf/tvpack.o', shell=True) != 0:
+    raise RuntimeError('Compilation of TVPACK failed.')
 
 # Default to use gcc as the compiler if `$CC` is not set.
 if not 'CC' in os.environ or not os.environ['CC']:
@@ -23,7 +26,7 @@ if not 'CC' in os.environ or not os.environ['CC']:
 
 # Ensure that `$CC` is not symlinked to `clang`, because the default shipped
 # one often does not support OpenMP, but `gcc` does.
-out = subprocess.check_output('$CC --version', shell=True)
+out = subprocess.check_output('$CC  --version', shell=True)
 if 'clang' in out.decode('ascii'):
     # It is. Now try to find a `gcc` to replace it with.
     found = False
@@ -57,10 +60,7 @@ setup(packages=find_packages(exclude=['docs']),
       ext_modules=[Extension('lab.bvn_cdf',
                              sources=['lab/bvn_cdf/bvn_cdf.pyx'],
                              include_dirs=[np.get_include()],
-                             extra_compile_args=['-fPIC',
-                                                 '-O2',
-                                                 '-fopenmp'],
-                             extra_link_args=['lab/bvn_cdf/tvpack.o',
-                                              '-lgfortran',
-                                              '-fopenmp'])],
+                             extra_compile_args=['-fPIC', '-O2', '-fopenmp'],
+                             extra_objects=['lab/bvn_cdf/tvpack.o'],
+                             extra_link_args=['-fopenmp'])],
       include_package_data=True)
