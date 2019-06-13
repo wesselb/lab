@@ -12,7 +12,6 @@ before_install:
   - export LD_PRELOAD="/usr/lib/libtcmalloc.so.4"
 install:
   - pip install --upgrade pip
-  - pip install tensorflow==2.0.0b
   - pip install --no-cache-dir -U -r requirements.txt | cat
 script:
   - pytest -v --cov=lab --cov-report term-missing
