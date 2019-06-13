@@ -45,20 +45,9 @@ def to_np(x):
     return x
 
 
-@_dispatch(B.TorchNumeric)
+@_dispatch({B.TorchNumeric, B.TFNumeric})
 def to_np(x):
     return x.numpy()
-
-
-@_dispatch(B.TFNumeric)
-def to_np(x):
-    with tf.Session() as sess:
-        return sess.run(x)
-
-
-@_dispatch(tf.Dimension)
-def to_np(x):
-    return x.value
 
 
 @_dispatch({tuple, tf.TensorShape, torch.Size})

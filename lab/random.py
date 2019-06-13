@@ -7,7 +7,7 @@ import sys
 import numpy as np
 
 from . import dispatch, B
-from .types import Dimension, DType, Int, Numeric
+from .types import DType, Int, Numeric
 from .util import abstract
 
 __all__ = ['set_random_seed', 'rand', 'randn', 'choice']
@@ -26,7 +26,7 @@ def set_random_seed(seed):
     # Set seed for TensorFlow, if it is loaded.
     if 'tensorflow' in sys.modules:
         import tensorflow
-        tensorflow.set_random_seed(seed)
+        tensorflow.random.set_seed(seed)
 
     # Set seed for PyTorch, if it is loaded.
     if 'torch' in sys.modules:
@@ -34,7 +34,7 @@ def set_random_seed(seed):
         torch.manual_seed(seed)
 
 
-@dispatch(DType, [Dimension])
+@dispatch(DType, [Int])
 @abstract()
 def rand(dtype, *shape):  # pragma: no cover
     """Construct a U[0, 1] random tensor.
@@ -49,7 +49,7 @@ def rand(dtype, *shape):  # pragma: no cover
 
 
 @dispatch.multi((Int,),  # Single integer is a not a reference.
-                ([Dimension],))
+                ([Int],))
 def rand(*shape):
     return rand(B.default_dtype, *shape)
 
@@ -59,7 +59,7 @@ def rand(ref):
     return rand(B.dtype(ref), *B.shape(ref))
 
 
-@dispatch(DType, [Dimension])
+@dispatch(DType, [Int])
 @abstract(promote=None)
 def randn(dtype, *shape):  # pragma: no cover
     """Construct a N(0, 1) random tensor.
@@ -74,7 +74,7 @@ def randn(dtype, *shape):  # pragma: no cover
 
 
 @dispatch.multi((Int,),  # Single integer is a not a reference.
-                ([Dimension],))
+                ([Int],))
 def randn(*shape):
     return randn(B.default_dtype, *shape)
 

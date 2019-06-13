@@ -7,7 +7,7 @@ import autograd.numpy as anp
 from . import dispatch
 from .custom import autograd_register
 from ..custom import bvn_cdf, s_bvn_cdf
-from ..types import NPNumeric, NPDType, NPDimension, Int
+from ..types import NPNumeric, NPDType, Int
 
 __all__ = []
 
@@ -17,17 +17,17 @@ def isnan(a):
     return anp.isnan(a)
 
 
-@dispatch(NPDType, [NPDimension])
+@dispatch(NPDType, [Int])
 def zeros(dtype, *shape):
     return anp.zeros(shape, dtype=dtype)
 
 
-@dispatch(NPDType, [NPDimension])
+@dispatch(NPDType, [Int])
 def ones(dtype, *shape):
     return anp.ones(shape, dtype=dtype)
 
 
-@dispatch(NPDType, NPDimension, NPDimension)
+@dispatch(NPDType, Int, Int)
 def eye(dtype, *shape):
     return anp.eye(shape[0], shape[1], dtype=dtype)
 

@@ -2,7 +2,6 @@
 
 from __future__ import absolute_import, division, print_function
 
-import numpy as np
 from autograd.extend import primitive, defvjp_argnums
 from plum import Dispatcher
 

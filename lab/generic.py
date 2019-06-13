@@ -6,7 +6,7 @@ import numpy as np
 from plum import Callable
 
 from . import dispatch, B, Dispatcher
-from .types import Numeric, DType, Dimension, Int
+from .types import Numeric, DType, Int
 from .util import abstract
 
 __all__ = ['nan',
@@ -76,7 +76,7 @@ def isnan(a):  # pragma: no cover
     """
 
 
-@dispatch(DType, [Dimension])
+@dispatch(DType, [Int])
 @abstract(promote=None)
 def zeros(dtype, *shape):  # pragma: no cover
     """Create a tensor of zeros.
@@ -95,7 +95,7 @@ def zeros(dtype, *shape):  # pragma: no cover
 
 
 @dispatch.multi((Int,),  # Single integer is not a reference.
-                ([Dimension],))
+                ([Int],))
 def zeros(*shape):
     return zeros(B.default_dtype, *shape)
 
@@ -105,7 +105,7 @@ def zeros(ref):
     return zeros(B.dtype(ref), *B.shape(ref))
 
 
-@dispatch(DType, [Dimension])
+@dispatch(DType, [Int])
 @abstract(promote=None)
 def ones(dtype, *shape):  # pragma: no cover
     """Create a tensor of ones.
@@ -124,7 +124,7 @@ def ones(dtype, *shape):  # pragma: no cover
 
 
 @dispatch.multi((Int,),  # Single integer is not a reference.
-                ([Dimension],))
+                ([Int],))
 def ones(*shape):
     return ones(B.default_dtype, *shape)
 
@@ -134,7 +134,7 @@ def ones(ref):
     return ones(B.dtype(ref), *B.shape(ref))
 
 
-@dispatch(DType, Dimension, Dimension)
+@dispatch(DType, Int, Int)
 @abstract(promote=None)
 def eye(dtype, *shape):  # pragma: no cover
     """Create an identity matrix.
@@ -152,18 +152,17 @@ def eye(dtype, *shape):  # pragma: no cover
     """
 
 
-@dispatch(DType, Dimension)
+@dispatch(DType, Int)
 def eye(dtype, *shape):
     return eye(dtype, shape[0], shape[0])
 
 
-@dispatch(Dimension, [Dimension])
+@dispatch(Int, [Int])
 def eye(*shape):
     return eye(B.default_dtype, *shape)
 
 
-@dispatch.multi((Int,),  # Single integer is not a reference.
-                (Dimension,))
+@dispatch(Int)  # Single integer is not a reference.
 def eye(shape):
     return eye(B.default_dtype, shape, shape)
 

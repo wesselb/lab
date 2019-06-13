@@ -3,7 +3,7 @@
 from __future__ import absolute_import, division, print_function
 
 from . import dispatch
-from .types import Numeric, Dimension
+from .types import Numeric, Int
 from .util import abstract
 
 __all__ = ['shape',
@@ -218,7 +218,7 @@ def unstack(a, axis=0):  # pragma: no cover
     """
 
 
-@dispatch(Numeric, [Dimension])
+@dispatch(Numeric, [Int])
 @abstract()
 def reshape(a, *shape):  # pragma: no cover
     """Reshape a tensor.
@@ -260,7 +260,7 @@ def concat2d(*rows):
     return concat(*[concat(*row, axis=1) for row in rows], axis=0)
 
 
-@dispatch(Numeric, [Dimension])
+@dispatch(Numeric, [Int])
 @abstract()
 def tile(a, *repeats):  # pragma: no cover
     """Tile a tensor.

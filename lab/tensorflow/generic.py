@@ -8,22 +8,22 @@ from plum import convert, Callable
 from . import dispatch, B
 from .custom import tensorflow_register
 from ..custom import bvn_cdf, s_bvn_cdf
-from ..types import TFNumeric, TFDType, TFDimension, NPNumeric, Number, Int
+from ..types import TFNumeric, TFDType, NPNumeric, Number, Int
 
 __all__ = []
 
 
 @dispatch(TFNumeric)
 def isnan(a):
-    return tf.is_nan(a)
+    return tf.math.is_nan(a)
 
 
-@dispatch(TFDType, [TFDimension])
+@dispatch(TFDType, [Int])
 def zeros(dtype, *shape):
     return tf.zeros(shape, dtype=dtype)
 
 
-@dispatch(TFDType, [TFDimension])
+@dispatch(TFDType, [Int])
 def ones(dtype, *shape):
     return tf.ones(shape, dtype=dtype)
 
@@ -31,12 +31,6 @@ def ones(dtype, *shape):
 @dispatch(TFDType, Int, Int)
 def eye(dtype, *shape):
     return tf.eye(shape[0], shape[1], dtype=dtype)
-
-
-@dispatch(TFDType, TFDimension, TFDimension)
-def eye(dtype, *shape):
-    # `tf.eye` requires integers!
-    return eye(dtype, *(convert(x, int) for x in shape))
 
 
 @dispatch(TFDType, object, object, Int)
@@ -81,7 +75,7 @@ def exp(a):
 
 @dispatch(TFNumeric)
 def log(a):
-    return tf.log(a)
+    return tf.math.log(a)
 
 
 @dispatch(TFNumeric)

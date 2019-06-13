@@ -75,12 +75,6 @@ def test_autograd_tracing():
         assert isinstance(obj, B.NPNumeric)
 
 
-def test_dimension():
-    for t in [B.NPDimension, B.TFDimension, B.TorchDimension, B.Dimension]:
-        assert isinstance(1, t)
-    assert isinstance(tf.ones((1, 1)).shape[0], B.Dimension)
-
-
 def test_data_type():
     assert isinstance(np.float32, B.NPDType)
     assert isinstance(np.float32, B.DType)
@@ -131,13 +125,10 @@ def test_framework_np(t):
 @pytest.mark.parametrize('t', [B.TF, B.Framework])
 def test_framework_tf(t):
     assert isinstance(tf.constant(1), t)
-    assert isinstance(1, t)
-    assert isinstance(tf.ones((1, 1)).shape[0], t)
     assert isinstance(tf.float32, t)
 
 
 @pytest.mark.parametrize('t', [B.Torch, B.Framework])
 def test_framework_torch(t):
     assert isinstance(torch.tensor(1), t)
-    assert isinstance(1, t)
     assert isinstance(torch.float32, t)

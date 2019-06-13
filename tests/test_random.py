@@ -20,11 +20,8 @@ from .util import (
 
 @pytest.mark.parametrize('dtype', [np.float32, tf.float32, torch.float32])
 def test_set_seed(dtype):
-    # Careful with TensorFlow's graph!
-    tf.reset_default_graph()
     B.set_random_seed(0)
     x = to_np(B.rand(dtype))
-    tf.reset_default_graph()
     B.set_random_seed(0)
     y = to_np(B.rand(dtype))
     assert x == y

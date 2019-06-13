@@ -6,7 +6,7 @@ import autograd.numpy as anp
 
 from . import dispatch, B
 from ..shaping import _vec_to_tril_shape
-from ..types import NPNumeric, NPDimension
+from ..types import NPNumeric, Int
 
 __all__ = []
 
@@ -62,7 +62,7 @@ def unstack(a, axis=0):
     return [x.squeeze(axis=axis) for x in out]
 
 
-@dispatch(NPNumeric, [NPDimension])
+@dispatch(NPNumeric, [Int])
 def reshape(a, *shape):
     return anp.reshape(a, shape)
 
@@ -72,7 +72,7 @@ def concat(*elements, **kw_args):
     return anp.concatenate(elements, axis=kw_args.get('axis', 0))
 
 
-@dispatch(NPNumeric, [NPDimension])
+@dispatch(NPNumeric, [Int])
 def tile(a, *repeats):
     return anp.tile(a, repeats)
 

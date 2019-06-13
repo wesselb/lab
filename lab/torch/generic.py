@@ -7,8 +7,7 @@ import torch
 from . import dispatch
 from .custom import torch_register
 from ..custom import bvn_cdf, s_bvn_cdf
-from ..types import TorchNumeric, TorchDType, TorchDimension, NPNumeric, \
-    Number, Int
+from ..types import TorchNumeric, TorchDType, NPNumeric, Number, Int
 
 __all__ = []
 
@@ -18,17 +17,17 @@ def isnan(a):
     return torch.isnan(a)
 
 
-@dispatch(TorchDType, [TorchDimension])
+@dispatch(TorchDType, [Int])
 def zeros(dtype, *shape):
     return torch.zeros(shape, dtype=dtype)
 
 
-@dispatch(TorchDType, [TorchDimension])
+@dispatch(TorchDType, [Int])
 def ones(dtype, *shape):
     return torch.ones(shape, dtype=dtype)
 
 
-@dispatch(TorchDType, TorchDimension, TorchDimension)
+@dispatch(TorchDType, Int, Int)
 def eye(dtype, *shape):
     return torch.eye(shape[0], shape[1], dtype=dtype)
 

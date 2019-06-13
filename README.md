@@ -113,7 +113,6 @@ Float        # Floating-point numbers
 Bool         # Booleans
 Number       # Numbers
 Numeric      # Numerical objects, including booleans
-Dimension    # Dimensions of shapes
 DType        # Data type
 Framework    # Anything accepted by supported frameworks
 ```
@@ -123,7 +122,6 @@ Framework    # Anything accepted by supported frameworks
 
 ```
 NPNumeric
-NPDimension
 NPDType
  
 NP           # Anything NumPy
@@ -133,7 +131,6 @@ NP           # Anything NumPy
 
 ```
 TFNumeric
-TFDimension
 TFDType
  
 TF           # Anything TensorFlow
@@ -144,7 +141,6 @@ TF           # Anything TensorFlow
 
 ```
 TorchNumeric
-TorchDimension
 TorchDType
  
 Torch        # Anything PyTorch

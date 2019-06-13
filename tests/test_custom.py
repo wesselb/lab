@@ -62,28 +62,29 @@ def check_grad(f, args, kw_args=None, digits=6):
 
         return f_i
 
-    with tf.Session() as sess:
-        # Walk through the arguments.
-        for i in range(len(args)):
-            # Numerically compute gradient.
-            f_i = create_f_i(i, args)
-            numerical_grad = gradient(f_i)(args[i])
+    # Walk through the arguments.
+    for i in range(len(args)):
+        # Numerically compute gradient.
+        f_i = create_f_i(i, args)
+        numerical_grad = gradient(f_i)(args[i])
 
-            # Check AutoGrad gradient.
-            autograd_grad = grad(f_i)(args[i])
-            approx(numerical_grad, autograd_grad, digits)
+        # Check AutoGrad gradient.
+        autograd_grad = grad(f_i)(args[i])
+        approx(numerical_grad, autograd_grad, digits)
 
-            # Check TensorFlow gradient.
-            tf_args = tuple([as_tf(arg) for arg in args])
-            f_i = create_f_i(i, tf_args)
-            tf_grad = sess.run(tf.gradients(f_i(tf_args[i]), tf_args[i])[0])
-            approx(numerical_grad, tf_grad, digits)
+        # Check TensorFlow gradient.
+        tf_args = tuple([as_tf(arg) for arg in args])
+        f_i = create_f_i(i, tf_args)
+        with tf.GradientTape() as t:
+            t.watch(tf_args[i])
+            tf_grad = t.gradient(f_i(tf_args[i]), tf_args[i]).numpy()
+        approx(numerical_grad, tf_grad, digits)
 
-            # Check PyTorch gradient.
-            torch_args = tuple([as_torch(arg, grad=True) for arg in args])
-            f_i = create_f_i(i, torch_args)
-            f_i(torch_args[i]).backward()
-            approx(numerical_grad, torch_args[i].grad, digits)
+        # Check PyTorch gradient.
+        torch_args = tuple([as_torch(arg, grad=True) for arg in args])
+        f_i = create_f_i(i, torch_args)
+        f_i(torch_args[i]).backward()
+        approx(numerical_grad, torch_args[i].grad, digits)
 
 
 def test_toeplitz_solve():

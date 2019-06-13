@@ -21,7 +21,6 @@ from . import dispatch
 
 __all__ = ['Int', 'Float', 'Bool', 'Number',
            'NPNumeric', 'TFNumeric', 'TorchNumeric', 'Numeric',
-           'NPDimension', 'TorchDimension', 'TFDimension', 'Dimension',
            'NPDType', 'TFDType', 'TorchDType', 'DType',
            'default_dtype', 'issubdtype', 'dtype',
            'NP', 'TF', 'Torch', 'Framework',
@@ -78,36 +77,21 @@ def _module_attr(module, attr):
 # Define TensorFlow module types.
 _tf_tensor = ModuleType('tensorflow', 'Tensor')
 _tf_variable = ModuleType('tensorflow', 'Variable')
-_tf_refvariable = ModuleType('tensorflow.python.ops.variables', 'RefVariable')
-_tf_dimension = ModuleType('tensorflow', 'Dimension')
 _tf_dtype = ModuleType('tensorflow', 'DType')
-_tf_retrievables = [_tf_tensor,
-                    _tf_variable,
-                    _tf_refvariable,
-                    _tf_dimension,
-                    _tf_dtype]
+_tf_retrievables = [_tf_tensor, _tf_variable, _tf_dtype]
 
 # Define PyTorch module types.
 _torch_tensor = ModuleType('torch', 'Tensor')
 _torch_dtype = ModuleType('torch', 'dtype')
-_torch_retrievables = [_torch_tensor,
-                       _torch_dtype]
+_torch_retrievables = [_torch_tensor, _torch_dtype]
 
-# Basic numeric types:
+# Numeric types:
 Int = Union(*([int] + np.sctypes['int'] + np.sctypes['uint']), alias='Int')
 Float = Union(*([float] + np.sctypes['float']), alias='Float')
 Bool = Union(bool, np.bool_, alias='Bool')
-
-# Dimension types:
-NPDimension = Union(Int, alias='NPDimension')
-TFDimension = Union(NPDimension, _tf_dimension, alias='TFDimension')
-TorchDimension = Union(NPDimension, alias='TorchDimension')
-Dimension = Union(NPDimension, TFDimension, TorchDimension, alias='Dimension')
-
-# Advanced numeric types:
-Number = Union(Dimension, Int, Float, alias='Number')
+Number = Union(Int, Float, alias='Number')
 NPNumeric = Union(Number, Bool, np.ndarray, Box, alias='NPNumeric')
-TFNumeric = Union(_tf_tensor, _tf_variable, _tf_refvariable, alias='TFNumeric')
+TFNumeric = Union(_tf_tensor, _tf_variable, alias='TFNumeric')
 TorchNumeric = Union(_torch_tensor, alias='TorchNumeric')
 Numeric = Union(NPNumeric, TFNumeric, TorchNumeric, alias='Numeric')
 
@@ -119,9 +103,6 @@ add_conversion_method(NPNumeric, TFNumeric,
                       lambda x: _module_call('tensorflow', 'constant', x))
 add_conversion_method(NPNumeric, TorchNumeric,
                       lambda x: _module_call('torch', 'tensor', x))
-
-# Define corresponding conversion methods.
-add_conversion_method(_tf_dimension, int, lambda x: x.value)
 
 # Data types:
 NPDType = Union(type, np.dtype, alias='NPDType')
@@ -210,7 +191,7 @@ def dtype(a):
 
 
 # Framework types:
-NP = Union(NPNumeric, NPDimension, NPDType, alias='NP')
-TF = Union(TFNumeric, TFDimension, TFDType, alias='TF')
-Torch = Union(TorchNumeric, TorchDimension, TorchDType, alias='Torch')
+NP = Union(NPNumeric, NPDType, alias='NP')
+TF = Union(TFNumeric, TFDType, alias='TF')
+Torch = Union(TorchNumeric, TorchDType, alias='Torch')
 Framework = Union(NP, TF, Torch, alias='Framework')

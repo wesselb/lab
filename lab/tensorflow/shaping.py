@@ -7,7 +7,7 @@ import tensorflow as tf
 
 from . import dispatch, B
 from ..shaping import _vec_to_tril_shape
-from ..types import TFNumeric, TFDimension
+from ..types import TFNumeric, Int
 
 __all__ = []
 
@@ -30,9 +30,9 @@ def squeeze(a):
 @dispatch(TFNumeric)
 def diag(a):
     if B.rank(a) == 1:
-        return tf.diag(a)
+        return tf.linalg.diag(a)
     elif B.rank(a) == 2:
-        return tf.diag_part(a)
+        return tf.linalg.diag_part(a)
     else:
         raise ValueError('Argument must have rank 1 or 2.')
 
@@ -67,7 +67,7 @@ def unstack(a, axis=0):
     return tf.unstack(a, axis=axis)
 
 
-@dispatch(TFNumeric, [TFDimension])
+@dispatch(TFNumeric, [Int])
 def reshape(a, *shape):
     return tf.reshape(a, shape=shape)
 
@@ -77,7 +77,7 @@ def concat(*elements, **kw_args):
     return tf.concat(elements, axis=kw_args.get('axis', 0))
 
 
-@dispatch(TFNumeric, [TFDimension])
+@dispatch(TFNumeric, [Int])
 def tile(a, *repeats):
     return tf.tile(a, repeats)
 

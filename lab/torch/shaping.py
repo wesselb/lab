@@ -7,7 +7,7 @@ import torch
 
 from . import dispatch, B
 from ..shaping import _vec_to_tril_shape
-from ..types import TorchNumeric, TorchDimension
+from ..types import TorchNumeric, Int
 
 __all__ = []
 
@@ -62,7 +62,7 @@ def unstack(a, axis=0):
     return torch.unbind(a, dim=axis)
 
 
-@dispatch(TorchNumeric, [TorchDimension])
+@dispatch(TorchNumeric, [Int])
 def reshape(a, *shape):
     return torch.reshape(a, shape=shape)
 
@@ -72,7 +72,7 @@ def concat(*elements, **kw_args):
     return torch.cat(elements, dim=kw_args.get('axis', 0))
 
 
-@dispatch(TorchNumeric, [TorchDimension])
+@dispatch(TorchNumeric, [Int])
 def tile(a, *repeats):
     return a.repeat(*repeats)
 

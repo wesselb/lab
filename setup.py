@@ -48,7 +48,7 @@ if 'clang' in out.decode('ascii'):
 requirements = ['numpy>=1.16',
                 'scipy<1.3',
                 'autograd',
-                'tensorflow==2.0.0b',
+                'tensorflow>=2',
                 'torch',
 
                 'fdm',
