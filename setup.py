@@ -45,8 +45,8 @@ if 'clang' in out.decode('ascii'):
                            'be found. Please install gcc. On OS X, this can '
                            'be done with "brew install gcc".')
 
-requirements = ['numpy',
-                'scipy<=1.2.1',
+requirements = ['numpy>=1.16',
+                'scipy<1.3',
                 'autograd',
                 'tensorflow',
                 'torch',
