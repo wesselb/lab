@@ -30,7 +30,7 @@ The installation then proceeds as follows:
 
 ```
 pip install numpy cython  # These must be installed first.
-pip install la-backends
+pip install backends
 ```
 
 ## Basic Usage
