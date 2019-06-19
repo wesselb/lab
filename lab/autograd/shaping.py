@@ -5,7 +5,7 @@ from __future__ import absolute_import, division, print_function
 import autograd.numpy as anp
 
 from . import dispatch, B
-from ..shaping import _vec_to_tril_shape
+from ..shaping import _vec_to_tril_shape_upper_perm
 from ..types import NPNumeric, Int
 
 __all__ = []
@@ -34,20 +34,19 @@ def diag(a):
 @dispatch(NPNumeric)
 def vec_to_tril(a):
     if B.rank(a) != 1:
-        raise ValueError('Ianput must be rank 1.')
-    m = _vec_to_tril_shape(a)
-    out = anp.zeros((m, m), dtype=a.dtype)
-    out[anp.tril_indices(m)] = a
-    return out
+        raise ValueError('Input must be rank 1.')
+    m, upper, perm = _vec_to_tril_shape_upper_perm(a)
+    a = anp.concatenate((a, anp.zeros(upper, dtype=a.dtype)))
+    return anp.reshape(a[perm], (m, m))
 
 
 @dispatch(NPNumeric)
 def tril_to_vec(a):
     if B.rank(a) != 2:
-        raise ValueError('Ianput must be rank 2.')
+        raise ValueError('Input must be rank 2.')
     n, m = B.shape(a)
     if n != m:
-        raise ValueError('Ianput must be square.')
+        raise ValueError('Input must be square.')
     return a[anp.tril_indices(n)]
 
 

@@ -6,7 +6,7 @@ import numpy as np
 import tensorflow as tf
 
 from . import dispatch, B
-from ..shaping import _vec_to_tril_shape
+from ..shaping import _vec_to_tril_shape_upper_perm
 from ..types import TFNumeric, Int
 
 __all__ = []
@@ -41,10 +41,9 @@ def diag(a):
 def vec_to_tril(a):
     if B.rank(a) != 1:
         raise ValueError('Input must be rank 1.')
-    m = _vec_to_tril_shape(a)
-    return tf.scatter_nd(indices=list(zip(*np.tril_indices(m))),
-                         shape=[m, m],
-                         updates=a)
+    m, upper, perm = _vec_to_tril_shape_upper_perm(a)
+    a = tf.concat((a, tf.zeros(upper, dtype=a.dtype)), axis=0)
+    return tf.reshape(tf.gather(a, perm), [m, m])
 
 
 @dispatch(TFNumeric)

@@ -5,6 +5,7 @@ from __future__ import absolute_import, division, print_function
 from . import dispatch
 from .types import Numeric, Int
 from .util import abstract
+import numpy as np
 
 __all__ = ['shape',
            'rank',
@@ -159,9 +160,22 @@ def flatten(a):  # pragma: no cover
     return reshape(a, -1)
 
 
-def _vec_to_tril_shape(a):
-    n = int(shape(a)[0])  # Dimensions are not necessarily integers!
-    return int(((1 + 8 * n) ** .5 - 1) / 2)
+def _vec_to_tril_shape_upper_perm(a):
+    # Compute length of side of result.
+    n = shape(a)[0]
+    m = int(((1 + 8 * n) ** .5 - 1) / 2)
+
+    # Compute number of elements in upper part.
+    upper = int((m ** 2 - m) / 2)
+
+    # Compute sorting permutation.
+    ind_lower = np.tril_indices(m)
+    ind_upper = np.triu_indices(m, k=1)
+    ind_concat = (np.concatenate((ind_lower[0], ind_upper[0])),
+                  np.concatenate((ind_lower[1], ind_upper[1])))
+    perm = np.lexsort((ind_concat[1], ind_concat[0]))
+
+    return m, upper, perm
 
 
 @dispatch(Numeric)
