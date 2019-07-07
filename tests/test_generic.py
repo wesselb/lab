@@ -135,6 +135,7 @@ def test_cast():
                                B.tan,
                                B.tanh,
                                B.sigmoid,
+                               B.softplus,
                                B.relu])
 def test_unary_signed(f):
     check_function(f, (Tensor(),))
@@ -147,6 +148,11 @@ def test_unary_positive(f):
     check_function(f, (PositiveTensor(),))
     check_function(f, (PositiveTensor(2),))
     check_function(f, (PositiveTensor(2, 3),))
+
+
+@pytest.mark.parametrize('a', [0, -1, 1])
+def test_softplus_correctness(a):
+    allclose(B.softplus(a), np.log(1 + np.exp(a)))
 
 
 @pytest.mark.parametrize('f', [B.add,

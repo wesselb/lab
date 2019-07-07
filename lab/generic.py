@@ -30,6 +30,7 @@ __all__ = ['nan',
            'tan',
            'tanh',
            'sigmoid',
+           'softplus',
            'relu',
            'add',
            'subtract',
@@ -396,6 +397,20 @@ def sigmoid(a):
 
 
 @dispatch(object)
+def softplus(a):
+    """Softplus function.
+
+    Args:
+        a (tensor): Tensor.
+
+    Returns:
+        tensor: Softplus function evaluated at `a`.
+    """
+    zero = B.cast(B.dtype(a), 0)
+    return log(1 + exp(-abs(a))) + maximum(a, zero)
+
+
+@dispatch(object)
 def relu(a):
     """Rectified linear unit.
 
@@ -405,7 +420,8 @@ def relu(a):
     Returns:
         tensor: Rectified linear unit evaluated at `a`.
     """
-    return maximum(B.zeros(a), a)
+    zero = B.cast(B.dtype(a), 0)
+    return maximum(zero, a)
 
 
 # Binary functions:
