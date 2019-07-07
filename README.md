@@ -223,6 +223,7 @@ sin(a)
 cos(a)
 tan(a)
 sigmoid(a)
+softplus(a)
 relu(a)
 
 add(a, b)
