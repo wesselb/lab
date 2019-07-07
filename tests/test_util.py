@@ -5,18 +5,65 @@ from __future__ import absolute_import, division, print_function
 import plum
 import pytest
 from plum import NotFoundLookupError
+import numpy as np
 
 import lab as B
-from lab.util import abstract, batch_computation
+from lab.util import (
+    abstract,
+    batch_computation,
+    _common_shape,
+    _translate_index
+)
+
+from .util import allclose
 
 
-def test_batch_computation():
-    # Correctness is already checked by usage in linear algebra functions. Here
-    # we test the check of batch shapes.
-    with pytest.raises(ValueError):
-        batch_computation(None, B.randn(3, 4, 4), B.randn(2, 4, 4))
-    with pytest.raises(ValueError):
-        batch_computation(None, B.randn(2, 2, 4, 4), B.randn(2, 4, 4))
+@pytest.mark.parametrize('shapes,common_shape',
+                         [([(), ()], ()),
+                          ([(5,), (1,)], (5,)),
+                          ([(2, 5), (1, 5)], (2, 5)),
+                          ([(5,), (1, 5)], (1, 5)),
+                          ([(3, 5), (1,)], (3, 5))])
+def test_common_shape(shapes, common_shape):
+    assert _common_shape(*shapes) == common_shape
+    assert _common_shape(*reversed(shapes)) == common_shape
+
+
+@pytest.mark.parametrize('shapes',
+                         [[(5,), (6,)],
+                          [(5, 2), (5, 3)],
+                          [(5, 2), (3,)]])
+def test_common_shape_errors(shapes):
+    with pytest.raises(RuntimeError):
+        _common_shape(*shapes)
+    with pytest.raises(RuntimeError):
+        _common_shape(*reversed(shapes))
+
+
+@pytest.mark.parametrize('index,batch_shape,translated_index',
+                         [((5, 2), (3,), (2,)),
+                          ((2, 3, 4), (5, 5), (3, 4)),
+                          ((2, 3, 4), (1, 5), (0, 4)),
+                          ((2, 3, 4), (5, 1), (3, 0))])
+def test_translate_index(index, batch_shape, translated_index):
+    assert _translate_index(index, batch_shape) == translated_index
+
+
+@pytest.mark.parametrize('index,batch_shape',
+                         [((5, 3), (3,)),
+                          ((2, 3, 4), (4, 4))])
+def test_translate_index_errors(index, batch_shape):
+    with pytest.raises(RuntimeError):
+        _translate_index(index, batch_shape)
+
+
+@pytest.mark.parametrize('x1_batch', [(), (1,), (2,), (2, 2), (2, 1), (1, 2)])
+@pytest.mark.parametrize('x2_batch', [(), (1,), (2,), (2, 2), (2, 1), (1, 2)])
+def test_batch_computation(x1_batch, x2_batch):
+    x1 = np.random.randn(*(x1_batch + (3, 4)))
+    x2 = np.random.randn(*(x2_batch + (4, 5)))
+    allclose(batch_computation(np.matmul, (x1, x2), (2, 2)),
+             np.matmul(x1, x2))
 
 
 def test_metadata():

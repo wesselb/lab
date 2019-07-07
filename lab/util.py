@@ -2,9 +2,9 @@
 
 from __future__ import absolute_import, division, print_function
 
-from functools import wraps, reduce
-from operator import mul
+from functools import wraps
 
+import numpy as np
 import plum
 
 from . import B
@@ -12,30 +12,80 @@ from . import B
 __all__ = ['batch_computation', 'abstract']
 
 
-def batch_computation(f, *xs):
-    """Apply a function over all the batches of the arguments, where the
-    arguments are assumed to be matrices or batches of matrices.
+def _common_shape(*shapes):
+    common_shape = shapes[0]
+    for shape in shapes[1:]:
+        # Add empty dimensions to either shape if it is shorter.
+        diff = len(common_shape) - len(shape)
+        shape = (1,) * max(diff, 0) + shape
+        common_shape = (1,) * max(-diff, 0) + common_shape
+
+        # Resolve the shapes.
+        new_common_shape = ()
+        for d1, d2 in zip(common_shape, shape):
+            if d1 == d2:
+                new_common_shape += (d1,)
+            elif d1 == 1:
+                new_common_shape += (d2,)
+            elif d2 == 1:
+                new_common_shape += (d1,)
+            else:
+                raise RuntimeError('Cannot reconcile running common shape {} '
+                                   'with {}.'.format(common_shape, shape))
+        common_shape = new_common_shape
+    return common_shape
+
+
+def _translate_index(index, batch_shape):
+    # Remove superfluous index dimensions and cast to tuple.
+    index = tuple(index[-len(batch_shape):])
+
+    # Resolve the index.
+    translated_index = ()
+    for i, s in zip(index, batch_shape):
+        if i < s:
+            translated_index += (i,)
+        elif s == 1:
+            translated_index += (0,)
+        else:
+            raise RuntimeError('Cannot translate index {} to batch shape {}.'
+                               ''.format(index, batch_shape))
+    return translated_index
+
+
+def batch_computation(f, xs, ranks):
+    """Apply a function over all batches of arguments.
 
     Args:
-        *xs (tensor): Matrices or batches of matrices.
+        f (function): Function that performs the computation.
+        xs (tuple): Matrices or batches of matrices.
+        ranks (tuple): Ranks of the arguments.
 
     Returns:
         tensor: Result in batched form.
     """
     # Reshape arguments for batched computation.
-    batch_shapes = [B.shape(x)[:-2] for x in xs]
-    xs = [B.reshape(x, -1, *B.shape(x)[-2:]) for x in xs]
+    batch_shapes = [B.shape(x)[:-rank] for x, rank in zip(xs, ranks)]
 
-    # Check that all batch shapes are the same.
-    if not all(s == batch_shapes[0] for s in batch_shapes[1:]):
-        raise ValueError('Inconsistent batch shapes.')
+    # Find the common shape.
+    batch_shape = _common_shape(*batch_shapes)
+    indices = np.indices(batch_shape)
 
-    batch_shape = batch_shapes[0]
+    # Handle the edge case that there is no batching.
+    if len(indices) == 0:
+        indices = [()]
+    else:
+        # Put the index dimension last.
+        perm = tuple(list(range(1, len(batch_shape) + 1))) + (0,)
+        indices = indices.transpose(perm)
+        # Turn into a list of indices.
+        indices = indices.reshape(-1, len(batch_shape))
 
     # Loop over batches.
     batches = []
-    for i in range(reduce(mul, batch_shape, 1)):
-        batches.append(f(*[x[i, :, :] for x in xs]))
+    for index in indices:
+        batches.append(f(*[x[_translate_index(index, s)]
+                           for x, s in zip(xs, batch_shapes)]))
 
     # Construct result, reshape, and return.
     res = B.stack(*batches, axis=0)

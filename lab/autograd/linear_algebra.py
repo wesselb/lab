@@ -108,7 +108,7 @@ def triangular_solve(a, b, lower_a=True):
                                      lower=lower_a,
                                      check_finite=False)
 
-    return batch_computation(_triangular_solve, a, b)
+    return batch_computation(_triangular_solve, (a, b), (2, 2))
 
 
 f = autograd_register(toeplitz_solve, s_toeplitz_solve)

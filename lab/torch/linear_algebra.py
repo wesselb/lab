@@ -72,12 +72,12 @@ def inv(a):
 
 @dispatch(TorchNumeric)
 def det(a):
-    return batch_computation(torch.det, a)
+    return batch_computation(torch.det, (a,), (2,))
 
 
 @dispatch(TorchNumeric)
 def logdet(a):
-    return batch_computation(torch.logdet, a)
+    return batch_computation(torch.logdet, (a,), (2,))
 
 
 @dispatch(TorchNumeric)
