@@ -123,18 +123,32 @@ def test_tile(r1, r2):
     check_function(B.tile, (Tensor(3, 4), Value(r1), Value(r2)))
 
 
-def test_take():
+def test_take_consistency():
     # Check consistency between indices and mask.
-    check_function(B.take,
-                   (Matrix(3, 3), Value([0, 1], [True, True, False])),
+    check_function(B.take, (Matrix(3, 3), Value([0, 1], [True, True, False])),
                    {'axis': Value(0, 1)})
 
-    # Check order of indices.
-    check_function(B.take, (Matrix(3, 4), Value([2, 1])), {'axis': Value(0, 1)})
 
+def test_take_consistency_order():
+    # Check order of indices.
+    check_function(B.take,
+                   (Matrix(3, 4), Value([2, 1])),
+                   {'axis': Value(0, 1)})
+
+
+def test_take_indices_rank():
+    # Check that indices must be rank 1.
+    for a in Matrix(3, 4).forms():
+        with pytest.raises(ValueError):
+            B.take(a, [[0], [1]])
+
+
+def test_take_empty_list():
     # Check empty list.
     check_function(B.take, (Matrix(3, 4), Value([])), {'axis': Value(0, 1)})
 
+
+def test_take_tf():
     # Check that TensorFlow also takes in tensors.
     a = Matrix(3, 4, 5)
     ref = Tensor(3)

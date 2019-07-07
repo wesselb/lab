@@ -78,6 +78,9 @@ def tile(a, *repeats):
 
 @dispatch(NPNumeric, object)
 def take(a, indices_or_mask, axis=0):
+    if B.rank(indices_or_mask) != 1:
+        raise ValueError('Indices or mask must be rank 1.')
+
     # Put axis `axis` first.
     if axis > 0:
         # Create a permutation to switch `axis` and `0`.
@@ -86,7 +89,7 @@ def take(a, indices_or_mask, axis=0):
         a = anp.transpose(a, perm)
 
     # Take the relevant part.
-    a = a[indices_or_mask, ...]
+    a = a[indices_or_mask]
 
     # Put axis `axis` back again.
     if axis > 0:

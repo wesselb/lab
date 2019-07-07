@@ -78,12 +78,15 @@ def tile(a, *repeats):
 
 @dispatch(TorchNumeric, object)
 def take(a, indices_or_mask, axis=0):
+    if B.rank(indices_or_mask) != 1:
+        raise ValueError('Indices or mask must be rank 1.')
+
     # Put axis `axis` first.
     if axis > 0:
         a = torch.transpose(a, 0, axis)
 
     # Take the relevant part.
-    a = a[indices_or_mask, ...]
+    a = a[indices_or_mask]
 
     # Put axis `axis` back again.
     if axis > 0:

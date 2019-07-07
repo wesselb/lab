@@ -302,7 +302,7 @@ def take(a, indices_or_mask, axis=0):  # pragma: no cover
     Args:
         a (tensor): Tensor.
         indices_or_mask (list): List of indices or boolean indicating which
-            elements to take.
+            elements to take. Must be rank 1.
         axis (int, optional): Axis along which to take indices. Defaults to `0`.
 
     Returns:
