@@ -6,7 +6,6 @@ TODO:
     ☐ Reuse Plum's error message.
     ☐ Fix output data types of custom gradients in TensorFlow.
     ☐ `bvn_cdf` and `toeplitz_solve` always output `float64`s. Issue?
-    ☐ Refactor scan once TF2.0 is integrated.
 
     ☐ Test and implement batched behaviour for linear algebra operations:
         ☐ svd
@@ -25,6 +24,7 @@ Future:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ x Refactor scan once TF2.0 is integrated. @cancelled (19-07-07 18:53) @project(TODO)
  ✓ Port bvn_cdf. @done (19-05-16 18:06) @project(TODO)
  ✓ Check Python 2 and Python 3 compatibility. @done (19-05-16 18:06) @project(TODO)
  ✓ Documentation. @critical @done (19-05-02 13:29) @project(TODO)
