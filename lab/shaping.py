@@ -2,10 +2,11 @@
 
 from __future__ import absolute_import, division, print_function
 
+import numpy as np
+
 from . import dispatch
 from .types import Numeric, Int
 from .util import abstract
-import numpy as np
 
 __all__ = ['shape',
            'rank',
