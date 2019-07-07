@@ -17,3 +17,6 @@ from ..types import _tf_retrievables
 # Retrieve types.
 for retrievable in _tf_retrievables:
     retrievable.retrieve()
+
+# Alias to actual module.
+sys.modules[__name__] = B

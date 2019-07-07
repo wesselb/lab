@@ -9,3 +9,6 @@ from .generic import *
 from .shaping import *
 from .linear_algebra import *
 from .random import *
+
+# Alias to actual module.
+sys.modules[__name__] = B

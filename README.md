@@ -178,6 +178,12 @@ This section lists all available constants and methods.
     
 See the documentation for more detailed descriptions of each function. 
 
+### Special Variables
+```
+default_dtype  # Default data type.
+epsilon        # Magnitude of diagonal to regularise matrices with.
+```
+
 ### Constants
 ```
 nan
@@ -186,6 +192,7 @@ log_2_pi
 
 isnan(a)
 ```
+
 
 ### Generic
 ```

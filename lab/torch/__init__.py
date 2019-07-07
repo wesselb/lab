@@ -17,3 +17,6 @@ from ..types import _torch_retrievables
 # Retrieve types.
 for retrievable in _torch_retrievables:
     retrievable.retrieve()
+
+# Alias to actual module.
+sys.modules[__name__] = B

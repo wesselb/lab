@@ -86,8 +86,7 @@ def zeros(dtype, *shape):  # pragma: no cover
     construct a tensor of zeros.
 
     Args:
-        dtype (dtype, optional): Data type. Defaults to
-            `.types.default_dtype`.
+        dtype (dtype, optional): Data type. Defaults to the default data type.
         *shape (shape): Shape of the tensor.
 
     Returns:
@@ -115,8 +114,7 @@ def ones(dtype, *shape):  # pragma: no cover
     construct a tensor of ones.
 
     Args:
-        dtype (dtype, optional): Data type. Defaults to
-            `.types.default_dtype`.
+        dtype (dtype, optional): Data type. Defaults to the default data type.
         *shape (shape or ): Shape of the tensor.
 
     Returns:
@@ -144,8 +142,7 @@ def eye(dtype, *shape):  # pragma: no cover
     construct an identity matrix.
 
     Args:
-        dtype (dtype, optional): Data type. Defaults to
-            `.types.default_dtype`.
+        dtype (dtype, optional): Data type. Defaults to the default data type.
         *shape (shape): Shape of the matrix.
 
     Returns:
@@ -180,7 +177,7 @@ def linspace(dtype, a, b, num):
     linearly.
 
     Args:
-        dtype (dtype, optional): Data type. Defaults to `.types.default_dtype`.
+        dtype (dtype, optional): Data type. Defaults to the default data type.
         a (number): Lower bound.
         b (number): Upper bound.
         num (int): Number of numbers.

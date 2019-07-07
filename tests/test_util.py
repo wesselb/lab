@@ -2,20 +2,27 @@
 
 from __future__ import absolute_import, division, print_function
 
+import lab as B
+import lab.autograd as B_autograd
+import lab.tensorflow as B_tf
+import lab.torch as B_torch
+import numpy as np
 import plum
 import pytest
-from plum import NotFoundLookupError
-import numpy as np
-
-import lab as B
 from lab.util import (
     abstract,
     batch_computation,
     _common_shape,
     _translate_index
 )
+from plum import NotFoundLookupError
 
 from .util import allclose
+
+
+@pytest.mark.parametrize('other', [B_tf, B_torch, B_autograd])
+def test_module_mapping(other):
+    assert B is other
 
 
 @pytest.mark.parametrize('shapes,common_shape',

@@ -40,7 +40,7 @@ def rand(dtype, *shape):  # pragma: no cover
     """Construct a U[0, 1] random tensor.
 
     Args:
-        dtype (dtype, optional): Data type. Defaults to `.types.default_dtype`.
+        dtype (dtype, optional): Data type. Defaults to the default data type.
         *shape (shape, optional): Shape of the tensor. Defaults to `()`.
 
     Returns:
@@ -65,7 +65,7 @@ def randn(dtype, *shape):  # pragma: no cover
     """Construct a N(0, 1) random tensor.
 
     Args:
-        dtype (dtype, optional): Data type. Defaults to `.types.default_dtype`.
+        dtype (dtype, optional): Data type. Defaults to the default data type.
         *shape (shape, optional): Shape of the tensor. Defaults to `()`.
 
     Returns:
