@@ -50,7 +50,7 @@ def vec_to_tril(a):
 def tril_to_vec(a):
     if B.rank(a) != 2:
         raise ValueError('Input must be rank 2.')
-    n, m = B.shape(a)
+    n, m = a.shape
     if n != m:
         raise ValueError('Input must be square.')
     return tf.gather_nd(a, list(zip(*np.tril_indices(int(n)))))

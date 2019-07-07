@@ -76,9 +76,10 @@ def _module_attr(module, attr):
 
 # Define TensorFlow module types.
 _tf_tensor = ModuleType('tensorflow', 'Tensor')
+_tf_indexedslices = ModuleType('tensorflow', 'IndexedSlices')
 _tf_variable = ModuleType('tensorflow', 'Variable')
 _tf_dtype = ModuleType('tensorflow', 'DType')
-_tf_retrievables = [_tf_tensor, _tf_variable, _tf_dtype]
+_tf_retrievables = [_tf_tensor, _tf_indexedslices, _tf_variable, _tf_dtype]
 
 # Define PyTorch module types.
 _torch_tensor = ModuleType('torch', 'Tensor')
@@ -91,7 +92,8 @@ Float = Union(*([float] + np.sctypes['float']), alias='Float')
 Bool = Union(bool, np.bool_, alias='Bool')
 Number = Union(Int, Float, alias='Number')
 NPNumeric = Union(Number, Bool, np.ndarray, Box, alias='NPNumeric')
-TFNumeric = Union(_tf_tensor, _tf_variable, alias='TFNumeric')
+TFNumeric = Union(_tf_tensor, _tf_variable, _tf_indexedslices,
+                  alias='TFNumeric')
 TorchNumeric = Union(_torch_tensor, alias='TorchNumeric')
 Numeric = Union(NPNumeric, TFNumeric, TorchNumeric, alias='Numeric')
 
