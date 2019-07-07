@@ -26,6 +26,16 @@ def test_sizing(f):
     check_function(f, (Tensor(3, 4, 5),), {}, assert_dtype=False)
 
 
+@pytest.mark.parametrize('x,shape', [([], (0,)),
+                                     ([5], (1,)),
+                                     ([[5], [6]], (2, 1)),
+                                     ((), (0,)),
+                                     ((5,), (1,)),
+                                     (((5,), (2,)), (2, 1))])
+def test_shape_other(x, shape):
+    assert B.shape(x) == shape
+
+
 def test_isscalar():
     assert B.isscalar(1.0)
     assert not B.isscalar(np.array([1.0]))

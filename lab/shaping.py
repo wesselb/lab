@@ -45,7 +45,12 @@ def shape(a):  # pragma: no cover
         return ()
 
 
-@dispatch(Numeric)
+@dispatch({list, tuple})
+def shape(a):
+    return np.array(a).shape
+
+
+@dispatch({Numeric, list, tuple})
 def rank(a):  # pragma: no cover
     """Get the shape of a tensor.
 
