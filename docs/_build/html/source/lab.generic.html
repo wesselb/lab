@@ -226,8 +226,7 @@ construct a tensor of zeros.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>dtype</strong> (<em>dtype</em><em>, </em><em>optional</em>) – Data type. Defaults to
-<cite>.types.default_dtype</cite>.</p></li>
+<li><p><strong>dtype</strong> (<em>dtype</em><em>, </em><em>optional</em>) – Data type. Defaults to the default data type.</p></li>
 <li><p><strong>*shape</strong> (<em>shape</em>) – Shape of the tensor.</p></li>
 </ul>
 </dd>
@@ -249,8 +248,7 @@ construct a tensor of ones.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>dtype</strong> (<em>dtype</em><em>, </em><em>optional</em>) – Data type. Defaults to
-<cite>.types.default_dtype</cite>.</p></li>
+<li><p><strong>dtype</strong> (<em>dtype</em><em>, </em><em>optional</em>) – Data type. Defaults to the default data type.</p></li>
 <li><p><strong>*shape</strong> (<em>shape or</em>) – Shape of the tensor.</p></li>
 </ul>
 </dd>
@@ -272,8 +270,7 @@ construct an identity matrix.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>dtype</strong> (<em>dtype</em><em>, </em><em>optional</em>) – Data type. Defaults to
-<cite>.types.default_dtype</cite>.</p></li>
+<li><p><strong>dtype</strong> (<em>dtype</em><em>, </em><em>optional</em>) – Data type. Defaults to the default data type.</p></li>
 <li><p><strong>*shape</strong> (<em>shape</em>) – Shape of the matrix.</p></li>
 </ul>
 </dd>
@@ -294,7 +291,7 @@ linearly.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>dtype</strong> (<em>dtype</em><em>, </em><em>optional</em>) – Data type. Defaults to <cite>.types.default_dtype</cite>.</p></li>
+<li><p><strong>dtype</strong> (<em>dtype</em><em>, </em><em>optional</em>) – Data type. Defaults to the default data type.</p></li>
 <li><p><strong>a</strong> (<em>number</em>) – Lower bound.</p></li>
 <li><p><strong>b</strong> (<em>number</em>) – Upper bound.</p></li>
 <li><p><strong>num</strong> (<em>int</em>) – Number of numbers.</p></li>
@@ -532,6 +529,23 @@ size <cite>step</cite>.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Sigmoid function evaluated at <cite>a</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lab.generic.softplus">
+<code class="descclassname">lab.generic.</code><code class="descname">softplus</code><a class="reference internal" href="../_modules/lab/generic.html#softplus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.softplus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Softplus function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Softplus function evaluated at <cite>a</cite>.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>tensor</p>

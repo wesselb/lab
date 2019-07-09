@@ -6,6 +6,8 @@
 A generic interface for linear algebra backends: code it once, run it on
 any backend
 
+*Note:* LAB requires TensorFlow 2.
+
 -  `Installation <#installation>`__
 -  `Basic Usage <#basic-usage>`__
 -  `List of Types <#list-of-types>`__
@@ -26,16 +28,14 @@ any backend
 Installation
 ------------
 
-The package is tested for Python 2.7 and Python 3.6, which are the
-versions recommended to use. To install the package, please ensure that
-``gcc`` and ``gfortran`` are available, and then run the following
-commands:
+Before installing the package, please ensure that ``gcc`` and
+``gfortran`` are available. On OS X, these are both installed with
+``brew install gcc``; users of Anaconda may want to instead consider
+``conda install gcc``. Then simply
 
 ::
 
-    git clone https://github.com/wesselb/lab
-    cd lab
-    make install
+    pip install backends
 
 Basic Usage
 -----------
@@ -125,7 +125,6 @@ General
     Bool         # Booleans
     Number       # Numbers
     Numeric      # Numerical objects, including booleans
-    Dimension    # Dimensions of shapes
     DType        # Data type
     Framework    # Anything accepted by supported frameworks
 
@@ -135,7 +134,6 @@ NumPy
 ::
 
     NPNumeric
-    NPDimension
     NPDType
      
     NP           # Anything NumPy
@@ -146,7 +144,6 @@ TensorFlow
 ::
 
     TFNumeric
-    TFDimension
     TFDType
      
     TF           # Anything TensorFlow
@@ -157,7 +154,6 @@ PyTorch
 ::
 
     TorchNumeric
-    TorchDimension
     TorchDType
      
     Torch        # Anything PyTorch
@@ -190,6 +186,14 @@ This section lists all available constants and methods.
       ``tensor``.
 
 See the documentation for more detailed descriptions of each function.
+
+Special Variables
+~~~~~~~~~~~~~~~~~
+
+::
+
+    default_dtype  # Default data type.
+    epsilon        # Magnitude of diagonal to regularise matrices with.
 
 Constants
 ~~~~~~~~~
@@ -241,6 +245,7 @@ Generic
     cos(a)
     tan(a)
     sigmoid(a)
+    softplus(a)
     relu(a)
 
     add(a, b)

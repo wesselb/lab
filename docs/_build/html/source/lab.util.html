@@ -183,12 +183,15 @@
 <span id="lab-util-module"></span><h1>lab.util module<a class="headerlink" href="#module-lab.util" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="lab.util.batch_computation">
-<code class="descclassname">lab.util.</code><code class="descname">batch_computation</code><span class="sig-paren">(</span><em>f</em>, <em>*xs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lab/util.html#batch_computation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.util.batch_computation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Apply a function over all the batches of the arguments, where the
-arguments are assumed to be matrices or batches of matrices.</p>
+<code class="descclassname">lab.util.</code><code class="descname">batch_computation</code><span class="sig-paren">(</span><em>f</em>, <em>xs</em>, <em>ranks</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lab/util.html#batch_computation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.util.batch_computation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply a function over all batches of arguments.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>*xs</strong> (<em>tensor</em>) – Matrices or batches of matrices.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> (<em>function</em>) – Function that performs the computation.</p></li>
+<li><p><strong>xs</strong> (<em>tuple</em>) – Matrices or batches of matrices.</p></li>
+<li><p><strong>ranks</strong> (<em>tuple</em>) – Ranks of the arguments.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Result in batched form.</p>

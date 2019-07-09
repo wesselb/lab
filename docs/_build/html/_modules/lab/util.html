@@ -152,9 +152,9 @@
 
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
 
-<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">wraps</span><span class="p">,</span> <span class="n">reduce</span>
-<span class="kn">from</span> <span class="nn">operator</span> <span class="k">import</span> <span class="n">mul</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">wraps</span>
 
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">plum</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">B</span>
@@ -162,30 +162,80 @@
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;batch_computation&#39;</span><span class="p">,</span> <span class="s1">&#39;abstract&#39;</span><span class="p">]</span>
 
 
-<div class="viewcode-block" id="batch_computation"><a class="viewcode-back" href="../../source/lab.util.html#lab.util.batch_computation">[docs]</a><span class="k">def</span> <span class="nf">batch_computation</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="o">*</span><span class="n">xs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Apply a function over all the batches of the arguments, where the</span>
-<span class="sd">    arguments are assumed to be matrices or batches of matrices.</span>
+<span class="k">def</span> <span class="nf">_common_shape</span><span class="p">(</span><span class="o">*</span><span class="n">shapes</span><span class="p">):</span>
+    <span class="n">common_shape</span> <span class="o">=</span> <span class="n">shapes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">shape</span> <span class="ow">in</span> <span class="n">shapes</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+        <span class="c1"># Add empty dimensions to either shape if it is shorter.</span>
+        <span class="n">diff</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">common_shape</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,)</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="n">diff</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">shape</span>
+        <span class="n">common_shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,)</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="o">-</span><span class="n">diff</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">common_shape</span>
+
+        <span class="c1"># Resolve the shapes.</span>
+        <span class="n">new_common_shape</span> <span class="o">=</span> <span class="p">()</span>
+        <span class="k">for</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">common_shape</span><span class="p">,</span> <span class="n">shape</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">d1</span> <span class="o">==</span> <span class="n">d2</span><span class="p">:</span>
+                <span class="n">new_common_shape</span> <span class="o">+=</span> <span class="p">(</span><span class="n">d1</span><span class="p">,)</span>
+            <span class="k">elif</span> <span class="n">d1</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">new_common_shape</span> <span class="o">+=</span> <span class="p">(</span><span class="n">d2</span><span class="p">,)</span>
+            <span class="k">elif</span> <span class="n">d2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">new_common_shape</span> <span class="o">+=</span> <span class="p">(</span><span class="n">d1</span><span class="p">,)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Cannot reconcile running common shape </span><span class="si">{}</span><span class="s1"> &#39;</span>
+                                   <span class="s1">&#39;with </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">common_shape</span><span class="p">,</span> <span class="n">shape</span><span class="p">))</span>
+        <span class="n">common_shape</span> <span class="o">=</span> <span class="n">new_common_shape</span>
+    <span class="k">return</span> <span class="n">common_shape</span>
+
+
+<span class="k">def</span> <span class="nf">_translate_index</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">batch_shape</span><span class="p">):</span>
+    <span class="c1"># Remove superfluous index dimensions and cast to tuple.</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">batch_shape</span><span class="p">):])</span>
+
+    <span class="c1"># Resolve the index.</span>
+    <span class="n">translated_index</span> <span class="o">=</span> <span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">batch_shape</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="p">:</span>
+            <span class="n">translated_index</span> <span class="o">+=</span> <span class="p">(</span><span class="n">i</span><span class="p">,)</span>
+        <span class="k">elif</span> <span class="n">s</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">translated_index</span> <span class="o">+=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Cannot translate index </span><span class="si">{}</span><span class="s1"> to batch shape </span><span class="si">{}</span><span class="s1">.&#39;</span>
+                               <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">batch_shape</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">translated_index</span>
+
+
+<div class="viewcode-block" id="batch_computation"><a class="viewcode-back" href="../../source/lab.util.html#lab.util.batch_computation">[docs]</a><span class="k">def</span> <span class="nf">batch_computation</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">ranks</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Apply a function over all batches of arguments.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        *xs (tensor): Matrices or batches of matrices.</span>
+<span class="sd">        f (function): Function that performs the computation.</span>
+<span class="sd">        xs (tuple): Matrices or batches of matrices.</span>
+<span class="sd">        ranks (tuple): Ranks of the arguments.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        tensor: Result in batched form.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Reshape arguments for batched computation.</span>
-    <span class="n">batch_shapes</span> <span class="o">=</span> <span class="p">[</span><span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">x</span><span class="p">)[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xs</span><span class="p">]</span>
-    <span class="n">xs</span> <span class="o">=</span> <span class="p">[</span><span class="n">B</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">*</span><span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="o">-</span><span class="mi">2</span><span class="p">:])</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xs</span><span class="p">]</span>
+    <span class="n">batch_shapes</span> <span class="o">=</span> <span class="p">[</span><span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">x</span><span class="p">)[:</span><span class="o">-</span><span class="n">rank</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">rank</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ranks</span><span class="p">)]</span>
 
-    <span class="c1"># Check that all batch shapes are the same.</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">s</span> <span class="o">==</span> <span class="n">batch_shapes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">batch_shapes</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Inconsistent batch shapes.&#39;</span><span class="p">)</span>
+    <span class="c1"># Find the common shape.</span>
+    <span class="n">batch_shape</span> <span class="o">=</span> <span class="n">_common_shape</span><span class="p">(</span><span class="o">*</span><span class="n">batch_shapes</span><span class="p">)</span>
+    <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">indices</span><span class="p">(</span><span class="n">batch_shape</span><span class="p">)</span>
 
-    <span class="n">batch_shape</span> <span class="o">=</span> <span class="n">batch_shapes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># Handle the edge case that there is no batching.</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="p">[()]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Put the index dimension last.</span>
+        <span class="n">perm</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">batch_shape</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)))</span> <span class="o">+</span> <span class="p">(</span><span class="mi">0</span><span class="p">,)</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="n">indices</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">perm</span><span class="p">)</span>
+        <span class="c1"># Turn into a list of indices.</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="n">indices</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">batch_shape</span><span class="p">))</span>
 
     <span class="c1"># Loop over batches.</span>
     <span class="n">batches</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">reduce</span><span class="p">(</span><span class="n">mul</span><span class="p">,</span> <span class="n">batch_shape</span><span class="p">,</span> <span class="mi">1</span><span class="p">)):</span>
-        <span class="n">batches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xs</span><span class="p">]))</span>
+    <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span>
+        <span class="n">batches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="n">_translate_index</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">s</span><span class="p">)]</span>
+                           <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">batch_shapes</span><span class="p">)]))</span>
 
     <span class="c1"># Construct result, reshape, and return.</span>
     <span class="n">res</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="o">*</span><span class="n">batches</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>

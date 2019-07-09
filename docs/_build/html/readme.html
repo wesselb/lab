@@ -96,6 +96,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#list-of-methods">List of Methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#special-variables">Special Variables</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#constants">Constants</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#generic">Generic</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#linear-algebra">Linear Algebra</a></li>
@@ -175,6 +176,7 @@
 <p><a class="reference external" href="https://travis-ci.org/wesselb/lab"><img alt="Build" src="https://travis-ci.org/wesselb/lab.svg?branch=master" /></a> <a class="reference external" href="https://coveralls.io/github/wesselb/lab?branch=master"><img alt="Coverage Status" src="https://coveralls.io/repos/github/wesselb/lab/badge.svg?branch=master&amp;service=github" /></a> <a class="reference external" href="https://wesselb.github.io/lab"><img alt="Latest Docs" src="https://img.shields.io/badge/docs-latest-blue.svg" /></a></p>
 <p>A generic interface for linear algebra backends: code it once, run it on
 any backend</p>
+<p><em>Note:</em> LAB requires TensorFlow 2.</p>
 <ul class="simple">
 <li><p><a class="reference external" href="#installation">Installation</a></p></li>
 <li><p><a class="reference external" href="#basic-usage">Basic Usage</a></p></li>
@@ -198,13 +200,11 @@ any backend</p>
 </ul>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<p>The package is tested for Python 2.7 and Python 3.6, which are the
-versions recommended to use. To install the package, please ensure that
-<code class="docutils literal notranslate"><span class="pre">gcc</span></code> and <code class="docutils literal notranslate"><span class="pre">gfortran</span></code> are available, and then run the following
-commands:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">wesselb</span><span class="o">/</span><span class="n">lab</span>
-<span class="n">cd</span> <span class="n">lab</span>
-<span class="n">make</span> <span class="n">install</span>
+<p>Before installing the package, please ensure that <code class="docutils literal notranslate"><span class="pre">gcc</span></code> and
+<code class="docutils literal notranslate"><span class="pre">gfortran</span></code> are available. On OS X, these are both installed with
+<code class="docutils literal notranslate"><span class="pre">brew</span> <span class="pre">install</span> <span class="pre">gcc</span></code>; users of Anaconda may want to instead consider
+<code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">gcc</span></code>. Then simply</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">backends</span>
 </pre></div>
 </div>
 </div>
@@ -279,7 +279,6 @@ of objects or extend functions.</p>
 <span class="n">Bool</span>         <span class="c1"># Booleans</span>
 <span class="n">Number</span>       <span class="c1"># Numbers</span>
 <span class="n">Numeric</span>      <span class="c1"># Numerical objects, including booleans</span>
-<span class="n">Dimension</span>    <span class="c1"># Dimensions of shapes</span>
 <span class="n">DType</span>        <span class="c1"># Data type</span>
 <span class="n">Framework</span>    <span class="c1"># Anything accepted by supported frameworks</span>
 </pre></div>
@@ -288,7 +287,6 @@ of objects or extend functions.</p>
 <div class="section" id="numpy">
 <h3>NumPy<a class="headerlink" href="#numpy" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">NPNumeric</span>
-<span class="n">NPDimension</span>
 <span class="n">NPDType</span>
 
 <span class="n">NP</span>           <span class="c1"># Anything NumPy</span>
@@ -298,7 +296,6 @@ of objects or extend functions.</p>
 <div class="section" id="tensorflow">
 <h3>TensorFlow<a class="headerlink" href="#tensorflow" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TFNumeric</span>
-<span class="n">TFDimension</span>
 <span class="n">TFDType</span>
 
 <span class="n">TF</span>           <span class="c1"># Anything TensorFlow</span>
@@ -308,7 +305,6 @@ of objects or extend functions.</p>
 <div class="section" id="pytorch">
 <h3>PyTorch<a class="headerlink" href="#pytorch" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TorchNumeric</span>
-<span class="n">TorchDimension</span>
 <span class="n">TorchDType</span>
 
 <span class="n">Torch</span>        <span class="c1"># Anything PyTorch</span>
@@ -344,6 +340,13 @@ creates a tensor full of zeros of the same shape and data type as
 </li>
 </ul>
 <p>See the documentation for more detailed descriptions of each function.</p>
+<div class="section" id="special-variables">
+<h3>Special Variables<a class="headerlink" href="#special-variables" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">default_dtype</span>  <span class="c1"># Default data type.</span>
+<span class="n">epsilon</span>        <span class="c1"># Magnitude of diagonal to regularise matrices with.</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="constants">
 <h3>Constants<a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nan</span>
@@ -390,6 +393,7 @@ creates a tensor full of zeros of the same shape and data type as
 <span class="n">cos</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 <span class="n">tan</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 <span class="n">sigmoid</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">softplus</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 <span class="n">relu</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 
 <span class="n">add</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
