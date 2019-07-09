@@ -89,7 +89,7 @@ def take(a, indices_or_mask, axis=0):
         a = anp.transpose(a, perm)
 
     # Take the relevant part.
-    a = a[indices_or_mask]
+    a = a[indices_or_mask, ...]
 
     # Put axis `axis` back again.
     if axis > 0:
