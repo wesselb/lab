@@ -7,6 +7,8 @@
 A generic interface for linear algebra backends: code it once, run it on any 
 backend
 
+_Note:_ LAB requires TensorFlow 2.
+
 * [Installation](#installation)
 * [Basic Usage](#basic-usage)
 * [List of Types](#list-of-types)
