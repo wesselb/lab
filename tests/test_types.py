@@ -72,7 +72,7 @@ def test_autograd_tracing():
 
     # Test that objects are of the right type.
     for obj in found_objs:
-        assert isinstance(obj, B.NPNumeric)
+        assert isinstance(obj, B.AGNumeric)
 
 
 def test_data_type():
