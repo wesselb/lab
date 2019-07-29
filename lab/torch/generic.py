@@ -47,7 +47,8 @@ def cast(dtype, a):
     return a.type(dtype)
 
 
-@dispatch(TorchDType, {NPNumeric, Number})
+@dispatch.multi((TorchDType, NPNumeric),
+                (TorchDType, Number))
 def cast(dtype, a):
     return torch.tensor(a, dtype=dtype)
 
