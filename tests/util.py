@@ -39,7 +39,7 @@ def dtype_equal(x, y):
         assert x is y
 
 
-@_dispatch({B.NPNumeric, B.Number, B.Bool})
+@_dispatch({B.NPNumeric, B.Number, B.Bool}, precedence=1)
 def to_np(x):
     """Convert a tensor to NumPy."""
     return x
