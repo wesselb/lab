@@ -19,12 +19,35 @@ from plum import (
 
 from . import dispatch
 
-__all__ = ['Int', 'Float', 'Bool', 'Number',
-           'NPNumeric', 'TFNumeric', 'TorchNumeric', 'Numeric',
-           'NPDType', 'TFDType', 'TorchDType', 'DType',
-           'default_dtype', 'issubdtype', 'dtype',
-           'NP', 'TF', 'Torch', 'Framework',
-           '_tf_retrievables', '_torch_retrievables']
+__all__ = ['Int',
+           'Float',
+           'Bool',
+           'Number',
+
+           'NPNumeric',
+           'AGNumeric',
+           'TFNumeric',
+           'TorchNumeric',
+           'Numeric',
+
+           'NPDType',
+           'AGDType',
+           'TFDType',
+           'TorchDType',
+           'DType',
+
+           'default_dtype',
+           'issubdtype',
+           'dtype',
+
+           'NP',
+           'AG',
+           'TF',
+           'Torch',
+           'Framework',
+
+           '_tf_retrievables',
+           '_torch_retrievables']
 
 
 @parametric
@@ -90,12 +113,18 @@ _torch_retrievables = [_torch_tensor, _torch_dtype]
 Int = Union(*([int] + np.sctypes['int'] + np.sctypes['uint']), alias='Int')
 Float = Union(*([float] + np.sctypes['float']), alias='Float')
 Bool = Union(bool, np.bool_, alias='Bool')
-Number = Union(Int, Float, alias='Number')
-NPNumeric = Union(Number, Bool, np.ndarray, Box, alias='NPNumeric')
-TFNumeric = Union(_tf_tensor, _tf_variable, _tf_indexedslices,
-                  alias='TFNumeric')
-TorchNumeric = Union(_torch_tensor, alias='TorchNumeric')
-Numeric = Union(NPNumeric, TFNumeric, TorchNumeric, alias='Numeric')
+Number = Union(Int, Bool, Float, alias='Number')
+NPNumeric = Union(Number, np.ndarray, alias='NPNumeric')
+AGNumeric = Union(NPNumeric, Box, alias='AGNumeric')
+TFNumeric = Union(Number,
+                  _tf_tensor,
+                  _tf_variable,
+                  _tf_indexedslices, alias='TFNumeric')
+TorchNumeric = Union(Number, _torch_tensor, alias='TorchNumeric')
+Numeric = Union(NPNumeric,
+                AGNumeric,
+                TFNumeric,
+                TorchNumeric, alias='Numeric')
 
 # Define corresponding promotion rules and conversion methods.
 add_promotion_rule(NPNumeric, TFNumeric, TFNumeric)
@@ -108,6 +137,7 @@ add_conversion_method(NPNumeric, TorchNumeric,
 
 # Data types:
 NPDType = Union(type, np.dtype, alias='NPDType')
+AGDType = Union(NPDType, alias='AGDType')
 TFDType = Union(_tf_dtype, alias='TFDType')
 TorchDType = Union(_torch_dtype, alias='TorchDType')
 DType = Union(NPDType, TFDType, TorchDType, alias='DType')
@@ -194,6 +224,7 @@ def dtype(a):
 
 # Framework types:
 NP = Union(NPNumeric, NPDType, alias='NP')
+AG = Union(AGNumeric, AGDType, alias='AG')
 TF = Union(TFNumeric, TFDType, alias='TF')
 Torch = Union(TorchNumeric, TorchDType, alias='Torch')
 Framework = Union(NP, TF, Torch, alias='Framework')
