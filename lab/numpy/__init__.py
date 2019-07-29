@@ -1,0 +1,23 @@
+# -*- coding: utf-8 -*-
+
+from __future__ import absolute_import, division, print_function
+
+# noinspection PyUnresolvedReferences
+from .. import *
+from .. import dispatch as dispatch_orig
+
+
+# All methods here should have precedence, because NumPy forms the base of
+# everything.
+def dispatch(*args, **kw_args):
+    kw_args['precedence'] = 1
+    return dispatch_orig(*args, **kw_args)
+
+
+from .generic import *
+from .shaping import *
+from .linear_algebra import *
+from .random import *
+
+# Alias to actual module.
+sys.modules[__name__] = B
