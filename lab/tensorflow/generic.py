@@ -5,7 +5,7 @@ from __future__ import absolute_import, division, print_function
 import tensorflow as tf
 from plum import Callable
 
-from . import dispatch, B, Numeric
+from . import dispatch, B, Numeric, TFNumeric
 from .custom import tensorflow_register
 from ..custom import bvn_cdf, s_bvn_cdf
 from ..types import TFDType, Int
@@ -197,7 +197,9 @@ f = tensorflow_register(bvn_cdf, s_bvn_cdf)
 dispatch(Numeric, Numeric, Numeric)(f)
 
 
-@dispatch(Callable, Numeric, [Numeric])
+# If `Numeric` types are used here, this implementation is more specific
+# than the generic implementation, which will use TensorFlow unnecessarily.
+@dispatch(Callable, TFNumeric, [TFNumeric])
 def scan(f, xs, *init_state):
     return tf.scan(f, xs, initializer=init_state)
 
