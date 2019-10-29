@@ -5,34 +5,34 @@ from __future__ import absolute_import, division, print_function
 import numpy as np
 import torch
 
-from . import dispatch, B
+from . import dispatch, B, Numeric
 from ..shaping import _vec_to_tril_shape_upper_perm
-from ..types import TorchNumeric, Int
+from ..types import Int
 
 __all__ = []
 
 
-@dispatch(TorchNumeric)
+@dispatch(Numeric)
 def length(a):
     return a.numel()
 
 
-@dispatch(TorchNumeric)
+@dispatch(Numeric)
 def expand_dims(a, axis=0):
     return torch.unsqueeze(a, dim=axis)
 
 
-@dispatch(TorchNumeric)
+@dispatch(Numeric)
 def squeeze(a):
     return torch.squeeze(a)
 
 
-@dispatch(TorchNumeric)
+@dispatch(Numeric)
 def diag(a):
     return torch.diag(a)
 
 
-@dispatch(TorchNumeric)
+@dispatch(Numeric)
 def vec_to_tril(a):
     if B.rank(a) != 1:
         raise ValueError('Input must be rank 1.')
@@ -41,7 +41,7 @@ def vec_to_tril(a):
     return torch.reshape(a[perm], (m, m))
 
 
-@dispatch(TorchNumeric)
+@dispatch(Numeric)
 def tril_to_vec(a):
     if B.rank(a) != 2:
         raise ValueError('Input must be rank 2.')
@@ -51,32 +51,32 @@ def tril_to_vec(a):
     return a[np.tril_indices(n)]
 
 
-@dispatch([TorchNumeric])
+@dispatch([Numeric])
 def stack(*elements, **kw_args):
     return torch.stack(elements, dim=kw_args.get('axis', 0))
 
 
-@dispatch(TorchNumeric)
+@dispatch(Numeric)
 def unstack(a, axis=0):
     return torch.unbind(a, dim=axis)
 
 
-@dispatch(TorchNumeric, [Int])
+@dispatch(Numeric, [Int])
 def reshape(a, *shape):
     return torch.reshape(a, shape=shape)
 
 
-@dispatch([TorchNumeric])
+@dispatch([Numeric])
 def concat(*elements, **kw_args):
     return torch.cat(elements, dim=kw_args.get('axis', 0))
 
 
-@dispatch(TorchNumeric, [Int])
+@dispatch(Numeric, [Int])
 def tile(a, *repeats):
     return a.repeat(*repeats)
 
 
-@dispatch(TorchNumeric, object)
+@dispatch(Numeric, object)
 def take(a, indices_or_mask, axis=0):
     if B.rank(indices_or_mask) != 1:
         raise ValueError('Indices or mask must be rank 1.')

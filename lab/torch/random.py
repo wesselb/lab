@@ -5,7 +5,7 @@ from __future__ import absolute_import, division, print_function
 import torch
 
 from . import dispatch
-from ..types import TorchDType, TorchNumeric, Int
+from ..types import TorchNumeric, TorchDType, Int
 
 __all__ = []
 

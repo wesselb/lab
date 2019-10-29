@@ -4,15 +4,15 @@ from __future__ import absolute_import, division, print_function
 
 import torch
 
-from . import dispatch
+from . import dispatch, Numeric
 from .custom import torch_register
 from ..custom import bvn_cdf, s_bvn_cdf
-from ..types import TorchNumeric, TorchDType, NPNumeric, Number, Int
+from ..types import TorchNumeric, NPNumeric, TorchDType, Number, Int
 
 __all__ = []
 
 
-@dispatch(TorchNumeric)
+@dispatch(Numeric)
 def isnan(a):
     return torch.isnan(a)
 
@@ -47,98 +47,97 @@ def cast(dtype, a):
     return a.type(dtype)
 
 
-@dispatch.multi((TorchDType, NPNumeric),
-                (TorchDType, Number))
+@dispatch(TorchDType, {Number, NPNumeric})
 def cast(dtype, a):
     return torch.tensor(a, dtype=dtype)
 
 
-@dispatch(TorchNumeric)
+@dispatch(Numeric)
 def identity(a):
     return a.clone()
 
 
-@dispatch(TorchNumeric)
+@dispatch(Numeric)
 def abs(a):
     return torch.abs(a)
 
 
-@dispatch(TorchNumeric)
+@dispatch(Numeric)
 def sign(a):
     return torch.sign(a)
 
 
-@dispatch(TorchNumeric)
+@dispatch(Numeric)
 def sqrt(a):
     return torch.sqrt(a)
 
 
-@dispatch(TorchNumeric)
+@dispatch(Numeric)
 def exp(a):
     return torch.exp(a)
 
 
-@dispatch(TorchNumeric)
+@dispatch(Numeric)
 def log(a):
     return torch.log(a)
 
 
-@dispatch(TorchNumeric)
+@dispatch(Numeric)
 def sin(a):
     return torch.sin(a)
 
 
-@dispatch(TorchNumeric)
+@dispatch(Numeric)
 def cos(a):
     return torch.cos(a)
 
 
-@dispatch(TorchNumeric)
+@dispatch(Numeric)
 def tan(a):
     return torch.tan(a)
 
 
-@dispatch(TorchNumeric)
+@dispatch(Numeric)
 def tanh(a):
     return torch.tanh(a)
 
 
-@dispatch(TorchNumeric, TorchNumeric)
+@dispatch(Numeric, Numeric)
 def add(a, b):
     return a + b
 
 
-@dispatch(TorchNumeric, TorchNumeric)
+@dispatch(Numeric, Numeric)
 def subtract(a, b):
     return a - b
 
 
-@dispatch(TorchNumeric, TorchNumeric)
+@dispatch(Numeric, Numeric)
 def multiply(a, b):
     return a * b
 
 
-@dispatch(TorchNumeric, TorchNumeric)
+@dispatch(Numeric, Numeric)
 def divide(a, b):
     return a / b
 
 
-@dispatch(TorchNumeric, TorchNumeric)
+@dispatch(Numeric, Numeric)
 def power(a, b):
     return torch.pow(a, b)
 
 
-@dispatch(TorchNumeric, TorchNumeric)
+@dispatch(Numeric, Numeric)
 def minimum(a, b):
     return torch.min(a, b)
 
 
-@dispatch(TorchNumeric, TorchNumeric)
+@dispatch(Numeric, Numeric)
 def maximum(a, b):
     return torch.max(a, b)
 
 
-@dispatch(TorchNumeric)
+@dispatch(Numeric)
 def min(a, axis=None):
     if axis is None:
         return torch.min(a)
@@ -146,7 +145,7 @@ def min(a, axis=None):
         return torch.min(a, dim=axis)[0]
 
 
-@dispatch(TorchNumeric)
+@dispatch(Numeric)
 def max(a, axis=None):
     if axis is None:
         return torch.max(a)
@@ -154,7 +153,7 @@ def max(a, axis=None):
         return torch.max(a, dim=axis)[0]
 
 
-@dispatch(TorchNumeric)
+@dispatch(Numeric)
 def sum(a, axis=None):
     if axis is None:
         return torch.sum(a)
@@ -162,7 +161,7 @@ def sum(a, axis=None):
         return torch.sum(a, dim=axis)
 
 
-@dispatch(TorchNumeric)
+@dispatch(Numeric)
 def mean(a, axis=None):
     if axis is None:
         return torch.mean(a)
@@ -170,7 +169,7 @@ def mean(a, axis=None):
         return torch.mean(a, dim=axis)
 
 
-@dispatch(TorchNumeric)
+@dispatch(Numeric)
 def std(a, axis=None):
     if axis is None:
         return torch.std(a, unbiased=False)
@@ -178,7 +177,7 @@ def std(a, axis=None):
         return torch.std(a, dim=axis, unbiased=False)
 
 
-@dispatch(TorchNumeric)
+@dispatch(Numeric)
 def all(a, axis=None):
     if axis is None:
         return a.all()
@@ -186,7 +185,7 @@ def all(a, axis=None):
         return a.all(dim=axis)
 
 
-@dispatch(TorchNumeric)
+@dispatch(Numeric)
 def any(a, axis=None):
     if axis is None:
         return a.any()
@@ -194,35 +193,35 @@ def any(a, axis=None):
         return a.any(dim=axis)
 
 
-@dispatch(TorchNumeric, TorchNumeric)
+@dispatch(Numeric, Numeric)
 def lt(a, b):
     return torch.lt(a, b)
 
 
-@dispatch(TorchNumeric, TorchNumeric)
+@dispatch(Numeric, Numeric)
 def le(a, b):
     return torch.le(a, b)
 
 
-@dispatch(TorchNumeric, TorchNumeric)
+@dispatch(Numeric, Numeric)
 def gt(a, b):
     return torch.gt(a, b)
 
 
-@dispatch(TorchNumeric, TorchNumeric)
+@dispatch(Numeric, Numeric)
 def ge(a, b):
     return torch.ge(a, b)
 
 
 f = torch_register(bvn_cdf, s_bvn_cdf)
-dispatch(TorchNumeric, TorchNumeric, TorchNumeric)(f)
+dispatch(Numeric, Numeric, Numeric)(f)
 
 
-@dispatch(TorchNumeric)
+@dispatch(Numeric)
 def sort(a, axis=-1, descending=False):
     return torch.sort(a, dim=axis, descending=descending)[0]
 
 
-@dispatch(TorchNumeric)
+@dispatch(Numeric)
 def argsort(a, axis=-1, descending=False):
     return torch.argsort(a, dim=axis, descending=descending)

@@ -4,6 +4,9 @@ from __future__ import absolute_import, division, print_function
 
 # noinspection PyUnresolvedReferences
 from .. import *
+from ..types import Number, TorchNumeric
+
+Numeric = {Number, TorchNumeric}
 
 from .generic import *
 from .shaping import *
