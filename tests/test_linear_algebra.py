@@ -76,7 +76,7 @@ def test_trace():
 
     # Check that call with `axis1 == axis2` raises an error in NumPy.
     with pytest.raises(ValueError):
-        B.trace(Matrix().np(), axis1=0, axis2=0)
+        B.trace(Matrix().ag(), axis1=0, axis2=0)
 
 
 def test_kron():

@@ -11,9 +11,13 @@ import tensorflow as tf
 import torch
 from plum import Dispatcher
 
+from autograd.tracer import trace_stack, new_box
+from autograd.core import VJPNode, getval
+
 import lab as B
 
-__all__ = ['dtype_equal',
+__all__ = ['autograd_box',
+           'dtype_equal',
            'to_np',
            'allclose',
            'check_function',
@@ -28,6 +32,13 @@ _dispatch = Dispatcher()
 approx = np.testing.assert_array_almost_equal
 
 
+def autograd_box(x):
+    """Box a tensor in AutoGrad."""
+    t = trace_stack.new_trace().__enter__()
+    n = VJPNode.new_root()
+    return new_box(x, t, n)
+
+
 def dtype_equal(x, y):
     # NumPy has two representations of data types, and TensorFlow data types
     # equal to NumPy data types.
@@ -39,10 +50,15 @@ def dtype_equal(x, y):
         assert x is y
 
 
-@_dispatch({B.NPNumeric, B.Number, B.Bool}, precedence=1)
+@_dispatch({B.NPNumeric, B.Number})
 def to_np(x):
     """Convert a tensor to NumPy."""
     return x
+
+
+@_dispatch(B.AGNumeric)
+def to_np(x):
+    return getval(x)
 
 
 @_dispatch({B.TorchNumeric, B.TFNumeric})
@@ -65,7 +81,7 @@ def allclose(x, y, assert_dtype=False):
     """Assert that two numeric objects are close."""
     x, y = to_np(x), to_np(y)
 
-    # Assert that data types are equal if it concerns floats.
+    # Assert that data types are equal if required.
     if assert_dtype:
         assert np.array(x).dtype == np.array(y).dtype
 
@@ -79,8 +95,13 @@ def allclose(x, y, assert_dtype=False):
         allclose(xi, yi, assert_dtype)
 
 
-def check_function(f, args_spec, kw_args_spec=None, assert_dtype=True):
+def check_function(f, args_spec,
+                   kw_args_spec=None,
+                   assert_dtype=True,
+                   skip=None):
     """Check that a function produces consistent output."""
+    skip = [] if skip is None else skip
+
     if kw_args_spec is None:
         kw_args_spec = {}
 
@@ -95,13 +116,12 @@ def check_function(f, args_spec, kw_args_spec=None, assert_dtype=True):
     # Construct product of arguments.
     args_prod = list(product(*[arg.forms() for arg in args_spec]))
 
-    # Construct types TF and Torch numerics, lists, or tuples.
-    tf_type = plum.Union(B.TFNumeric,
-                         plum.List(B.TFNumeric),
-                         plum.Tuple(B.TFNumeric))
-    torch_type = plum.Union(B.TorchNumeric,
-                            plum.List(B.TorchNumeric),
-                            plum.Tuple(B.TorchNumeric))
+    # Construct framework types to skip mixes of.
+    fw_types = [plum.Union(t, plum.List(t), plum.Tuple(t))
+                for t in [B.AGNumeric, B.TorchNumeric, B.TFNumeric]]
+
+    # Construct other types to skip entirely.
+    skip_types = [plum.Union(t, plum.List(t), plum.Tuple(t)) for t in skip]
 
     # Check consistency of results.
     for kw_args in kw_args_prod:
@@ -109,10 +129,15 @@ def check_function(f, args_spec, kw_args_spec=None, assert_dtype=True):
         first_result = f(*args_prod[0], **kw_args)
 
         for args in args_prod:
-            # Skip mixes of TF and Torch numerics, lists, or tuples.
-            any_tf = any(isinstance(arg, tf_type) for arg in args)
-            any_torch = any(isinstance(arg, torch_type) for arg in args)
-            if any_tf and any_torch:
+            # Skip mixes of FW types.
+            fw_count = sum([any(isinstance(arg, t) for arg in args)
+                            for t in fw_types])
+
+            # Skip all skips.
+            skip_count = sum([any(isinstance(arg, t) for arg in args)
+                              for t in skip_types])
+
+            if fw_count >= 2 or skip_count >= 1:
                 log.debug('Skipping call with arguments {} and keyword '
                           'arguments {}.'.format(args, kw_args))
                 continue
@@ -132,7 +157,7 @@ class Tensor(object):
             self.mat = kw_args['mat']
 
     def forms(self):
-        return [self.np(), self.tf(), self.torch()]
+        return [self.np(), self.tf(), self.torch(), self.ag()]
 
     def np(self):
         return self.mat
@@ -142,6 +167,9 @@ class Tensor(object):
 
     def torch(self):
         return torch.tensor(self.mat)
+
+    def ag(self):
+        return autograd_box(self.mat)
 
 
 class PositiveTensor(Tensor):

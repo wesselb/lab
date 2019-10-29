@@ -2,6 +2,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+import lab as B
 import numpy as np
 import pytest
 import scipy.special
@@ -9,8 +10,8 @@ import tensorflow as tf
 import torch
 from plum import NotFoundLookupError
 
-import lab as B
 from .util import (
+    autograd_box,
     check_function,
     Tensor,
     Value,
@@ -113,6 +114,9 @@ def test_cast():
     dtype_equal(B.dtype(B.cast(np.float64, 1)), np.float64)
     dtype_equal(B.dtype(B.cast(np.float64, np.array(1))), np.float64)
 
+    dtype_equal(B.dtype(B.cast(np.float64, autograd_box(np.float32(1)))),
+                np.float64)
+
     dtype_equal(B.dtype(B.cast(tf.float64, 1)), tf.float64)
     dtype_equal(B.dtype(B.cast(tf.float64, np.array(1))), tf.float64)
     dtype_equal(B.dtype(B.cast(tf.float64, tf.constant(1))), tf.float64)
@@ -122,7 +126,10 @@ def test_cast():
     dtype_equal(B.dtype(B.cast(torch.float64, torch.tensor(1))), torch.float64)
 
     # Test that casting to its own data type does nothing.
-    for x in [B.randn(np.float32), B.randn(tf.float32), B.randn(torch.float32)]:
+    for x in [B.randn(np.float32),
+              autograd_box(B.randn(np.float32)),
+              B.randn(tf.float32),
+              B.randn(torch.float32)]:
         assert x is B.cast(B.dtype(x), x)
 
 
@@ -242,17 +249,26 @@ def test_scan():
 
     with pytest.raises(RuntimeError):
         B.scan(incorrect_scan_f,
-               Tensor(4).np(),
-               Tensor().np(),
-               Tensor().np())
+               Tensor(4).torch(),
+               Tensor().torch(),
+               Tensor().torch())
 
 
 def test_sort():
+    check_function(B.sort, (Tensor(4),),
+                   {'axis': Value(-1, 0), 'descending': Bool()})
+    # AutoGrad cannot sort multidimensional arrays.
     check_function(B.sort, (Tensor(2, 3, 4),),
-                   {'axis': Value(-1, 0, 1, 2), 'descending': Bool()})
+                   {'axis': Value(-1, 0, 1, 2), 'descending': Bool()},
+                   skip=[B.AGNumeric])
 
 
 def test_argsort():
+    check_function(B.argsort, (Tensor(4),),
+                   {'axis': Value(-1, 0), 'descending': Bool()},
+                   assert_dtype=False)
+    # AutoGrad cannot sort multidimensional arrays.
     check_function(B.argsort, (Tensor(2, 3, 4),),
                    {'axis': Value(-1, 0, 1, 2), 'descending': Bool()},
+                   skip=[B.AGNumeric],
                    assert_dtype=False)

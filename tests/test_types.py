@@ -26,9 +26,6 @@ def test_numeric():
     assert isinstance(np.float64(1), B.Number)
 
     # Test NumPy.
-    assert isinstance(1, B.NPNumeric)
-    assert isinstance(np.bool_(1), B.NPNumeric)
-    assert isinstance(np.float32(1), B.NPNumeric)
     assert isinstance(np.array(1), B.NPNumeric)
 
     # Test TensorFlow.
@@ -68,6 +65,9 @@ def test_autograd_tracing():
 
     # Test that function runs.
     f(np.ones(5))
+    found_objs[:] = []  # Clear found objects.
+
+    # Catch AutoGrad object.
     grad(f)(np.ones(5))
 
     # Test that objects are of the right type.
@@ -118,7 +118,6 @@ def test_dtype():
 @pytest.mark.parametrize('t', [B.NP, B.Framework])
 def test_framework_np(t):
     assert isinstance(np.array(1), t)
-    assert isinstance(1, t)
     assert isinstance(np.float32, t)
 
 
