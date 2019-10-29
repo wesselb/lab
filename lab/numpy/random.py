@@ -6,8 +6,8 @@ import warnings
 
 import numpy as np
 
-from . import dispatch, B
-from ..types import NPDType, NPNumeric, Int
+from . import dispatch, B, Numeric
+from ..types import NPDType, Int
 
 __all__ = []
 
@@ -29,7 +29,7 @@ def randn(dtype, *shape):
     return B.cast(dtype, np.random.randn(*shape))
 
 
-@dispatch(NPNumeric, Int)
+@dispatch(Numeric, Int)
 def choice(a, n):
     inds = np.random.choice(a.shape[0], n, replace=True)
     choices = a[inds]

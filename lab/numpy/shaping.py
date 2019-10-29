@@ -4,34 +4,34 @@ from __future__ import absolute_import, division, print_function
 
 import numpy as np
 
-from . import dispatch, B
+from . import dispatch, B, Numeric
 from ..shaping import _vec_to_tril_shape_upper_perm
-from ..types import NPNumeric, Int
+from ..types import Int
 
 __all__ = []
 
 
-@dispatch(NPNumeric)
+@dispatch(Numeric)
 def length(a):
     return np.size(a)
 
 
-@dispatch(NPNumeric)
+@dispatch(Numeric)
 def expand_dims(a, axis=0):
     return np.expand_dims(a, axis=axis)
 
 
-@dispatch(NPNumeric)
+@dispatch(Numeric)
 def squeeze(a):
     return np.squeeze(a)
 
 
-@dispatch(NPNumeric)
+@dispatch(Numeric)
 def diag(a):
     return np.diag(a)
 
 
-@dispatch(NPNumeric)
+@dispatch(Numeric)
 def vec_to_tril(a):
     if B.rank(a) != 1:
         raise ValueError('Input must be rank 1.')
@@ -40,7 +40,7 @@ def vec_to_tril(a):
     return np.reshape(a[perm], (m, m))
 
 
-@dispatch(NPNumeric)
+@dispatch(Numeric)
 def tril_to_vec(a):
     if B.rank(a) != 2:
         raise ValueError('Input must be rank 2.')
@@ -50,33 +50,33 @@ def tril_to_vec(a):
     return a[np.tril_indices(n)]
 
 
-@dispatch([NPNumeric])
+@dispatch([Numeric])
 def stack(*elements, **kw_args):
     return np.stack(elements, axis=kw_args.get('axis', 0))
 
 
-@dispatch(NPNumeric)
+@dispatch(Numeric)
 def unstack(a, axis=0):
     out = np.split(a, np.arange(1, a.shape[axis]), axis)
     return [x.squeeze(axis=axis) for x in out]
 
 
-@dispatch(NPNumeric, [Int])
+@dispatch(Numeric, [Int])
 def reshape(a, *shape):
     return np.reshape(a, shape)
 
 
-@dispatch([NPNumeric])
+@dispatch([Numeric])
 def concat(*elements, **kw_args):
     return np.concatenate(elements, axis=kw_args.get('axis', 0))
 
 
-@dispatch(NPNumeric, [Int])
+@dispatch(Numeric, [Int])
 def tile(a, *repeats):
     return np.tile(a, repeats)
 
 
-@dispatch(NPNumeric, object)
+@dispatch(Numeric, object)
 def take(a, indices_or_mask, axis=0):
     if B.rank(indices_or_mask) != 1:
         raise ValueError('Indices or mask must be rank 1.')

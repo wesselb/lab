@@ -4,14 +4,14 @@ from __future__ import absolute_import, division, print_function
 
 import numpy as np
 
-from . import B, dispatch
+from . import dispatch, Numeric
 from ..custom import bvn_cdf
-from ..types import NPNumeric, NPDType, Int
+from ..types import NPDType, Int
 
 __all__ = []
 
 
-@dispatch(NPNumeric)
+@dispatch(Numeric)
 def isnan(a):
     return np.isnan(a)
 
@@ -41,7 +41,7 @@ def range(dtype, start, stop, step):
     return np.arange(start, stop, step, dtype=dtype)
 
 
-@dispatch(NPDType, NPNumeric)
+@dispatch(NPDType, Numeric)
 def cast(dtype, a):
     if hasattr(a, 'astype'):
         return a.astype(dtype, copy=False)
@@ -49,150 +49,150 @@ def cast(dtype, a):
         return np.array(a, dtype=dtype)
 
 
-@dispatch(NPNumeric)
+@dispatch(Numeric)
 def identity(a):
     return np.array(a)
 
 
-@dispatch(NPNumeric)
+@dispatch(Numeric)
 def abs(a):
     return np.abs(a)
 
 
-@dispatch(NPNumeric)
+@dispatch(Numeric)
 def sign(a):
     return np.sign(a)
 
 
-@dispatch(NPNumeric)
+@dispatch(Numeric)
 def sqrt(a):
     return np.sqrt(a)
 
 
-@dispatch(NPNumeric)
+@dispatch(Numeric)
 def exp(a):
     return np.exp(a)
 
 
-@dispatch(NPNumeric)
+@dispatch(Numeric)
 def log(a):
     return np.log(a)
 
 
-@dispatch(NPNumeric)
+@dispatch(Numeric)
 def sin(a):
     return np.sin(a)
 
 
-@dispatch(NPNumeric)
+@dispatch(Numeric)
 def cos(a):
     return np.cos(a)
 
 
-@dispatch(NPNumeric)
+@dispatch(Numeric)
 def tan(a):
     return np.tan(a)
 
 
-@dispatch(NPNumeric)
+@dispatch(Numeric)
 def tanh(a):
     return np.tanh(a)
 
 
-@dispatch(NPNumeric, NPNumeric)
+@dispatch(Numeric, Numeric)
 def add(a, b):
     return np.add(a, b)
 
 
-@dispatch(NPNumeric, NPNumeric)
+@dispatch(Numeric, Numeric)
 def subtract(a, b):
     return np.subtract(a, b)
 
 
-@dispatch(NPNumeric, NPNumeric)
+@dispatch(Numeric, Numeric)
 def multiply(a, b):
     return np.multiply(a, b)
 
 
-@dispatch(NPNumeric, NPNumeric)
+@dispatch(Numeric, Numeric)
 def divide(a, b):
     return np.divide(a, b)
 
 
-@dispatch(NPNumeric, NPNumeric)
+@dispatch(Numeric, Numeric)
 def power(a, b):
     return np.power(a, b)
 
 
-@dispatch(NPNumeric, NPNumeric)
+@dispatch(Numeric, Numeric)
 def minimum(a, b):
     return np.minimum(a, b)
 
 
-@dispatch(NPNumeric, NPNumeric)
+@dispatch(Numeric, Numeric)
 def maximum(a, b):
     return np.maximum(a, b)
 
 
-@dispatch(NPNumeric)
+@dispatch(Numeric)
 def min(a, axis=None):
     return np.min(a, axis=axis)
 
 
-@dispatch(NPNumeric)
+@dispatch(Numeric)
 def max(a, axis=None):
     return np.max(a, axis=axis)
 
 
-@dispatch(NPNumeric)
+@dispatch(Numeric)
 def sum(a, axis=None):
     return np.sum(a, axis=axis)
 
 
-@dispatch(NPNumeric)
+@dispatch(Numeric)
 def mean(a, axis=None):
     return np.mean(a, axis=axis)
 
 
-@dispatch(NPNumeric)
+@dispatch(Numeric)
 def std(a, axis=None):
     return np.std(a, axis=axis, ddof=0)
 
 
-@dispatch(NPNumeric)
+@dispatch(Numeric)
 def all(a, axis=None):
     return np.all(a, axis=axis)
 
 
-@dispatch(NPNumeric)
+@dispatch(Numeric)
 def any(a, axis=None):
     return np.any(a, axis=axis)
 
 
-@dispatch(NPNumeric, NPNumeric)
+@dispatch(Numeric, Numeric)
 def lt(a, b):
     return np.less(a, b)
 
 
-@dispatch(NPNumeric, NPNumeric)
+@dispatch(Numeric, Numeric)
 def le(a, b):
     return np.less_equal(a, b)
 
 
-@dispatch(NPNumeric, NPNumeric)
+@dispatch(Numeric, Numeric)
 def gt(a, b):
     return np.greater(a, b)
 
 
-@dispatch(NPNumeric, NPNumeric)
+@dispatch(Numeric, Numeric)
 def ge(a, b):
     return np.greater_equal(a, b)
 
 
-dispatch(NPNumeric, NPNumeric, NPNumeric)(bvn_cdf)
+dispatch(Numeric, Numeric, Numeric)(bvn_cdf)
 
 
-@dispatch(NPNumeric)
+@dispatch(Numeric)
 def sort(a, axis=-1, descending=False):
     if descending:
         return -np.sort(-a, axis=axis)
@@ -200,7 +200,7 @@ def sort(a, axis=-1, descending=False):
         return np.sort(a, axis=axis)
 
 
-@dispatch(NPNumeric)
+@dispatch(Numeric)
 def argsort(a, axis=-1, descending=False):
     if descending:
         return np.argsort(-a, axis=axis)
