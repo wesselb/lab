@@ -46,8 +46,8 @@ if 'clang' in out.decode('ascii'):
                            'be done with "brew install gcc".')
 
 requirements = ['numpy>=1.16',
-                'scipy<1.3',
-                'autograd',
+                'scipy>=1.3',
+                'autograd>=1.3',
                 'tensorflow>=2.0.0b',
                 'torch',
 
