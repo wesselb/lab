@@ -5,7 +5,6 @@ from __future__ import absolute_import, division, print_function
 import sys
 
 import numpy as np
-from autograd.tracer import Box
 from plum import (
     Union,
     add_conversion_method,
@@ -109,13 +108,17 @@ _torch_tensor = ModuleType('torch', 'Tensor')
 _torch_dtype = ModuleType('torch', 'dtype')
 _torch_retrievables = [_torch_tensor, _torch_dtype]
 
+# Define AutoGrad module types.
+_ag_tensor = ModuleType('autograd.tracer', 'Box')
+_ag_retrievables = [_ag_tensor]
+
 # Numeric types:
 Int = Union(*([int] + np.sctypes['int'] + np.sctypes['uint']), alias='Int')
 Float = Union(*([float] + np.sctypes['float']), alias='Float')
 Bool = Union(bool, np.bool_, alias='Bool')
 Number = Union(Int, Bool, Float, alias='Number')
 NPNumeric = Union(np.ndarray, alias='NPNumeric')
-AGNumeric = Union(Box, alias='AGNumeric')
+AGNumeric = Union(_ag_tensor, alias='AGNumeric')
 TFNumeric = Union(_tf_tensor,
                   _tf_variable,
                   _tf_indexedslices, alias='TFNumeric')
