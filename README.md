@@ -125,7 +125,6 @@ DType        # Data type
 Framework    # Anything accepted by supported frameworks
 ```
 
-
 ### NumPy
 
 ```
@@ -133,6 +132,15 @@ NPNumeric
 NPDType
  
 NP           # Anything NumPy
+```
+
+### AutoGrad
+
+```
+AGNumeric
+AGDType
+ 
+AG           # Anything AutoGrad
 ```
 
 ### TensorFlow
