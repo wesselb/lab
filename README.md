@@ -7,7 +7,7 @@
 A generic interface for linear algebra backends: code it once, run it on any 
 backend
 
-_Note:_ LAB requires TensorFlow 2.
+_Note:_ LAB requires Python 3.5+ and TensorFlow 2 if TensorFlow is used.
 
 * [Installation](#installation)
 * [Basic Usage](#basic-usage)
@@ -43,17 +43,19 @@ Example:
 
 ```python
 import lab as B
+import lab.autograd    # Load the AutoGrad extension.
 import lab.torch       # Load the PyTorch extension.
 import lab.tensorflow  # Load the TensorFlow extension.
+
 
 def objective(matrix):
     outer_product = B.matmul(matrix, matrix, tr_b=True)
     return B.mean(outer_product)
 ```
 
-By default, the PyTorch and TensorFlow extensions are not loaded to save 
-startup time. Alternatively, one can directly `import lab.torch as B` or
-`import lab.tensorflow as B`.
+The AutoGrad, PyTorch, and TensorFlow extensions are not loaded automatically to
+not enforce a dependency on all three frameworks.
+An extension can alternatively be loaded via `import lab.autograd as B`.
 
 Run it with NumPy and AutoGrad:
 
@@ -62,6 +64,10 @@ Run it with NumPy and AutoGrad:
 
 >>> objective(B.randn(np.float64, 2, 2))
 0.15772589216756833
+
+>>> grad(objective)(B.randn(np.float64, 2, 2))
+array([[ 0.23519042, -1.06282928],
+       [ 0.23519042, -1.06282928]])
 ```
 
 Run it with TensorFlow:
@@ -265,6 +271,8 @@ scan(f, xs, *init_state)
 
 sort(a, axis=-1, descending=False)
 argsort(a, axis=-1, descending=False)
+
+to_numpy(a)
 ```
 
 ### Linear Algebra
