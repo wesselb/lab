@@ -12,7 +12,8 @@ from setuptools import find_packages, setup, Extension
 # Check that `gfortran` is available.
 if subprocess.call(['which', 'gfortran']) != 0:
     raise RuntimeError('gfortran cannot be found. Please install gfortran. '
-                       'On OS X, this can be done with "brew install gcc".')
+                       'On OS X, this can be done with "brew install gcc". '
+                       'On Linux, "apt-get install gfortran" should suffice.')
 
 # Compile TVPACK.
 if subprocess.call('gfortran -fPIC -O2 '
