@@ -5,7 +5,7 @@ from __future__ import absolute_import, division, print_function
 import numpy as np
 
 from . import dispatch
-from ..types import AGNumeric, Int
+from ..types import Int, AGNumeric
 
 __all__ = []
 

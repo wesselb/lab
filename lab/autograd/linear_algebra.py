@@ -7,25 +7,24 @@ import logging
 import autograd.numpy as anp
 import autograd.scipy.linalg as asla
 
-from . import dispatch, B
+from . import dispatch, B, Numeric
 from .custom import autograd_register
 from ..custom import toeplitz_solve, s_toeplitz_solve
 from ..linear_algebra import _default_perm
-from ..types import AGNumeric
 from ..util import batch_computation
 
 __all__ = []
 log = logging.getLogger(__name__)
 
 
-@dispatch(AGNumeric, AGNumeric)
+@dispatch(Numeric, Numeric)
 def matmul(a, b, tr_a=False, tr_b=False):
     a = transpose(a) if tr_a else a
     b = transpose(b) if tr_b else b
     return anp.matmul(a, b)
 
 
-@dispatch(AGNumeric)
+@dispatch(Numeric)
 def transpose(a, perm=None):
     # Correctly handle special cases.
     rank_a = B.rank(a)
@@ -39,7 +38,7 @@ def transpose(a, perm=None):
     return anp.transpose(a, axes=perm)
 
 
-@dispatch(AGNumeric)
+@dispatch(Numeric)
 def trace(a, axis1=0, axis2=1):
     if axis1 == axis2:
         raise ValueError('Keyword arguments axis1 and axis2 cannot be the '
@@ -60,48 +59,48 @@ def trace(a, axis1=0, axis2=1):
     return anp.trace(a)
 
 
-@dispatch(AGNumeric, AGNumeric)
+@dispatch(Numeric, Numeric)
 def kron(a, b):
     return anp.kron(a, b)
 
 
-@dispatch(AGNumeric)
+@dispatch(Numeric)
 def svd(a, compute_uv=True):
     res = anp.linalg.svd(a, full_matrices=False, compute_uv=compute_uv)
-    return (res[0], res[1], transpose(res[2]).conj()) if compute_uv else res
+    return (res[0], res[1], anp.conj(transpose(res[2]))) if compute_uv else res
 
 
-@dispatch(AGNumeric, AGNumeric)
+@dispatch(Numeric, Numeric)
 def solve(a, b):
     return anp.linalg.solve(a, b)
 
 
-@dispatch(AGNumeric)
+@dispatch(Numeric)
 def inv(a):
     return anp.linalg.inv(a)
 
 
-@dispatch(AGNumeric)
+@dispatch(Numeric)
 def det(a):
     return anp.linalg.det(a)
 
 
-@dispatch(AGNumeric)
+@dispatch(Numeric)
 def logdet(a):
     return anp.linalg.slogdet(a)[1]
 
 
-@dispatch(AGNumeric)
+@dispatch(Numeric)
 def cholesky(a):
     return anp.linalg.cholesky(a)
 
 
-@dispatch(AGNumeric, AGNumeric)
+@dispatch(Numeric, Numeric)
 def cholesky_solve(a, b):
     return triangular_solve(transpose(a), triangular_solve(a, b), lower_a=False)
 
 
-@dispatch(AGNumeric, AGNumeric)
+@dispatch(Numeric, Numeric)
 def triangular_solve(a, b, lower_a=True):
     def _triangular_solve(a_, b_):
         return asla.solve_triangular(a_, b_,
@@ -113,4 +112,4 @@ def triangular_solve(a, b, lower_a=True):
 
 
 f = autograd_register(toeplitz_solve, s_toeplitz_solve)
-dispatch(AGNumeric, AGNumeric, AGNumeric)(f)
+dispatch(Numeric, Numeric, Numeric)(f)

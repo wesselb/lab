@@ -4,34 +4,34 @@ from __future__ import absolute_import, division, print_function
 
 import autograd.numpy as anp
 
-from . import dispatch, B
+from . import dispatch, B, Numeric
 from ..shaping import _vec_to_tril_shape_upper_perm
-from ..types import AGNumeric, Int
+from ..types import Int
 
 __all__ = []
 
 
-@dispatch(AGNumeric)
+@dispatch(Numeric)
 def length(a):
     return anp.size(a)
 
 
-@dispatch(AGNumeric)
+@dispatch(Numeric)
 def expand_dims(a, axis=0):
     return anp.expand_dims(a, axis=axis)
 
 
-@dispatch(AGNumeric)
+@dispatch(Numeric)
 def squeeze(a):
     return anp.squeeze(a)
 
 
-@dispatch(AGNumeric)
+@dispatch(Numeric)
 def diag(a):
     return anp.diag(a)
 
 
-@dispatch(AGNumeric)
+@dispatch(Numeric)
 def vec_to_tril(a):
     if B.rank(a) != 1:
         raise ValueError('Input must be rank 1.')
@@ -40,7 +40,7 @@ def vec_to_tril(a):
     return anp.reshape(a[perm], (m, m))
 
 
-@dispatch(AGNumeric)
+@dispatch(Numeric)
 def tril_to_vec(a):
     if B.rank(a) != 2:
         raise ValueError('Input must be rank 2.')
@@ -50,33 +50,33 @@ def tril_to_vec(a):
     return a[anp.tril_indices(n)]
 
 
-@dispatch([AGNumeric])
+@dispatch([Numeric])
 def stack(*elements, **kw_args):
     return anp.stack(elements, axis=kw_args.get('axis', 0))
 
 
-@dispatch(AGNumeric)
+@dispatch(Numeric)
 def unstack(a, axis=0):
     out = anp.split(a, anp.arange(1, a.shape[axis]), axis)
     return [x.squeeze(axis=axis) for x in out]
 
 
-@dispatch(AGNumeric, [Int])
+@dispatch(Numeric, [Int])
 def reshape(a, *shape):
     return anp.reshape(a, shape)
 
 
-@dispatch([AGNumeric])
+@dispatch([Numeric])
 def concat(*elements, **kw_args):
     return anp.concatenate(elements, axis=kw_args.get('axis', 0))
 
 
-@dispatch(AGNumeric, [Int])
+@dispatch(Numeric, [Int])
 def tile(a, *repeats):
     return anp.tile(a, repeats)
 
 
-@dispatch(AGNumeric, object)
+@dispatch(Numeric, object)
 def take(a, indices_or_mask, axis=0):
     if B.rank(indices_or_mask) != 1:
         raise ValueError('Indices or mask must be rank 1.')
