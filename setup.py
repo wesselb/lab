@@ -47,14 +47,12 @@ if 'clang' in out.decode('ascii'):
 
 requirements = ['numpy>=1.16',
                 'scipy>=1.3',
-                'autograd>=1.3',
-                'tensorflow>=2.0.0b',
-                'torch',
 
                 'fdm',
                 'plum-dispatch']
 
 setup(packages=find_packages(exclude=['docs']),
+      python_requires='>=3.5',
       install_requires=requirements,
       cmdclass={'build_ext': build_ext},
       ext_modules=[Extension('lab.bvn_cdf',
