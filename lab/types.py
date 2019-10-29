@@ -114,14 +114,14 @@ Int = Union(*([int] + np.sctypes['int'] + np.sctypes['uint']), alias='Int')
 Float = Union(*([float] + np.sctypes['float']), alias='Float')
 Bool = Union(bool, np.bool_, alias='Bool')
 Number = Union(Int, Bool, Float, alias='Number')
-NPNumeric = Union(Number, np.ndarray, alias='NPNumeric')
-AGNumeric = Union(NPNumeric, Box, alias='AGNumeric')
-TFNumeric = Union(Number,
-                  _tf_tensor,
+NPNumeric = Union(np.ndarray, alias='NPNumeric')
+AGNumeric = Union(Box, alias='AGNumeric')
+TFNumeric = Union(_tf_tensor,
                   _tf_variable,
                   _tf_indexedslices, alias='TFNumeric')
-TorchNumeric = Union(Number, _torch_tensor, alias='TorchNumeric')
-Numeric = Union(NPNumeric,
+TorchNumeric = Union(_torch_tensor, alias='TorchNumeric')
+Numeric = Union(Number,
+                NPNumeric,
                 AGNumeric,
                 TFNumeric,
                 TorchNumeric, alias='Numeric')
