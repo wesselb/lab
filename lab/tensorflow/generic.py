@@ -3,17 +3,17 @@
 from __future__ import absolute_import, division, print_function
 
 import tensorflow as tf
-from plum import convert, Callable
+from plum import Callable
 
-from . import dispatch, B
+from . import dispatch, B, Numeric
 from .custom import tensorflow_register
 from ..custom import bvn_cdf, s_bvn_cdf
-from ..types import TFNumeric, TFDType, NPNumeric, Number, Int
+from ..types import TFDType, Int
 
 __all__ = []
 
 
-@dispatch(TFNumeric)
+@dispatch(Numeric)
 def isnan(a):
     return tf.math.is_nan(a)
 
@@ -43,117 +43,117 @@ def range(dtype, start, stop, step):
     return tf.range(start, stop, step, dtype=dtype)
 
 
-@dispatch(TFDType, {TFNumeric, NPNumeric, Number})
+@dispatch(TFDType, Numeric)
 def cast(dtype, a):
     return tf.cast(a, dtype=dtype)
 
 
-@dispatch(TFNumeric)
+@dispatch(Numeric)
 def identity(a):
     return tf.identity(a)
 
 
-@dispatch(TFNumeric)
+@dispatch(Numeric)
 def abs(a):
     return tf.abs(a)
 
 
-@dispatch(TFNumeric)
+@dispatch(Numeric)
 def sign(a):
     return tf.sign(a)
 
 
-@dispatch(TFNumeric)
+@dispatch(Numeric)
 def sqrt(a):
     return tf.sqrt(a)
 
 
-@dispatch(TFNumeric)
+@dispatch(Numeric)
 def exp(a):
     return tf.exp(a)
 
 
-@dispatch(TFNumeric)
+@dispatch(Numeric)
 def log(a):
     return tf.math.log(a)
 
 
-@dispatch(TFNumeric)
+@dispatch(Numeric)
 def sin(a):
     return tf.sin(a)
 
 
-@dispatch(TFNumeric)
+@dispatch(Numeric)
 def cos(a):
     return tf.cos(a)
 
 
-@dispatch(TFNumeric)
+@dispatch(Numeric)
 def tan(a):
     return tf.tan(a)
 
 
-@dispatch(TFNumeric)
+@dispatch(Numeric)
 def tanh(a):
     return tf.tanh(a)
 
 
-@dispatch(TFNumeric, TFNumeric)
+@dispatch(Numeric, Numeric)
 def add(a, b):
     return tf.add(a, b)
 
 
-@dispatch(TFNumeric, TFNumeric)
+@dispatch(Numeric, Numeric)
 def subtract(a, b):
     return tf.subtract(a, b)
 
 
-@dispatch(TFNumeric, TFNumeric)
+@dispatch(Numeric, Numeric)
 def multiply(a, b):
     return tf.multiply(a, b)
 
 
-@dispatch(TFNumeric, TFNumeric)
+@dispatch(Numeric, Numeric)
 def divide(a, b):
     return tf.divide(a, b)
 
 
-@dispatch(TFNumeric, TFNumeric)
+@dispatch(Numeric, Numeric)
 def power(a, b):
     return tf.pow(a, b)
 
 
-@dispatch(TFNumeric, TFNumeric)
+@dispatch(Numeric, Numeric)
 def minimum(a, b):
     return tf.minimum(a, b)
 
 
-@dispatch(TFNumeric, TFNumeric)
+@dispatch(Numeric, Numeric)
 def maximum(a, b):
     return tf.maximum(a, b)
 
 
-@dispatch(TFNumeric)
+@dispatch(Numeric)
 def min(a, axis=None):
     return tf.reduce_min(a, axis=axis)
 
 
-@dispatch(TFNumeric)
+@dispatch(Numeric)
 def max(a, axis=None):
     return tf.reduce_max(a, axis=axis)
 
 
-@dispatch(TFNumeric)
+@dispatch(Numeric)
 def sum(a, axis=None):
     return tf.reduce_sum(a, axis=axis)
 
 
-@dispatch(TFNumeric)
+@dispatch(Numeric)
 def mean(a, axis=None):
     return tf.reduce_mean(a, axis=axis)
 
 
-@dispatch(TFNumeric)
+@dispatch(Numeric)
 def std(a, axis=None):
     if axis is None:
         axes = list(range(B.rank(a)))
@@ -163,46 +163,46 @@ def std(a, axis=None):
     return tf.sqrt(var)
 
 
-@dispatch(TFNumeric)
+@dispatch(Numeric)
 def all(a, axis=None):
     return tf.reduce_all(a, axis=axis)
 
 
-@dispatch(TFNumeric)
+@dispatch(Numeric)
 def any(a, axis=None):
     return tf.reduce_any(a, axis=axis)
 
 
-@dispatch(TFNumeric, TFNumeric)
+@dispatch(Numeric, Numeric)
 def lt(a, b):
     return tf.less(a, b)
 
 
-@dispatch(TFNumeric, TFNumeric)
+@dispatch(Numeric, Numeric)
 def le(a, b):
     return tf.less_equal(a, b)
 
 
-@dispatch(TFNumeric, TFNumeric)
+@dispatch(Numeric, Numeric)
 def gt(a, b):
     return tf.greater(a, b)
 
 
-@dispatch(TFNumeric, TFNumeric)
+@dispatch(Numeric, Numeric)
 def ge(a, b):
     return tf.greater_equal(a, b)
 
 
 f = tensorflow_register(bvn_cdf, s_bvn_cdf)
-dispatch(TFNumeric, TFNumeric, TFNumeric)(f)
+dispatch(Numeric, Numeric, Numeric)(f)
 
 
-@dispatch(Callable, TFNumeric, [TFNumeric])
+@dispatch(Callable, Numeric, [Numeric])
 def scan(f, xs, *init_state):
     return tf.scan(f, xs, initializer=init_state)
 
 
-@dispatch(TFNumeric)
+@dispatch(Numeric)
 def sort(a, axis=-1, descending=False):
     if descending:
         direction = 'DESCENDING'
@@ -211,7 +211,7 @@ def sort(a, axis=-1, descending=False):
     return tf.sort(a, axis=axis, direction=direction)
 
 
-@dispatch(TFNumeric)
+@dispatch(Numeric)
 def argsort(a, axis=-1, descending=False):
     if descending:
         direction = 'DESCENDING'

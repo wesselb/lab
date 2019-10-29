@@ -5,29 +5,29 @@ from __future__ import absolute_import, division, print_function
 import numpy as np
 import tensorflow as tf
 
-from . import dispatch, B
+from . import dispatch, B, Numeric
 from ..shaping import _vec_to_tril_shape_upper_perm
-from ..types import TFNumeric, Int
+from ..types import Int
 
 __all__ = []
 
 
-@dispatch(TFNumeric)
+@dispatch(Numeric)
 def length(a):
     return tf.size(a)
 
 
-@dispatch(TFNumeric)
+@dispatch(Numeric)
 def expand_dims(a, axis=0):
     return tf.expand_dims(a, axis=axis)
 
 
-@dispatch(TFNumeric)
+@dispatch(Numeric)
 def squeeze(a):
     return tf.squeeze(a)
 
 
-@dispatch(TFNumeric)
+@dispatch(Numeric)
 def diag(a):
     if B.rank(a) == 1:
         return tf.linalg.diag(a)
@@ -37,7 +37,7 @@ def diag(a):
         raise ValueError('Argument must have rank 1 or 2.')
 
 
-@dispatch(TFNumeric)
+@dispatch(Numeric)
 def vec_to_tril(a):
     if B.rank(a) != 1:
         raise ValueError('Input must be rank 1.')
@@ -46,7 +46,7 @@ def vec_to_tril(a):
     return tf.reshape(tf.gather(a, perm), [m, m])
 
 
-@dispatch(TFNumeric)
+@dispatch(Numeric)
 def tril_to_vec(a):
     if B.rank(a) != 2:
         raise ValueError('Input must be rank 2.')
@@ -56,32 +56,32 @@ def tril_to_vec(a):
     return tf.gather_nd(a, list(zip(*np.tril_indices(int(n)))))
 
 
-@dispatch([TFNumeric])
+@dispatch([Numeric])
 def stack(*elements, **kw_args):
     return tf.stack(elements, axis=kw_args.get('axis', 0))
 
 
-@dispatch(TFNumeric)
+@dispatch(Numeric)
 def unstack(a, axis=0):
     return tf.unstack(a, axis=axis)
 
 
-@dispatch(TFNumeric, [Int])
+@dispatch(Numeric, [Int])
 def reshape(a, *shape):
     return tf.reshape(a, shape=shape)
 
 
-@dispatch([TFNumeric])
+@dispatch([Numeric])
 def concat(*elements, **kw_args):
     return tf.concat(elements, axis=kw_args.get('axis', 0))
 
 
-@dispatch(TFNumeric, [Int])
+@dispatch(Numeric, [Int])
 def tile(a, *repeats):
     return tf.tile(a, repeats)
 
 
-@dispatch(TFNumeric, object)
+@dispatch(Numeric, object)
 def take(a, indices_or_mask, axis=0):
     if B.rank(indices_or_mask) != 1:
         raise ValueError('Indices or mask must be rank 1.')

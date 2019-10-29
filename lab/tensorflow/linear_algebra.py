@@ -4,21 +4,20 @@ from __future__ import absolute_import, division, print_function
 
 import tensorflow as tf
 
-from . import dispatch, B
+from . import dispatch, B, Numeric
 from .custom import tensorflow_register
 from ..custom import toeplitz_solve, s_toeplitz_solve
 from ..linear_algebra import _default_perm
-from ..types import TFNumeric
 
 __all__ = []
 
 
-@dispatch(TFNumeric, TFNumeric)
+@dispatch(Numeric, Numeric)
 def matmul(a, b, tr_a=False, tr_b=False):
     return tf.matmul(a, b, transpose_a=tr_a, transpose_b=tr_b)
 
 
-@dispatch(TFNumeric)
+@dispatch(Numeric)
 def transpose(a, perm=None):
     # Correctly handle special cases.
     rank_a = B.rank(a)
@@ -32,7 +31,7 @@ def transpose(a, perm=None):
     return tf.transpose(a, perm=perm)
 
 
-@dispatch(TFNumeric)
+@dispatch(Numeric)
 def trace(a, axis1=0, axis2=1):
     perm = [i for i in range(B.rank(a)) if i not in [axis1, axis2]]
     perm += [axis1, axis2]
@@ -40,7 +39,7 @@ def trace(a, axis1=0, axis2=1):
     return tf.linalg.trace(a)
 
 
-@dispatch(TFNumeric, TFNumeric)
+@dispatch(Numeric, Numeric)
 def kron(a, b):
     shape_a = B.shape(a)
     shape_b = B.shape(b)
@@ -55,46 +54,46 @@ def kron(a, b):
     return tf.reshape(a * b, tuple(x * y for x, y in zip(shape_a, shape_b)))
 
 
-@dispatch(TFNumeric)
+@dispatch(Numeric)
 def svd(a, compute_uv=True):
     res = tf.linalg.svd(a, full_matrices=False, compute_uv=compute_uv)
     return (res[1], res[0], res[2]) if compute_uv else res
 
 
-@dispatch(TFNumeric, TFNumeric)
+@dispatch(Numeric, Numeric)
 def solve(a, b):
     return tf.linalg.solve(a, b)
 
 
-@dispatch(TFNumeric)
+@dispatch(Numeric)
 def inv(a):
     return tf.linalg.inv(a)
 
 
-@dispatch(TFNumeric)
+@dispatch(Numeric)
 def det(a):
     return tf.linalg.det(a)
 
 
-@dispatch(TFNumeric)
+@dispatch(Numeric)
 def logdet(a):
     return tf.linalg.logdet(a)
 
 
-@dispatch(TFNumeric)
+@dispatch(Numeric)
 def cholesky(a):
     return tf.linalg.cholesky(a)
 
 
-@dispatch(TFNumeric, TFNumeric)
+@dispatch(Numeric, Numeric)
 def cholesky_solve(a, b):
     return tf.linalg.cholesky_solve(a, b)
 
 
-@dispatch(TFNumeric, TFNumeric)
+@dispatch(Numeric, Numeric)
 def triangular_solve(a, b, lower_a=True):
     return tf.linalg.triangular_solve(a, b, lower=lower_a)
 
 
 f = tensorflow_register(toeplitz_solve, s_toeplitz_solve)
-dispatch(TFNumeric, TFNumeric, TFNumeric)(f)
+dispatch(Numeric, Numeric, Numeric)(f)
