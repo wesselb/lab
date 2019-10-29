@@ -3,10 +3,19 @@
 from __future__ import absolute_import, division, print_function
 
 import numpy as np
-from plum import Callable
+from plum import Callable, convert, add_conversion_method
 
 from . import dispatch, B, Dispatcher
-from .types import Numeric, DType, Int
+from .types import (
+    Number,
+    Numeric,
+    DType,
+    Int,
+    NPNumeric,
+    AGNumeric,
+    TFNumeric,
+    TorchNumeric,
+)
 from .util import abstract
 
 __all__ = ['nan',
@@ -55,7 +64,8 @@ __all__ = ['nan',
            'bvn_cdf',
            'scan',
            'sort',
-           'argsort']
+           'argsort',
+           'to_numpy']
 
 _dispatch = Dispatcher()
 
@@ -819,3 +829,22 @@ def argsort(a, axis=-1, descending=False):
     Returns:
         tensor: The indices that would sort `a`.
     """
+
+
+add_conversion_method(Number, NPNumeric, np.array)
+add_conversion_method(AGNumeric, NPNumeric,
+                      lambda x: convert(x._value, NPNumeric))
+add_conversion_method(TFNumeric, NPNumeric, lambda x: x.numpy())
+add_conversion_method(TorchNumeric, NPNumeric, lambda x: x.detach().numpy())
+
+
+def to_numpy(a):
+    """Convert an object to NumPy.
+
+    Args:
+        a (object): Object to convert.
+
+    Returns:
+        `np.ndarray`: `a` as NumPy.
+    """
+    return convert(a, NPNumeric)

@@ -272,3 +272,8 @@ def test_argsort():
                    {'axis': Value(-1, 0, 1, 2), 'descending': Bool()},
                    skip=[B.AGNumeric],
                    assert_dtype=False)
+
+
+def test_to_numpy():
+    check_function(B.to_numpy, (Tensor(),))
+    check_function(B.to_numpy, (Tensor(4),))
