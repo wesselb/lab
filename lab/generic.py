@@ -831,13 +831,13 @@ def argsort(a, axis=-1, descending=False):
     """
 
 
-add_conversion_method(Number, NPNumeric, np.array)
-add_conversion_method(AGNumeric, NPNumeric,
-                      lambda x: convert(x._value, NPNumeric))
-add_conversion_method(TFNumeric, NPNumeric, lambda x: x.numpy())
-add_conversion_method(TorchNumeric, NPNumeric, lambda x: x.detach().numpy())
+NPOrNum = {NPNumeric, Number}  #: Type NumPy numeric or number.
+add_conversion_method(AGNumeric, NPOrNum, lambda x: x._value)
+add_conversion_method(TFNumeric, NPOrNum, lambda x: x.numpy())
+add_conversion_method(TorchNumeric, NPOrNum, lambda x: x.detach().numpy())
 
 
+@dispatch(object)
 def to_numpy(a):
     """Convert an object to NumPy.
 
@@ -847,4 +847,24 @@ def to_numpy(a):
     Returns:
         `np.ndarray`: `a` as NumPy.
     """
-    return convert(a, NPNumeric)
+    return convert(a, NPOrNum)
+
+
+@dispatch([object])
+def to_numpy(*elements):
+    return to_numpy(elements)
+
+
+@dispatch(list)
+def to_numpy(a):
+    return [to_numpy(x) for x in a]
+
+
+@dispatch(tuple)
+def to_numpy(a):
+    return tuple(to_numpy(x) for x in a)
+
+
+@dispatch(dict)
+def to_numpy(a):
+    return {k: to_numpy(v) for k, v in a.items()}

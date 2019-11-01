@@ -277,3 +277,22 @@ def test_argsort():
 def test_to_numpy():
     check_function(B.to_numpy, (Tensor(),))
     check_function(B.to_numpy, (Tensor(4),))
+
+
+def test_to_numpy_multiple_objects():
+    assert B.to_numpy(tf.constant(1), tf.constant(1)) == (1, 1)
+
+
+def test_to_numpy_list():
+    x = B.to_numpy([tf.constant(1)])
+    assert isinstance(x[0], (B.Number, B.NPNumeric))
+
+
+def test_to_numpy_tuple():
+    x = B.to_numpy((tf.constant(1),))
+    assert isinstance(x[0], (B.Number, B.NPNumeric))
+
+
+def test_to_numpy_dict():
+    x = B.to_numpy({'a': tf.constant(1)})
+    assert isinstance(x['a'], (B.Number, B.NPNumeric))
