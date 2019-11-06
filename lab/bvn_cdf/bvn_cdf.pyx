@@ -1,3 +1,6 @@
+# Apparently this future import is needed to fix the NumPy import.
+from __future__ import absolute_import
+
 cimport numpy as np
 import numpy as np
 
