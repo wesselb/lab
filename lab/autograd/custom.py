@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import absolute_import, division, print_function
-
 from autograd.extend import primitive, defvjp_argnums
 from plum import Dispatcher
 

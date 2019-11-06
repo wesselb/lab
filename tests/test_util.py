@@ -1,22 +1,18 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import absolute_import, division, print_function
+import numpy as np
+import plum
+import pytest
+from plum import NotFoundLookupError
 
 import lab as B
 import lab.autograd as B_autograd
 import lab.tensorflow as B_tf
 import lab.torch as B_torch
-import numpy as np
-import plum
-import pytest
 from lab.util import (
     abstract,
     batch_computation,
     _common_shape,
     _translate_index
 )
-from plum import NotFoundLookupError
-
 from .util import allclose
 
 
@@ -80,10 +76,10 @@ def test_metadata():
 
 
 def test_abstract():
-    class General(object):
+    class General:
         pass
 
-    class Specific(object):
+    class Specific:
         pass
 
     a = General()

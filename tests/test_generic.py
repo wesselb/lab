@@ -1,8 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import absolute_import, division, print_function
-
-import lab as B
 import numpy as np
 import pytest
 import scipy.special
@@ -10,6 +5,7 @@ import tensorflow as tf
 import torch
 from plum import NotFoundLookupError
 
+import lab as B
 from .util import (
     autograd_box,
     check_function,

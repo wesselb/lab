@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import absolute_import, division, print_function
-
 import tensorflow as tf
 from autograd import grad
 from fdm import check_sensitivity, gradient

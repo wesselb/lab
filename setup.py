@@ -53,7 +53,7 @@ requirements = ['numpy>=1.16',
                 'plum-dispatch']
 
 setup(packages=find_packages(exclude=['docs']),
-      python_requires='>=3.5',
+      python_requires='>=3.6',
       install_requires=requirements,
       cmdclass={'build_ext': build_ext},
       ext_modules=[Extension('lab.bvn_cdf',

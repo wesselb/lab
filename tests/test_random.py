@@ -1,15 +1,11 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import absolute_import, division, print_function
-
 import warnings
 
-import lab as B
 import numpy  as np
 import pytest
 import tensorflow as tf
 import torch
 
+import lab as B
 from .util import (
     Tensor,
     allclose,

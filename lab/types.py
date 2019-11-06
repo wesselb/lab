@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import absolute_import, division, print_function
-
 import sys
 
 import numpy as np
@@ -50,7 +46,7 @@ __all__ = ['Int',
 
 
 @parametric
-class UnimportedType(object):
+class UnimportedType:
     """Parametric type that represents a type that yet has to be loaded."""
 
 

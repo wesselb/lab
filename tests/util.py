@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import absolute_import, division, print_function
-
 import logging
 from itertools import product
 
@@ -9,10 +5,9 @@ import numpy as np
 import plum
 import tensorflow as tf
 import torch
-from plum import Dispatcher
-
-from autograd.tracer import trace_stack, new_box
 from autograd.core import VJPNode, getval
+from autograd.tracer import trace_stack, new_box
+from plum import Dispatcher
 
 import lab as B
 
@@ -147,7 +142,7 @@ def check_function(f, args_spec,
             allclose(first_result, f(*args, **kw_args), assert_dtype)
 
 
-class Tensor(object):
+class Tensor:
     """Tensor placeholder."""
 
     def __init__(self, *dims, **kw_args):
@@ -259,7 +254,7 @@ class PSDTriangular(PSD):
             self.mat = np.transpose(self.mat, perm)
 
 
-class Tuple(object):
+class Tuple:
     """Tuple placeholder."""
 
     def __init__(self, *xs):
@@ -269,7 +264,7 @@ class Tuple(object):
         return tuple(zip(*(x.forms() for x in self.xs)))
 
 
-class List(object):
+class List:
     """List placeholder for in argument specification."""
 
     def __init__(self, *xs):
@@ -279,7 +274,7 @@ class List(object):
         return list(zip(*(x.forms() for x in self.xs)))
 
 
-class Value(object):
+class Value:
     """Value placeholder."""
 
     def __init__(self, *values):
