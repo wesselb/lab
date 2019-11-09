@@ -240,6 +240,7 @@ range(stop)
 cast(dtype, a)
 
 identity(a)
+negative(a)
 abs(a)
 sign(a)
 sqrt(a)

@@ -130,6 +130,7 @@ def test_cast():
 
 
 @pytest.mark.parametrize('f', [B.identity,
+                               B.negative,
                                B.abs,
                                B.sign,
                                B.exp,

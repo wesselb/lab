@@ -51,6 +51,11 @@ def identity(a):
 
 
 @dispatch(Numeric)
+def negative(a):
+    return np.negative(a)
+
+
+@dispatch(Numeric)
 def abs(a):
     return np.abs(a)
 

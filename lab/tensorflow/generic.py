@@ -50,6 +50,11 @@ def identity(a):
 
 
 @dispatch(Numeric)
+def negative(a):
+    return tf.negative(a)
+
+
+@dispatch(Numeric)
 def abs(a):
     return tf.abs(a)
 

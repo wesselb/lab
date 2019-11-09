@@ -25,6 +25,7 @@ __all__ = ['nan',
            'range',
            'cast',
            'identity',
+           'negative',
            'abs',
            'sign',
            'sqrt',
@@ -266,6 +267,19 @@ def identity(a):  # pragma: no cover
 
     Returns:
         tensor: `a` exactly.
+    """
+
+
+@dispatch(Numeric)
+@abstract()
+def negative(a):  # pragma: no cover
+    """Negate a tensor.
+
+    Args:
+        a (tensor): Tensor.
+
+    Returns:
+        tensor: Negative of `a`.
     """
 
 

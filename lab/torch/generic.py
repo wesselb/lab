@@ -54,6 +54,11 @@ def identity(a):
 
 
 @dispatch(Numeric)
+def negative(a):
+    return torch.neg(a)
+
+
+@dispatch(Numeric)
 def abs(a):
     return torch.abs(a)
 

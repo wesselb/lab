@@ -28,6 +28,11 @@ def identity(a):
 
 
 @dispatch(Numeric)
+def negative(a):
+    return anp.negative(a)
+
+
+@dispatch(Numeric)
 def abs(a):
     return anp.abs(a)
 
