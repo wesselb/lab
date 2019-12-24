@@ -223,6 +223,12 @@ ones(dtype, *shape)
 ones(*shape)
 ones(ref)
 
+one(dtype)
+one(ref)
+
+zero(dtype)
+zero(ref)
+
 eye(dtype, *shape)
 eye(*shape)
 eye(ref)

@@ -43,10 +43,11 @@ def test_zeros_ones_eye(f):
     assert B.shape(f(2)) == (2, 2) if f is B.eye else (2,)
     assert B.shape(f(2, 3)) == (2, 3)
 
-    # Check shape type of calls.
+    # Check type of calls.
     assert B.dtype(f(2)) == B.default_dtype
     assert B.dtype(f(2, 3)) == B.default_dtype
 
+    # Check reference calls.
     for t1, t2 in [(np.float32, np.int64),
                    (tf.float32, tf.int64),
                    (torch.float32, torch.int64)]:
@@ -57,10 +58,20 @@ def test_zeros_ones_eye(f):
         assert B.shape(f(t2, 2, 3)) == (2, 3)
         assert B.shape(f(ref)) == (4, 5)
 
-        # Check shape type of calls.
+        # Check type of calls.
         assert B.dtype(f(t2, 2)) == t2
         assert B.dtype(f(t2, 2, 3)) == t2
         assert B.dtype(f(ref)) == t1
+
+
+@pytest.mark.parametrize('f', [B.zero, B.one])
+def test_zero_one(f):
+    # Check consistency.
+    check_function(f, (Value(np.float32, tf.float32, torch.float32),))
+
+    # Check reference calls.
+    for t in [np.float32, tf.float32, torch.float32]:
+        assert B.dtype(f(B.randn(t))) == t
 
 
 def test_eye_exceptions():

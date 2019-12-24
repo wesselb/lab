@@ -20,6 +20,8 @@ __all__ = ['nan',
            'isnan',
            'zeros',
            'ones',
+           'zero',
+           'one',
            'eye',
            'linspace',
            'range',
@@ -122,7 +124,7 @@ def ones(dtype, *shape):  # pragma: no cover
 
     Args:
         dtype (dtype, optional): Data type. Defaults to the default data type.
-        *shape (shape or ): Shape of the tensor.
+        *shape (shape): Shape of the tensor.
 
     Returns:
         tensor: Tensor of ones of shape `shape` and data type `dtype`.
@@ -138,6 +140,42 @@ def ones(*shape):
 @dispatch(Numeric)
 def ones(ref):
     return ones(B.dtype(ref), *B.shape(ref))
+
+
+@dispatch(DType)
+def zero(dtype):
+    """Create a `0` with a particular data type.
+
+    Args:
+        dtype (dtype): Data type.
+
+    Returns:
+        scalar: `0` with data type `dtype`.
+    """
+    return B.cast(dtype, 0)
+
+
+@dispatch(Numeric)
+def zero(ref):
+    return zero(B.dtype(ref))
+
+
+@dispatch(DType)
+def one(dtype):
+    """Create a `1` with a particular data type.
+
+    Args:
+        dtype (dtype): Data type.
+
+    Returns:
+        scalar: `1` with data type `dtype`.
+    """
+    return B.cast(dtype, 1)
+
+
+@dispatch(Numeric)
+def one(ref):
+    return one(B.dtype(ref))
 
 
 @dispatch(DType, Int, Int)
