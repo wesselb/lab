@@ -148,15 +148,20 @@
            <div itemprop="articleBody">
             
   <h1>Source code for lab.generic</h1><div class="highlight"><pre>
-<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
-
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">plum</span> <span class="k">import</span> <span class="n">Callable</span>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">plum</span> <span class="k">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">convert</span><span class="p">,</span> <span class="n">add_conversion_method</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">dispatch</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">Dispatcher</span>
-<span class="kn">from</span> <span class="nn">.types</span> <span class="k">import</span> <span class="n">Numeric</span><span class="p">,</span> <span class="n">DType</span><span class="p">,</span> <span class="n">Int</span>
+<span class="kn">from</span> <span class="nn">.types</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">Number</span><span class="p">,</span>
+    <span class="n">Numeric</span><span class="p">,</span>
+    <span class="n">DType</span><span class="p">,</span>
+    <span class="n">Int</span><span class="p">,</span>
+    <span class="n">NPNumeric</span><span class="p">,</span>
+    <span class="n">AGNumeric</span><span class="p">,</span>
+    <span class="n">TFNumeric</span><span class="p">,</span>
+    <span class="n">TorchNumeric</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">.util</span> <span class="k">import</span> <span class="n">abstract</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;nan&#39;</span><span class="p">,</span>
@@ -165,11 +170,14 @@
            <span class="s1">&#39;isnan&#39;</span><span class="p">,</span>
            <span class="s1">&#39;zeros&#39;</span><span class="p">,</span>
            <span class="s1">&#39;ones&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;zero&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;one&#39;</span><span class="p">,</span>
            <span class="s1">&#39;eye&#39;</span><span class="p">,</span>
            <span class="s1">&#39;linspace&#39;</span><span class="p">,</span>
            <span class="s1">&#39;range&#39;</span><span class="p">,</span>
            <span class="s1">&#39;cast&#39;</span><span class="p">,</span>
            <span class="s1">&#39;identity&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;negative&#39;</span><span class="p">,</span>
            <span class="s1">&#39;abs&#39;</span><span class="p">,</span>
            <span class="s1">&#39;sign&#39;</span><span class="p">,</span>
            <span class="s1">&#39;sqrt&#39;</span><span class="p">,</span>
@@ -205,7 +213,8 @@
            <span class="s1">&#39;bvn_cdf&#39;</span><span class="p">,</span>
            <span class="s1">&#39;scan&#39;</span><span class="p">,</span>
            <span class="s1">&#39;sort&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;argsort&#39;</span><span class="p">]</span>
+           <span class="s1">&#39;argsort&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;to_numpy&#39;</span><span class="p">]</span>
 
 <span class="n">_dispatch</span> <span class="o">=</span> <span class="n">Dispatcher</span><span class="p">()</span>
 
@@ -265,7 +274,7 @@
 
 <span class="sd">    Args:</span>
 <span class="sd">        dtype (dtype, optional): Data type. Defaults to the default data type.</span>
-<span class="sd">        *shape (shape or ): Shape of the tensor.</span>
+<span class="sd">        *shape (shape): Shape of the tensor.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        tensor: Tensor of ones of shape `shape` and data type `dtype`.</span>
@@ -281,6 +290,42 @@
 <div class="viewcode-block" id="ones"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.ones">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">ones</span><span class="p">(</span><span class="n">ref</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">ones</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">ref</span><span class="p">),</span> <span class="o">*</span><span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">ref</span><span class="p">))</span></div>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">DType</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">zero</span><span class="p">(</span><span class="n">dtype</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a `0` with a particular data type.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dtype (dtype): Data type.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        scalar: `0` with data type `dtype`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="zero"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.zero">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">zero</span><span class="p">(</span><span class="n">ref</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">zero</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">ref</span><span class="p">))</span></div>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="n">DType</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">one</span><span class="p">(</span><span class="n">dtype</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a `1` with a particular data type.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dtype (dtype): Data type.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        scalar: `1` with data type `dtype`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="one"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.one">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">one</span><span class="p">(</span><span class="n">ref</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">one</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">ref</span><span class="p">))</span></div>
 
 
 <span class="nd">@dispatch</span><span class="p">(</span><span class="n">DType</span><span class="p">,</span> <span class="n">Int</span><span class="p">,</span> <span class="n">Int</span><span class="p">)</span>
@@ -410,6 +455,19 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        tensor: `a` exactly.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="negative"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.negative">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
+<span class="nd">@abstract</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">negative</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;Negate a tensor.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (tensor): Tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tensor: Negative of `a`.</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
 
@@ -969,6 +1027,45 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        tensor: The indices that would sort `a`.</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<span class="n">NPOrNum</span> <span class="o">=</span> <span class="p">{</span><span class="n">NPNumeric</span><span class="p">,</span> <span class="n">Number</span><span class="p">}</span>  <span class="c1">#: Type NumPy numeric or number.</span>
+<span class="n">add_conversion_method</span><span class="p">(</span><span class="n">AGNumeric</span><span class="p">,</span> <span class="n">NPOrNum</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">_value</span><span class="p">)</span>
+<span class="n">add_conversion_method</span><span class="p">(</span><span class="n">TFNumeric</span><span class="p">,</span> <span class="n">NPOrNum</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+<span class="n">add_conversion_method</span><span class="p">(</span><span class="n">TorchNumeric</span><span class="p">,</span> <span class="n">NPOrNum</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">to_numpy</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert an object to NumPy.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (object): Object to convert.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        `np.ndarray`: `a` as NumPy.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">convert</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">NPOrNum</span><span class="p">)</span>
+
+
+<span class="nd">@dispatch</span><span class="p">([</span><span class="nb">object</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">to_numpy</span><span class="p">(</span><span class="o">*</span><span class="n">elements</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">to_numpy</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">to_numpy</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">a</span><span class="p">]</span>
+
+
+<span class="nd">@dispatch</span><span class="p">(</span><span class="nb">tuple</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">to_numpy</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">a</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="to_numpy"><a class="viewcode-back" href="../../source/lab.generic.html#lab.generic.to_numpy">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">to_numpy</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">to_numpy</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">a</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span></div>
 </pre></div>
 
            </div>

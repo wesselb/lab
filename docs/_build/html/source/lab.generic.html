@@ -96,6 +96,11 @@
 <li class="toctree-l2"><a class="reference internal" href="lab.custom.html">lab.custom module</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">lab.generic module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.linear_algebra.html">lab.linear_algebra module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.numpy.html">lab.numpy package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.numpy.generic.html">lab.numpy.generic module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.numpy.linear_algebra.html">lab.numpy.linear_algebra module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.numpy.random.html">lab.numpy.random module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.numpy.shaping.html">lab.numpy.shaping module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.random.html">lab.random module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.shaping.html">lab.shaping module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.tensorflow.html">lab.tensorflow package</a></li>
@@ -249,7 +254,7 @@ construct a tensor of ones.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>dtype</strong> (<em>dtype</em><em>, </em><em>optional</em>) – Data type. Defaults to the default data type.</p></li>
-<li><p><strong>*shape</strong> (<em>shape or</em>) – Shape of the tensor.</p></li>
+<li><p><strong>*shape</strong> (<em>shape</em>) – Shape of the tensor.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -257,6 +262,40 @@ construct a tensor of ones.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lab.generic.zero">
+<code class="descclassname">lab.generic.</code><code class="descname">zero</code><a class="reference internal" href="../_modules/lab/generic.html#zero"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.zero" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a <cite>0</cite> with a particular data type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dtype</strong> (<em>dtype</em>) – Data type.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>0</cite> with data type <cite>dtype</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>scalar</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lab.generic.one">
+<code class="descclassname">lab.generic.</code><code class="descname">one</code><a class="reference internal" href="../_modules/lab/generic.html#one"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.one" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a <cite>1</cite> with a particular data type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dtype</strong> (<em>dtype</em>) – Data type.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>1</cite> with data type <cite>dtype</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>scalar</p>
 </dd>
 </dl>
 </dd></dl>
@@ -359,6 +398,23 @@ size <cite>step</cite>.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><cite>a</cite> exactly.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lab.generic.negative">
+<code class="descclassname">lab.generic.</code><code class="descname">negative</code><a class="reference internal" href="../_modules/lab/generic.html#negative"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.negative" title="Permalink to this definition">¶</a></dt>
+<dd><p>Negate a tensor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Negative of <cite>a</cite>.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>tensor</p>
@@ -1049,6 +1105,23 @@ correlation <cite>c</cite>.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lab.generic.to_numpy">
+<code class="descclassname">lab.generic.</code><code class="descname">to_numpy</code><a class="reference internal" href="../_modules/lab/generic.html#to_numpy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.to_numpy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert an object to NumPy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>a</strong> (<em>object</em>) – Object to convert.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>a</cite> as NumPy.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>np.ndarray</cite></p>
 </dd>
 </dl>
 </dd></dl>

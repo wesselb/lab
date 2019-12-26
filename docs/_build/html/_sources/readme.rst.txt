@@ -6,7 +6,8 @@
 A generic interface for linear algebra backends: code it once, run it on
 any backend
 
-*Note:* LAB requires TensorFlow 2.
+*Note:* LAB requires Python 3.6 or higher and TensorFlow 2 if TensorFlow
+is used.
 
 -  `Installation <#installation>`__
 -  `Basic Usage <#basic-usage>`__
@@ -31,7 +32,9 @@ Installation
 Before installing the package, please ensure that ``gcc`` and
 ``gfortran`` are available. On OS X, these are both installed with
 ``brew install gcc``; users of Anaconda may want to instead consider
-``conda install gcc``. Then simply
+``conda install gcc``. On Linux, ``gcc`` is most likely already
+available, and ``gfortran`` can be installed with
+``apt-get install gfortran``. Then simply
 
 ::
 
@@ -48,16 +51,18 @@ Example:
 .. code:: python
 
     import lab as B
+    import lab.autograd    # Load the AutoGrad extension.
     import lab.torch       # Load the PyTorch extension.
     import lab.tensorflow  # Load the TensorFlow extension.
+
 
     def objective(matrix):
         outer_product = B.matmul(matrix, matrix, tr_b=True)
         return B.mean(outer_product)
 
-By default, the PyTorch and TensorFlow extensions are not loaded to save
-startup time. Alternatively, one can directly ``import lab.torch as B``
-or ``import lab.tensorflow as B``.
+The AutoGrad, PyTorch, and TensorFlow extensions are not loaded
+automatically to not enforce a dependency on all three frameworks. An
+extension can alternatively be loaded via ``import lab.autograd as B``.
 
 Run it with NumPy and AutoGrad:
 
@@ -67,6 +72,10 @@ Run it with NumPy and AutoGrad:
 
     >>> objective(B.randn(np.float64, 2, 2))
     0.15772589216756833
+
+    >>> grad(objective)(B.randn(np.float64, 2, 2))
+    array([[ 0.23519042, -1.06282928],
+           [ 0.23519042, -1.06282928]])
 
 Run it with TensorFlow:
 
@@ -137,6 +146,16 @@ NumPy
     NPDType
      
     NP           # Anything NumPy
+
+AutoGrad
+~~~~~~~~
+
+::
+
+    AGNumeric
+    AGDType
+     
+    AG           # Anything AutoGrad
 
 TensorFlow
 ~~~~~~~~~~
@@ -219,6 +238,12 @@ Generic
     ones(*shape)
     ones(ref)
 
+    one(dtype)
+    one(ref)
+
+    zero(dtype)
+    zero(ref)
+
     eye(dtype, *shape)
     eye(*shape)
     eye(ref)
@@ -236,6 +261,7 @@ Generic
     cast(dtype, a)
 
     identity(a)
+    negative(a)
     abs(a)
     sign(a)
     sqrt(a)
@@ -278,6 +304,8 @@ Generic
 
     sort(a, axis=-1, descending=False)
     argsort(a, axis=-1, descending=False)
+
+    to_numpy(a)
 
 Linear Algebra
 ~~~~~~~~~~~~~~

@@ -148,11 +148,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for lab.shaping</h1><div class="highlight"><pre>
-<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
-
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">dispatch</span>
 <span class="kn">from</span> <span class="nn">.types</span> <span class="k">import</span> <span class="n">Numeric</span><span class="p">,</span> <span class="n">Int</span>
@@ -360,7 +356,7 @@
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
 
-<div class="viewcode-block" id="stack"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.stack">[docs]</a><span class="nd">@dispatch</span><span class="p">([</span><span class="n">Numeric</span><span class="p">])</span>
+<div class="viewcode-block" id="stack"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.stack">[docs]</a><span class="nd">@dispatch</span><span class="p">([</span><span class="nb">object</span><span class="p">])</span>
 <span class="nd">@abstract</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">stack</span><span class="p">(</span><span class="o">*</span><span class="n">elements</span><span class="p">,</span> <span class="o">**</span><span class="n">kw_args</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
     <span class="sd">&quot;&quot;&quot;Concatenate tensors along a new axis.</span>
@@ -402,7 +398,7 @@
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
 
-<div class="viewcode-block" id="concat"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.concat">[docs]</a><span class="nd">@dispatch</span><span class="p">([</span><span class="n">Numeric</span><span class="p">])</span>
+<div class="viewcode-block" id="concat"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.concat">[docs]</a><span class="nd">@dispatch</span><span class="p">([</span><span class="nb">object</span><span class="p">])</span>
 <span class="nd">@abstract</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">concat</span><span class="p">(</span><span class="o">*</span><span class="n">elements</span><span class="p">,</span> <span class="o">**</span><span class="n">kw_args</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
     <span class="sd">&quot;&quot;&quot;Concatenate tensors along an axis.</span>

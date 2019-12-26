@@ -91,6 +91,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#list-of-types">List of Types</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#general">General</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#numpy">NumPy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#autograd">AutoGrad</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#tensorflow">TensorFlow</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pytorch">PyTorch</a></li>
 </ul>
@@ -176,7 +177,8 @@
 <p><a class="reference external" href="https://travis-ci.org/wesselb/lab"><img alt="Build" src="https://travis-ci.org/wesselb/lab.svg?branch=master" /></a> <a class="reference external" href="https://coveralls.io/github/wesselb/lab?branch=master"><img alt="Coverage Status" src="https://coveralls.io/repos/github/wesselb/lab/badge.svg?branch=master&amp;service=github" /></a> <a class="reference external" href="https://wesselb.github.io/lab"><img alt="Latest Docs" src="https://img.shields.io/badge/docs-latest-blue.svg" /></a></p>
 <p>A generic interface for linear algebra backends: code it once, run it on
 any backend</p>
-<p><em>Note:</em> LAB requires TensorFlow 2.</p>
+<p><em>Note:</em> LAB requires Python 3.6 or higher and TensorFlow 2 if TensorFlow
+is used.</p>
 <ul class="simple">
 <li><p><a class="reference external" href="#installation">Installation</a></p></li>
 <li><p><a class="reference external" href="#basic-usage">Basic Usage</a></p></li>
@@ -203,7 +205,9 @@ any backend</p>
 <p>Before installing the package, please ensure that <code class="docutils literal notranslate"><span class="pre">gcc</span></code> and
 <code class="docutils literal notranslate"><span class="pre">gfortran</span></code> are available. On OS X, these are both installed with
 <code class="docutils literal notranslate"><span class="pre">brew</span> <span class="pre">install</span> <span class="pre">gcc</span></code>; users of Anaconda may want to instead consider
-<code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">gcc</span></code>. Then simply</p>
+<code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">gcc</span></code>. On Linux, <code class="docutils literal notranslate"><span class="pre">gcc</span></code> is most likely already
+available, and <code class="docutils literal notranslate"><span class="pre">gfortran</span></code> can be installed with
+<code class="docutils literal notranslate"><span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">gfortran</span></code>. Then simply</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">backends</span>
 </pre></div>
 </div>
@@ -214,22 +218,28 @@ any backend</p>
 determines the backend to use depending on the types of its arguments.</p>
 <p>Example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">lab</span> <span class="kn">as</span> <span class="nn">B</span>
+<span class="kn">import</span> <span class="nn">lab.autograd</span>    <span class="c1"># Load the AutoGrad extension.</span>
 <span class="kn">import</span> <span class="nn">lab.torch</span>       <span class="c1"># Load the PyTorch extension.</span>
 <span class="kn">import</span> <span class="nn">lab.tensorflow</span>  <span class="c1"># Load the TensorFlow extension.</span>
+
 
 <span class="k">def</span> <span class="nf">objective</span><span class="p">(</span><span class="n">matrix</span><span class="p">):</span>
     <span class="n">outer_product</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">matrix</span><span class="p">,</span> <span class="n">tr_b</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">outer_product</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>By default, the PyTorch and TensorFlow extensions are not loaded to save
-startup time. Alternatively, one can directly <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">lab.torch</span> <span class="pre">as</span> <span class="pre">B</span></code>
-or <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">lab.tensorflow</span> <span class="pre">as</span> <span class="pre">B</span></code>.</p>
+<p>The AutoGrad, PyTorch, and TensorFlow extensions are not loaded
+automatically to not enforce a dependency on all three frameworks. An
+extension can alternatively be loaded via <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">lab.autograd</span> <span class="pre">as</span> <span class="pre">B</span></code>.</p>
 <p>Run it with NumPy and AutoGrad:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">autograd.numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">objective</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 <span class="go">0.15772589216756833</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">grad</span><span class="p">(</span><span class="n">objective</span><span class="p">)(</span><span class="n">B</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="go">array([[ 0.23519042, -1.06282928],</span>
+<span class="go">       [ 0.23519042, -1.06282928]])</span>
 </pre></div>
 </div>
 <p>Run it with TensorFlow:</p>
@@ -290,6 +300,15 @@ of objects or extend functions.</p>
 <span class="n">NPDType</span>
 
 <span class="n">NP</span>           <span class="c1"># Anything NumPy</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="autograd">
+<h3>AutoGrad<a class="headerlink" href="#autograd" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">AGNumeric</span>
+<span class="n">AGDType</span>
+
+<span class="n">AG</span>           <span class="c1"># Anything AutoGrad</span>
 </pre></div>
 </div>
 </div>
@@ -367,6 +386,12 @@ creates a tensor full of zeros of the same shape and data type as
 <span class="n">ones</span><span class="p">(</span><span class="o">*</span><span class="n">shape</span><span class="p">)</span>
 <span class="n">ones</span><span class="p">(</span><span class="n">ref</span><span class="p">)</span>
 
+<span class="n">one</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+<span class="n">one</span><span class="p">(</span><span class="n">ref</span><span class="p">)</span>
+
+<span class="n">zero</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+<span class="n">zero</span><span class="p">(</span><span class="n">ref</span><span class="p">)</span>
+
 <span class="n">eye</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">)</span>
 <span class="n">eye</span><span class="p">(</span><span class="o">*</span><span class="n">shape</span><span class="p">)</span>
 <span class="n">eye</span><span class="p">(</span><span class="n">ref</span><span class="p">)</span>
@@ -384,6 +409,7 @@ creates a tensor full of zeros of the same shape and data type as
 <span class="n">cast</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
 
 <span class="n">identity</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">negative</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 <span class="nb">abs</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 <span class="n">sign</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 <span class="n">sqrt</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
@@ -426,6 +452,8 @@ creates a tensor full of zeros of the same shape and data type as
 
 <span class="n">sort</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">descending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">argsort</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">descending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">to_numpy</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

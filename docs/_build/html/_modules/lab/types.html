@@ -148,14 +148,9 @@
            <div itemprop="articleBody">
             
   <h1>Source code for lab.types</h1><div class="highlight"><pre>
-<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
-
-<span class="kn">import</span> <span class="nn">sys</span>
+<span></span><span class="kn">import</span> <span class="nn">sys</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">autograd.tracer</span> <span class="k">import</span> <span class="n">Box</span>
 <span class="kn">from</span> <span class="nn">plum</span> <span class="k">import</span> <span class="p">(</span>
     <span class="n">Union</span><span class="p">,</span>
     <span class="n">add_conversion_method</span><span class="p">,</span>
@@ -169,16 +164,39 @@
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">dispatch</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Int&#39;</span><span class="p">,</span> <span class="s1">&#39;Float&#39;</span><span class="p">,</span> <span class="s1">&#39;Bool&#39;</span><span class="p">,</span> <span class="s1">&#39;Number&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;NPNumeric&#39;</span><span class="p">,</span> <span class="s1">&#39;TFNumeric&#39;</span><span class="p">,</span> <span class="s1">&#39;TorchNumeric&#39;</span><span class="p">,</span> <span class="s1">&#39;Numeric&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;NPDType&#39;</span><span class="p">,</span> <span class="s1">&#39;TFDType&#39;</span><span class="p">,</span> <span class="s1">&#39;TorchDType&#39;</span><span class="p">,</span> <span class="s1">&#39;DType&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;default_dtype&#39;</span><span class="p">,</span> <span class="s1">&#39;issubdtype&#39;</span><span class="p">,</span> <span class="s1">&#39;dtype&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;NP&#39;</span><span class="p">,</span> <span class="s1">&#39;TF&#39;</span><span class="p">,</span> <span class="s1">&#39;Torch&#39;</span><span class="p">,</span> <span class="s1">&#39;Framework&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;_tf_retrievables&#39;</span><span class="p">,</span> <span class="s1">&#39;_torch_retrievables&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Int&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;Float&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;Bool&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;Number&#39;</span><span class="p">,</span>
+
+           <span class="s1">&#39;NPNumeric&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;AGNumeric&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;TFNumeric&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;TorchNumeric&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;Numeric&#39;</span><span class="p">,</span>
+
+           <span class="s1">&#39;NPDType&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;AGDType&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;TFDType&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;TorchDType&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;DType&#39;</span><span class="p">,</span>
+
+           <span class="s1">&#39;default_dtype&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;issubdtype&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;dtype&#39;</span><span class="p">,</span>
+
+           <span class="s1">&#39;NP&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;AG&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;TF&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;Torch&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;Framework&#39;</span><span class="p">,</span>
+
+           <span class="s1">&#39;_tf_retrievables&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;_torch_retrievables&#39;</span><span class="p">]</span>
 
 
 <span class="nd">@parametric</span>
-<span class="k">class</span> <span class="nc">UnimportedType</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">UnimportedType</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Parametric type that represents a type that yet has to be loaded.&quot;&quot;&quot;</span>
 
 
@@ -236,16 +254,26 @@
 <span class="n">_torch_dtype</span> <span class="o">=</span> <span class="n">ModuleType</span><span class="p">(</span><span class="s1">&#39;torch&#39;</span><span class="p">,</span> <span class="s1">&#39;dtype&#39;</span><span class="p">)</span>
 <span class="n">_torch_retrievables</span> <span class="o">=</span> <span class="p">[</span><span class="n">_torch_tensor</span><span class="p">,</span> <span class="n">_torch_dtype</span><span class="p">]</span>
 
+<span class="c1"># Define AutoGrad module types.</span>
+<span class="n">_ag_tensor</span> <span class="o">=</span> <span class="n">ModuleType</span><span class="p">(</span><span class="s1">&#39;autograd.tracer&#39;</span><span class="p">,</span> <span class="s1">&#39;Box&#39;</span><span class="p">)</span>
+<span class="n">_ag_retrievables</span> <span class="o">=</span> <span class="p">[</span><span class="n">_ag_tensor</span><span class="p">]</span>
+
 <span class="c1"># Numeric types:</span>
 <span class="n">Int</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="o">*</span><span class="p">([</span><span class="nb">int</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sctypes</span><span class="p">[</span><span class="s1">&#39;int&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sctypes</span><span class="p">[</span><span class="s1">&#39;uint&#39;</span><span class="p">]),</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;Int&#39;</span><span class="p">)</span>
 <span class="n">Float</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="o">*</span><span class="p">([</span><span class="nb">float</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sctypes</span><span class="p">[</span><span class="s1">&#39;float&#39;</span><span class="p">]),</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;Float&#39;</span><span class="p">)</span>
 <span class="n">Bool</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">bool_</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;Bool&#39;</span><span class="p">)</span>
-<span class="n">Number</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">Int</span><span class="p">,</span> <span class="n">Float</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;Number&#39;</span><span class="p">)</span>
-<span class="n">NPNumeric</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">Number</span><span class="p">,</span> <span class="n">Bool</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Box</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;NPNumeric&#39;</span><span class="p">)</span>
-<span class="n">TFNumeric</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">_tf_tensor</span><span class="p">,</span> <span class="n">_tf_variable</span><span class="p">,</span> <span class="n">_tf_indexedslices</span><span class="p">,</span>
-                  <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;TFNumeric&#39;</span><span class="p">)</span>
+<span class="n">Number</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">Int</span><span class="p">,</span> <span class="n">Bool</span><span class="p">,</span> <span class="n">Float</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;Number&#39;</span><span class="p">)</span>
+<span class="n">NPNumeric</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;NPNumeric&#39;</span><span class="p">)</span>
+<span class="n">AGNumeric</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">_ag_tensor</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;AGNumeric&#39;</span><span class="p">)</span>
+<span class="n">TFNumeric</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">_tf_tensor</span><span class="p">,</span>
+                  <span class="n">_tf_variable</span><span class="p">,</span>
+                  <span class="n">_tf_indexedslices</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;TFNumeric&#39;</span><span class="p">)</span>
 <span class="n">TorchNumeric</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">_torch_tensor</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;TorchNumeric&#39;</span><span class="p">)</span>
-<span class="n">Numeric</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">NPNumeric</span><span class="p">,</span> <span class="n">TFNumeric</span><span class="p">,</span> <span class="n">TorchNumeric</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;Numeric&#39;</span><span class="p">)</span>
+<span class="n">Numeric</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">Number</span><span class="p">,</span>
+                <span class="n">NPNumeric</span><span class="p">,</span>
+                <span class="n">AGNumeric</span><span class="p">,</span>
+                <span class="n">TFNumeric</span><span class="p">,</span>
+                <span class="n">TorchNumeric</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;Numeric&#39;</span><span class="p">)</span>
 
 <span class="c1"># Define corresponding promotion rules and conversion methods.</span>
 <span class="n">add_promotion_rule</span><span class="p">(</span><span class="n">NPNumeric</span><span class="p">,</span> <span class="n">TFNumeric</span><span class="p">,</span> <span class="n">TFNumeric</span><span class="p">)</span>
@@ -258,6 +286,7 @@
 
 <span class="c1"># Data types:</span>
 <span class="n">NPDType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="nb">type</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;NPDType&#39;</span><span class="p">)</span>
+<span class="n">AGDType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">NPDType</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;AGDType&#39;</span><span class="p">)</span>
 <span class="n">TFDType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">_tf_dtype</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;TFDType&#39;</span><span class="p">)</span>
 <span class="n">TorchDType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">_torch_dtype</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;TorchDType&#39;</span><span class="p">)</span>
 <span class="n">DType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">NPDType</span><span class="p">,</span> <span class="n">TFDType</span><span class="p">,</span> <span class="n">TorchDType</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;DType&#39;</span><span class="p">)</span>
@@ -344,6 +373,7 @@
 
 <span class="c1"># Framework types:</span>
 <span class="n">NP</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">NPNumeric</span><span class="p">,</span> <span class="n">NPDType</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;NP&#39;</span><span class="p">)</span>
+<span class="n">AG</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">AGNumeric</span><span class="p">,</span> <span class="n">AGDType</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;AG&#39;</span><span class="p">)</span>
 <span class="n">TF</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">TFNumeric</span><span class="p">,</span> <span class="n">TFDType</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;TF&#39;</span><span class="p">)</span>
 <span class="n">Torch</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">TorchNumeric</span><span class="p">,</span> <span class="n">TorchDType</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;Torch&#39;</span><span class="p">)</span>
 <span class="n">Framework</span> <span class="o">=</span> <span class="n">Union</span><span class="p">(</span><span class="n">NP</span><span class="p">,</span> <span class="n">TF</span><span class="p">,</span> <span class="n">Torch</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;Framework&#39;</span><span class="p">)</span>
