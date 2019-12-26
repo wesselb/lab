@@ -206,7 +206,7 @@ def tril_to_vec(a):  # pragma: no cover
     """
 
 
-@dispatch([Numeric])
+@dispatch([object])
 @abstract()
 def stack(*elements, **kw_args):  # pragma: no cover
     """Concatenate tensors along a new axis.
@@ -248,7 +248,7 @@ def reshape(a, *shape):  # pragma: no cover
     """
 
 
-@dispatch([Numeric])
+@dispatch([object])
 @abstract()
 def concat(*elements, **kw_args):  # pragma: no cover
     """Concatenate tensors along an axis.
