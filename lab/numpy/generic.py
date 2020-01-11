@@ -1,4 +1,5 @@
 import numpy as np
+import scipy.special as sps
 
 from . import dispatch, Numeric
 from ..custom import bvn_cdf
@@ -98,6 +99,11 @@ def tan(a):
 @dispatch(Numeric)
 def tanh(a):
     return np.tanh(a)
+
+
+@dispatch(Numeric)
+def erf(a):
+    return sps.erf(a)
 
 
 @dispatch(Numeric, Numeric)

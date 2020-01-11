@@ -149,6 +149,7 @@ def test_cast():
                                B.cos,
                                B.tan,
                                B.tanh,
+                               B.erf,
                                B.sigmoid,
                                B.softplus,
                                B.relu])

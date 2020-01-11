@@ -1,4 +1,5 @@
 import autograd.numpy as anp
+import autograd.scipy.special as asps
 
 from . import dispatch, Numeric
 from .custom import autograd_register
@@ -75,6 +76,11 @@ def tan(a):
 @dispatch(Numeric)
 def tanh(a):
     return anp.tanh(a)
+
+
+@dispatch(Numeric)
+def erf(a):
+    return asps.erf(a)
 
 
 @dispatch(Numeric, Numeric)

@@ -37,6 +37,7 @@ __all__ = ['nan',
            'cos',
            'tan',
            'tanh',
+           'erf',
            'sigmoid',
            'softplus',
            'relu',
@@ -435,6 +436,19 @@ def tanh(a):  # pragma: no cover
 
     Returns:
         tensor: Tangent hyperbolic function evaluated at `a`.
+    """
+
+
+@dispatch(Numeric)
+@abstract()
+def erf(a):  # pragma: no cover
+    """Error function.
+
+    Args:
+        a (tensor): Tensor.
+
+    Returns:
+        tensor: Error function evaluated at `a`.
     """
 
 

@@ -99,6 +99,11 @@ def tanh(a):
     return tf.tanh(a)
 
 
+@dispatch(Numeric)
+def erf(a):
+    return tf.math.erf(a)
+
+
 @dispatch(Numeric, Numeric)
 def add(a, b):
     return tf.add(a, b)

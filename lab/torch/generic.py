@@ -103,6 +103,11 @@ def tanh(a):
     return torch.tanh(a)
 
 
+@dispatch(Numeric)
+def erf(a):
+    return torch.erf(a)
+
+
 @dispatch(Numeric, Numeric)
 def add(a, b):
     return a + b
