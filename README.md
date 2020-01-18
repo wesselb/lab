@@ -210,7 +210,6 @@ pi
 log_2_pi
 ```
 
-
 ### Generic
 ```
 isnan(a)
