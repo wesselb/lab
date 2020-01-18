@@ -4,7 +4,7 @@ import numpy as np
 import scipy.linalg as sla
 from scipy.stats import norm
 
-from .bvn_cdf import bvn_cdf
+from .bvn_cdf import bvn_cdf, s_bvn_cdf
 
 __all__ = ['toeplitz_solve', 's_toeplitz_solve',
            'bvn_cdf', 's_bvn_cdf']
@@ -78,21 +78,5 @@ def s_toeplitz_solve(s_y, y, a, b, c):
     n = a.shape[0]
     s_a = np.array([s_inv.diagonal(-i).sum() for i in range(n)])
     s_b = np.array([s_inv.diagonal(i).sum() for i in range(1, n)])
-
-    return s_a, s_b, s_c
-
-
-def s_bvn_cdf(s_y, y, a, b, c):
-    q = np.sqrt(1 - c ** 2)
-
-    # Compute the densities.
-    pdfs = 1 / (2 * np.pi * q) * \
-           np.exp(-(a ** 2 - 2 * c * a * b + b ** 2) /
-                  (2 * (1 - c ** 2)))
-
-    # Compute sensitivities.
-    s_a = s_y * norm.pdf(a) * norm.cdf(b, c * a, q)
-    s_b = s_y * norm.pdf(b) * norm.cdf(a, c * b, q)
-    s_c = s_y * pdfs
 
     return s_a, s_b, s_c
