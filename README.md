@@ -208,13 +208,13 @@ epsilon        # Magnitude of diagonal to regularise matrices with.
 nan
 pi
 log_2_pi
-
-isnan(a)
 ```
 
 
 ### Generic
 ```
+isnan(a)
+
 zeros(dtype, *shape)
 zeros(*shape)
 zeros(ref)
