@@ -118,6 +118,15 @@ def test_logdet():
     check_function(B.logdet, (PSD(4, 3, 3),))
 
 
+def test_expm():
+    check_function(B.expm, (Matrix(),))
+
+
+def test_logm():
+    mat = B.eye(3) + 0.1 * B.randn(3, 3)
+    check_function(B.logm, (Tensor(mat=mat),))
+
+
 @pytest.mark.parametrize('f', [B.cholesky, B.chol])
 def test_cholesky(f):
     check_function(f, (PSD(),))

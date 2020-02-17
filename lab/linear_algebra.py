@@ -14,6 +14,8 @@ __all__ = ['epsilon',
            'inv',
            'det',
            'logdet',
+           'expm',
+           'logm',
            'cholesky', 'chol',
            'cholesky_solve', 'cholsolve',
            'triangular_solve', 'trisolve',
@@ -177,6 +179,32 @@ def logdet(a):  # pragma: no cover
 
     Returns:
         scalar: Log-determinant of `a`
+    """
+
+
+@dispatch(object)
+@abstract()
+def expm(a):  # pragma: no cover
+    """Compute the matrix exponential of `a`.
+
+    Args:
+        a (tensor): Matrix to matrix exponential of.
+
+    Returns:
+        scalar: Matrix exponential of `a`
+    """
+
+
+@dispatch(object)
+@abstract()
+def logm(a):  # pragma: no cover
+    """Compute the matrix logarithm of `a`.
+
+    Args:
+        a (tensor): Matrix to matrix logarithm of.
+
+    Returns:
+        scalar: Matrix logarithm of `a`
     """
 
 

@@ -305,6 +305,8 @@ solve(a, b)
 inv(a)
 det(a) 
 logdet(a) 
+expm(a)
+logm(a)
 cholesky(a) (alias: chol)
 
 cholesky_solve(a, b)  (alias: cholsolve)

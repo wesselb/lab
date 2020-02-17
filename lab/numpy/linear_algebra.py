@@ -4,7 +4,7 @@ import numpy as np
 import scipy.linalg as sla
 
 from . import dispatch, B, Numeric
-from ..custom import toeplitz_solve
+from ..custom import toeplitz_solve, expm, logm
 from ..linear_algebra import _default_perm
 from ..util import batch_computation
 
@@ -67,6 +67,11 @@ def det(a):
 @dispatch(Numeric)
 def logdet(a):
     return np.linalg.slogdet(a)[1]
+
+
+dispatch(Numeric)(expm)
+
+dispatch(Numeric)(logm)
 
 
 @dispatch(Numeric)

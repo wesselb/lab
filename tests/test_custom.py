@@ -1,17 +1,19 @@
+import pytest
+
+import lab as B
 import tensorflow as tf
 from autograd import grad
 from fdm import check_sensitivity, gradient
-
-import lab as B
 from lab.autograd.custom import as_tuple
 from lab.custom import (
-    toeplitz_solve,
-    s_toeplitz_solve,
-    bvn_cdf,
-    s_bvn_cdf
+    toeplitz_solve, s_toeplitz_solve,
+    bvn_cdf, s_bvn_cdf,
+    expm, s_expm,
+    logm, s_logm
 )
 from lab.tensorflow.custom import as_tf
 from lab.torch.custom import as_torch, as_np
+
 from .util import approx
 
 
@@ -95,3 +97,15 @@ def test_toeplitz_solve():
 def test_bvn_cdf():
     check_sensitivity(bvn_cdf, s_bvn_cdf, (B.rand(3), B.rand(3), B.rand(3)))
     check_grad(bvn_cdf, (B.rand(3), B.rand(3), B.rand(3)))
+
+
+def test_expm():
+    check_sensitivity(expm, s_expm, (B.randn(3, 3),))
+    check_grad(expm, (B.randn(3, 3),))
+
+
+@pytest.mark.xfail
+def test_logm():
+    mat = B.eye(3) + 0.1 * B.randn(3, 3)
+    check_sensitivity(logm, s_logm, (mat,))
+    check_grad(logm, (mat,))

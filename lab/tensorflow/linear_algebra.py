@@ -2,7 +2,11 @@ import tensorflow as tf
 
 from . import dispatch, B, Numeric
 from .custom import tensorflow_register
-from ..custom import toeplitz_solve, s_toeplitz_solve
+from ..custom import (
+    toeplitz_solve, s_toeplitz_solve,
+    expm, s_expm,
+    logm, s_logm
+)
 from ..linear_algebra import _default_perm
 
 __all__ = []
@@ -74,6 +78,13 @@ def det(a):
 @dispatch(Numeric)
 def logdet(a):
     return tf.linalg.logdet(a)
+
+
+f = tensorflow_register(expm, s_expm)
+dispatch(Numeric)(f)
+
+f = tensorflow_register(logm, s_logm)
+dispatch(Numeric)(f)
 
 
 @dispatch(Numeric)

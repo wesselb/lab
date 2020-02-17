@@ -2,12 +2,14 @@ import logging
 
 import numpy as np
 import scipy.linalg as sla
-from scipy.stats import norm
 
+# noinspection PyUnresolvedReferences
 from .bvn_cdf import bvn_cdf, s_bvn_cdf
 
 __all__ = ['toeplitz_solve', 's_toeplitz_solve',
-           'bvn_cdf', 's_bvn_cdf']
+           'bvn_cdf', 's_bvn_cdf',
+           'expm', 's_expm',
+           'logm', 's_logm']
 
 log = logging.getLogger(__name__)
 
@@ -80,3 +82,20 @@ def s_toeplitz_solve(s_y, y, a, b, c):
     s_b = np.array([s_inv.diagonal(i).sum() for i in range(1, n)])
 
     return s_a, s_b, s_c
+
+
+def expm(a):
+    return sla.expm(a)
+
+
+def s_expm(s_y, y, a):
+    return sla.expm_frechet(a, s_y.T, compute_expm=False).T
+
+
+def logm(a):
+    return sla.logm(a)
+
+
+def s_logm(a):  # pragma: no cover
+    raise NotImplementedError('The derivative for the matrix logarithm is '
+                              'current not implemented.')

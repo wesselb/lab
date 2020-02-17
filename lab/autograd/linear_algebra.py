@@ -5,7 +5,11 @@ import autograd.scipy.linalg as asla
 
 from . import dispatch, B, Numeric
 from .custom import autograd_register
-from ..custom import toeplitz_solve, s_toeplitz_solve
+from ..custom import (
+    toeplitz_solve, s_toeplitz_solve,
+    expm, s_expm,
+    logm, s_logm
+)
 from ..linear_algebra import _default_perm
 from ..util import batch_computation
 
@@ -84,6 +88,13 @@ def det(a):
 @dispatch(Numeric)
 def logdet(a):
     return anp.linalg.slogdet(a)[1]
+
+
+f = autograd_register(expm, s_expm)
+dispatch(Numeric)(f)
+
+f = autograd_register(logm, s_logm)
+dispatch(Numeric)(f)
 
 
 @dispatch(Numeric)
