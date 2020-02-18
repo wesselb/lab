@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import absolute_import, division, print_function
-
 import os
 import subprocess
 
@@ -10,16 +6,21 @@ from Cython.Build import build_ext
 from setuptools import find_packages, setup, Extension
 
 # Check that `gfortran` is available.
-if subprocess.call(['which', 'gfortran']) != 0:
+if subprocess.call('which gfortran', shell=True) != 0:
     raise RuntimeError('gfortran cannot be found. Please install gfortran. '
                        'On OS X, this can be done with "brew install gcc". '
                        'On Linux, "apt-get install gfortran" should suffice.')
 
-# Compile TVPACK.
-if subprocess.call('gfortran -fPIC -O2 '
-                   '-c lab/bvn_cdf/tvpack.f '
-                   '-o lab/bvn_cdf/tvpack.o', shell=True) != 0:
-    raise RuntimeError('Compilation of TVPACK failed.')
+# If `xcrun` is available, make sure the includes are added to CPATH.
+if subprocess.call('which xcrun', shell=True) == 0:
+    path = subprocess.check_output('xcrun --show-sdk-path',
+                                   shell=True).strip().decode('ascii')
+    path += '/usr/include'
+
+    # Add to CPATH.
+    if 'CPATH' not in os.environ:
+        os.environ['CPATH'] = ''
+    os.environ['CPATH'] += path
 
 # Default to use gcc as the compiler if `$CC` is not set.
 if not 'CC' in os.environ or not os.environ['CC']:
@@ -45,6 +46,12 @@ if 'clang' in out.decode('ascii'):
         raise RuntimeError('Your gcc runs clang, and no version of gcc could '
                            'be found. Please install gcc. On OS X, this can '
                            'be done with "brew install gcc".')
+
+# Compile TVPACK.
+if subprocess.call('gfortran -fPIC -O2 '
+                   '-c lab/bvn_cdf/tvpack.f '
+                   '-o lab/bvn_cdf/tvpack.o', shell=True) != 0:
+    raise RuntimeError('Compilation of TVPACK failed.')
 
 requirements = ['numpy>=1.16',
                 'scipy>=1.3',

@@ -7,10 +7,7 @@
 A generic interface for linear algebra backends: code it once, run it on any 
 backend
 
-_Note:_ LAB requires Python 3.6 or higher and TensorFlow 2 if TensorFlow is 
-used.
-
-* [Installation](#installation)
+* [Requirements and Installation](#requirements-and-installation)
 * [Basic Usage](#basic-usage)
 * [List of Types](#list-of-types)
     - [General](#general)
@@ -24,13 +21,9 @@ used.
     - [Random](#random)
     - [Shaping](#shaping)
 
-## Installation
-Before installing the package, please ensure that `gcc` and `gfortran` are 
-available.
-On OS X, these are both installed with `brew install gcc`;
-users of Anaconda may want to instead consider `conda install gcc`.
-On Linux, `gcc` is most likely already available, and `gfortran` can be 
-installed with `apt-get install gfortran`.
+## Requirements and Installation
+
+See [the instructions here](https://gist.github.com/wesselb/4b44bf87f3789425f96e26c4308d0adc).
 Then simply
 
 ```
