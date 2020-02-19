@@ -1,4 +1,5 @@
 import numpy as np
+import math
 
 from . import dispatch
 from .types import Numeric, Int
@@ -162,31 +163,33 @@ def flatten(a):  # pragma: no cover
     return reshape(a, -1)
 
 
-def _vec_to_tril_shape_upper_perm(a):
-    # Compute length of side of result.
-    n = shape(a)[0]
-    m = int(((1 + 8 * n) ** .5 - 1) / 2)
-
-    # Compute number of elements in upper part.
-    upper = int((m ** 2 - m) / 2)
+def _vec_to_tril_shape_upper_perm(a, offset=0):
+    # Compute the length of a side of the square result.
+    m = shape(a)[0]
+    k = offset
+    if k <= 0:
+        side = int((math.sqrt(1 + 8 * m) - 1) / 2) - k
+    else:
+        side = int((math.sqrt(1 + 8 * (k * (k + 1) + m)) - (1 + 2 * k)) / 2)
 
     # Compute sorting permutation.
-    ind_lower = np.tril_indices(m)
-    ind_upper = np.triu_indices(m, k=1)
+    ind_lower = np.tril_indices(side, k=offset)
+    ind_upper = np.triu_indices(side, k=1 + offset)
     ind_concat = (np.concatenate((ind_lower[0], ind_upper[0])),
                   np.concatenate((ind_lower[1], ind_upper[1])))
     perm = np.lexsort((ind_concat[1], ind_concat[0]))
 
-    return m, upper, perm
+    return side, len(ind_upper[0]), perm
 
 
 @dispatch(Numeric)
 @abstract()
-def vec_to_tril(a):  # pragma: no cover
+def vec_to_tril(a, offset=0):  # pragma: no cover
     """Construct a lower triangular matrix from a vector.
 
     Args:
         a (tensor): Vector.
+        offset (int, optional): Diagonal offset.
 
     Returns:
         tensor: Lower triangular matrix.
@@ -195,11 +198,12 @@ def vec_to_tril(a):  # pragma: no cover
 
 @dispatch(Numeric)
 @abstract()
-def tril_to_vec(a):  # pragma: no cover
+def tril_to_vec(a, offset=0):  # pragma: no cover
     """Construct a vector from a lower triangular matrix.
 
     Args:
         a (tensor): Lower triangular matrix.
+        offset (int, optional): Diagonal offset.
 
     Returns:
         tensor: Vector

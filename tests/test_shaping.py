@@ -68,15 +68,25 @@ def test_flatten():
     check_function(B.flatten, (Tensor(3, 4),))
 
 
-def test_vec_to_tril_and_back():
-    check_function(B.vec_to_tril, (Tensor(6),))
-    check_function(B.tril_to_vec, (Matrix(3),))
+@pytest.mark.parametrize('offset', [-2, -1, 0, 1, 2])
+def test_vec_to_tril(offset):
+    n = B.length(B.tril_to_vec(B.ones(7, 7), offset=offset))
+    check_function(B.vec_to_tril, (Tensor(n),), {'offset': Value(offset)})
 
-    # Check correctness.
-    mat = Tensor(6).np()
-    allclose(B.tril_to_vec(B.vec_to_tril(mat)), mat)
 
-    # Check exceptions.
+def test_tril_to_vec():
+    check_function(B.tril_to_vec, (Matrix(6),), {'offset': Value(0, 1, -1)})
+
+
+@pytest.mark.parametrize('offset', [-2, -1, 0, 1, 2])
+def test_vec_to_tril_and_back_correctness(offset):
+    n = B.length(B.tril_to_vec(B.ones(7, 7), offset=offset))
+    vec = Tensor(n).np()
+    mat = B.vec_to_tril(vec, offset=offset)
+    allclose(B.tril_to_vec(mat, offset=offset), vec)
+
+
+def test_vec_to_tril_and_back_exceptions():
     for x in Matrix(3, 4).forms():
         with pytest.raises(ValueError):
             B.vec_to_tril(x)

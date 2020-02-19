@@ -28,22 +28,22 @@ def diag(a):
 
 
 @dispatch(Numeric)
-def vec_to_tril(a):
+def vec_to_tril(a, offset=0):
     if B.rank(a) != 1:
         raise ValueError('Input must be rank 1.')
-    m, upper, perm = _vec_to_tril_shape_upper_perm(a)
+    side, upper, perm = _vec_to_tril_shape_upper_perm(a, offset=offset)
     a = anp.concatenate((a, anp.zeros(upper, dtype=a.dtype)))
-    return anp.reshape(a[perm], (m, m))
+    return anp.reshape(a[perm], (side, side))
 
 
 @dispatch(Numeric)
-def tril_to_vec(a):
+def tril_to_vec(a, offset=0):
     if B.rank(a) != 2:
         raise ValueError('Input must be rank 2.')
     n, m = B.shape(a)
     if n != m:
         raise ValueError('Input must be square.')
-    return a[anp.tril_indices(n)]
+    return a[anp.tril_indices(n, k=offset)]
 
 
 @dispatch([Numeric])
