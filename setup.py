@@ -32,7 +32,7 @@ out = subprocess.check_output('$CC  --version', shell=True)
 if 'clang' in out.decode('ascii'):
     # It is. Now try to find a `gcc` to replace it with.
     found = False
-    for i in range(9, 3, -1):
+    for i in range(100, 3, -1):
         gcci = 'gcc-{}'.format(i)
         if subprocess.call(['which', gcci]) == 0:
             # Set both `$CC` and `$CXX` in this case, just to be sure.
