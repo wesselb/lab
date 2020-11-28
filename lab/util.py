@@ -24,7 +24,7 @@ def as_tuple(x):
 
 @_dispatch(object)
 def as_tuple(x):
-    return (x,)
+    return x,
 
 
 def _common_shape(*shapes):

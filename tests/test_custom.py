@@ -12,7 +12,8 @@ from lab.custom import (
     logm, s_logm
 )
 from lab.tensorflow.custom import as_tf
-from lab.torch.custom import as_torch, as_np
+from lab.torch.custom import as_torch
+from lab.jax.custom import as_jax
 from .util import approx
 
 
@@ -21,11 +22,14 @@ def test_as_tf():
     assert isinstance(as_tf((B.randn(),))[0], B.TFNumeric)
 
 
-def test_as_torch_and_as_np():
+def test_as_torch():
     assert isinstance(as_torch(B.randn()), B.TorchNumeric)
     assert isinstance(as_torch((B.randn(),))[0], B.TorchNumeric)
-    assert isinstance(as_np(as_torch(B.randn())), B.NPNumeric)
-    assert isinstance(as_np(as_torch((B.randn(),)))[0], B.NPNumeric)
+
+
+def test_as_jax():
+    assert isinstance(as_jax(B.randn()), B.JaxNumeric)
+    assert isinstance(as_jax((B.randn(),))[0], B.JaxNumeric)
 
 
 def check_grad(f, args, kw_args=None, digits=6):

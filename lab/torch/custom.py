@@ -5,7 +5,7 @@ from plum import convert, Dispatcher
 
 from . import B
 
-__all__ = ['torch_register', 'as_torch', 'as_np']
+__all__ = ['torch_register', 'as_torch']
 
 _dispatch = Dispatcher()
 
@@ -30,24 +30,6 @@ def as_torch(xs, grad=False):
     return tuple([as_torch(x, grad=grad) for x in xs])
 
 
-@_dispatch(B.TorchNumeric)
-def as_np(x):
-    """Convert object to NumPy.
-
-    Args:
-        x (tensor): Object to convert.
-
-    Returns:
-        tensor: `x` as a NumPy object.
-    """
-    return x.detach().numpy()
-
-
-@_dispatch(tuple)
-def as_np(xs):
-    return tuple([as_np(x) for x in xs])
-
-
 def torch_register(f, s_f):
     """Register a function and its sensitivity for PyTorch.
 
@@ -63,7 +45,7 @@ def torch_register(f, s_f):
     class Function(torch.autograd.Function):
         @staticmethod
         def forward(ctx, *args):
-            y = f(*as_np(args))
+            y = f(*B.to_numpy(args))
             ctx.save_for_backward(as_torch(y), *args)
             return as_torch(y)
 
@@ -72,7 +54,7 @@ def torch_register(f, s_f):
             # The profiler does not catch that this is tested.
             y = ctx.saved_tensors[0]
             args = ctx.saved_tensors[1:]
-            return as_torch(s_f(s_y.numpy(), y.numpy(), *as_np(args)))
+            return as_torch(s_f(s_y.numpy(), y.numpy(), *B.to_numpy(args)))
 
     # Wrap it to preserve the function name.
 

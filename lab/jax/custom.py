@@ -1,19 +1,38 @@
-import numpy as np
-from jax.core import Primitive
-from jax import custom_vjp
-from plum import Dispatcher
 from functools import wraps
 
+import jax.numpy as jnp
+from jax import custom_vjp
+from jax.core import Primitive
+from plum import Dispatcher
+
+from . import B
 from ..util import as_tuple
 
 __all__ = ['jax_register']
 _dispatch = Dispatcher()
 
 
+@_dispatch(B.Numeric)
+def as_jax(x):
+    """Convert object to Jax.
+
+    Args:
+        x (object): Object to convert.
+
+    Returns:
+        object: `x` as a Jax object.
+    """
+    return jnp.asarray(x)
+
+
+@_dispatch(tuple)
+def as_jax(xs):
+    return tuple([as_jax(x) for x in xs])
+
+
 def _as_primitive(f):
     def f_wrapped(*args, **kw_args):
-        # Convert `args` to NumPy. The implementations do not support Jax types.
-        return f(*[np.array(arg) for arg in args], **kw_args)
+        return as_jax(f(*B.to_numpy(args), **kw_args))
 
     primitive = Primitive(f.__name__)
     primitive.def_impl(f_wrapped)
