@@ -5,7 +5,6 @@ import scipy.linalg as sla
 
 # noinspection PyUnresolvedReferences
 from .bvn_cdf import bvn_cdf as bvn_cdf_, s_bvn_cdf
-from .types import Jax
 
 __all__ = ['toeplitz_solve', 's_toeplitz_solve',
            'bvn_cdf', 's_bvn_cdf',
@@ -13,10 +12,6 @@ __all__ = ['toeplitz_solve', 's_toeplitz_solve',
            'logm', 's_logm']
 
 log = logging.getLogger(__name__)
-
-
-def bvn_cdf(a, b, c):
-    return bvn_cdf_(a, b, c)
 
 
 def _mm(a, b):
@@ -87,6 +82,12 @@ def s_toeplitz_solve(s_y, y, a, b, c):
     s_b = np.array([s_inv.diagonal(i).sum() for i in range(1, n)])
 
     return s_a, s_b, s_c
+
+
+def bvn_cdf(a, b, c):
+    # We do not directly use `bvn_cdf_` to not have `inspect.signature` fail, which
+    # does not work for `bvn_cdf_`.
+    return bvn_cdf_(a, b, c)
 
 
 def expm(a):

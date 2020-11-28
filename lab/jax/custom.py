@@ -1,11 +1,30 @@
 import numpy as np
+from jax.core import Primitive
 from jax import custom_vjp
 from plum import Dispatcher
+from functools import wraps
 
 from ..util import as_tuple
 
 __all__ = ['jax_register']
 _dispatch = Dispatcher()
+
+
+def _as_primitive(f):
+    def f_wrapped(*args, **kw_args):
+        # Convert `args` to NumPy. The implementations do not support Jax types.
+        return f(*[np.array(arg) for arg in args], **kw_args)
+
+    primitive = Primitive(f.__name__)
+    primitive.def_impl(f_wrapped)
+
+    # Wrap `primitive.bind` to preserve the metadata of `f`.
+
+    @wraps(f)
+    def bind_wrapped(*args, **kw_args):
+        return primitive.bind(*args, **kw_args)
+
+    return bind_wrapped
 
 
 def jax_register(f, s_f):
@@ -18,23 +37,21 @@ def jax_register(f, s_f):
     Returns:
         function: Jax function.
     """
-    # Create a primitive for `f`.
-    f_primitive = custom_vjp(f)
+    f = _as_primitive(f)
+    s_f = _as_primitive(s_f)
+
+    f = custom_vjp(f)
+
+    # Define and register the forward and backward pass.
 
     def forward(*args, **kw_args):
-        # Convert `args` to NumPy. The implementations do not yet support Jax types.
-        args = [np.array(arg) for arg in args]
         y = f(*args, **kw_args)
         return y, (y, args, kw_args)
 
     def backward(res, s_y):
         y, args, kw_args = res
-        # Convert `s_y` to NumPy. The implementations do not yet support Jax types.
-        s_y = np.array(s_y)
         return as_tuple(s_f(s_y, y, *args, **kw_args))
 
-    # Register the sensitivity.
-    f_primitive.defvjp(forward, backward)
+    f.defvjp(forward, backward)
 
-    # Return the Jax primitive.
-    return f_primitive
+    return f

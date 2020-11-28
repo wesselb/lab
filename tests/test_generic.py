@@ -232,6 +232,12 @@ def test_logical_comparisons(f):
     check_function(f, (Tensor(2, 3), Tensor(2, 3)), {}, assert_dtype=False)
 
 
+def test_bvn_cdf():
+    check_function(B.bvn_cdf,
+                   (PositiveTensor(5), PositiveTensor(5), PositiveTensor(5)),
+                   {}, assert_dtype=False)
+
+
 def test_scan():
     # Check consistency by inputting various shapes for a simple scanning
     # function.
