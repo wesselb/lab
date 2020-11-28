@@ -1,6 +1,6 @@
 # [LAB](http://github.com/wesselb/lab)
 
-[![Build](https://travis-ci.org/wesselb/lab.svg?branch=master)](https://travis-ci.org/wesselb/lab)
+[![CI](https://github.com/wesselb/lab/workflows/CI/badge.svg?branch=master)](https://github.com/wesselb/lab/actions?query=workflow%3ACI)
 [![Coverage Status](https://coveralls.io/repos/github/wesselb/lab/badge.svg?branch=master&service=github)](https://coveralls.io/github/wesselb/lab?branch=master)
 [![Latest Docs](https://img.shields.io/badge/docs-latest-blue.svg)](https://wesselb.github.io/lab)
 
