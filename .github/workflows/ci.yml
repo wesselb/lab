@@ -11,20 +11,33 @@ jobs:
       matrix:
         python-version: [3.6, 3.7, 3.8]
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          sudo apt-get install gfortran
+          python -m pip install --upgrade pip
+          pip install --no-cache-dir -U -r requirements.txt | cat
+      - name: Test
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COVERALLS_FLAG_NAME: ${{ matrix.python-version }}
+          COVERALLS_PARALLEL: true
+        run: |
+          pytest -v --cov=lab --cov-report term-missing
+          coveralls
+  coveralls:
+    name: Finish coverage
+    needs: test
+    runs-on: ubuntu-latest
+    container: python:3-slim
+    steps:
+    - name: Finished
       run: |
-        sudo apt-get install gfortran google-perftools
-        # export LD_PRELOAD="/usr/lib/libtcmalloc.so.4"
-        python -m pip install --upgrade pip
-        pip install --no-cache-dir -U -r requirements.txt | cat
-    - name: Test
+        pip3 install --upgrade coveralls
+        coveralls --finish
       env:
-        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-      run: |
-        pytest -v --cov=lab --cov-report term-missing
-        coveralls
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
