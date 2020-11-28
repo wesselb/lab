@@ -4,7 +4,8 @@ import numpy as np
 import scipy.linalg as sla
 
 # noinspection PyUnresolvedReferences
-from .bvn_cdf import bvn_cdf, s_bvn_cdf
+from .bvn_cdf import bvn_cdf as bvn_cdf_, s_bvn_cdf
+from .types import Jax
 
 __all__ = ['toeplitz_solve', 's_toeplitz_solve',
            'bvn_cdf', 's_bvn_cdf',
@@ -12,6 +13,10 @@ __all__ = ['toeplitz_solve', 's_toeplitz_solve',
            'logm', 's_logm']
 
 log = logging.getLogger(__name__)
+
+
+def bvn_cdf(a, b, c):
+    return bvn_cdf_(a, b, c)
 
 
 def _mm(a, b):

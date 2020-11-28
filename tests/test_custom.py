@@ -1,10 +1,10 @@
+import jax
 import pytest
-
-import lab as B
 import tensorflow as tf
 from autograd import grad
 from fdm import check_sensitivity, gradient
-from lab.autograd.custom import as_tuple
+
+import lab as B
 from lab.custom import (
     toeplitz_solve, s_toeplitz_solve,
     bvn_cdf, s_bvn_cdf,
@@ -13,14 +13,7 @@ from lab.custom import (
 )
 from lab.tensorflow.custom import as_tf
 from lab.torch.custom import as_torch, as_np
-
 from .util import approx
-
-
-def test_as_tuple():
-    assert as_tuple(1) == (1,)
-    assert as_tuple((1,)) == (1,)
-    assert as_tuple((1, 2)) == (1, 2)
 
 
 def test_as_tf():
@@ -83,6 +76,12 @@ def check_grad(f, args, kw_args=None, digits=6):
         f_i = create_f_i(i, torch_args)
         f_i(torch_args[i]).backward()
         approx(numerical_grad, torch_args[i].grad, digits)
+
+        # Check Jax gradient.
+        torch_args = tuple([jax.device_put(arg) for arg in args])
+        f_i = create_f_i(i, torch_args)
+        jax_grad = jax.grad(f_i)(args[i])
+        approx(numerical_grad, jax_grad, digits)
 
 
 def test_toeplitz_solve():

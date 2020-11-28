@@ -1,6 +1,7 @@
 import warnings
 
-import numpy  as np
+import jax.numpy as jnp
+import numpy as np
 import pytest
 import tensorflow as tf
 import torch
@@ -9,12 +10,11 @@ import lab as B
 from .util import (
     Tensor,
     allclose,
-    dtype_equal,
     to_np
 )
 
 
-@pytest.mark.parametrize('dtype', [np.float32, tf.float32, torch.float32])
+@pytest.mark.parametrize('dtype', [np.float32, tf.float32, torch.float32, jnp.float32])
 def test_set_seed(dtype):
     B.set_random_seed(0)
     x = to_np(B.rand(dtype))
@@ -26,29 +26,29 @@ def test_set_seed(dtype):
 @pytest.mark.parametrize('f', [B.rand, B.randn])
 def test_random_generators(f):
     # Test without specifying data type.
-    dtype_equal(B.dtype(f()), B.default_dtype)
+    assert B.dtype(f()) is B.default_dtype
     assert B.shape(f()) == ()
-    dtype_equal(B.dtype(f(2)), B.default_dtype)
+    assert B.dtype(f(2)) is B.default_dtype
     allclose(B.shape(f(2)), (2,))
-    dtype_equal(B.dtype(f(2, 3)), B.default_dtype)
+    assert B.dtype(f(2, 3)) is B.default_dtype
     assert B.shape(f(2, 3)) == (2, 3)
 
     # Test with specifying data type.
-    for t in [np.float32, tf.float32, torch.float32]:
+    for t in [np.float32, tf.float32, torch.float32, jnp.float32]:
         # Test direct specification.
-        dtype_equal(B.dtype(f(t)), t)
+        assert B.dtype(f(t)) is t
         assert B.shape(f(t)) == ()
-        dtype_equal(B.dtype(f(t, 2)), t)
+        assert B.dtype(f(t, 2)) is t
         assert B.shape(f(t, 2)) == (2,)
-        dtype_equal(B.dtype(f(t, 2, 3)), t)
+        assert B.dtype(f(t, 2, 3)) is t
         assert B.shape(f(t, 2, 3)) == (2, 3)
 
         # Test reference specification.
-        dtype_equal(B.dtype(f(f(t))), t)
+        assert B.dtype(f(f(t))) is t
         assert B.shape(f(f())) == ()
-        dtype_equal(B.dtype(f(f(t, 2))), t)
+        assert B.dtype(f(f(t, 2))) is t
         assert B.shape(f(f(t, 2))) == (2,)
-        dtype_equal(B.dtype(f(f(t, 2, 3))), t)
+        assert B.dtype(f(f(t, 2, 3))) is t
         assert B.shape(f(f(t, 2, 3))) == (2, 3)
 
 

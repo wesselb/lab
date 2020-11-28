@@ -7,7 +7,9 @@ import lab as B
 import lab.autograd as B_autograd
 import lab.tensorflow as B_tf
 import lab.torch as B_torch
+import lab.jax as B_jax
 from lab.util import (
+    as_tuple,
     abstract,
     batch_computation,
     _common_shape,
@@ -16,9 +18,15 @@ from lab.util import (
 from .util import allclose
 
 
-@pytest.mark.parametrize('other', [B_tf, B_torch, B_autograd])
+@pytest.mark.parametrize('other', [B_tf, B_torch, B_autograd, B_jax])
 def test_module_mapping(other):
     assert B is other
+
+
+def test_as_tuple():
+    assert as_tuple(1) == (1,)
+    assert as_tuple((1,)) == (1,)
+    assert as_tuple((1, 2)) == (1, 2)
 
 
 @pytest.mark.parametrize('shapes,common_shape',

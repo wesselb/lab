@@ -1,6 +1,7 @@
 import logging
 from itertools import product
 
+import jax.numpy as jnp
 import numpy as np
 import plum
 import tensorflow as tf
@@ -12,7 +13,6 @@ from plum import Dispatcher
 import lab as B
 
 __all__ = ['autograd_box',
-           'dtype_equal',
            'to_np',
            'allclose',
            'check_function',
@@ -34,18 +34,7 @@ def autograd_box(x):
     return new_box(x, t, n)
 
 
-def dtype_equal(x, y):
-    # NumPy has two representations of data types, and TensorFlow data types
-    # equal to NumPy data types.
-    if isinstance(x, (type, np.dtype)) and isinstance(y, (type, np.dtype)):
-        # We are safe to equate, because `x` nor `y` can be a TensorFlow or
-        # PyTorch data type.
-        assert x == y
-    else:
-        assert x is y
-
-
-@_dispatch({B.NPNumeric, B.Number})
+@_dispatch({B.NPNumeric, B.Number}, precedence=1)
 def to_np(x):
     """Convert a tensor to NumPy."""
     return x
@@ -61,6 +50,11 @@ def to_np(x):
     return x.numpy()
 
 
+@_dispatch(B.JaxNumeric)
+def to_np(x):
+    return np.array(x)
+
+
 @_dispatch({tuple, tf.TensorShape, torch.Size})
 def to_np(tup):
     return tuple(to_np(x) for x in tup)
@@ -69,6 +63,7 @@ def to_np(tup):
 @_dispatch(list)
 def to_np(lst):
     return to_np(tuple(lst))
+
 
 
 @_dispatch(object, object, [bool])
@@ -94,7 +89,8 @@ def check_function(f, args_spec,
                    kw_args_spec=None,
                    assert_dtype=True,
                    skip=None):
-    """Check that a function produces consistent output."""
+    """Check that a function produces consistent output. Moreover, if the first
+    argument is a data type, check that the result is exactly of that type."""
     skip = [] if skip is None else skip
 
     if kw_args_spec is None:
@@ -113,7 +109,7 @@ def check_function(f, args_spec,
 
     # Construct framework types to skip mixes of.
     fw_types = [plum.Union(t, plum.List(t), plum.Tuple(t))
-                for t in [B.AGNumeric, B.TorchNumeric, B.TFNumeric]]
+                for t in [B.AGNumeric, B.TorchNumeric, B.TFNumeric, B.JaxNumeric]]
 
     # Construct other types to skip entirely.
     skip_types = [plum.Union(t, plum.List(t), plum.Tuple(t)) for t in skip]
@@ -122,6 +118,10 @@ def check_function(f, args_spec,
     for kw_args in kw_args_prod:
         # Compare everything against the first result.
         first_result = f(*args_prod[0], **kw_args)
+
+        # If first argument is a data type, then check that.
+        if isinstance(args_prod[0][0], B.DType):
+            assert B.dtype(first_result) is args_prod[0][0]
 
         for args in args_prod:
             # Skip mixes of FW types.
@@ -137,9 +137,15 @@ def check_function(f, args_spec,
                           'arguments {}.'.format(args, kw_args))
                 continue
 
+            # Check consistency.
             log.debug('Call with arguments {} and keyword arguments {}.'
                       ''.format(args, kw_args))
-            allclose(first_result, f(*args, **kw_args), assert_dtype)
+            result = f(*args, **kw_args)
+            allclose(first_result, result, assert_dtype)
+
+            # If first argument is a data type, then again check that.
+            if isinstance(args[0], B.DType):
+                assert B.dtype(result) is args[0]
 
 
 class Tensor:
@@ -152,7 +158,7 @@ class Tensor:
             self.mat = kw_args['mat']
 
     def forms(self):
-        return [self.np(), self.tf(), self.torch(), self.ag()]
+        return [self.np(), self.tf(), self.torch(), self.ag(), self.jax()]
 
     def np(self):
         return self.mat
@@ -165,6 +171,9 @@ class Tensor:
 
     def ag(self):
         return autograd_box(self.mat)
+
+    def jax(self):
+        return jnp. array(self.mat)
 
 
 class PositiveTensor(Tensor):
