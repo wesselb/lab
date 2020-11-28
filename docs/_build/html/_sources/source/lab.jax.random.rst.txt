@@ -1,0 +1,7 @@
+lab.jax.random module
+=====================
+
+.. automodule:: lab.jax.random
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,8 +1,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -12,27 +11,29 @@
   
 
   
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
   
   
   
 
   
-  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
 </head>
@@ -48,7 +49,7 @@
           
 
           
-            <a href="../../index.html" class="icon icon-home"> lab
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> lab
           
 
           
@@ -75,6 +76,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -90,6 +92,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -128,7 +131,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../index.html">Docs</a> &raquo;</li>
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="../index.html">Module code</a> &raquo;</li>
         
@@ -149,10 +152,11 @@
             
   <h1>Source code for lab.shaping</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">math</span>
 
-<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">dispatch</span>
-<span class="kn">from</span> <span class="nn">.types</span> <span class="k">import</span> <span class="n">Numeric</span><span class="p">,</span> <span class="n">Int</span>
-<span class="kn">from</span> <span class="nn">.util</span> <span class="k">import</span> <span class="n">abstract</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">dispatch</span>
+<span class="kn">from</span> <span class="nn">.types</span> <span class="kn">import</span> <span class="n">Numeric</span><span class="p">,</span> <span class="n">Int</span>
+<span class="kn">from</span> <span class="nn">.util</span> <span class="kn">import</span> <span class="n">abstract</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;shape&#39;</span><span class="p">,</span>
            <span class="s1">&#39;rank&#39;</span><span class="p">,</span>
@@ -312,31 +316,33 @@
     <span class="k">return</span> <span class="n">reshape</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span></div>
 
 
-<span class="k">def</span> <span class="nf">_vec_to_tril_shape_upper_perm</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
-    <span class="c1"># Compute length of side of result.</span>
-    <span class="n">n</span> <span class="o">=</span> <span class="n">shape</span><span class="p">(</span><span class="n">a</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">m</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(((</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">8</span> <span class="o">*</span> <span class="n">n</span><span class="p">)</span> <span class="o">**</span> <span class="o">.</span><span class="mi">5</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
-
-    <span class="c1"># Compute number of elements in upper part.</span>
-    <span class="n">upper</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">m</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">m</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">_vec_to_tril_shape_upper_perm</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="c1"># Compute the length of a side of the square result.</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">shape</span><span class="p">(</span><span class="n">a</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">offset</span>
+    <span class="k">if</span> <span class="n">k</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">side</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">8</span> <span class="o">*</span> <span class="n">m</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">k</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">side</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">8</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">m</span><span class="p">))</span> <span class="o">-</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">k</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
 
     <span class="c1"># Compute sorting permutation.</span>
-    <span class="n">ind_lower</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tril_indices</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
-    <span class="n">ind_upper</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu_indices</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">ind_lower</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tril_indices</span><span class="p">(</span><span class="n">side</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span>
+    <span class="n">ind_upper</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu_indices</span><span class="p">(</span><span class="n">side</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span> <span class="o">+</span> <span class="n">offset</span><span class="p">)</span>
     <span class="n">ind_concat</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">ind_lower</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ind_upper</span><span class="p">[</span><span class="mi">0</span><span class="p">])),</span>
                   <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">ind_lower</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">ind_upper</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
     <span class="n">perm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">lexsort</span><span class="p">((</span><span class="n">ind_concat</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">ind_concat</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 
-    <span class="k">return</span> <span class="n">m</span><span class="p">,</span> <span class="n">upper</span><span class="p">,</span> <span class="n">perm</span>
+    <span class="k">return</span> <span class="n">side</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ind_upper</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">perm</span>
 
 
 <div class="viewcode-block" id="vec_to_tril"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.vec_to_tril">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
 <span class="nd">@abstract</span><span class="p">()</span>
-<span class="k">def</span> <span class="nf">vec_to_tril</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+<span class="k">def</span> <span class="nf">vec_to_tril</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
     <span class="sd">&quot;&quot;&quot;Construct a lower triangular matrix from a vector.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        a (tensor): Vector.</span>
+<span class="sd">        offset (int, optional): Diagonal offset.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        tensor: Lower triangular matrix.</span>
@@ -345,11 +351,12 @@
 
 <div class="viewcode-block" id="tril_to_vec"><a class="viewcode-back" href="../../source/lab.shaping.html#lab.shaping.tril_to_vec">[docs]</a><span class="nd">@dispatch</span><span class="p">(</span><span class="n">Numeric</span><span class="p">)</span>
 <span class="nd">@abstract</span><span class="p">()</span>
-<span class="k">def</span> <span class="nf">tril_to_vec</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+<span class="k">def</span> <span class="nf">tril_to_vec</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
     <span class="sd">&quot;&quot;&quot;Construct a vector from a lower triangular matrix.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        a (tensor): Lower triangular matrix.</span>
+<span class="sd">        offset (int, optional): Diagonal offset.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        tensor: Vector</span>
@@ -466,11 +473,19 @@
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2017, Wessel Bruinsma
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -481,7 +496,6 @@
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

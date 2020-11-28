@@ -2,6 +2,6 @@ lab.custom module
 =================
 
 .. automodule:: lab.custom
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

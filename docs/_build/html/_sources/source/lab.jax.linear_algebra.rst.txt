@@ -1,0 +1,7 @@
+lab.jax.linear\_algebra module
+==============================
+
+.. automodule:: lab.jax.linear_algebra
+   :members:
+   :undoc-members:
+   :show-inheritance:

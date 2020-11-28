@@ -1,8 +1,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -12,31 +11,33 @@
   
 
   
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
   
   
   
 
   
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="lab.generic module" href="lab.generic.html" />
-    <link rel="prev" title="lab.autograd.shaping module" href="lab.autograd.shaping.html" /> 
+    <link rel="prev" title="lab.bvn_cdf module" href="lab.bvn_cdf.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -50,7 +51,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home"> lab
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> lab
           
 
           
@@ -77,6 +78,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -93,8 +95,15 @@
 <li class="toctree-l2"><a class="reference internal" href="lab.autograd.linear_algebra.html">lab.autograd.linear_algebra module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.autograd.random.html">lab.autograd.random module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.autograd.shaping.html">lab.autograd.shaping module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.bvn_cdf.html">lab.bvn_cdf module</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">lab.custom module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.generic.html">lab.generic module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.jax.html">lab.jax package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.jax.custom.html">lab.jax.custom module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.jax.generic.html">lab.jax.generic module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.jax.linear_algebra.html">lab.jax.linear_algebra module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.jax.random.html">lab.jax.random module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.jax.shaping.html">lab.jax.shaping module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.linear_algebra.html">lab.linear_algebra module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.numpy.html">lab.numpy package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.numpy.generic.html">lab.numpy.generic module</a></li>
@@ -124,6 +133,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -162,7 +172,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../index.html">Docs</a> &raquo;</li>
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="../api.html">Application Programming Interface</a> &raquo;</li>
         
@@ -187,24 +197,44 @@
             
   <div class="section" id="module-lab.custom">
 <span id="lab-custom-module"></span><h1>lab.custom module<a class="headerlink" href="#module-lab.custom" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
-<dt id="lab.custom.toeplitz_solve">
-<code class="descclassname">lab.custom.</code><code class="descname">toeplitz_solve</code><span class="sig-paren">(</span><em>a</em>, <em>b</em>, <em>c</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lab/custom.html#toeplitz_solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.custom.toeplitz_solve" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="lab.custom.s_toeplitz_solve">
-<code class="descclassname">lab.custom.</code><code class="descname">s_toeplitz_solve</code><span class="sig-paren">(</span><em>s_y</em>, <em>y</em>, <em>a</em>, <em>b</em>, <em>c</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lab/custom.html#s_toeplitz_solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.custom.s_toeplitz_solve" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
+<dl class="py function">
 <dt id="lab.custom.bvn_cdf">
-<code class="descclassname">lab.custom.</code><code class="descname">bvn_cdf</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lab.custom.bvn_cdf" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">lab.custom.</code><code class="sig-name descname">bvn_cdf</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">a</span></em>, <em class="sig-param"><span class="n">b</span></em>, <em class="sig-param"><span class="n">c</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lab/custom.html#bvn_cdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.custom.bvn_cdf" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="function">
+<dl class="py function">
+<dt id="lab.custom.expm">
+<code class="sig-prename descclassname">lab.custom.</code><code class="sig-name descname">expm</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">a</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lab/custom.html#expm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.custom.expm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="lab.custom.logm">
+<code class="sig-prename descclassname">lab.custom.</code><code class="sig-name descname">logm</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">a</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lab/custom.html#logm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.custom.logm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
 <dt id="lab.custom.s_bvn_cdf">
-<code class="descclassname">lab.custom.</code><code class="descname">s_bvn_cdf</code><span class="sig-paren">(</span><em>s_y</em>, <em>y</em>, <em>a</em>, <em>b</em>, <em>c</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lab/custom.html#s_bvn_cdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.custom.s_bvn_cdf" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">lab.custom.</code><code class="sig-name descname">s_bvn_cdf</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lab.custom.s_bvn_cdf" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="lab.custom.s_expm">
+<code class="sig-prename descclassname">lab.custom.</code><code class="sig-name descname">s_expm</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s_y</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">a</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lab/custom.html#s_expm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.custom.s_expm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="lab.custom.s_logm">
+<code class="sig-prename descclassname">lab.custom.</code><code class="sig-name descname">s_logm</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">a</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lab/custom.html#s_logm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.custom.s_logm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="lab.custom.s_toeplitz_solve">
+<code class="sig-prename descclassname">lab.custom.</code><code class="sig-name descname">s_toeplitz_solve</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s_y</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">a</span></em>, <em class="sig-param"><span class="n">b</span></em>, <em class="sig-param"><span class="n">c</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lab/custom.html#s_toeplitz_solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.custom.s_toeplitz_solve" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="lab.custom.toeplitz_solve">
+<code class="sig-prename descclassname">lab.custom.</code><code class="sig-name descname">toeplitz_solve</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">a</span></em>, <em class="sig-param"><span class="n">b</span></em>, <em class="sig-param"><span class="n">c</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lab/custom.html#toeplitz_solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.custom.toeplitz_solve" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
@@ -220,7 +250,7 @@
         <a href="lab.generic.html" class="btn btn-neutral float-right" title="lab.generic module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="lab.autograd.shaping.html" class="btn btn-neutral float-left" title="lab.autograd.shaping module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="lab.bvn_cdf.html" class="btn btn-neutral float-left" title="lab.bvn_cdf module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -229,11 +259,19 @@
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2017, Wessel Bruinsma
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -244,7 +282,6 @@
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

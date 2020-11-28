@@ -1,22 +1,21 @@
 `LAB <http://github.com/wesselb/lab>`__
 =======================================
 
-|Build| |Coverage Status| |Latest Docs|
+|CI| |Coverage Status| |Latest Docs|
 
 A generic interface for linear algebra backends: code it once, run it on
 any backend
 
-*Note:* LAB requires Python 3.6 or higher and TensorFlow 2 if TensorFlow
-is used.
-
--  `Installation <#installation>`__
+-  `Requirements and Installation <#requirements-and-installation>`__
 -  `Basic Usage <#basic-usage>`__
 -  `List of Types <#list-of-types>`__
 
    -  `General <#general>`__
    -  `NumPy <#numpy>`__
+   -  `AutoGrad <#autograd>`__
    -  `TensorFlow <#tensorflow>`__
    -  `PyTorch <#pytorch>`__
+   -  `Jax <#jax>`__
 
 -  `List of Methods <#list-of-methods>`__
 
@@ -26,15 +25,12 @@ is used.
    -  `Random <#random>`__
    -  `Shaping <#shaping>`__
 
-Installation
-------------
+Requirements and Installation
+-----------------------------
 
-Before installing the package, please ensure that ``gcc`` and
-``gfortran`` are available. On OS X, these are both installed with
-``brew install gcc``; users of Anaconda may want to instead consider
-``conda install gcc``. On Linux, ``gcc`` is most likely already
-available, and ``gfortran`` can be installed with
-``apt-get install gfortran``. Then simply
+See `the instructions
+here <https://gist.github.com/wesselb/4b44bf87f3789425f96e26c4308d0adc>`__.
+Then simply
 
 ::
 
@@ -54,13 +50,14 @@ Example:
     import lab.autograd    # Load the AutoGrad extension.
     import lab.torch       # Load the PyTorch extension.
     import lab.tensorflow  # Load the TensorFlow extension.
+    import lab.jax         # Load the Jax extension.
 
 
     def objective(matrix):
         outer_product = B.matmul(matrix, matrix, tr_b=True)
         return B.mean(outer_product)
 
-The AutoGrad, PyTorch, and TensorFlow extensions are not loaded
+The AutoGrad, PyTorch, TensorFlow, and Jax extensions are not loaded
 automatically to not enforce a dependency on all three frameworks. An
 extension can alternatively be loaded via ``import lab.autograd as B``.
 
@@ -94,6 +91,21 @@ Run it with PyTorch:
 
     >>> objective(B.randn(torch.float64, 2, 2))
     tensor(1.9557, dtype=torch.float64)
+
+Run it with Jax:
+
+.. code:: python
+
+    >>> import jax
+
+    >>> import jax.numpy as jnp
+
+    >>> jax.jit(objective)(B.randn(jnp.float32, 2, 2))
+    DeviceArray(0.3109299, dtype=float32)
+
+    >>> jax.jit(jax.grad(objective))(B.randn(jnp.float32, 2, 2))
+    DeviceArray([[ 0.2525182, -1.26065  ],
+                 [ 0.2525182, -1.26065  ]], dtype=float32)
 
 List of Types
 -------------
@@ -177,6 +189,16 @@ PyTorch
      
     Torch        # Anything PyTorch
 
+Jax
+~~~
+
+::
+
+    JaxNumeric
+    JaxDType
+     
+    Jax          # Anything Jax
+
 List of Methods
 ---------------
 
@@ -223,12 +245,12 @@ Constants
     pi
     log_2_pi
 
-    isnan(a)
-
 Generic
 ~~~~~~~
 
 ::
+
+    isnan(a)
 
     zeros(dtype, *shape)
     zeros(*shape)
@@ -270,6 +292,8 @@ Generic
     sin(a)
     cos(a)
     tan(a)
+    tanh(a)
+    erf(a)
     sigmoid(a)
     softplus(a)
     relu(a)
@@ -321,6 +345,8 @@ Linear Algebra
     inv(a)
     det(a) 
     logdet(a) 
+    expm(a)
+    logm(a)
     cholesky(a) (alias: chol)
 
     cholesky_solve(a, b)  (alias: cholsolve)
@@ -384,8 +410,8 @@ Shaping
 
     diag(a)
     flatten(a)
-    vec_to_tril(a)
-    tril_to_vec(a)
+    vec_to_tril(a, offset=0)
+    tril_to_vec(a, offset=0)
     stack(*elements, axis=0)
     unstack(a, axis=0)
     reshape(a, *shape)
@@ -394,8 +420,8 @@ Shaping
     tile(a, *repeats)
     take(a, indices, axis=0)
 
-.. |Build| image:: https://travis-ci.org/wesselb/lab.svg?branch=master
-   :target: https://travis-ci.org/wesselb/lab
+.. |CI| image:: https://github.com/wesselb/lab/workflows/CI/badge.svg?branch=master
+   :target: https://github.com/wesselb/lab/actions?query=workflow%3ACI
 .. |Coverage Status| image:: https://coveralls.io/repos/github/wesselb/lab/badge.svg?branch=master&service=github
    :target: https://coveralls.io/github/wesselb/lab?branch=master
 .. |Latest Docs| image:: https://img.shields.io/badge/docs-latest-blue.svg

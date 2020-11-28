@@ -2,18 +2,18 @@ lab.tensorflow package
 ======================
 
 .. automodule:: lab.tensorflow
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    lab.tensorflow.custom
    lab.tensorflow.generic
    lab.tensorflow.linear_algebra
    lab.tensorflow.random
    lab.tensorflow.shaping
-

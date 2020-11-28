@@ -1,0 +1,19 @@
+lab.jax package
+===============
+
+.. automodule:: lab.jax
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   lab.jax.custom
+   lab.jax.generic
+   lab.jax.linear_algebra
+   lab.jax.random
+   lab.jax.shaping

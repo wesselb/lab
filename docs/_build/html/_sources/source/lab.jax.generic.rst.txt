@@ -1,0 +1,7 @@
+lab.jax.generic module
+======================
+
+.. automodule:: lab.jax.generic
+   :members:
+   :undoc-members:
+   :show-inheritance:

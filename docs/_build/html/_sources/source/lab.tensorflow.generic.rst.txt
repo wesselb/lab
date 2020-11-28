@@ -2,6 +2,6 @@ lab.tensorflow.generic module
 =============================
 
 .. automodule:: lab.tensorflow.generic
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,8 +1,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -12,31 +11,33 @@
   
 
   
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
   
   
   
 
   
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="lab.numpy package" href="lab.numpy.html" />
-    <link rel="prev" title="lab.generic module" href="lab.generic.html" /> 
+    <link rel="prev" title="lab.jax.shaping module" href="lab.jax.shaping.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -50,7 +51,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home"> lab
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> lab
           
 
           
@@ -77,6 +78,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -93,8 +95,15 @@
 <li class="toctree-l2"><a class="reference internal" href="lab.autograd.linear_algebra.html">lab.autograd.linear_algebra module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.autograd.random.html">lab.autograd.random module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.autograd.shaping.html">lab.autograd.shaping module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.bvn_cdf.html">lab.bvn_cdf module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.custom.html">lab.custom module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.generic.html">lab.generic module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.jax.html">lab.jax package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.jax.custom.html">lab.jax.custom module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.jax.generic.html">lab.jax.generic module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.jax.linear_algebra.html">lab.jax.linear_algebra module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.jax.random.html">lab.jax.random module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.jax.shaping.html">lab.jax.shaping module</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">lab.linear_algebra module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.numpy.html">lab.numpy package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.numpy.generic.html">lab.numpy.generic module</a></li>
@@ -124,6 +133,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -162,7 +172,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../index.html">Docs</a> &raquo;</li>
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="../api.html">Application Programming Interface</a> &raquo;</li>
         
@@ -187,221 +197,21 @@
             
   <div class="section" id="module-lab.linear_algebra">
 <span id="lab-linear-algebra-module"></span><h1>lab.linear_algebra module<a class="headerlink" href="#module-lab.linear_algebra" title="Permalink to this headline">¶</a></h1>
-<dl class="data">
-<dt id="lab.linear_algebra.epsilon">
-<code class="descclassname">lab.linear_algebra.</code><code class="descname">epsilon</code><em class="property"> = 1e-12</em><a class="headerlink" href="#lab.linear_algebra.epsilon" title="Permalink to this definition">¶</a></dt>
-<dd><p>Magnitude of diagonal to regularise matrices with.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.linear_algebra.transpose">
-<code class="descclassname">lab.linear_algebra.</code><code class="descname">transpose</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#transpose"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.transpose" title="Permalink to this definition">¶</a></dt>
-<dd><p>Transpose a matrix.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>tensor</em>) – Matrix to transpose.</p></li>
-<li><p><strong>perm</strong> (<em>list</em><em>[</em><em>int</em><em>] or </em><em>tuple</em><em>[</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – Permutation. Defaults to
-switching the last two axes.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Transposition of <cite>a</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.linear_algebra.t">
-<code class="descclassname">lab.linear_algebra.</code><code class="descname">t</code><a class="headerlink" href="#lab.linear_algebra.t" title="Permalink to this definition">¶</a></dt>
-<dd><p>Shorthand for <cite>transpose</cite>.</p>
-</dd></dl>
-
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lab.linear_algebra.T">
-<code class="descclassname">lab.linear_algebra.</code><code class="descname">T</code><a class="headerlink" href="#lab.linear_algebra.T" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">lab.linear_algebra.</code><code class="sig-name descname">T</code><a class="headerlink" href="#lab.linear_algebra.T" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shorthand for <cite>transpose</cite>.</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="lab.linear_algebra.matmul">
-<code class="descclassname">lab.linear_algebra.</code><code class="descname">matmul</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#matmul"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.matmul" title="Permalink to this definition">¶</a></dt>
-<dd><p>Matrix multiplication.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>tensor</em>) – First matrix.</p></li>
-<li><p><strong>b</strong> (<em>tensor</em>) – Second matrix.</p></li>
-<li><p><strong>tr_a</strong> (<em>bool</em><em>, </em><em>optional</em>) – Transpose first matrix. Defaults to <cite>False</cite>.</p></li>
-<li><p><strong>tr_b</strong> (<em>bool</em><em>, </em><em>optional</em>) – Transpose second matrix. Defaults to <cite>False</cite>.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Matrix product of <cite>a</cite> and <cite>b</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
+<dl class="py attribute">
+<dt id="lab.linear_algebra.chol">
+<code class="sig-prename descclassname">lab.linear_algebra.</code><code class="sig-name descname">chol</code><a class="headerlink" href="#lab.linear_algebra.chol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shorthand for <cite>cholesky</cite>.</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="lab.linear_algebra.mm">
-<code class="descclassname">lab.linear_algebra.</code><code class="descname">mm</code><a class="headerlink" href="#lab.linear_algebra.mm" title="Permalink to this definition">¶</a></dt>
-<dd><p>Shorthand for <cite>matmul</cite>.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.linear_algebra.dot">
-<code class="descclassname">lab.linear_algebra.</code><code class="descname">dot</code><a class="headerlink" href="#lab.linear_algebra.dot" title="Permalink to this definition">¶</a></dt>
-<dd><p>Shorthand for <cite>matmul</cite>.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.linear_algebra.kron">
-<code class="descclassname">lab.linear_algebra.</code><code class="descname">kron</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#kron"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.kron" title="Permalink to this definition">¶</a></dt>
-<dd><p>Kronecker product.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>tensor</em>) – First matrix.</p></li>
-<li><p><strong>b</strong> (<em>tensor</em>) – Second matrix.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Kronecker product of <cite>a</cite> and <cite>b</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.linear_algebra.trace">
-<code class="descclassname">lab.linear_algebra.</code><code class="descname">trace</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#trace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.trace" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the trace of a tensor.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>tensor</em>) – Tensor to compute trace of.</p></li>
-<li><p><strong>axis1</strong> (<em>int</em><em>, </em><em>optional</em>) – First dimension to compute trace over. Defaults
-to <cite>0</cite>.</p></li>
-<li><p><strong>axis2</strong> (<em>int</em><em>, </em><em>optional</em>) – Second dimension to compute trace over. Defaults
-to <cite>1</cite>.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Trace.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.linear_algebra.svd">
-<code class="descclassname">lab.linear_algebra.</code><code class="descname">svd</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#svd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.svd" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the singular value decomposition.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>PyTorch does not allow batch computation.</p>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>tensor</em>) – Matrix to decompose.</p></li>
-<li><p><strong>compute_uv</strong> (<em>bool</em><em>, </em><em>optional</em>) – Also compute <cite>U</cite> and <cite>V</cite>. Defaults to
-<cite>True</cite>.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><cite>(U, S, V)</cite> is <cite>compute_uv</cite> is <cite>True</cite> and just <cite>S</cite> otherwise.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tuple</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.linear_algebra.solve">
-<code class="descclassname">lab.linear_algebra.</code><code class="descname">solve</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.solve" title="Permalink to this definition">¶</a></dt>
-<dd><p>Solve the linear system <cite>a x = b</cite>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>tensor</em>) – LHS <cite>a</cite>.</p></li>
-<li><p><strong>b</strong> (<em>tensor</em>) – RHS <cite>b</cite>.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Solution <cite>x</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.linear_algebra.inv">
-<code class="descclassname">lab.linear_algebra.</code><code class="descname">inv</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#inv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.inv" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the inverse of <cite>a</cite>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Matrix to compute inverse of.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Inverse of <cite>a</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.linear_algebra.det">
-<code class="descclassname">lab.linear_algebra.</code><code class="descname">det</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#det"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.det" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the determinant of <cite>a</cite>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Matrix to compute determinant of.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Determinant of <cite>a</cite></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>scalar</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.linear_algebra.logdet">
-<code class="descclassname">lab.linear_algebra.</code><code class="descname">logdet</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#logdet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.logdet" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the log-determinant of <cite>a</cite>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Matrix to compute log-determinant of.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Log-determinant of <cite>a</cite></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>scalar</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lab.linear_algebra.cholesky">
-<code class="descclassname">lab.linear_algebra.</code><code class="descname">cholesky</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#cholesky"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.cholesky" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">lab.linear_algebra.</code><code class="sig-name descname">cholesky</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#cholesky"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.cholesky" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the Cholesky decomposition.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -416,15 +226,9 @@ to <cite>1</cite>.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="lab.linear_algebra.chol">
-<code class="descclassname">lab.linear_algebra.</code><code class="descname">chol</code><a class="headerlink" href="#lab.linear_algebra.chol" title="Permalink to this definition">¶</a></dt>
-<dd><p>Shorthand for <cite>cholesky</cite>.</p>
-</dd></dl>
-
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lab.linear_algebra.cholesky_solve">
-<code class="descclassname">lab.linear_algebra.</code><code class="descname">cholesky_solve</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#cholesky_solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.cholesky_solve" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">lab.linear_algebra.</code><code class="sig-name descname">cholesky_solve</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#cholesky_solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.cholesky_solve" title="Permalink to this definition">¶</a></dt>
 <dd><p>Solve the linear system <cite>a x = b</cite> given the Cholesky factorisation of
 <cite>a</cite>.</p>
 <dl class="field-list simple">
@@ -443,142 +247,45 @@ to <cite>1</cite>.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lab.linear_algebra.cholsolve">
-<code class="descclassname">lab.linear_algebra.</code><code class="descname">cholsolve</code><a class="headerlink" href="#lab.linear_algebra.cholsolve" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">lab.linear_algebra.</code><code class="sig-name descname">cholsolve</code><a class="headerlink" href="#lab.linear_algebra.cholsolve" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shorthand for <cite>cholesky_solve</cite>.</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="lab.linear_algebra.triangular_solve">
-<code class="descclassname">lab.linear_algebra.</code><code class="descname">triangular_solve</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#triangular_solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.triangular_solve" title="Permalink to this definition">¶</a></dt>
-<dd><p>Solve the linear system <cite>a x = b</cite> where <cite>a</cite> is triangular.</p>
+<dl class="py attribute">
+<dt id="lab.linear_algebra.det">
+<code class="sig-prename descclassname">lab.linear_algebra.</code><code class="sig-name descname">det</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#det"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.det" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the determinant of <cite>a</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>tensor</em>) – Triangular matrix <cite>a</cite>.</p></li>
-<li><p><strong>b</strong> (<em>tensor</em>) – RHS <cite>b</cite>.</p></li>
-<li><p><strong>lower_a</strong> (<em>bool</em><em>, </em><em>optional</em>) – Indicate that <cite>a</cite> is lower triangular
-instead of upper triangular. Defaults to <cite>True</cite>.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Matrix to compute determinant of.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Solution <cite>x</cite>.</p>
+<dd class="field-even"><p>Determinant of <cite>a</cite></p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
+<dd class="field-odd"><p>scalar</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="lab.linear_algebra.trisolve">
-<code class="descclassname">lab.linear_algebra.</code><code class="descname">trisolve</code><a class="headerlink" href="#lab.linear_algebra.trisolve" title="Permalink to this definition">¶</a></dt>
-<dd><p>Shorthand for <cite>triangular_solve</cite>.</p>
+<dl class="py attribute">
+<dt id="lab.linear_algebra.dot">
+<code class="sig-prename descclassname">lab.linear_algebra.</code><code class="sig-name descname">dot</code><a class="headerlink" href="#lab.linear_algebra.dot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shorthand for <cite>matmul</cite>.</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="lab.linear_algebra.toeplitz_solve">
-<code class="descclassname">lab.linear_algebra.</code><code class="descname">toeplitz_solve</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#toeplitz_solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.toeplitz_solve" title="Permalink to this definition">¶</a></dt>
-<dd><p>Solve the linear system <cite>toep(a, b) x = c</cite> where <cite>toep(a, b)</cite> is a
-Toeplitz matrix.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>tensor</em>) – First column of the Toeplitz matrix.</p></li>
-<li><p><strong>b</strong> (<em>tensor</em><em>, </em><em>optional</em>) – <em>Except for the first element</em>, first row of the
-Toeplitz matrix. Defaults to <cite>a[1:]</cite>.</p></li>
-<li><p><strong>c</strong> (<em>tensor</em>) – RHS <cite>c</cite>.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Solution <cite>x</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
+<dl class="py data">
+<dt id="lab.linear_algebra.epsilon">
+<code class="sig-prename descclassname">lab.linear_algebra.</code><code class="sig-name descname">epsilon</code><em class="property"> = 1e-12</em><a class="headerlink" href="#lab.linear_algebra.epsilon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Magnitude of diagonal to regularise matrices with.</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="lab.linear_algebra.toepsolve">
-<code class="descclassname">lab.linear_algebra.</code><code class="descname">toepsolve</code><a class="headerlink" href="#lab.linear_algebra.toepsolve" title="Permalink to this definition">¶</a></dt>
-<dd><p>Shorthand for <cite>toeplitz_solve</cite>.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.linear_algebra.outer">
-<code class="descclassname">lab.linear_algebra.</code><code class="descname">outer</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#outer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.outer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the outer product between two vectors or matrices.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>tensor</em>) – First tensor.</p></li>
-<li><p><strong>b</strong> (<em>tensor</em>) – Second tensor.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Outer product of <cite>a</cite> and <cite>b</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.linear_algebra.reg">
-<code class="descclassname">lab.linear_algebra.</code><code class="descname">reg</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#reg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.reg" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a diagonal to a matrix.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>matrix</em>) – Matrix to add a diagonal to.</p></li>
-<li><p><strong>diag</strong> (<em>float</em><em>, </em><em>optional</em>) – Magnitude of the diagonal to add. Defaults to
-<cite>.linear_algebra.epsilon</cite>.</p></li>
-<li><p><strong>clip</strong> (<em>bool</em><em>, </em><em>optional</em>) – Let <cite>diag</cite> be at least <cite>.linear_algebra.epsilon</cite>.
-Defaults to <cite>True</cite>.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Regularised version of <cite>a</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>matrix</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.linear_algebra.pw_dists2">
-<code class="descclassname">lab.linear_algebra.</code><code class="descname">pw_dists2</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#pw_dists2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.pw_dists2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the square the Euclidean norm of the pairwise
-differences between two matrices where rows correspond to elements and
-columns to features.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>matrix</em>) – First matrix.</p></li>
-<li><p><strong>b</strong> (<em>matrix</em><em>, </em><em>optional</em>) – Second matrix. Defaults to <cite>a</cite>.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><dl class="simple">
-<dt>Square of the Euclidean norm of the pairwise differences</dt><dd><p>between the elements of <cite>a</cite> and <cite>b</cite>.</p>
-</dd>
-</dl>
-</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>matrix</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.linear_algebra.pw_dists">
-<code class="descclassname">lab.linear_algebra.</code><code class="descname">pw_dists</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#pw_dists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.pw_dists" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the Euclidean norm of the pairwise differences between two
+<dl class="py attribute">
+<dt id="lab.linear_algebra.ew_dists">
+<code class="sig-prename descclassname">lab.linear_algebra.</code><code class="sig-name descname">ew_dists</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#ew_dists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.ew_dists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the Euclidean norm of the element-wise differences between two
 matrices where rows correspond to elements and columns to features.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -589,7 +296,7 @@ matrices where rows correspond to elements and columns to features.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><dl class="simple">
-<dt>Euclidean norm of the pairwise differences between the</dt><dd><p>elements of <cite>a</cite> and <cite>b</cite>.</p>
+<dt>Euclidean norm of the element-wise differences between the</dt><dd><p>elements of <cite>a</cite> and <cite>b</cite>.</p>
 </dd>
 </dl>
 </p>
@@ -600,9 +307,9 @@ matrices where rows correspond to elements and columns to features.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lab.linear_algebra.ew_dists2">
-<code class="descclassname">lab.linear_algebra.</code><code class="descname">ew_dists2</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#ew_dists2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.ew_dists2" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">lab.linear_algebra.</code><code class="sig-name descname">ew_dists2</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#ew_dists2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.ew_dists2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the square the Euclidean norm of the element-wise
 differences between two matrices where rows correspond to elements and
 columns to features.</p>
@@ -626,10 +333,10 @@ columns to features.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="lab.linear_algebra.ew_dists">
-<code class="descclassname">lab.linear_algebra.</code><code class="descname">ew_dists</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#ew_dists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.ew_dists" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the Euclidean norm of the element-wise differences between two
+<dl class="py attribute">
+<dt id="lab.linear_algebra.ew_sums">
+<code class="sig-prename descclassname">lab.linear_algebra.</code><code class="sig-name descname">ew_sums</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#ew_sums"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.ew_sums" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the Euclidean norm of the element-wise sums between two
 matrices where rows correspond to elements and columns to features.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -640,7 +347,7 @@ matrices where rows correspond to elements and columns to features.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><dl class="simple">
-<dt>Euclidean norm of the element-wise differences between the</dt><dd><p>elements of <cite>a</cite> and <cite>b</cite>.</p>
+<dt>Euclidean norm of the element-wise sums between the</dt><dd><p>elements of <cite>a</cite> and <cite>b</cite>.</p>
 </dd>
 </dl>
 </p>
@@ -651,60 +358,9 @@ matrices where rows correspond to elements and columns to features.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="lab.linear_algebra.pw_sums2">
-<code class="descclassname">lab.linear_algebra.</code><code class="descname">pw_sums2</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#pw_sums2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.pw_sums2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the square the Euclidean norm of the pairwise
-sums between two matrices where rows correspond to elements and
-columns to features.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>matrix</em>) – First matrix.</p></li>
-<li><p><strong>b</strong> (<em>matrix</em><em>, </em><em>optional</em>) – Second matrix. Defaults to <cite>a</cite>.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><dl class="simple">
-<dt>Square of the Euclidean norm of the pairwise sums</dt><dd><p>between the elements of <cite>a</cite> and <cite>b</cite>.</p>
-</dd>
-</dl>
-</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>matrix</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.linear_algebra.pw_sums">
-<code class="descclassname">lab.linear_algebra.</code><code class="descname">pw_sums</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#pw_sums"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.pw_sums" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the Euclidean norm of the pairwise sums between two
-matrices where rows correspond to elements and columns to features.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>matrix</em>) – First matrix.</p></li>
-<li><p><strong>b</strong> (<em>matrix</em><em>, </em><em>optional</em>) – Second matrix. Defaults to <cite>a</cite>.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><dl class="simple">
-<dt>Euclidean norm of the pairwise sums between the</dt><dd><p>elements of <cite>a</cite> and <cite>b</cite>.</p>
-</dd>
-</dl>
-</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>matrix</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lab.linear_algebra.ew_sums2">
-<code class="descclassname">lab.linear_algebra.</code><code class="descname">ew_sums2</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#ew_sums2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.ew_sums2" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">lab.linear_algebra.</code><code class="sig-name descname">ew_sums2</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#ew_sums2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.ew_sums2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the square the Euclidean norm of the element-wise
 sums between two matrices where rows correspond to elements and
 columns to features.</p>
@@ -728,10 +384,146 @@ columns to features.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="lab.linear_algebra.ew_sums">
-<code class="descclassname">lab.linear_algebra.</code><code class="descname">ew_sums</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#ew_sums"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.ew_sums" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the Euclidean norm of the element-wise sums between two
+<dl class="py attribute">
+<dt id="lab.linear_algebra.expm">
+<code class="sig-prename descclassname">lab.linear_algebra.</code><code class="sig-name descname">expm</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#expm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.expm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the matrix exponential of <cite>a</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Matrix to matrix exponential of.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Matrix exponential of <cite>a</cite></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>scalar</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.linear_algebra.inv">
+<code class="sig-prename descclassname">lab.linear_algebra.</code><code class="sig-name descname">inv</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#inv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.inv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the inverse of <cite>a</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Matrix to compute inverse of.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Inverse of <cite>a</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.linear_algebra.kron">
+<code class="sig-prename descclassname">lab.linear_algebra.</code><code class="sig-name descname">kron</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#kron"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.kron" title="Permalink to this definition">¶</a></dt>
+<dd><p>Kronecker product.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – First matrix.</p></li>
+<li><p><strong>b</strong> (<em>tensor</em>) – Second matrix.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Kronecker product of <cite>a</cite> and <cite>b</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.linear_algebra.logdet">
+<code class="sig-prename descclassname">lab.linear_algebra.</code><code class="sig-name descname">logdet</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#logdet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.logdet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the log-determinant of <cite>a</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Matrix to compute log-determinant of.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Log-determinant of <cite>a</cite></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>scalar</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.linear_algebra.logm">
+<code class="sig-prename descclassname">lab.linear_algebra.</code><code class="sig-name descname">logm</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#logm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.logm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the matrix logarithm of <cite>a</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Matrix to matrix logarithm of.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Matrix logarithm of <cite>a</cite></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>scalar</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.linear_algebra.matmul">
+<code class="sig-prename descclassname">lab.linear_algebra.</code><code class="sig-name descname">matmul</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#matmul"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.matmul" title="Permalink to this definition">¶</a></dt>
+<dd><p>Matrix multiplication.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – First matrix.</p></li>
+<li><p><strong>b</strong> (<em>tensor</em>) – Second matrix.</p></li>
+<li><p><strong>tr_a</strong> (<em>bool</em><em>, </em><em>optional</em>) – Transpose first matrix. Defaults to <cite>False</cite>.</p></li>
+<li><p><strong>tr_b</strong> (<em>bool</em><em>, </em><em>optional</em>) – Transpose second matrix. Defaults to <cite>False</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Matrix product of <cite>a</cite> and <cite>b</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.linear_algebra.mm">
+<code class="sig-prename descclassname">lab.linear_algebra.</code><code class="sig-name descname">mm</code><a class="headerlink" href="#lab.linear_algebra.mm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shorthand for <cite>matmul</cite>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.linear_algebra.outer">
+<code class="sig-prename descclassname">lab.linear_algebra.</code><code class="sig-name descname">outer</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#outer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.outer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the outer product between two vectors or matrices.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – First tensor.</p></li>
+<li><p><strong>b</strong> (<em>tensor</em>) – Second tensor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Outer product of <cite>a</cite> and <cite>b</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.linear_algebra.pw_dists">
+<code class="sig-prename descclassname">lab.linear_algebra.</code><code class="sig-name descname">pw_dists</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#pw_dists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.pw_dists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the Euclidean norm of the pairwise differences between two
 matrices where rows correspond to elements and columns to features.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -742,7 +534,7 @@ matrices where rows correspond to elements and columns to features.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><dl class="simple">
-<dt>Euclidean norm of the element-wise sums between the</dt><dd><p>elements of <cite>a</cite> and <cite>b</cite>.</p>
+<dt>Euclidean norm of the pairwise differences between the</dt><dd><p>elements of <cite>a</cite> and <cite>b</cite>.</p>
 </dd>
 </dl>
 </p>
@@ -751,6 +543,258 @@ matrices where rows correspond to elements and columns to features.</p>
 <dd class="field-odd"><p>matrix</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.linear_algebra.pw_dists2">
+<code class="sig-prename descclassname">lab.linear_algebra.</code><code class="sig-name descname">pw_dists2</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#pw_dists2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.pw_dists2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the square the Euclidean norm of the pairwise
+differences between two matrices where rows correspond to elements and
+columns to features.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>matrix</em>) – First matrix.</p></li>
+<li><p><strong>b</strong> (<em>matrix</em><em>, </em><em>optional</em>) – Second matrix. Defaults to <cite>a</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Square of the Euclidean norm of the pairwise differences</dt><dd><p>between the elements of <cite>a</cite> and <cite>b</cite>.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>matrix</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.linear_algebra.pw_sums">
+<code class="sig-prename descclassname">lab.linear_algebra.</code><code class="sig-name descname">pw_sums</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#pw_sums"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.pw_sums" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the Euclidean norm of the pairwise sums between two
+matrices where rows correspond to elements and columns to features.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>matrix</em>) – First matrix.</p></li>
+<li><p><strong>b</strong> (<em>matrix</em><em>, </em><em>optional</em>) – Second matrix. Defaults to <cite>a</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Euclidean norm of the pairwise sums between the</dt><dd><p>elements of <cite>a</cite> and <cite>b</cite>.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>matrix</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.linear_algebra.pw_sums2">
+<code class="sig-prename descclassname">lab.linear_algebra.</code><code class="sig-name descname">pw_sums2</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#pw_sums2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.pw_sums2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the square the Euclidean norm of the pairwise
+sums between two matrices where rows correspond to elements and
+columns to features.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>matrix</em>) – First matrix.</p></li>
+<li><p><strong>b</strong> (<em>matrix</em><em>, </em><em>optional</em>) – Second matrix. Defaults to <cite>a</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Square of the Euclidean norm of the pairwise sums</dt><dd><p>between the elements of <cite>a</cite> and <cite>b</cite>.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>matrix</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.linear_algebra.reg">
+<code class="sig-prename descclassname">lab.linear_algebra.</code><code class="sig-name descname">reg</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#reg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.reg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a diagonal to a matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>matrix</em>) – Matrix to add a diagonal to.</p></li>
+<li><p><strong>diag</strong> (<em>float</em><em>, </em><em>optional</em>) – Magnitude of the diagonal to add. Defaults to
+<cite>.linear_algebra.epsilon</cite>.</p></li>
+<li><p><strong>clip</strong> (<em>bool</em><em>, </em><em>optional</em>) – Let <cite>diag</cite> be at least <cite>.linear_algebra.epsilon</cite>.
+Defaults to <cite>True</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Regularised version of <cite>a</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>matrix</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.linear_algebra.solve">
+<code class="sig-prename descclassname">lab.linear_algebra.</code><code class="sig-name descname">solve</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.solve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solve the linear system <cite>a x = b</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – LHS <cite>a</cite>.</p></li>
+<li><p><strong>b</strong> (<em>tensor</em>) – RHS <cite>b</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Solution <cite>x</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.linear_algebra.svd">
+<code class="sig-prename descclassname">lab.linear_algebra.</code><code class="sig-name descname">svd</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#svd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.svd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the singular value decomposition.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>PyTorch does not allow batch computation.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – Matrix to decompose.</p></li>
+<li><p><strong>compute_uv</strong> (<em>bool</em><em>, </em><em>optional</em>) – Also compute <cite>U</cite> and <cite>V</cite>. Defaults to
+<cite>True</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>(U, S, V)</cite> is <cite>compute_uv</cite> is <cite>True</cite> and just <cite>S</cite> otherwise.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.linear_algebra.t">
+<code class="sig-prename descclassname">lab.linear_algebra.</code><code class="sig-name descname">t</code><a class="headerlink" href="#lab.linear_algebra.t" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shorthand for <cite>transpose</cite>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.linear_algebra.toeplitz_solve">
+<code class="sig-prename descclassname">lab.linear_algebra.</code><code class="sig-name descname">toeplitz_solve</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#toeplitz_solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.toeplitz_solve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solve the linear system <cite>toep(a, b) x = c</cite> where <cite>toep(a, b)</cite> is a
+Toeplitz matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – First column of the Toeplitz matrix.</p></li>
+<li><p><strong>b</strong> (<em>tensor</em><em>, </em><em>optional</em>) – <em>Except for the first element</em>, first row of the
+Toeplitz matrix. Defaults to <cite>a[1:]</cite>.</p></li>
+<li><p><strong>c</strong> (<em>tensor</em>) – RHS <cite>c</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Solution <cite>x</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.linear_algebra.toepsolve">
+<code class="sig-prename descclassname">lab.linear_algebra.</code><code class="sig-name descname">toepsolve</code><a class="headerlink" href="#lab.linear_algebra.toepsolve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shorthand for <cite>toeplitz_solve</cite>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.linear_algebra.trace">
+<code class="sig-prename descclassname">lab.linear_algebra.</code><code class="sig-name descname">trace</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#trace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.trace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the trace of a tensor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – Tensor to compute trace of.</p></li>
+<li><p><strong>axis1</strong> (<em>int</em><em>, </em><em>optional</em>) – First dimension to compute trace over. Defaults
+to <cite>0</cite>.</p></li>
+<li><p><strong>axis2</strong> (<em>int</em><em>, </em><em>optional</em>) – Second dimension to compute trace over. Defaults
+to <cite>1</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Trace.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.linear_algebra.transpose">
+<code class="sig-prename descclassname">lab.linear_algebra.</code><code class="sig-name descname">transpose</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#transpose"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.transpose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transpose a matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – Matrix to transpose.</p></li>
+<li><p><strong>perm</strong> (<em>list</em><em>[</em><em>int</em><em>] or </em><em>tuple</em><em>[</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – Permutation. Defaults to
+switching the last two axes.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Transposition of <cite>a</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.linear_algebra.triangular_solve">
+<code class="sig-prename descclassname">lab.linear_algebra.</code><code class="sig-name descname">triangular_solve</code><a class="reference internal" href="../_modules/lab/linear_algebra.html#triangular_solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.linear_algebra.triangular_solve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solve the linear system <cite>a x = b</cite> where <cite>a</cite> is triangular.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – Triangular matrix <cite>a</cite>.</p></li>
+<li><p><strong>b</strong> (<em>tensor</em>) – RHS <cite>b</cite>.</p></li>
+<li><p><strong>lower_a</strong> (<em>bool</em><em>, </em><em>optional</em>) – Indicate that <cite>a</cite> is lower triangular
+instead of upper triangular. Defaults to <cite>True</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Solution <cite>x</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.linear_algebra.trisolve">
+<code class="sig-prename descclassname">lab.linear_algebra.</code><code class="sig-name descname">trisolve</code><a class="headerlink" href="#lab.linear_algebra.trisolve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shorthand for <cite>triangular_solve</cite>.</p>
 </dd></dl>
 
 </div>
@@ -766,7 +810,7 @@ matrices where rows correspond to elements and columns to features.</p>
         <a href="lab.numpy.html" class="btn btn-neutral float-right" title="lab.numpy package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="lab.generic.html" class="btn btn-neutral float-left" title="lab.generic module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="lab.jax.shaping.html" class="btn btn-neutral float-left" title="lab.jax.shaping module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -775,11 +819,19 @@ matrices where rows correspond to elements and columns to features.</p>
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2017, Wessel Bruinsma
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -790,7 +842,6 @@ matrices where rows correspond to elements and columns to features.</p>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

@@ -2,6 +2,6 @@ lab.linear\_algebra module
 ==========================
 
 .. automodule:: lab.linear_algebra
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

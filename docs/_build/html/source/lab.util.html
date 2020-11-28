@@ -1,8 +1,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -12,27 +11,29 @@
   
 
   
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
   
   
   
 
   
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="prev" title="lab.types module" href="lab.types.html" /> 
@@ -49,7 +50,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home"> lab
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> lab
           
 
           
@@ -76,6 +77,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -92,8 +94,15 @@
 <li class="toctree-l2"><a class="reference internal" href="lab.autograd.linear_algebra.html">lab.autograd.linear_algebra module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.autograd.random.html">lab.autograd.random module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.autograd.shaping.html">lab.autograd.shaping module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.bvn_cdf.html">lab.bvn_cdf module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.custom.html">lab.custom module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.generic.html">lab.generic module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.jax.html">lab.jax package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.jax.custom.html">lab.jax.custom module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.jax.generic.html">lab.jax.generic module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.jax.linear_algebra.html">lab.jax.linear_algebra module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.jax.random.html">lab.jax.random module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.jax.shaping.html">lab.jax.shaping module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.linear_algebra.html">lab.linear_algebra module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.numpy.html">lab.numpy package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.numpy.generic.html">lab.numpy.generic module</a></li>
@@ -123,6 +132,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -161,7 +171,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../index.html">Docs</a> &raquo;</li>
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="../api.html">Application Programming Interface</a> &raquo;</li>
         
@@ -186,9 +196,45 @@
             
   <div class="section" id="module-lab.util">
 <span id="lab-util-module"></span><h1>lab.util module<a class="headerlink" href="#module-lab.util" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
+<dl class="py function">
+<dt id="lab.util.abstract">
+<code class="sig-prename descclassname">lab.util.</code><code class="sig-name descname">abstract</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">promote</span><span class="o">=</span><span class="default_value">- 1</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lab/util.html#abstract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.util.abstract" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a decorator for an abstract function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>promote</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of arguments to promote. Set to <cite>-1</cite>
+to promote all arguments, and set to <cite>None</cite> or <cite>0</cite> to promote no
+arguments. Defaults to <cite>-1</cite>.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Decorator.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.util.as_tuple">
+<code class="sig-prename descclassname">lab.util.</code><code class="sig-name descname">as_tuple</code><a class="reference internal" href="../_modules/lab/util.html#as_tuple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.util.as_tuple" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get <cite>x</cite> as a tuple. Will be wrapped in a one-tuple if it is not a tuple.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>object</em>) – Object to get as a tuple.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>x</cite> as a tuple.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt id="lab.util.batch_computation">
-<code class="descclassname">lab.util.</code><code class="descname">batch_computation</code><span class="sig-paren">(</span><em>f</em>, <em>xs</em>, <em>ranks</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lab/util.html#batch_computation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.util.batch_computation" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">lab.util.</code><code class="sig-name descname">batch_computation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em>, <em class="sig-param"><span class="n">xs</span></em>, <em class="sig-param"><span class="n">ranks</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lab/util.html#batch_computation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.util.batch_computation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Apply a function over all batches of arguments.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -203,25 +249,6 @@
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="lab.util.abstract">
-<code class="descclassname">lab.util.</code><code class="descname">abstract</code><span class="sig-paren">(</span><em>promote=-1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lab/util.html#abstract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.util.abstract" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a decorator for an abstract function.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>promote</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of arguments to promote. Set to <cite>-1</cite>
-to promote all arguments, and set to <cite>None</cite> or <cite>0</cite> to promote no
-arguments. Defaults to <cite>-1</cite>.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Decorator.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>function</p>
 </dd>
 </dl>
 </dd></dl>
@@ -246,11 +273,19 @@ arguments. Defaults to <cite>-1</cite>.</p>
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2017, Wessel Bruinsma
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -261,7 +296,6 @@ arguments. Defaults to <cite>-1</cite>.</p>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

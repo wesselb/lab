@@ -1,8 +1,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -12,30 +11,32 @@
   
 
   
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
   
   
   
 
   
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="lab.linear_algebra module" href="lab.linear_algebra.html" />
+    <link rel="next" title="lab.jax package" href="lab.jax.html" />
     <link rel="prev" title="lab.custom module" href="lab.custom.html" /> 
 </head>
 
@@ -50,7 +51,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home"> lab
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> lab
           
 
           
@@ -77,6 +78,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -93,8 +95,15 @@
 <li class="toctree-l2"><a class="reference internal" href="lab.autograd.linear_algebra.html">lab.autograd.linear_algebra module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.autograd.random.html">lab.autograd.random module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.autograd.shaping.html">lab.autograd.shaping module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.bvn_cdf.html">lab.bvn_cdf module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.custom.html">lab.custom module</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">lab.generic module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.jax.html">lab.jax package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.jax.custom.html">lab.jax.custom module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.jax.generic.html">lab.jax.generic module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.jax.linear_algebra.html">lab.jax.linear_algebra module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.jax.random.html">lab.jax.random module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.jax.shaping.html">lab.jax.shaping module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.linear_algebra.html">lab.linear_algebra module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.numpy.html">lab.numpy package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.numpy.generic.html">lab.numpy.generic module</a></li>
@@ -124,6 +133,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -162,7 +172,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../index.html">Docs</a> &raquo;</li>
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="../api.html">Application Programming Interface</a> &raquo;</li>
         
@@ -187,244 +197,9 @@
             
   <div class="section" id="module-lab.generic">
 <span id="lab-generic-module"></span><h1>lab.generic module<a class="headerlink" href="#module-lab.generic" title="Permalink to this headline">¶</a></h1>
-<dl class="data">
-<dt id="lab.generic.nan">
-<code class="descclassname">lab.generic.</code><code class="descname">nan</code><em class="property"> = nan</em><a class="headerlink" href="#lab.generic.nan" title="Permalink to this definition">¶</a></dt>
-<dd><p>NaN.</p>
-</dd></dl>
-
-<dl class="data">
-<dt id="lab.generic.pi">
-<code class="descclassname">lab.generic.</code><code class="descname">pi</code><em class="property"> = 3.141592653589793</em><a class="headerlink" href="#lab.generic.pi" title="Permalink to this definition">¶</a></dt>
-<dd><p>Value of pi.</p>
-</dd></dl>
-
-<dl class="data">
-<dt id="lab.generic.log_2_pi">
-<code class="descclassname">lab.generic.</code><code class="descname">log_2_pi</code><em class="property"> = 1.8378770664093453</em><a class="headerlink" href="#lab.generic.log_2_pi" title="Permalink to this definition">¶</a></dt>
-<dd><p>Value of log(2 * pi).</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.generic.isnan">
-<code class="descclassname">lab.generic.</code><code class="descname">isnan</code><a class="reference internal" href="../_modules/lab/generic.html#isnan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.isnan" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check whether a tensor is NaN.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><cite>a</cite> is NaN.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor[bool]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.generic.zeros">
-<code class="descclassname">lab.generic.</code><code class="descname">zeros</code><a class="reference internal" href="../_modules/lab/generic.html#zeros"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.zeros" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a tensor of zeros.</p>
-<p>Can also give a reference tensor whose data type and shape will be used to
-construct a tensor of zeros.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dtype</strong> (<em>dtype</em><em>, </em><em>optional</em>) – Data type. Defaults to the default data type.</p></li>
-<li><p><strong>*shape</strong> (<em>shape</em>) – Shape of the tensor.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Tensor of zeros of shape <cite>shape</cite> and data type <cite>dtype</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.generic.ones">
-<code class="descclassname">lab.generic.</code><code class="descname">ones</code><a class="reference internal" href="../_modules/lab/generic.html#ones"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.ones" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a tensor of ones.</p>
-<p>Can also give a reference tensor whose data type and shape will be used to
-construct a tensor of ones.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dtype</strong> (<em>dtype</em><em>, </em><em>optional</em>) – Data type. Defaults to the default data type.</p></li>
-<li><p><strong>*shape</strong> (<em>shape</em>) – Shape of the tensor.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Tensor of ones of shape <cite>shape</cite> and data type <cite>dtype</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.generic.zero">
-<code class="descclassname">lab.generic.</code><code class="descname">zero</code><a class="reference internal" href="../_modules/lab/generic.html#zero"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.zero" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a <cite>0</cite> with a particular data type.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>dtype</strong> (<em>dtype</em>) – Data type.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><cite>0</cite> with data type <cite>dtype</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>scalar</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.generic.one">
-<code class="descclassname">lab.generic.</code><code class="descname">one</code><a class="reference internal" href="../_modules/lab/generic.html#one"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.one" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a <cite>1</cite> with a particular data type.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>dtype</strong> (<em>dtype</em>) – Data type.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><cite>1</cite> with data type <cite>dtype</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>scalar</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.generic.eye">
-<code class="descclassname">lab.generic.</code><code class="descname">eye</code><a class="reference internal" href="../_modules/lab/generic.html#eye"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.eye" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create an identity matrix.</p>
-<p>Can also give a reference tensor whose data type and shape will be used to
-construct an identity matrix.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dtype</strong> (<em>dtype</em><em>, </em><em>optional</em>) – Data type. Defaults to the default data type.</p></li>
-<li><p><strong>*shape</strong> (<em>shape</em>) – Shape of the matrix.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Identity matrix of shape <cite>shape</cite> and data type <cite>dtype</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.generic.linspace">
-<code class="descclassname">lab.generic.</code><code class="descname">linspace</code><a class="reference internal" href="../_modules/lab/generic.html#linspace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.linspace" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a vector of <cite>c</cite> numbers ranging from <cite>a</cite> to <cite>c</cite>, distributed
-linearly.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dtype</strong> (<em>dtype</em><em>, </em><em>optional</em>) – Data type. Defaults to the default data type.</p></li>
-<li><p><strong>a</strong> (<em>number</em>) – Lower bound.</p></li>
-<li><p><strong>b</strong> (<em>number</em>) – Upper bound.</p></li>
-<li><p><strong>num</strong> (<em>int</em>) – Number of numbers.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><cite>c</cite> numbers ranging from <cite>a</cite> to <cite>c</cite>, distributed linearly.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>vector</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.generic.range">
-<code class="descclassname">lab.generic.</code><code class="descname">range</code><a class="reference internal" href="../_modules/lab/generic.html#range"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.range" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a vector of numbers ranging from <cite>start</cite> to <cite>stop</cite> with step
-size <cite>step</cite>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dtype</strong> (<em>dtype</em><em>, </em><em>optional</em>) – Data type. Defaults to <cite>int</cite>.</p></li>
-<li><p><strong>start</strong> (<em>number</em><em>, </em><em>optional</em>) – Start of range. Defaults to <cite>0</cite>.</p></li>
-<li><p><strong>stop</strong> (<em>number</em>) – End of range.</p></li>
-<li><p><strong>step</strong> (<em>number</em><em>, </em><em>optional</em>) – Step size. Defaults to <cite>1</cite>.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Numbers ranging from <cite>start</cite> to <cite>stop</cite> with step size <cite>step</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>vector</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.generic.cast">
-<code class="descclassname">lab.generic.</code><code class="descname">cast</code><a class="reference internal" href="../_modules/lab/generic.html#cast"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.cast" title="Permalink to this definition">¶</a></dt>
-<dd><p>Cast an object to another data type.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dtype</strong> (<em>dtype</em>) – New data type.</p></li>
-<li><p><strong>a</strong> (<em>tensor</em>) – Tensor to cast.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><cite>a</cite>, but of data type <cite>dtype</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.generic.identity">
-<code class="descclassname">lab.generic.</code><code class="descname">identity</code><a class="reference internal" href="../_modules/lab/generic.html#identity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.identity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Identity function</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><cite>a</cite> exactly.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.generic.negative">
-<code class="descclassname">lab.generic.</code><code class="descname">negative</code><a class="reference internal" href="../_modules/lab/generic.html#negative"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.negative" title="Permalink to this definition">¶</a></dt>
-<dd><p>Negate a tensor.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Negative of <cite>a</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lab.generic.abs">
-<code class="descclassname">lab.generic.</code><code class="descname">abs</code><a class="reference internal" href="../_modules/lab/generic.html#abs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.abs" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">abs</code><a class="reference internal" href="../_modules/lab/generic.html#abs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.abs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Absolute value.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -439,196 +214,9 @@ size <cite>step</cite>.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="lab.generic.sign">
-<code class="descclassname">lab.generic.</code><code class="descname">sign</code><a class="reference internal" href="../_modules/lab/generic.html#sign"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.sign" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sign function.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Sign of <cite>a</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.generic.sqrt">
-<code class="descclassname">lab.generic.</code><code class="descname">sqrt</code><a class="reference internal" href="../_modules/lab/generic.html#sqrt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.sqrt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Square root.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Square root of <cite>a</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.generic.exp">
-<code class="descclassname">lab.generic.</code><code class="descname">exp</code><a class="reference internal" href="../_modules/lab/generic.html#exp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.exp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Exponential function.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Exponential function evaluated at <cite>a</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.generic.log">
-<code class="descclassname">lab.generic.</code><code class="descname">log</code><a class="reference internal" href="../_modules/lab/generic.html#log"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.log" title="Permalink to this definition">¶</a></dt>
-<dd><p>Logarithmic function</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Logarithmic function evaluated at <cite>a</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.generic.sin">
-<code class="descclassname">lab.generic.</code><code class="descname">sin</code><a class="reference internal" href="../_modules/lab/generic.html#sin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.sin" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sine function.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Sine function evaluated at <cite>a</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.generic.cos">
-<code class="descclassname">lab.generic.</code><code class="descname">cos</code><a class="reference internal" href="../_modules/lab/generic.html#cos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.cos" title="Permalink to this definition">¶</a></dt>
-<dd><p>Cosine function.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Cosine function evaluated at <cite>a</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.generic.tan">
-<code class="descclassname">lab.generic.</code><code class="descname">tan</code><a class="reference internal" href="../_modules/lab/generic.html#tan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.tan" title="Permalink to this definition">¶</a></dt>
-<dd><p>Tangent function.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Tangent function evaluated at <cite>a</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.generic.tanh">
-<code class="descclassname">lab.generic.</code><code class="descname">tanh</code><a class="reference internal" href="../_modules/lab/generic.html#tanh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.tanh" title="Permalink to this definition">¶</a></dt>
-<dd><p>Tangent hyperbolic function.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Tangent hyperbolic function evaluated at <cite>a</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.generic.sigmoid">
-<code class="descclassname">lab.generic.</code><code class="descname">sigmoid</code><a class="reference internal" href="../_modules/lab/generic.html#sigmoid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.sigmoid" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sigmoid function.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Sigmoid function evaluated at <cite>a</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.generic.softplus">
-<code class="descclassname">lab.generic.</code><code class="descname">softplus</code><a class="reference internal" href="../_modules/lab/generic.html#softplus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.softplus" title="Permalink to this definition">¶</a></dt>
-<dd><p>Softplus function.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Softplus function evaluated at <cite>a</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.generic.relu">
-<code class="descclassname">lab.generic.</code><code class="descname">relu</code><a class="reference internal" href="../_modules/lab/generic.html#relu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.relu" title="Permalink to this definition">¶</a></dt>
-<dd><p>Rectified linear unit.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Rectified linear unit evaluated at <cite>a</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lab.generic.add">
-<code class="descclassname">lab.generic.</code><code class="descname">add</code><a class="reference internal" href="../_modules/lab/generic.html#add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.add" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">add</code><a class="reference internal" href="../_modules/lab/generic.html#add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.add" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add two tensors.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -646,270 +234,9 @@ size <cite>step</cite>.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="lab.generic.subtract">
-<code class="descclassname">lab.generic.</code><code class="descname">subtract</code><a class="reference internal" href="../_modules/lab/generic.html#subtract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.subtract" title="Permalink to this definition">¶</a></dt>
-<dd><p>Subtract two tensors.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>tensor</em>) – First tensor.</p></li>
-<li><p><strong>b</strong> (<em>tensor</em>) – Second tensor.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><cite>a</cite> minus <cite>b</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.generic.multiply">
-<code class="descclassname">lab.generic.</code><code class="descname">multiply</code><a class="reference internal" href="../_modules/lab/generic.html#multiply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.multiply" title="Permalink to this definition">¶</a></dt>
-<dd><p>Multiply two tensors.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>tensor</em>) – First tensor.</p></li>
-<li><p><strong>b</strong> (<em>tensor</em>) – Second tensor.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Product of <cite>a</cite> and <cite>b</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.generic.divide">
-<code class="descclassname">lab.generic.</code><code class="descname">divide</code><a class="reference internal" href="../_modules/lab/generic.html#divide"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.divide" title="Permalink to this definition">¶</a></dt>
-<dd><p>Divide two tensors.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>tensor</em>) – First tensor.</p></li>
-<li><p><strong>b</strong> (<em>tensor</em>) – Second tensor.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><cite>a</cite> divided by <cite>b</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.generic.power">
-<code class="descclassname">lab.generic.</code><code class="descname">power</code><a class="reference internal" href="../_modules/lab/generic.html#power"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.power" title="Permalink to this definition">¶</a></dt>
-<dd><p>Raise a tensor to a power.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p></li>
-<li><p><strong>power</strong> (<em>tensor</em>) – Power.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><cite>a</cite> to the power of <cite>power</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.generic.minimum">
-<code class="descclassname">lab.generic.</code><code class="descname">minimum</code><a class="reference internal" href="../_modules/lab/generic.html#minimum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.minimum" title="Permalink to this definition">¶</a></dt>
-<dd><p>Take the minimum of two tensors.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>tensor</em>) – First tensor.</p></li>
-<li><p><strong>b</strong> (<em>tensor</em>) – Second tensor.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Minimum of <cite>a</cite> and <cite>b</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.generic.maximum">
-<code class="descclassname">lab.generic.</code><code class="descname">maximum</code><a class="reference internal" href="../_modules/lab/generic.html#maximum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.maximum" title="Permalink to this definition">¶</a></dt>
-<dd><p>Take the maximum of two tensors.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>tensor</em>) – First tensor.</p></li>
-<li><p><strong>b</strong> (<em>tensor</em>) – Second tensor.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Maximum of <cite>a</cite> and <cite>b</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.generic.leaky_relu">
-<code class="descclassname">lab.generic.</code><code class="descname">leaky_relu</code><a class="reference internal" href="../_modules/lab/generic.html#leaky_relu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.leaky_relu" title="Permalink to this definition">¶</a></dt>
-<dd><p>Leaky rectified linear unit.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>tensor</em>) – Input.</p></li>
-<li><p><strong>alpha</strong> (<em>tensor</em>) – Coefficient of leak.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Activation value.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.generic.min">
-<code class="descclassname">lab.generic.</code><code class="descname">min</code><a class="reference internal" href="../_modules/lab/generic.html#min"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.min" title="Permalink to this definition">¶</a></dt>
-<dd><p>Take the minimum of a tensor, possibly along an axis.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p></li>
-<li><p><strong>axis</strong> (<em>int</em><em>, </em><em>optional</em>) – Optional axis.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Reduced tensor.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.generic.max">
-<code class="descclassname">lab.generic.</code><code class="descname">max</code><a class="reference internal" href="../_modules/lab/generic.html#max"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.max" title="Permalink to this definition">¶</a></dt>
-<dd><p>Take the maximum of a tensor, possibly along an axis.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p></li>
-<li><p><strong>axis</strong> (<em>int</em><em>, </em><em>optional</em>) – Optional axis.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Reduced tensor.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.generic.sum">
-<code class="descclassname">lab.generic.</code><code class="descname">sum</code><a class="reference internal" href="../_modules/lab/generic.html#sum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.sum" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sum a tensor, possibly along an axis.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p></li>
-<li><p><strong>axis</strong> (<em>int</em><em>, </em><em>optional</em>) – Optional axis.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Reduced tensor.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.generic.mean">
-<code class="descclassname">lab.generic.</code><code class="descname">mean</code><a class="reference internal" href="../_modules/lab/generic.html#mean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.mean" title="Permalink to this definition">¶</a></dt>
-<dd><p>Take the mean of a tensor, possibly along an axis.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p></li>
-<li><p><strong>axis</strong> (<em>int</em><em>, </em><em>optional</em>) – Optional axis.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Reduced tensor.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.generic.std">
-<code class="descclassname">lab.generic.</code><code class="descname">std</code><a class="reference internal" href="../_modules/lab/generic.html#std"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.std" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the standard deviation of a tensor, possibly along an axis.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p></li>
-<li><p><strong>axis</strong> (<em>int</em><em>, </em><em>optional</em>) – Optional axis.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Reduced tensor.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.generic.logsumexp">
-<code class="descclassname">lab.generic.</code><code class="descname">logsumexp</code><a class="reference internal" href="../_modules/lab/generic.html#logsumexp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.logsumexp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Exponentiate a tensor, sum it, and then take the logarithm, possibly
-along an axis.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p></li>
-<li><p><strong>axis</strong> (<em>int</em><em>, </em><em>optional</em>) – Optional axis.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Reduced tensor.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lab.generic.all">
-<code class="descclassname">lab.generic.</code><code class="descname">all</code><a class="reference internal" href="../_modules/lab/generic.html#all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.all" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">all</code><a class="reference internal" href="../_modules/lab/generic.html#all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.all" title="Permalink to this definition">¶</a></dt>
 <dd><p>Logical all of a tensor, possibly along an axis.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -927,9 +254,9 @@ along an axis.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lab.generic.any">
-<code class="descclassname">lab.generic.</code><code class="descname">any</code><a class="reference internal" href="../_modules/lab/generic.html#any"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.any" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">any</code><a class="reference internal" href="../_modules/lab/generic.html#any"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.any" title="Permalink to this definition">¶</a></dt>
 <dd><p>Logical any of a tensor, possibly along an axis.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -947,89 +274,31 @@ along an axis.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="lab.generic.lt">
-<code class="descclassname">lab.generic.</code><code class="descname">lt</code><a class="reference internal" href="../_modules/lab/generic.html#lt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.lt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check whether one tensor is strictly less than another.</p>
+<dl class="py attribute">
+<dt id="lab.generic.argsort">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">argsort</code><a class="reference internal" href="../_modules/lab/generic.html#argsort"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.argsort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the indices that would a tensor along an axis in ascending order.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>tensor</em>) – First tensor.</p></li>
-<li><p><strong>b</strong> (<em>tensor</em>) – Second tensor.</p></li>
+<li><p><strong>a</strong> (<em>tensor</em>) – Tensor to sort.</p></li>
+<li><p><strong>axis</strong> (<em>int</em><em>, </em><em>optional</em>) – Axis to sort along. Defaults to <cite>-1</cite>.</p></li>
+<li><p><strong>descending</strong> (<em>bool</em><em>, </em><em>optional</em>) – Sort in descending order. Defaults to
+<cite>False</cite>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><cite>a</cite> is strictly less than <cite>b</cite>.</p>
+<dd class="field-even"><p>The indices that would sort <cite>a</cite>.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor[bool]</p>
+<dd class="field-odd"><p>tensor</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="lab.generic.le">
-<code class="descclassname">lab.generic.</code><code class="descname">le</code><a class="reference internal" href="../_modules/lab/generic.html#le"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.le" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check whether one tensor is less than or equal to another.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>tensor</em>) – First tensor.</p></li>
-<li><p><strong>b</strong> (<em>tensor</em>) – Second tensor.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><cite>a</cite> is less than or equal to <cite>b</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor[bool]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.generic.gt">
-<code class="descclassname">lab.generic.</code><code class="descname">gt</code><a class="reference internal" href="../_modules/lab/generic.html#gt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.gt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check whether one tensor is strictly greater than another.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>tensor</em>) – First tensor.</p></li>
-<li><p><strong>b</strong> (<em>tensor</em>) – Second tensor.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><cite>a</cite> is strictly greater than <cite>b</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor[bool]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.generic.ge">
-<code class="descclassname">lab.generic.</code><code class="descname">ge</code><a class="reference internal" href="../_modules/lab/generic.html#ge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.ge" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check whether one tensor is greater than or equal to another.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>tensor</em>) – First tensor.</p></li>
-<li><p><strong>b</strong> (<em>tensor</em>) – Second tensor.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><cite>a</cite> is greater than or equal to <cite>b</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor[bool]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lab.generic.bvn_cdf">
-<code class="descclassname">lab.generic.</code><code class="descname">bvn_cdf</code><a class="reference internal" href="../_modules/lab/generic.html#bvn_cdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.bvn_cdf" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">bvn_cdf</code><a class="reference internal" href="../_modules/lab/generic.html#bvn_cdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.bvn_cdf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Standard bivariate normal CDF. Computes the probability that <cite>X &lt; a</cite>
 and <cite>Y &lt; b</cite> if <cite>X ~ N(0, 1)</cite>, <cite>Y ~ N(0, 1)</cite>, and <cite>X</cite> and <cite>Y</cite> have
 correlation <cite>c</cite>.</p>
@@ -1050,9 +319,571 @@ correlation <cite>c</cite>.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
+<dt id="lab.generic.cast">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">cast</code><a class="reference internal" href="../_modules/lab/generic.html#cast"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.cast" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cast an object to another data type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dtype</strong> (<em>dtype</em>) – New data type.</p></li>
+<li><p><strong>a</strong> (<em>tensor</em>) – Tensor to cast.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>a</cite>, but of data type <cite>dtype</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.generic.cos">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">cos</code><a class="reference internal" href="../_modules/lab/generic.html#cos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.cos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cosine function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Cosine function evaluated at <cite>a</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.generic.divide">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">divide</code><a class="reference internal" href="../_modules/lab/generic.html#divide"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.divide" title="Permalink to this definition">¶</a></dt>
+<dd><p>Divide two tensors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – First tensor.</p></li>
+<li><p><strong>b</strong> (<em>tensor</em>) – Second tensor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>a</cite> divided by <cite>b</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.generic.erf">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">erf</code><a class="reference internal" href="../_modules/lab/generic.html#erf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.erf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Error function evaluated at <cite>a</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.generic.exp">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">exp</code><a class="reference internal" href="../_modules/lab/generic.html#exp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.exp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exponential function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Exponential function evaluated at <cite>a</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.generic.eye">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">eye</code><a class="reference internal" href="../_modules/lab/generic.html#eye"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.eye" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an identity matrix.</p>
+<p>Can also give a reference tensor whose data type and shape will be used to
+construct an identity matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dtype</strong> (<em>dtype</em><em>, </em><em>optional</em>) – Data type. Defaults to the default data type.</p></li>
+<li><p><strong>*shape</strong> (<em>shape</em>) – Shape of the matrix.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Identity matrix of shape <cite>shape</cite> and data type <cite>dtype</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.generic.ge">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">ge</code><a class="reference internal" href="../_modules/lab/generic.html#ge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.ge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether one tensor is greater than or equal to another.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – First tensor.</p></li>
+<li><p><strong>b</strong> (<em>tensor</em>) – Second tensor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>a</cite> is greater than or equal to <cite>b</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor[bool]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.generic.gt">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">gt</code><a class="reference internal" href="../_modules/lab/generic.html#gt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.gt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether one tensor is strictly greater than another.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – First tensor.</p></li>
+<li><p><strong>b</strong> (<em>tensor</em>) – Second tensor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>a</cite> is strictly greater than <cite>b</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor[bool]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.generic.identity">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">identity</code><a class="reference internal" href="../_modules/lab/generic.html#identity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.identity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Identity function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>a</cite> exactly.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.generic.isnan">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">isnan</code><a class="reference internal" href="../_modules/lab/generic.html#isnan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.isnan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether a tensor is NaN.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>a</cite> is NaN.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor[bool]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.generic.le">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">le</code><a class="reference internal" href="../_modules/lab/generic.html#le"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.le" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether one tensor is less than or equal to another.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – First tensor.</p></li>
+<li><p><strong>b</strong> (<em>tensor</em>) – Second tensor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>a</cite> is less than or equal to <cite>b</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor[bool]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.generic.leaky_relu">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">leaky_relu</code><a class="reference internal" href="../_modules/lab/generic.html#leaky_relu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.leaky_relu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Leaky rectified linear unit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – Input.</p></li>
+<li><p><strong>alpha</strong> (<em>tensor</em>) – Coefficient of leak.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Activation value.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.generic.linspace">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">linspace</code><a class="reference internal" href="../_modules/lab/generic.html#linspace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.linspace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a vector of <cite>c</cite> numbers ranging from <cite>a</cite> to <cite>c</cite>, distributed
+linearly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dtype</strong> (<em>dtype</em><em>, </em><em>optional</em>) – Data type. Defaults to the default data type.</p></li>
+<li><p><strong>a</strong> (<em>number</em>) – Lower bound.</p></li>
+<li><p><strong>b</strong> (<em>number</em>) – Upper bound.</p></li>
+<li><p><strong>num</strong> (<em>int</em>) – Number of numbers.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>c</cite> numbers ranging from <cite>a</cite> to <cite>c</cite>, distributed linearly.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>vector</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.generic.log">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">log</code><a class="reference internal" href="../_modules/lab/generic.html#log"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logarithmic function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Logarithmic function evaluated at <cite>a</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="lab.generic.log_2_pi">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">log_2_pi</code><em class="property"> = 1.8378770664093453</em><a class="headerlink" href="#lab.generic.log_2_pi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Value of log(2 * pi).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.generic.logsumexp">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">logsumexp</code><a class="reference internal" href="../_modules/lab/generic.html#logsumexp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.logsumexp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exponentiate a tensor, sum it, and then take the logarithm, possibly
+along an axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p></li>
+<li><p><strong>axis</strong> (<em>int</em><em>, </em><em>optional</em>) – Optional axis.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Reduced tensor.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.generic.lt">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">lt</code><a class="reference internal" href="../_modules/lab/generic.html#lt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.lt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether one tensor is strictly less than another.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – First tensor.</p></li>
+<li><p><strong>b</strong> (<em>tensor</em>) – Second tensor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>a</cite> is strictly less than <cite>b</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor[bool]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.generic.max">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">max</code><a class="reference internal" href="../_modules/lab/generic.html#max"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.max" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take the maximum of a tensor, possibly along an axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p></li>
+<li><p><strong>axis</strong> (<em>int</em><em>, </em><em>optional</em>) – Optional axis.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Reduced tensor.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.generic.maximum">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">maximum</code><a class="reference internal" href="../_modules/lab/generic.html#maximum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.maximum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take the maximum of two tensors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – First tensor.</p></li>
+<li><p><strong>b</strong> (<em>tensor</em>) – Second tensor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Maximum of <cite>a</cite> and <cite>b</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.generic.mean">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">mean</code><a class="reference internal" href="../_modules/lab/generic.html#mean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.mean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take the mean of a tensor, possibly along an axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p></li>
+<li><p><strong>axis</strong> (<em>int</em><em>, </em><em>optional</em>) – Optional axis.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Reduced tensor.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.generic.min">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">min</code><a class="reference internal" href="../_modules/lab/generic.html#min"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.min" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take the minimum of a tensor, possibly along an axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p></li>
+<li><p><strong>axis</strong> (<em>int</em><em>, </em><em>optional</em>) – Optional axis.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Reduced tensor.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.generic.minimum">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">minimum</code><a class="reference internal" href="../_modules/lab/generic.html#minimum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.minimum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take the minimum of two tensors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – First tensor.</p></li>
+<li><p><strong>b</strong> (<em>tensor</em>) – Second tensor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Minimum of <cite>a</cite> and <cite>b</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.generic.multiply">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">multiply</code><a class="reference internal" href="../_modules/lab/generic.html#multiply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.multiply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Multiply two tensors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – First tensor.</p></li>
+<li><p><strong>b</strong> (<em>tensor</em>) – Second tensor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Product of <cite>a</cite> and <cite>b</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="lab.generic.nan">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">nan</code><em class="property"> = nan</em><a class="headerlink" href="#lab.generic.nan" title="Permalink to this definition">¶</a></dt>
+<dd><p>NaN.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.generic.negative">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">negative</code><a class="reference internal" href="../_modules/lab/generic.html#negative"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.negative" title="Permalink to this definition">¶</a></dt>
+<dd><p>Negate a tensor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Negative of <cite>a</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.generic.one">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">one</code><a class="reference internal" href="../_modules/lab/generic.html#one"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.one" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a <cite>1</cite> with a particular data type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dtype</strong> (<em>dtype</em>) – Data type.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>1</cite> with data type <cite>dtype</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>scalar</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.generic.ones">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">ones</code><a class="reference internal" href="../_modules/lab/generic.html#ones"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.ones" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a tensor of ones.</p>
+<p>Can also give a reference tensor whose data type and shape will be used to
+construct a tensor of ones.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dtype</strong> (<em>dtype</em><em>, </em><em>optional</em>) – Data type. Defaults to the default data type.</p></li>
+<li><p><strong>*shape</strong> (<em>shape</em>) – Shape of the tensor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Tensor of ones of shape <cite>shape</cite> and data type <cite>dtype</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="lab.generic.pi">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">pi</code><em class="property"> = 3.141592653589793</em><a class="headerlink" href="#lab.generic.pi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Value of pi.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.generic.power">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">power</code><a class="reference internal" href="../_modules/lab/generic.html#power"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.power" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raise a tensor to a power.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p></li>
+<li><p><strong>power</strong> (<em>tensor</em>) – Power.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>a</cite> to the power of <cite>power</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.generic.range">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">range</code><a class="reference internal" href="../_modules/lab/generic.html#range"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a vector of numbers ranging from <cite>start</cite> to <cite>stop</cite> with step
+size <cite>step</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dtype</strong> (<em>dtype</em><em>, </em><em>optional</em>) – Data type. Defaults to <cite>int</cite>.</p></li>
+<li><p><strong>start</strong> (<em>number</em><em>, </em><em>optional</em>) – Start of range. Defaults to <cite>0</cite>.</p></li>
+<li><p><strong>stop</strong> (<em>number</em>) – End of range.</p></li>
+<li><p><strong>step</strong> (<em>number</em><em>, </em><em>optional</em>) – Step size. Defaults to <cite>1</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Numbers ranging from <cite>start</cite> to <cite>stop</cite> with step size <cite>step</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>vector</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.generic.relu">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">relu</code><a class="reference internal" href="../_modules/lab/generic.html#relu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.relu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rectified linear unit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Rectified linear unit evaluated at <cite>a</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
 <dt id="lab.generic.scan">
-<code class="descclassname">lab.generic.</code><code class="descname">scan</code><a class="reference internal" href="../_modules/lab/generic.html#scan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.scan" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">scan</code><a class="reference internal" href="../_modules/lab/generic.html#scan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.scan" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform a TensorFlow-style scanning operation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1065,9 +896,77 @@ correlation <cite>c</cite>.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
+<dt id="lab.generic.sigmoid">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">sigmoid</code><a class="reference internal" href="../_modules/lab/generic.html#sigmoid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.sigmoid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sigmoid function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Sigmoid function evaluated at <cite>a</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.generic.sign">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">sign</code><a class="reference internal" href="../_modules/lab/generic.html#sign"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.sign" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sign function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Sign of <cite>a</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.generic.sin">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">sin</code><a class="reference internal" href="../_modules/lab/generic.html#sin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.sin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sine function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Sine function evaluated at <cite>a</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.generic.softplus">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">softplus</code><a class="reference internal" href="../_modules/lab/generic.html#softplus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.softplus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Softplus function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Softplus function evaluated at <cite>a</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
 <dt id="lab.generic.sort">
-<code class="descclassname">lab.generic.</code><code class="descname">sort</code><a class="reference internal" href="../_modules/lab/generic.html#sort"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.sort" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">sort</code><a class="reference internal" href="../_modules/lab/generic.html#sort"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.sort" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sort a tensor along an axis in ascending order.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1087,21 +986,16 @@ correlation <cite>c</cite>.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="lab.generic.argsort">
-<code class="descclassname">lab.generic.</code><code class="descname">argsort</code><a class="reference internal" href="../_modules/lab/generic.html#argsort"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.argsort" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the indices that would a tensor along an axis in ascending order.</p>
+<dl class="py attribute">
+<dt id="lab.generic.sqrt">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">sqrt</code><a class="reference internal" href="../_modules/lab/generic.html#sqrt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.sqrt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Square root.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>tensor</em>) – Tensor to sort.</p></li>
-<li><p><strong>axis</strong> (<em>int</em><em>, </em><em>optional</em>) – Axis to sort along. Defaults to <cite>-1</cite>.</p></li>
-<li><p><strong>descending</strong> (<em>bool</em><em>, </em><em>optional</em>) – Sort in descending order. Defaults to
-<cite>False</cite>.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The indices that would sort <cite>a</cite>.</p>
+<dd class="field-even"><p>Square root of <cite>a</cite>.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>tensor</p>
@@ -1109,9 +1003,103 @@ correlation <cite>c</cite>.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
+<dt id="lab.generic.std">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">std</code><a class="reference internal" href="../_modules/lab/generic.html#std"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.std" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the standard deviation of a tensor, possibly along an axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p></li>
+<li><p><strong>axis</strong> (<em>int</em><em>, </em><em>optional</em>) – Optional axis.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Reduced tensor.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.generic.subtract">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">subtract</code><a class="reference internal" href="../_modules/lab/generic.html#subtract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.subtract" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subtract two tensors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – First tensor.</p></li>
+<li><p><strong>b</strong> (<em>tensor</em>) – Second tensor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>a</cite> minus <cite>b</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.generic.sum">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">sum</code><a class="reference internal" href="../_modules/lab/generic.html#sum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.sum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sum a tensor, possibly along an axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p></li>
+<li><p><strong>axis</strong> (<em>int</em><em>, </em><em>optional</em>) – Optional axis.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Reduced tensor.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.generic.tan">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">tan</code><a class="reference internal" href="../_modules/lab/generic.html#tan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.tan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tangent function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Tangent function evaluated at <cite>a</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.generic.tanh">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">tanh</code><a class="reference internal" href="../_modules/lab/generic.html#tanh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.tanh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tangent hyperbolic function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Tangent hyperbolic function evaluated at <cite>a</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
 <dt id="lab.generic.to_numpy">
-<code class="descclassname">lab.generic.</code><code class="descname">to_numpy</code><a class="reference internal" href="../_modules/lab/generic.html#to_numpy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.to_numpy" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">to_numpy</code><a class="reference internal" href="../_modules/lab/generic.html#to_numpy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.to_numpy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert an object to NumPy.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1126,6 +1114,45 @@ correlation <cite>c</cite>.</p>
 </dl>
 </dd></dl>
 
+<dl class="py attribute">
+<dt id="lab.generic.zero">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">zero</code><a class="reference internal" href="../_modules/lab/generic.html#zero"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.zero" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a <cite>0</cite> with a particular data type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dtype</strong> (<em>dtype</em>) – Data type.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>0</cite> with data type <cite>dtype</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>scalar</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.generic.zeros">
+<code class="sig-prename descclassname">lab.generic.</code><code class="sig-name descname">zeros</code><a class="reference internal" href="../_modules/lab/generic.html#zeros"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.generic.zeros" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a tensor of zeros.</p>
+<p>Can also give a reference tensor whose data type and shape will be used to
+construct a tensor of zeros.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dtype</strong> (<em>dtype</em><em>, </em><em>optional</em>) – Data type. Defaults to the default data type.</p></li>
+<li><p><strong>*shape</strong> (<em>shape</em>) – Shape of the tensor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Tensor of zeros of shape <cite>shape</cite> and data type <cite>dtype</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 
 
@@ -1136,7 +1163,7 @@ correlation <cite>c</cite>.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="lab.linear_algebra.html" class="btn btn-neutral float-right" title="lab.linear_algebra module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="lab.jax.html" class="btn btn-neutral float-right" title="lab.jax package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="lab.custom.html" class="btn btn-neutral float-left" title="lab.custom module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -1148,11 +1175,19 @@ correlation <cite>c</cite>.</p>
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2017, Wessel Bruinsma
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -1163,7 +1198,6 @@ correlation <cite>c</cite>.</p>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

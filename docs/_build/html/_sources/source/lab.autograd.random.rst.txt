@@ -2,6 +2,6 @@ lab.autograd.random module
 ==========================
 
 .. automodule:: lab.autograd.random
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

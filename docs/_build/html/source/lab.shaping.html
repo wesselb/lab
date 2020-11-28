@@ -1,8 +1,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -12,27 +11,29 @@
   
 
   
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
   
   
   
 
   
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="lab.tensorflow package" href="lab.tensorflow.html" />
@@ -50,7 +51,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home"> lab
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> lab
           
 
           
@@ -77,6 +78,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -93,8 +95,15 @@
 <li class="toctree-l2"><a class="reference internal" href="lab.autograd.linear_algebra.html">lab.autograd.linear_algebra module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.autograd.random.html">lab.autograd.random module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.autograd.shaping.html">lab.autograd.shaping module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.bvn_cdf.html">lab.bvn_cdf module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.custom.html">lab.custom module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.generic.html">lab.generic module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.jax.html">lab.jax package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.jax.custom.html">lab.jax.custom module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.jax.generic.html">lab.jax.generic module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.jax.linear_algebra.html">lab.jax.linear_algebra module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.jax.random.html">lab.jax.random module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab.jax.shaping.html">lab.jax.shaping module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.linear_algebra.html">lab.linear_algebra module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.numpy.html">lab.numpy package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lab.numpy.generic.html">lab.numpy.generic module</a></li>
@@ -124,6 +133,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -162,7 +172,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../index.html">Docs</a> &raquo;</li>
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="../api.html">Application Programming Interface</a> &raquo;</li>
         
@@ -187,266 +197,9 @@
             
   <div class="section" id="module-lab.shaping">
 <span id="lab-shaping-module"></span><h1>lab.shaping module<a class="headerlink" href="#module-lab.shaping" title="Permalink to this headline">¶</a></h1>
-<dl class="attribute">
-<dt id="lab.shaping.shape">
-<code class="descclassname">lab.shaping.</code><code class="descname">shape</code><a class="reference internal" href="../_modules/lab/shaping.html#shape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.shape" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the shape of a tensor.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Shape of <cite>a</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>object</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.shaping.rank">
-<code class="descclassname">lab.shaping.</code><code class="descname">rank</code><a class="reference internal" href="../_modules/lab/shaping.html#rank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.rank" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the shape of a tensor.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Rank of <cite>a</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>int</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.shaping.length">
-<code class="descclassname">lab.shaping.</code><code class="descname">length</code><a class="reference internal" href="../_modules/lab/shaping.html#length"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.length" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the length of a tensor.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Length of <cite>a</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>int</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.shaping.size">
-<code class="descclassname">lab.shaping.</code><code class="descname">size</code><a class="headerlink" href="#lab.shaping.size" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for <cite>length</cite>.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.shaping.isscalar">
-<code class="descclassname">lab.shaping.</code><code class="descname">isscalar</code><a class="reference internal" href="../_modules/lab/shaping.html#isscalar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.isscalar" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check whether a tensor is a scalar.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><cite>True</cite> if <cite>a</cite> is a scalar, otherwise <cite>False</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>bool</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.shaping.expand_dims">
-<code class="descclassname">lab.shaping.</code><code class="descname">expand_dims</code><a class="reference internal" href="../_modules/lab/shaping.html#expand_dims"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.expand_dims" title="Permalink to this definition">¶</a></dt>
-<dd><p>Insert an empty axis.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p></li>
-<li><p><strong>axis</strong> (<em>int</em><em>, </em><em>optional</em>) – Index of new axis. Defaults to <cite>0</cite>.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><cite>a</cite> with the new axis.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.shaping.squeeze">
-<code class="descclassname">lab.shaping.</code><code class="descname">squeeze</code><a class="reference internal" href="../_modules/lab/shaping.html#squeeze"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.squeeze" title="Permalink to this definition">¶</a></dt>
-<dd><p>Remove all axes containing only a single element.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><cite>a</cite> without axes containing only a single element.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.shaping.uprank">
-<code class="descclassname">lab.shaping.</code><code class="descname">uprank</code><a class="reference internal" href="../_modules/lab/shaping.html#uprank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.uprank" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert the input into a rank two tensor.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><cite>a</cite>, but of rank two.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.shaping.diag">
-<code class="descclassname">lab.shaping.</code><code class="descname">diag</code><a class="reference internal" href="../_modules/lab/shaping.html#diag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.diag" title="Permalink to this definition">¶</a></dt>
-<dd><p>Take the diagonal of a matrix, or construct a diagonal matrix from its
-diagonal.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Matrix or diagonal.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Diagonal or matrix.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.shaping.flatten">
-<code class="descclassname">lab.shaping.</code><code class="descname">flatten</code><a class="reference internal" href="../_modules/lab/shaping.html#flatten"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.flatten" title="Permalink to this definition">¶</a></dt>
-<dd><p>Flatten a tensor.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Flattened tensor.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.shaping.vec_to_tril">
-<code class="descclassname">lab.shaping.</code><code class="descname">vec_to_tril</code><a class="reference internal" href="../_modules/lab/shaping.html#vec_to_tril"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.vec_to_tril" title="Permalink to this definition">¶</a></dt>
-<dd><p>Construct a lower triangular matrix from a vector.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Vector.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Lower triangular matrix.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.shaping.tril_to_vec">
-<code class="descclassname">lab.shaping.</code><code class="descname">tril_to_vec</code><a class="reference internal" href="../_modules/lab/shaping.html#tril_to_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.tril_to_vec" title="Permalink to this definition">¶</a></dt>
-<dd><p>Construct a vector from a lower triangular matrix.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Lower triangular matrix.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Vector</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.shaping.stack">
-<code class="descclassname">lab.shaping.</code><code class="descname">stack</code><a class="reference internal" href="../_modules/lab/shaping.html#stack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.stack" title="Permalink to this definition">¶</a></dt>
-<dd><p>Concatenate tensors along a new axis.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>*elements</strong> (<em>tensor</em>) – Tensors to stack.</p></li>
-<li><p><strong>axis</strong> (<em>int</em><em>, </em><em>optional</em>) – Index of new axis. Defaults to <cite>0</cite>.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Stacked tensors.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.shaping.unstack">
-<code class="descclassname">lab.shaping.</code><code class="descname">unstack</code><a class="reference internal" href="../_modules/lab/shaping.html#unstack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.unstack" title="Permalink to this definition">¶</a></dt>
-<dd><p>Unstack tensors along an axis.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>list</em>) – List of tensors.</p></li>
-<li><p><strong>axis</strong> (<em>int</em><em>, </em><em>optional</em>) – Index along which to unstack. Defaults to <cite>0</cite>.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>List of tensors.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list[tensor]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="lab.shaping.reshape">
-<code class="descclassname">lab.shaping.</code><code class="descname">reshape</code><a class="reference internal" href="../_modules/lab/shaping.html#reshape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.reshape" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reshape a tensor.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>tensor</em>) – Tensor to reshape.</p></li>
-<li><p><strong>*shape</strong> (<em>shape</em>) – New shape.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Reshaped tensor.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lab.shaping.concat">
-<code class="descclassname">lab.shaping.</code><code class="descname">concat</code><a class="reference internal" href="../_modules/lab/shaping.html#concat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.concat" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">lab.shaping.</code><code class="sig-name descname">concat</code><a class="reference internal" href="../_modules/lab/shaping.html#concat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.concat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Concatenate tensors along an axis.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -464,9 +217,9 @@ diagonal.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lab.shaping.concat2d">
-<code class="descclassname">lab.shaping.</code><code class="descname">concat2d</code><a class="reference internal" href="../_modules/lab/shaping.html#concat2d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.concat2d" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">lab.shaping.</code><code class="sig-name descname">concat2d</code><a class="reference internal" href="../_modules/lab/shaping.html#concat2d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.concat2d" title="Permalink to this definition">¶</a></dt>
 <dd><p>Concatenate tensors into a matrix.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -482,9 +235,217 @@ rows of the matrix.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
+<dt id="lab.shaping.diag">
+<code class="sig-prename descclassname">lab.shaping.</code><code class="sig-name descname">diag</code><a class="reference internal" href="../_modules/lab/shaping.html#diag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.diag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take the diagonal of a matrix, or construct a diagonal matrix from its
+diagonal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Matrix or diagonal.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Diagonal or matrix.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.shaping.expand_dims">
+<code class="sig-prename descclassname">lab.shaping.</code><code class="sig-name descname">expand_dims</code><a class="reference internal" href="../_modules/lab/shaping.html#expand_dims"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.expand_dims" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert an empty axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p></li>
+<li><p><strong>axis</strong> (<em>int</em><em>, </em><em>optional</em>) – Index of new axis. Defaults to <cite>0</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>a</cite> with the new axis.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.shaping.flatten">
+<code class="sig-prename descclassname">lab.shaping.</code><code class="sig-name descname">flatten</code><a class="reference internal" href="../_modules/lab/shaping.html#flatten"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.flatten" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flatten a tensor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Flattened tensor.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.shaping.isscalar">
+<code class="sig-prename descclassname">lab.shaping.</code><code class="sig-name descname">isscalar</code><a class="reference internal" href="../_modules/lab/shaping.html#isscalar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.isscalar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether a tensor is a scalar.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>True</cite> if <cite>a</cite> is a scalar, otherwise <cite>False</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.shaping.length">
+<code class="sig-prename descclassname">lab.shaping.</code><code class="sig-name descname">length</code><a class="reference internal" href="../_modules/lab/shaping.html#length"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the length of a tensor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Length of <cite>a</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.shaping.rank">
+<code class="sig-prename descclassname">lab.shaping.</code><code class="sig-name descname">rank</code><a class="reference internal" href="../_modules/lab/shaping.html#rank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.rank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the shape of a tensor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Rank of <cite>a</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.shaping.reshape">
+<code class="sig-prename descclassname">lab.shaping.</code><code class="sig-name descname">reshape</code><a class="reference internal" href="../_modules/lab/shaping.html#reshape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.reshape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reshape a tensor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – Tensor to reshape.</p></li>
+<li><p><strong>*shape</strong> (<em>shape</em>) – New shape.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Reshaped tensor.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.shaping.shape">
+<code class="sig-prename descclassname">lab.shaping.</code><code class="sig-name descname">shape</code><a class="reference internal" href="../_modules/lab/shaping.html#shape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the shape of a tensor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Shape of <cite>a</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.shaping.size">
+<code class="sig-prename descclassname">lab.shaping.</code><code class="sig-name descname">size</code><a class="headerlink" href="#lab.shaping.size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for <cite>length</cite>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.shaping.squeeze">
+<code class="sig-prename descclassname">lab.shaping.</code><code class="sig-name descname">squeeze</code><a class="reference internal" href="../_modules/lab/shaping.html#squeeze"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.squeeze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove all axes containing only a single element.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>a</cite> without axes containing only a single element.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.shaping.stack">
+<code class="sig-prename descclassname">lab.shaping.</code><code class="sig-name descname">stack</code><a class="reference internal" href="../_modules/lab/shaping.html#stack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.stack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Concatenate tensors along a new axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>*elements</strong> (<em>tensor</em>) – Tensors to stack.</p></li>
+<li><p><strong>axis</strong> (<em>int</em><em>, </em><em>optional</em>) – Index of new axis. Defaults to <cite>0</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Stacked tensors.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.shaping.take">
+<code class="sig-prename descclassname">lab.shaping.</code><code class="sig-name descname">take</code><a class="reference internal" href="../_modules/lab/shaping.html#take"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.take" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take particular elements along an axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p></li>
+<li><p><strong>indices_or_mask</strong> (<em>list</em>) – List of indices or boolean indicating which
+elements to take. Must be rank 1.</p></li>
+<li><p><strong>axis</strong> (<em>int</em><em>, </em><em>optional</em>) – Axis along which to take indices. Defaults to <cite>0</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Selected subtensor.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
 <dt id="lab.shaping.tile">
-<code class="descclassname">lab.shaping.</code><code class="descname">tile</code><a class="reference internal" href="../_modules/lab/shaping.html#tile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.tile" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">lab.shaping.</code><code class="sig-name descname">tile</code><a class="reference internal" href="../_modules/lab/shaping.html#tile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.tile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tile a tensor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -502,21 +463,76 @@ rows of the matrix.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="lab.shaping.take">
-<code class="descclassname">lab.shaping.</code><code class="descname">take</code><a class="reference internal" href="../_modules/lab/shaping.html#take"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.take" title="Permalink to this definition">¶</a></dt>
-<dd><p>Take particular elements along an axis.</p>
+<dl class="py attribute">
+<dt id="lab.shaping.tril_to_vec">
+<code class="sig-prename descclassname">lab.shaping.</code><code class="sig-name descname">tril_to_vec</code><a class="reference internal" href="../_modules/lab/shaping.html#tril_to_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.tril_to_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a vector from a lower triangular matrix.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p></li>
-<li><p><strong>indices_or_mask</strong> (<em>list</em>) – List of indices or boolean indicating which
-elements to take. Must be rank 1.</p></li>
-<li><p><strong>axis</strong> (<em>int</em><em>, </em><em>optional</em>) – Axis along which to take indices. Defaults to <cite>0</cite>.</p></li>
+<li><p><strong>a</strong> (<em>tensor</em>) – Lower triangular matrix.</p></li>
+<li><p><strong>offset</strong> (<em>int</em><em>, </em><em>optional</em>) – Diagonal offset.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Selected subtensor.</p>
+<dd class="field-even"><p>Vector</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.shaping.unstack">
+<code class="sig-prename descclassname">lab.shaping.</code><code class="sig-name descname">unstack</code><a class="reference internal" href="../_modules/lab/shaping.html#unstack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.unstack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unstack tensors along an axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>list</em>) – List of tensors.</p></li>
+<li><p><strong>axis</strong> (<em>int</em><em>, </em><em>optional</em>) – Index along which to unstack. Defaults to <cite>0</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of tensors.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[tensor]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.shaping.uprank">
+<code class="sig-prename descclassname">lab.shaping.</code><code class="sig-name descname">uprank</code><a class="reference internal" href="../_modules/lab/shaping.html#uprank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.uprank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the input into a rank two tensor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>a</strong> (<em>tensor</em>) – Tensor.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>a</cite>, but of rank two.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lab.shaping.vec_to_tril">
+<code class="sig-prename descclassname">lab.shaping.</code><code class="sig-name descname">vec_to_tril</code><a class="reference internal" href="../_modules/lab/shaping.html#vec_to_tril"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lab.shaping.vec_to_tril" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a lower triangular matrix from a vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>tensor</em>) – Vector.</p></li>
+<li><p><strong>offset</strong> (<em>int</em><em>, </em><em>optional</em>) – Diagonal offset.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Lower triangular matrix.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>tensor</p>
@@ -546,11 +562,19 @@ elements to take. Must be rank 1.</p></li>
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2017, Wessel Bruinsma
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -561,7 +585,6 @@ elements to take. Must be rank 1.</p></li>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

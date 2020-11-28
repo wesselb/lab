@@ -2,6 +2,6 @@ lab.torch.custom module
 =======================
 
 .. automodule:: lab.torch.custom
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

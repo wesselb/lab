@@ -2,6 +2,6 @@ lab.tensorflow.shaping module
 =============================
 
 .. automodule:: lab.tensorflow.shaping
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

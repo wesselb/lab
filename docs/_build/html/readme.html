@@ -1,8 +1,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -12,27 +11,29 @@
   
 
   
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
   
   
   
 
   
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Application Programming Interface" href="api.html" />
@@ -50,7 +51,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> lab
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> lab
           
 
           
@@ -77,6 +78,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -86,7 +88,7 @@
             
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">LAB</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#requirements-and-installation">Requirements and Installation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#basic-usage">Basic Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#list-of-types">List of Types</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#general">General</a></li>
@@ -94,6 +96,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#autograd">AutoGrad</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#tensorflow">TensorFlow</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pytorch">PyTorch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#jax">Jax</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#list-of-methods">List of Methods</a><ul>
@@ -113,6 +116,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -151,7 +155,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="index.html">Docs</a> &raquo;</li>
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
       <li>LAB</li>
     
@@ -174,20 +178,20 @@
             
   <div class="section" id="lab">
 <h1><a class="reference external" href="http://github.com/wesselb/lab">LAB</a><a class="headerlink" href="#lab" title="Permalink to this headline">¶</a></h1>
-<p><a class="reference external" href="https://travis-ci.org/wesselb/lab"><img alt="Build" src="https://travis-ci.org/wesselb/lab.svg?branch=master" /></a> <a class="reference external" href="https://coveralls.io/github/wesselb/lab?branch=master"><img alt="Coverage Status" src="https://coveralls.io/repos/github/wesselb/lab/badge.svg?branch=master&amp;service=github" /></a> <a class="reference external" href="https://wesselb.github.io/lab"><img alt="Latest Docs" src="https://img.shields.io/badge/docs-latest-blue.svg" /></a></p>
+<p><a class="reference external" href="https://github.com/wesselb/lab/actions?query=workflow%3ACI"><img alt="CI" src="https://github.com/wesselb/lab/workflows/CI/badge.svg?branch=master" /></a> <a class="reference external" href="https://coveralls.io/github/wesselb/lab?branch=master"><img alt="Coverage Status" src="https://coveralls.io/repos/github/wesselb/lab/badge.svg?branch=master&amp;service=github" /></a> <a class="reference external" href="https://wesselb.github.io/lab"><img alt="Latest Docs" src="https://img.shields.io/badge/docs-latest-blue.svg" /></a></p>
 <p>A generic interface for linear algebra backends: code it once, run it on
 any backend</p>
-<p><em>Note:</em> LAB requires Python 3.6 or higher and TensorFlow 2 if TensorFlow
-is used.</p>
 <ul class="simple">
-<li><p><a class="reference external" href="#installation">Installation</a></p></li>
+<li><p><a class="reference external" href="#requirements-and-installation">Requirements and Installation</a></p></li>
 <li><p><a class="reference external" href="#basic-usage">Basic Usage</a></p></li>
 <li><p><a class="reference external" href="#list-of-types">List of Types</a></p>
 <ul>
 <li><p><a class="reference external" href="#general">General</a></p></li>
 <li><p><a class="reference external" href="#numpy">NumPy</a></p></li>
+<li><p><a class="reference external" href="#autograd">AutoGrad</a></p></li>
 <li><p><a class="reference external" href="#tensorflow">TensorFlow</a></p></li>
 <li><p><a class="reference external" href="#pytorch">PyTorch</a></p></li>
+<li><p><a class="reference external" href="#jax">Jax</a></p></li>
 </ul>
 </li>
 <li><p><a class="reference external" href="#list-of-methods">List of Methods</a></p>
@@ -200,14 +204,11 @@ is used.</p>
 </ul>
 </li>
 </ul>
-<div class="section" id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<p>Before installing the package, please ensure that <code class="docutils literal notranslate"><span class="pre">gcc</span></code> and
-<code class="docutils literal notranslate"><span class="pre">gfortran</span></code> are available. On OS X, these are both installed with
-<code class="docutils literal notranslate"><span class="pre">brew</span> <span class="pre">install</span> <span class="pre">gcc</span></code>; users of Anaconda may want to instead consider
-<code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">gcc</span></code>. On Linux, <code class="docutils literal notranslate"><span class="pre">gcc</span></code> is most likely already
-available, and <code class="docutils literal notranslate"><span class="pre">gfortran</span></code> can be installed with
-<code class="docutils literal notranslate"><span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">gfortran</span></code>. Then simply</p>
+<div class="section" id="requirements-and-installation">
+<h2>Requirements and Installation<a class="headerlink" href="#requirements-and-installation" title="Permalink to this headline">¶</a></h2>
+<p>See <a class="reference external" href="https://gist.github.com/wesselb/4b44bf87f3789425f96e26c4308d0adc">the instructions
+here</a>.
+Then simply</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">backends</span>
 </pre></div>
 </div>
@@ -217,22 +218,23 @@ available, and <code class="docutils literal notranslate"><span class="pre">gfor
 <p>The basic use case for the package is to write code that automatically
 determines the backend to use depending on the types of its arguments.</p>
 <p>Example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">lab</span> <span class="kn">as</span> <span class="nn">B</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">lab</span> <span class="k">as</span> <span class="nn">B</span>
 <span class="kn">import</span> <span class="nn">lab.autograd</span>    <span class="c1"># Load the AutoGrad extension.</span>
 <span class="kn">import</span> <span class="nn">lab.torch</span>       <span class="c1"># Load the PyTorch extension.</span>
 <span class="kn">import</span> <span class="nn">lab.tensorflow</span>  <span class="c1"># Load the TensorFlow extension.</span>
+<span class="kn">import</span> <span class="nn">lab.jax</span>         <span class="c1"># Load the Jax extension.</span>
 
 
 <span class="k">def</span> <span class="nf">objective</span><span class="p">(</span><span class="n">matrix</span><span class="p">):</span>
-    <span class="n">outer_product</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">matrix</span><span class="p">,</span> <span class="n">tr_b</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">outer_product</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">matrix</span><span class="p">,</span> <span class="n">tr_b</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">outer_product</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The AutoGrad, PyTorch, and TensorFlow extensions are not loaded
+<p>The AutoGrad, PyTorch, TensorFlow, and Jax extensions are not loaded
 automatically to not enforce a dependency on all three frameworks. An
 extension can alternatively be loaded via <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">lab.autograd</span> <span class="pre">as</span> <span class="pre">B</span></code>.</p>
 <p>Run it with NumPy and AutoGrad:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">autograd.numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">autograd.numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">objective</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 <span class="go">0.15772589216756833</span>
@@ -243,7 +245,7 @@ extension can alternatively be loaded via <code class="docutils literal notransl
 </pre></div>
 </div>
 <p>Run it with TensorFlow:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="kn">as</span> <span class="nn">tf</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">objective</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 <span class="go">&lt;tf.Tensor &#39;Mean:0&#39; shape=() dtype=float64&gt;</span>
@@ -256,17 +258,30 @@ extension can alternatively be loaded via <code class="docutils literal notransl
 <span class="go">tensor(1.9557, dtype=torch.float64)</span>
 </pre></div>
 </div>
+<p>Run it with Jax:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">jax</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">jax</span><span class="o">.</span><span class="n">jit</span><span class="p">(</span><span class="n">objective</span><span class="p">)(</span><span class="n">B</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="go">DeviceArray(0.3109299, dtype=float32)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">jax</span><span class="o">.</span><span class="n">jit</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">objective</span><span class="p">))(</span><span class="n">B</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="go">DeviceArray([[ 0.2525182, -1.26065  ],</span>
+<span class="go">             [ 0.2525182, -1.26065  ]], dtype=float32)</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="list-of-types">
 <h2>List of Types<a class="headerlink" href="#list-of-types" title="Permalink to this headline">¶</a></h2>
 <p>This section lists all available types, which can be used to check types
 of objects or extend functions.</p>
 <p>Example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">lab</span> <span class="kn">as</span> <span class="nn">B</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">lab</span> <span class="k">as</span> <span class="nn">B</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">plum</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">])],</span> <span class="n">List</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">NPNumeric</span><span class="p">))</span>
 <span class="go">True</span>
@@ -274,7 +289,7 @@ of objects or extend functions.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">])],</span> <span class="n">List</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">TFNumeric</span><span class="p">))</span>
 <span class="go">False</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="kn">as</span> <span class="nn">tf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">lab.tensorflow</span>
 
@@ -330,6 +345,15 @@ of objects or extend functions.</p>
 </pre></div>
 </div>
 </div>
+<div class="section" id="jax">
+<h3>Jax<a class="headerlink" href="#jax" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">JaxNumeric</span>
+<span class="n">JaxDType</span>
+
+<span class="n">Jax</span>          <span class="c1"># Anything Jax</span>
+</pre></div>
+</div>
+</div>
 </div>
 <div class="section" id="list-of-methods">
 <h2>List of Methods<a class="headerlink" href="#list-of-methods" title="Permalink to this headline">¶</a></h2>
@@ -371,14 +395,14 @@ creates a tensor full of zeros of the same shape and data type as
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nan</span>
 <span class="n">pi</span>
 <span class="n">log_2_pi</span>
-
-<span class="n">isnan</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="generic">
 <h3>Generic<a class="headerlink" href="#generic" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">zeros</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">isnan</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+
+<span class="n">zeros</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">)</span>
 <span class="n">zeros</span><span class="p">(</span><span class="o">*</span><span class="n">shape</span><span class="p">)</span>
 <span class="n">zeros</span><span class="p">(</span><span class="n">ref</span><span class="p">)</span>
 
@@ -418,6 +442,8 @@ creates a tensor full of zeros of the same shape and data type as
 <span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 <span class="n">cos</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 <span class="n">tan</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">tanh</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">erf</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 <span class="n">sigmoid</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 <span class="n">softplus</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 <span class="n">relu</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
@@ -468,6 +494,8 @@ creates a tensor full of zeros of the same shape and data type as
 <span class="n">inv</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 <span class="n">det</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 <span class="n">logdet</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">expm</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">logm</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 <span class="n">cholesky</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="p">(</span><span class="n">alias</span><span class="p">:</span> <span class="n">chol</span><span class="p">)</span>
 
 <span class="n">cholesky_solve</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>  <span class="p">(</span><span class="n">alias</span><span class="p">:</span> <span class="n">cholsolve</span><span class="p">)</span>
@@ -529,8 +557,8 @@ creates a tensor full of zeros of the same shape and data type as
 
 <span class="n">diag</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 <span class="n">flatten</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-<span class="n">vec_to_tril</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-<span class="n">tril_to_vec</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">vec_to_tril</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">tril_to_vec</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">stack</span><span class="p">(</span><span class="o">*</span><span class="n">elements</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">unstack</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">reshape</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">)</span>
@@ -564,11 +592,19 @@ creates a tensor full of zeros of the same shape and data type as
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2017, Wessel Bruinsma
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -579,7 +615,6 @@ creates a tensor full of zeros of the same shape and data type as
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

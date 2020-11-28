@@ -1,0 +1,7 @@
+lab.jax.shaping module
+======================
+
+.. automodule:: lab.jax.shaping
+   :members:
+   :undoc-members:
+   :show-inheritance:

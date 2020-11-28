@@ -2,18 +2,18 @@ lab.torch package
 =================
 
 .. automodule:: lab.torch
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    lab.torch.custom
    lab.torch.generic
    lab.torch.linear_algebra
    lab.torch.random
    lab.torch.shaping
-

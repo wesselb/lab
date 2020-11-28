@@ -2,6 +2,6 @@ lab.numpy.generic module
 ========================
 
 .. automodule:: lab.numpy.generic
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

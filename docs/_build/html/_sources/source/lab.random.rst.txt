@@ -2,6 +2,6 @@ lab.random module
 =================
 
 .. automodule:: lab.random
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

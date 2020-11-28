@@ -2,6 +2,6 @@ lab.types module
 ================
 
 .. automodule:: lab.types
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

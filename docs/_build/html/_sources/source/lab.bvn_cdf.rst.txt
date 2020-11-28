@@ -1,0 +1,7 @@
+lab.bvn\_cdf module
+===================
+
+.. automodule:: lab.bvn_cdf
+   :members:
+   :undoc-members:
+   :show-inheritance:

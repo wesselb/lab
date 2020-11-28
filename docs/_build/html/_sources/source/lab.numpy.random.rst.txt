@@ -2,6 +2,6 @@ lab.numpy.random module
 =======================
 
 .. automodule:: lab.numpy.random
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

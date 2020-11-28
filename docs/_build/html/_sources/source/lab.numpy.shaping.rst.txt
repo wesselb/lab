@@ -2,6 +2,6 @@ lab.numpy.shaping module
 ========================
 
 .. automodule:: lab.numpy.shaping
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
