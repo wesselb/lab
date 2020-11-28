@@ -12,6 +12,7 @@ backend
 * [List of Types](#list-of-types)
     - [General](#general)
     - [NumPy](#numpy)
+    - [AutoGrad](#autograd)
     - [TensorFlow](#tensorflow)
     - [PyTorch](#pytorch)
     - [Jax](#jax)
