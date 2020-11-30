@@ -7,14 +7,10 @@ import tensorflow as tf
 import torch
 
 import lab as B
-from .util import (
-    Tensor,
-    allclose,
-    to_np
-)
+from .util import Tensor, allclose, to_np
 
 
-@pytest.mark.parametrize('dtype', [np.float32, tf.float32, torch.float32, jnp.float32])
+@pytest.mark.parametrize("dtype", [np.float32, tf.float32, torch.float32, jnp.float32])
 def test_set_seed(dtype):
     B.set_random_seed(0)
     x = to_np(B.rand(dtype))
@@ -23,7 +19,7 @@ def test_set_seed(dtype):
     assert x == y
 
 
-@pytest.mark.parametrize('f', [B.rand, B.randn])
+@pytest.mark.parametrize("f", [B.rand, B.randn])
 def test_random_generators(f):
     # Test without specifying data type.
     assert B.dtype(f()) is B.default_dtype
@@ -52,10 +48,10 @@ def test_random_generators(f):
         assert B.shape(f(f(t, 2, 3))) == (2, 3)
 
 
-@pytest.mark.parametrize('f', [B.rand, B.randn])
+@pytest.mark.parametrize("f", [B.rand, B.randn])
 def test_conversion_warnings(f):
     with warnings.catch_warnings(record=True) as w:
-        warnings.simplefilter('always')
+        warnings.simplefilter("always")
 
         # Trigger the warning!
         f(int, 5)

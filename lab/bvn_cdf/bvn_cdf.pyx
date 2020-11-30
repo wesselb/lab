@@ -7,12 +7,12 @@ import numpy as np
 cimport cython
 from cython.parallel import prange
 
-cdef extern from 'math.h' nogil:
+cdef extern from "math.h" nogil:
     double log(double x)
     double exp(double x)
     double sqrt(double x)
 
-cdef extern from './tvpack.h' nogil:
+cdef extern from "./tvpack.h" nogil:
     double phid_(double* x)
     double bvnd_(double* x, double* y, double* rho)
 

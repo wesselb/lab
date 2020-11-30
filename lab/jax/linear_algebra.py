@@ -5,11 +5,7 @@ import jax.scipy.linalg as jsla
 
 from . import dispatch, B, Numeric
 from .custom import jax_register
-from ..custom import (
-    toeplitz_solve, s_toeplitz_solve,
-    expm, s_expm,
-    logm, s_logm
-)
+from ..custom import toeplitz_solve, s_toeplitz_solve, expm, s_expm, logm, s_logm
 from ..linear_algebra import _default_perm
 from ..util import batch_computation
 
@@ -94,10 +90,9 @@ def cholesky_solve(a, b):
 @dispatch(Numeric, Numeric)
 def triangular_solve(a, b, lower_a=True):
     def _triangular_solve(a_, b_):
-        return jsla.solve_triangular(a_, b_,
-                                     trans='N',
-                                     lower=lower_a,
-                                     check_finite=False)
+        return jsla.solve_triangular(
+            a_, b_, trans="N", lower=lower_a, check_finite=False
+        )
 
     return batch_computation(_triangular_solve, (a, b), (2, 2))
 

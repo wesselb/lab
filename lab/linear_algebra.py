@@ -4,26 +4,42 @@ from . import dispatch, B
 from .types import Numeric
 from .util import abstract
 
-__all__ = ['epsilon',
-           'transpose', 't', 'T',
-           'matmul', 'mm', 'dot',
-           'kron',
-           'trace',
-           'svd',
-           'solve',
-           'inv',
-           'det',
-           'logdet',
-           'expm',
-           'logm',
-           'cholesky', 'chol',
-           'cholesky_solve', 'cholsolve',
-           'triangular_solve', 'trisolve',
-           'toeplitz_solve', 'toepsolve',
-           'outer',
-           'reg',
-           'pw_dists2', 'pw_dists', 'ew_dists2', 'ew_dists',
-           'pw_sums2', 'pw_sums', 'ew_sums2', 'ew_sums']
+__all__ = [
+    "epsilon",
+    "transpose",
+    "t",
+    "T",
+    "matmul",
+    "mm",
+    "dot",
+    "kron",
+    "trace",
+    "svd",
+    "solve",
+    "inv",
+    "det",
+    "logdet",
+    "expm",
+    "logm",
+    "cholesky",
+    "chol",
+    "cholesky_solve",
+    "cholsolve",
+    "triangular_solve",
+    "trisolve",
+    "toeplitz_solve",
+    "toepsolve",
+    "outer",
+    "reg",
+    "pw_dists2",
+    "pw_dists",
+    "ew_dists2",
+    "ew_dists",
+    "pw_sums2",
+    "pw_sums",
+    "ew_sums2",
+    "ew_sums",
+]
 
 log = logging.getLogger(__name__)
 
@@ -386,8 +402,7 @@ def pw_dists(a, b):
     if B.shape(a)[1] == 1 and B.shape(b)[1] == 1:
         return B.abs(a - B.transpose(b))
 
-    return B.sqrt(B.maximum(B.pw_dists2(a, b),
-                            B.cast(B.dtype(a), 1e-30)))
+    return B.sqrt(B.maximum(B.pw_dists2(a, b), B.cast(B.dtype(a), 1e-30)))
 
 
 @dispatch(object)
@@ -439,8 +454,7 @@ def ew_dists(a, b):
     if B.shape(a)[1] == 1 and B.shape(b)[1] == 1:
         return B.abs(a - b)
 
-    return B.sqrt(B.maximum(B.ew_dists2(a, b),
-                            B.cast(B.dtype(a), 1e-30)))
+    return B.sqrt(B.maximum(B.ew_dists2(a, b), B.cast(B.dtype(a), 1e-30)))
 
 
 @dispatch(object)
@@ -499,8 +513,7 @@ def pw_sums(a, b):
     if B.shape(a)[1] == 1 and B.shape(b)[1] == 1:
         return B.abs(a + B.transpose(b))
 
-    return B.sqrt(B.maximum(B.pw_sums2(a, b),
-                            B.cast(B.dtype(a), 1e-30)))
+    return B.sqrt(B.maximum(B.pw_sums2(a, b), B.cast(B.dtype(a), 1e-30)))
 
 
 @dispatch(object)
@@ -552,8 +565,7 @@ def ew_sums(a, b):
     if B.shape(a)[1] == 1 and B.shape(b)[1] == 1:
         return B.abs(a + b)
 
-    return B.sqrt(B.maximum(B.ew_sums2(a, b),
-                            B.cast(B.dtype(a), 1e-30)))
+    return B.sqrt(B.maximum(B.ew_sums2(a, b), B.cast(B.dtype(a), 1e-30)))
 
 
 @dispatch(object)

@@ -5,24 +5,27 @@ from . import dispatch
 from .types import Numeric, Int
 from .util import abstract
 
-__all__ = ['shape',
-           'rank',
-           'length', 'size',
-           'isscalar',
-           'expand_dims',
-           'squeeze',
-           'uprank',
-           'diag',
-           'flatten',
-           'vec_to_tril',
-           'tril_to_vec',
-           'stack',
-           'unstack',
-           'reshape',
-           'concat',
-           'concat2d',
-           'tile',
-           'take']
+__all__ = [
+    "shape",
+    "rank",
+    "length",
+    "size",
+    "isscalar",
+    "expand_dims",
+    "squeeze",
+    "uprank",
+    "diag",
+    "flatten",
+    "vec_to_tril",
+    "tril_to_vec",
+    "stack",
+    "unstack",
+    "reshape",
+    "concat",
+    "concat2d",
+    "tile",
+    "take",
+]
 
 
 @dispatch(Numeric)
@@ -128,8 +131,9 @@ def uprank(a):
     """
     a_rank = rank(a)
     if a_rank > 2:
-        raise ValueError('Cannot convert a tensor of rank {} to rank 2.'
-                         ''.format(a_rank))
+        raise ValueError(
+            f"Cannot convert a tensor of rank {a_rank} to rank 2."
+        )
     while a_rank < 2:
         a = expand_dims(a, axis=-1)
         a_rank += 1
@@ -175,8 +179,10 @@ def _vec_to_tril_shape_upper_perm(a, offset=0):
     # Compute sorting permutation.
     ind_lower = np.tril_indices(side, k=offset)
     ind_upper = np.triu_indices(side, k=1 + offset)
-    ind_concat = (np.concatenate((ind_lower[0], ind_upper[0])),
-                  np.concatenate((ind_lower[1], ind_upper[1])))
+    ind_concat = (
+        np.concatenate((ind_lower[0], ind_upper[0])),
+        np.concatenate((ind_lower[1], ind_upper[1])),
+    )
     perm = np.lexsort((ind_concat[1], ind_concat[0]))
 
     return side, len(ind_upper[0]), perm

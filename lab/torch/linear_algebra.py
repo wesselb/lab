@@ -2,11 +2,7 @@ import torch
 
 from . import dispatch, B, Numeric
 from .custom import torch_register
-from ..custom import (
-    toeplitz_solve, s_toeplitz_solve,
-    expm, s_expm,
-    logm, s_logm
-)
+from ..custom import toeplitz_solve, s_toeplitz_solve, expm, s_expm, logm, s_logm
 from ..linear_algebra import _default_perm
 from ..util import batch_computation
 
@@ -46,7 +42,7 @@ def kron(a, b):
 
     # Check that ranks are equal.
     if len(shape_a) != len(shape_b):
-        raise ValueError('Inputs must have equal rank.')
+        raise ValueError("Inputs must have equal rank.")
 
     a = a.view(*sum([[i, 1] for i in shape_a], []))
     b = b.view(*sum([[1, i] for i in shape_b], []))
@@ -93,9 +89,9 @@ def cholesky(a):
 
 @dispatch(Numeric, Numeric)
 def cholesky_solve(a, b):
-    # The sensitivity for `torch.cholesky_solve` is not implemented,
-    # so instead we use `triangular_solve` and `transpose`. This should
-    # be reverted once the sensitivity is implemented.
+    # The sensitivity for `torch.cholesky_solve` is not implemented, so instead we
+    # use `triangular_solve` and `transpose`. This should be reverted once the
+    # sensitivity is implemented.
     # return torch.cholesky_solve(b, a, upper=False)
     return triangular_solve(transpose(a), triangular_solve(a, b), lower_a=False)
 

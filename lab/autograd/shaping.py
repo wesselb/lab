@@ -30,7 +30,7 @@ def diag(a):
 @dispatch(Numeric)
 def vec_to_tril(a, offset=0):
     if B.rank(a) != 1:
-        raise ValueError('Input must be rank 1.')
+        raise ValueError("Input must be rank 1.")
     side, upper, perm = _vec_to_tril_shape_upper_perm(a, offset=offset)
     a = anp.concatenate((a, anp.zeros(upper, dtype=a.dtype)))
     return anp.reshape(a[perm], (side, side))
@@ -39,16 +39,16 @@ def vec_to_tril(a, offset=0):
 @dispatch(Numeric)
 def tril_to_vec(a, offset=0):
     if B.rank(a) != 2:
-        raise ValueError('Input must be rank 2.')
+        raise ValueError("Input must be rank 2.")
     n, m = B.shape(a)
     if n != m:
-        raise ValueError('Input must be square.')
+        raise ValueError("Input must be square.")
     return a[anp.tril_indices(n, k=offset)]
 
 
 @dispatch([Numeric])
 def stack(*elements, **kw_args):
-    return anp.stack(elements, axis=kw_args.get('axis', 0))
+    return anp.stack(elements, axis=kw_args.get("axis", 0))
 
 
 @dispatch(Numeric)
@@ -64,7 +64,7 @@ def reshape(a, *shape):
 
 @dispatch([Numeric])
 def concat(*elements, **kw_args):
-    return anp.concatenate(elements, axis=kw_args.get('axis', 0))
+    return anp.concatenate(elements, axis=kw_args.get("axis", 0))
 
 
 @dispatch(Numeric, [Int])
@@ -75,7 +75,7 @@ def tile(a, *repeats):
 @dispatch(Numeric, object)
 def take(a, indices_or_mask, axis=0):
     if B.rank(indices_or_mask) != 1:
-        raise ValueError('Indices or mask must be rank 1.')
+        raise ValueError("Indices or mask must be rank 1.")
 
     # Put axis `axis` first.
     if axis > 0:

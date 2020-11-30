@@ -146,24 +146,24 @@ def test_dtype():
     assert B.dtype(jnp.array(1.0, dtype=jnp.float32)) is jnp.float32
 
 
-@pytest.mark.parametrize('t', [B.NP, B.Framework])
+@pytest.mark.parametrize("t", [B.NP, B.Framework])
 def test_framework_np(t):
     assert isinstance(np.array(1), t)
     assert isinstance(np.float32, t)
 
 
-@pytest.mark.parametrize('t', [B.TF, B.Framework])
+@pytest.mark.parametrize("t", [B.TF, B.Framework])
 def test_framework_tf(t):
     assert isinstance(tf.constant(1), t)
     assert isinstance(tf.float32, t)
 
 
-@pytest.mark.parametrize('t', [B.Torch, B.Framework])
+@pytest.mark.parametrize("t", [B.Torch, B.Framework])
 def test_framework_torch(t):
     assert isinstance(torch.tensor(1), t)
     assert isinstance(torch.float32, t)
 
 
-@pytest.mark.parametrize('t', [B.Jax, B.Framework])
+@pytest.mark.parametrize("t", [B.Jax, B.Framework])
 def test_framework_jax(t):
     assert isinstance(jnp.asarray(1), t)

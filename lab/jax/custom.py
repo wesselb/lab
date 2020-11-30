@@ -8,7 +8,7 @@ from plum import Dispatcher
 from . import B
 from ..util import as_tuple
 
-__all__ = ['jax_register']
+__all__ = ["jax_register"]
 _dispatch = Dispatcher()
 
 

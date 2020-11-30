@@ -30,13 +30,13 @@ def diag(a):
     elif B.rank(a) == 2:
         return tf.linalg.diag_part(a)
     else:
-        raise ValueError('Argument must have rank 1 or 2.')
+        raise ValueError("Argument must have rank 1 or 2.")
 
 
 @dispatch(Numeric)
 def vec_to_tril(a, offset=0):
     if B.rank(a) != 1:
-        raise ValueError('Input must be rank 1.')
+        raise ValueError("Input must be rank 1.")
     side, upper, perm = _vec_to_tril_shape_upper_perm(a, offset=offset)
     a = tf.concat((a, tf.zeros(upper, dtype=a.dtype)), axis=0)
     return tf.reshape(tf.gather(a, perm), [side, side])
@@ -45,16 +45,16 @@ def vec_to_tril(a, offset=0):
 @dispatch(Numeric)
 def tril_to_vec(a, offset=0):
     if B.rank(a) != 2:
-        raise ValueError('Input must be rank 2.')
+        raise ValueError("Input must be rank 2.")
     n, m = a.shape
     if n != m:
-        raise ValueError('Input must be square.')
+        raise ValueError("Input must be square.")
     return tf.gather_nd(a, list(zip(*np.tril_indices(int(n), k=offset))))
 
 
 @dispatch([Numeric])
 def stack(*elements, **kw_args):
-    return tf.stack(elements, axis=kw_args.get('axis', 0))
+    return tf.stack(elements, axis=kw_args.get("axis", 0))
 
 
 @dispatch(Numeric)
@@ -69,7 +69,7 @@ def reshape(a, *shape):
 
 @dispatch([Numeric])
 def concat(*elements, **kw_args):
-    return tf.concat(elements, axis=kw_args.get('axis', 0))
+    return tf.concat(elements, axis=kw_args.get("axis", 0))
 
 
 @dispatch(Numeric, [Int])
@@ -80,7 +80,7 @@ def tile(a, *repeats):
 @dispatch(Numeric, object)
 def take(a, indices_or_mask, axis=0):
     if B.rank(indices_or_mask) != 1:
-        raise ValueError('Indices or mask must be rank 1.')
+        raise ValueError("Indices or mask must be rank 1.")
 
     # Put axis `axis` first.
     if axis > 0:

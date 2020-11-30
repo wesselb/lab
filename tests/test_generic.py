@@ -16,7 +16,7 @@ from .util import (
     BoolTensor,
     NaNTensor,
     Bool,
-    allclose
+    allclose,
 )
 
 
@@ -32,12 +32,13 @@ def test_isnan():
     check_function(B.isnan, (NaNTensor(2, 3),), {}, assert_dtype=False)
 
 
-@pytest.mark.parametrize('f', [B.zeros, B.ones, B.eye])
+@pytest.mark.parametrize("f", [B.zeros, B.ones, B.eye])
 def test_zeros_ones_eye(f):
     # Check consistency.
-    check_function(f, (Value(np.float32, tf.float32, torch.float32, jnp.float32),
-                       Value(2),
-                       Value(3)))
+    check_function(
+        f,
+        (Value(np.float32, tf.float32, torch.float32, jnp.float32), Value(2), Value(3)),
+    )
 
     # Check shape of calls.
     assert B.shape(f(2)) == (2, 2) if f is B.eye else (2,)
@@ -48,10 +49,12 @@ def test_zeros_ones_eye(f):
     assert B.dtype(f(2, 3)) == B.default_dtype
 
     # Check reference calls.
-    for t1, t2 in [(np.float32, np.int64),
-                   (tf.float32, tf.int64),
-                   (torch.float32, torch.int64),
-                   (jnp.float32, jnp.int64)]:
+    for t1, t2 in [
+        (np.float32, np.int64),
+        (tf.float32, tf.int64),
+        (torch.float32, torch.int64),
+        (jnp.float32, jnp.int64),
+    ]:
         ref = B.randn(t1, 4, 5)
 
         # Check shape of calls.
@@ -65,7 +68,7 @@ def test_zeros_ones_eye(f):
         assert B.dtype(f(ref)) is t1
 
 
-@pytest.mark.parametrize('f', [B.zero, B.one])
+@pytest.mark.parametrize("f", [B.zero, B.one])
 def test_zero_one(f):
     # Check consistency.
     check_function(f, (Value(np.float32, tf.float32, torch.float32, jnp.float32),))
@@ -88,13 +91,15 @@ def test_linspace():
     allclose(B.linspace(0, 1, 10), np.linspace(0, 1, 10, dtype=B.default_dtype))
 
     # Check consistency.
-    check_function(B.linspace, (Value(np.float32,
-                                      tf.float32,
-                                      torch.float32,
-                                      jnp.float32),
-                                Value(0),
-                                Value(10),
-                                Value(20)))
+    check_function(
+        B.linspace,
+        (
+            Value(np.float32, tf.float32, torch.float32, jnp.float32),
+            Value(0),
+            Value(10),
+            Value(20),
+        ),
+    )
 
 
 def test_range():
@@ -105,22 +110,26 @@ def test_range():
 
     # Check various step sizes.
     for step in [1, 1.0, 0.25]:
-        check_function(B.range, (Value(np.float32,
-                                       tf.float32,
-                                       torch.float32,
-                                       jnp.float32),
-                                 Value(0),
-                                 Value(5),
-                                 Value(step)))
+        check_function(
+            B.range,
+            (
+                Value(np.float32, tf.float32, torch.float32, jnp.float32),
+                Value(0),
+                Value(5),
+                Value(step),
+            ),
+        )
 
     # Check two-argument specification.
-    check_function(B.range, (Value(np.float32, tf.float32, torch.float32, jnp.float32),
-                             Value(0),
-                             Value(5)))
+    check_function(
+        B.range,
+        (Value(np.float32, tf.float32, torch.float32, jnp.float32), Value(0), Value(5)),
+    )
 
     # Check one-argument specification.
-    check_function(B.range, (Value(np.float32, tf.float32, torch.float32, jnp.float32),
-                             Value(5)))
+    check_function(
+        B.range, (Value(np.float32, tf.float32, torch.float32, jnp.float32), Value(5))
+    )
 
 
 def test_cast():
@@ -142,72 +151,75 @@ def test_cast():
     assert B.dtype(B.cast(jnp.float64, jnp.array(1))) is jnp.float64
 
     # Test that casting to its own data type does nothing.
-    for x in [B.randn(np.float32),
-              autograd_box(B.randn(np.float32)),
-              B.randn(tf.float32),
-              B.randn(torch.float32),
-              B.randn(jnp.float32)]:
+    for x in [
+        B.randn(np.float32),
+        autograd_box(B.randn(np.float32)),
+        B.randn(tf.float32),
+        B.randn(torch.float32),
+        B.randn(jnp.float32),
+    ]:
         assert x is B.cast(B.dtype(x), x)
 
 
-@pytest.mark.parametrize('f', [B.identity,
-                               B.negative,
-                               B.abs,
-                               B.sign,
-                               B.exp,
-                               B.sin,
-                               B.cos,
-                               B.tan,
-                               B.tanh,
-                               B.erf,
-                               B.sigmoid,
-                               B.softplus,
-                               B.relu])
+@pytest.mark.parametrize(
+    "f",
+    [
+        B.identity,
+        B.negative,
+        B.abs,
+        B.sign,
+        B.exp,
+        B.sin,
+        B.cos,
+        B.tan,
+        B.tanh,
+        B.erf,
+        B.sigmoid,
+        B.softplus,
+        B.relu,
+    ],
+)
 def test_unary_signed(f):
     check_function(f, (Tensor(),))
     check_function(f, (Tensor(2),))
     check_function(f, (Tensor(2, 3),))
 
 
-@pytest.mark.parametrize('f', [B.log, B.sqrt])
+@pytest.mark.parametrize("f", [B.log, B.sqrt])
 def test_unary_positive(f):
     check_function(f, (PositiveTensor(),))
     check_function(f, (PositiveTensor(2),))
     check_function(f, (PositiveTensor(2, 3),))
 
 
-@pytest.mark.parametrize('a', [0, -1, 1])
+@pytest.mark.parametrize("a", [0, -1, 1])
 def test_softplus_correctness(a):
     allclose(B.softplus(a), np.log(1 + np.exp(a)))
 
 
-@pytest.mark.parametrize('f', [B.add,
-                               B.subtract,
-                               B.multiply,
-                               B.divide,
-                               B.minimum,
-                               B.maximum,
-                               B.leaky_relu])
+@pytest.mark.parametrize(
+    "f", [B.add, B.subtract, B.multiply, B.divide, B.minimum, B.maximum, B.leaky_relu]
+)
 def test_binary_signed(f):
     check_function(f, (Tensor(), Tensor()))
     check_function(f, (Tensor(2), Tensor(2)))
     check_function(f, (Tensor(2, 3), Tensor(2, 3)))
 
 
-@pytest.mark.parametrize('f', [B.power])
+@pytest.mark.parametrize("f", [B.power])
 def test_binary_positive_first(f):
     check_function(f, (PositiveTensor(), Tensor()))
     check_function(f, (PositiveTensor(2), Tensor(2)))
     check_function(f, (PositiveTensor(2, 3), Tensor(2, 3)))
 
 
-@pytest.mark.parametrize('f', [B.min, B.max, B.sum, B.mean, B.std, B.logsumexp])
+@pytest.mark.parametrize("f", [B.min, B.max, B.sum, B.mean, B.std, B.logsumexp])
 def test_reductions(f):
     check_function(f, (Tensor(),))
     check_function(f, (Tensor(2),))
-    check_function(f, (Tensor(2),), {'axis': Value(0)})
+    check_function(f, (Tensor(2),), {"axis": Value(0)})
     check_function(f, (Tensor(2, 3),))
-    check_function(f, (Tensor(2, 3),), {'axis': Value(0, 1)})
+    check_function(f, (Tensor(2, 3),), {"axis": Value(0, 1)})
 
 
 def test_logsumexp_correctness():
@@ -215,17 +227,16 @@ def test_logsumexp_correctness():
     allclose(B.logsumexp(mat, axis=1), scipy.special.logsumexp(mat, axis=1))
 
 
-@pytest.mark.parametrize('f', [B.all, B.any])
+@pytest.mark.parametrize("f", [B.all, B.any])
 def test_logical_reductions(f):
     check_function(f, (BoolTensor(),), {}, assert_dtype=False)
     check_function(f, (BoolTensor(2),), {}, assert_dtype=False)
-    check_function(f, (BoolTensor(2),), {'axis': Value(0)}, assert_dtype=False)
+    check_function(f, (BoolTensor(2),), {"axis": Value(0)}, assert_dtype=False)
     check_function(f, (BoolTensor(2, 3),), {}, assert_dtype=False)
-    check_function(f, (BoolTensor(2, 3),), {'axis': Value(0, 1)},
-                   assert_dtype=False)
+    check_function(f, (BoolTensor(2, 3),), {"axis": Value(0, 1)}, assert_dtype=False)
 
 
-@pytest.mark.parametrize('f', [B.lt, B.le, B.gt, B.ge])
+@pytest.mark.parametrize("f", [B.lt, B.le, B.gt, B.ge])
 def test_logical_comparisons(f):
     check_function(f, (Tensor(), Tensor()), {}, assert_dtype=False)
     check_function(f, (Tensor(2), Tensor(2)), {}, assert_dtype=False)
@@ -233,9 +244,12 @@ def test_logical_comparisons(f):
 
 
 def test_bvn_cdf():
-    check_function(B.bvn_cdf,
-                   (PositiveTensor(5), PositiveTensor(5), PositiveTensor(5)),
-                   {}, assert_dtype=False)
+    check_function(
+        B.bvn_cdf,
+        (PositiveTensor(5), PositiveTensor(5), PositiveTensor(5)),
+        {},
+        assert_dtype=False,
+    )
 
 
 def test_scan():
@@ -264,8 +278,10 @@ def test_scan():
     xs = Tensor(10, 3, 4)
     init_h = Tensor(3, 4)
     init_y = Tensor(3, 4)
-    allclose(B.scan(scan_f, xs.np(), init_h.np(), init_y.np()),
-             B.scan(scan_f, xs.tf(), init_h.tf(), init_y.tf()))
+    allclose(
+        B.scan(scan_f, xs.np(), init_h.np(), init_y.np()),
+        B.scan(scan_f, xs.tf(), init_h.tf(), init_y.tf()),
+    )
 
     # Check shape checking.
 
@@ -273,30 +289,35 @@ def test_scan():
         return prev + prev
 
     with pytest.raises(RuntimeError):
-        B.scan(incorrect_scan_f,
-               Tensor(4).torch(),
-               Tensor().torch(),
-               Tensor().torch())
+        B.scan(incorrect_scan_f, Tensor(4).torch(), Tensor().torch(), Tensor().torch())
 
 
 def test_sort():
-    check_function(B.sort, (Tensor(4),),
-                   {'axis': Value(-1, 0), 'descending': Bool()})
+    check_function(B.sort, (Tensor(4),), {"axis": Value(-1, 0), "descending": Bool()})
     # AutoGrad cannot sort multidimensional arrays.
-    check_function(B.sort, (Tensor(2, 3, 4),),
-                   {'axis': Value(-1, 0, 1, 2), 'descending': Bool()},
-                   skip=[B.AGNumeric])
+    check_function(
+        B.sort,
+        (Tensor(2, 3, 4),),
+        {"axis": Value(-1, 0, 1, 2), "descending": Bool()},
+        skip=[B.AGNumeric],
+    )
 
 
 def test_argsort():
-    check_function(B.argsort, (Tensor(4),),
-                   {'axis': Value(-1, 0), 'descending': Bool()},
-                   assert_dtype=False)
+    check_function(
+        B.argsort,
+        (Tensor(4),),
+        {"axis": Value(-1, 0), "descending": Bool()},
+        assert_dtype=False,
+    )
     # AutoGrad cannot sort multidimensional arrays.
-    check_function(B.argsort, (Tensor(2, 3, 4),),
-                   {'axis': Value(-1, 0, 1, 2), 'descending': Bool()},
-                   skip=[B.AGNumeric],
-                   assert_dtype=False)
+    check_function(
+        B.argsort,
+        (Tensor(2, 3, 4),),
+        {"axis": Value(-1, 0, 1, 2), "descending": Bool()},
+        skip=[B.AGNumeric],
+        assert_dtype=False,
+    )
 
 
 def test_to_numpy():
@@ -319,5 +340,5 @@ def test_to_numpy_tuple():
 
 
 def test_to_numpy_dict():
-    x = B.to_numpy({'a': tf.constant(1)})
-    assert isinstance(x['a'], (B.Number, B.NPNumeric))
+    x = B.to_numpy({"a": tf.constant(1)})
+    assert isinstance(x["a"], (B.Number, B.NPNumeric))

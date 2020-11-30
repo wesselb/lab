@@ -40,7 +40,7 @@ def range(dtype, start, stop, step):
 
 @dispatch(NPDType, Numeric)
 def cast(dtype, a):
-    if hasattr(a, 'astype'):
+    if hasattr(a, "astype"):
         return a.astype(dtype, copy=False)
     else:
         return np.array(a, dtype=dtype)

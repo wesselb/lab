@@ -203,8 +203,8 @@ f = tensorflow_register(bvn_cdf, s_bvn_cdf)
 dispatch(Numeric, Numeric, Numeric)(f)
 
 
-# If `Numeric` types are used here, this implementation is more specific
-# than the generic implementation, which will use TensorFlow unnecessarily.
+# If `Numeric` types are used here, this implementation is more specific than the
+# generic implementation, which will use TensorFlow unnecessarily.
 @dispatch(Callable, TFNumeric, [TFNumeric])
 def scan(f, xs, *init_state):
     return tf.scan(f, xs, initializer=init_state)
@@ -213,16 +213,16 @@ def scan(f, xs, *init_state):
 @dispatch(Numeric)
 def sort(a, axis=-1, descending=False):
     if descending:
-        direction = 'DESCENDING'
+        direction = "DESCENDING"
     else:
-        direction = 'ASCENDING'
+        direction = "ASCENDING"
     return tf.sort(a, axis=axis, direction=direction)
 
 
 @dispatch(Numeric)
 def argsort(a, axis=-1, descending=False):
     if descending:
-        direction = 'DESCENDING'
+        direction = "DESCENDING"
     else:
-        direction = 'ASCENDING'
+        direction = "ASCENDING"
     return tf.argsort(a, axis=axis, direction=direction)

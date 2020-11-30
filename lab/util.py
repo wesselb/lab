@@ -5,7 +5,7 @@ import plum
 
 from . import B
 
-__all__ = ['as_tuple', 'batch_computation', 'abstract']
+__all__ = ["as_tuple", "batch_computation", "abstract"]
 _dispatch = plum.Dispatcher()
 
 
@@ -24,7 +24,7 @@ def as_tuple(x):
 
 @_dispatch(object)
 def as_tuple(x):
-    return x,
+    return (x,)
 
 
 def _common_shape(*shapes):
@@ -45,15 +45,17 @@ def _common_shape(*shapes):
             elif d2 == 1:
                 new_common_shape += (d1,)
             else:
-                raise RuntimeError('Cannot reconcile running common shape {} '
-                                   'with {}.'.format(common_shape, shape))
+                raise RuntimeError(
+                    f"Cannot reconcile running common shape {common_shape} "
+                    f"with {shape}."
+                )
         common_shape = new_common_shape
     return common_shape
 
 
 def _translate_index(index, batch_shape):
     # Remove superfluous index dimensions and cast to tuple.
-    index = tuple(index[-len(batch_shape):])
+    index = tuple(index[-len(batch_shape) :])
 
     # Resolve the index.
     translated_index = ()
@@ -63,8 +65,9 @@ def _translate_index(index, batch_shape):
         elif s == 1:
             translated_index += (0,)
         else:
-            raise RuntimeError('Cannot translate index {} to batch shape {}.'
-                               ''.format(index, batch_shape))
+            raise RuntimeError(
+                f"Cannot translate index {index} to batch shape {batch_shape}."
+            )
     return translated_index
 
 
@@ -99,8 +102,9 @@ def batch_computation(f, xs, ranks):
     # Loop over batches.
     batches = []
     for index in indices:
-        batches.append(f(*[x[_translate_index(index, s)]
-                           for x, s in zip(xs, batch_shapes)]))
+        batches.append(
+            f(*[x[_translate_index(index, s)] for x, s in zip(xs, batch_shapes)])
+        )
 
     # Construct result, reshape, and return.
     res = B.stack(*batches, axis=0)
@@ -143,8 +147,9 @@ def abstract(promote=-1):
                 signature = plum.Signature(*types_after)
                 # TODO: Use the message from Plum directly here.
                 raise plum.NotFoundLookupError(
-                    'For function "{}", signature {} could not be resolved.'
-                    ''.format(f.__name__, signature))
+                    f'For function "{f.__name__}", signature {signature} could not be '
+                    f"resolved."
+                )
 
             # Retry call.
             return getattr(B, f.__name__)(*args, **kw_args)

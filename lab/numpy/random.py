@@ -10,7 +10,7 @@ __all__ = []
 
 def _warn_dtype(dtype):
     if B.issubdtype(dtype, np.integer):
-        warnings.warn('Casting random number of type float to type integer.')
+        warnings.warn("Casting random number of type float to type integer.")
 
 
 @dispatch(NPDType, [Int])

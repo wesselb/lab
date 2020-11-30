@@ -6,7 +6,7 @@ from . import dispatch, B
 from .types import DType, Int, Numeric
 from .util import abstract
 
-__all__ = ['set_random_seed', 'rand', 'randn', 'choice']
+__all__ = ["set_random_seed", "rand", "randn", "choice"]
 
 
 @dispatch(Int)
@@ -20,13 +20,15 @@ def set_random_seed(seed):
     np.random.seed(seed)
 
     # Set seed for TensorFlow, if it is loaded.
-    if 'tensorflow' in sys.modules:
+    if "tensorflow" in sys.modules:
         import tensorflow
+
         tensorflow.random.set_seed(seed)
 
     # Set seed for PyTorch, if it is loaded.
-    if 'torch' in sys.modules:
+    if "torch" in sys.modules:
         import torch
+
         torch.manual_seed(seed)
 
 
@@ -44,8 +46,7 @@ def rand(dtype, *shape):  # pragma: no cover
     """
 
 
-@dispatch.multi((Int,),  # Single integer is a not a reference.
-                ([Int],))
+@dispatch.multi((Int,), ([Int],))  # Single integer is a not a reference.
 def rand(*shape):
     return rand(B.default_dtype, *shape)
 
@@ -69,8 +70,7 @@ def randn(dtype, *shape):  # pragma: no cover
     """
 
 
-@dispatch.multi((Int,),  # Single integer is a not a reference.
-                ([Int],))
+@dispatch.multi((Int,), ([Int],))  # Single integer is a not a reference.
 def randn(*shape):
     return randn(B.default_dtype, *shape)
 

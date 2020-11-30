@@ -44,6 +44,7 @@ for _ in range(its):
     z = f1(x)
 us_lab = (time() - s) / its * 1e6
 
-print('Overhead: {:.1f} us / {:.1f} %'
-      ''.format(us_lab - us_native,
-                100 * (us_lab / us_native - 1)))
+print(
+    "Overhead: {:.1f} us / {:.1f} %"
+    "".format(us_lab - us_native, 100 * (us_lab / us_native - 1))
+)

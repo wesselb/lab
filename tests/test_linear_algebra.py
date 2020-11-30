@@ -12,7 +12,7 @@ from .util import (
     PSDTriangular,
     Value,
     Bool,
-    allclose
+    allclose,
 )
 
 
@@ -20,20 +20,21 @@ def test_constants():
     assert B.epsilon == 1e-12
 
 
-@pytest.mark.parametrize('f', [B.transpose, B.T, B.t])
+@pytest.mark.parametrize("f", [B.transpose, B.T, B.t])
 def test_transpose(f):
     # Check consistency.
     check_function(f, (Tensor(),))
-    check_function(f, (Tensor(2),), {'perm': Value(None, (0,))})
-    check_function(f, (Tensor(2, 3),),
-                   {'perm': Value(None, (0, 1), (1, 0))})
-    check_function(f, (Tensor(2, 3, 4),), {'perm': Value(None,
-                                                         (0, 1, 2),
-                                                         (0, 2, 1),
-                                                         (1, 0, 2),
-                                                         (1, 2, 0),
-                                                         (2, 1, 0),
-                                                         (2, 0, 1))})
+    check_function(f, (Tensor(2),), {"perm": Value(None, (0,))})
+    check_function(f, (Tensor(2, 3),), {"perm": Value(None, (0, 1), (1, 0))})
+    check_function(
+        f,
+        (Tensor(2, 3, 4),),
+        {
+            "perm": Value(
+                None, (0, 1, 2), (0, 2, 1), (1, 0, 2), (1, 2, 0), (2, 1, 0), (2, 0, 1)
+            )
+        },
+    )
 
     # Check correctness of zero-dimensional case.
     assert f(1) is 1
@@ -49,26 +50,29 @@ def test_transpose(f):
     allclose(f(a, perm=(1, 2, 0)), np.transpose(a, axes=(1, 2, 0)))
 
 
-@pytest.mark.parametrize('f', [B.matmul, B.mm, B.dot])
+@pytest.mark.parametrize("f", [B.matmul, B.mm, B.dot])
 def test_matmul(f):
-    check_function(f, (Tensor(3, 3), Tensor(3, 3)),
-                   {'tr_a': Bool(), 'tr_b': Bool()})
-    check_function(f, (Tensor(4, 3, 3), Tensor(4, 3, 3)),
-                   {'tr_a': Bool(), 'tr_b': Bool()})
+    check_function(f, (Tensor(3, 3), Tensor(3, 3)), {"tr_a": Bool(), "tr_b": Bool()})
+    check_function(
+        f, (Tensor(4, 3, 3), Tensor(4, 3, 3)), {"tr_a": Bool(), "tr_b": Bool()}
+    )
 
 
 def test_trace():
     # Check default call.
-    check_function(B.trace, (Tensor(2, 3, 4, 5),),
-                   {'axis1': Value(0), 'axis2': Value(1)})
+    check_function(
+        B.trace, (Tensor(2, 3, 4, 5),), {"axis1": Value(0), "axis2": Value(1)}
+    )
 
     # Check calls with `axis1 < axis2`.
-    check_function(B.trace, (Tensor(2, 3, 4, 5),),
-                   {'axis1': Value(0, 1), 'axis2': Value(2, 3)})
+    check_function(
+        B.trace, (Tensor(2, 3, 4, 5),), {"axis1": Value(0, 1), "axis2": Value(2, 3)}
+    )
 
     # Check calls with `axis1 > axis2`.
-    check_function(B.trace, (Tensor(2, 3, 4, 5),),
-                   {'axis1': Value(2, 3), 'axis2': Value(0, 1)})
+    check_function(
+        B.trace, (Tensor(2, 3, 4, 5),), {"axis1": Value(2, 3), "axis2": Value(0, 1)}
+    )
 
     # Check that call with `axis1 == axis2` raises an error in NumPy.
     with pytest.raises(ValueError):
@@ -94,7 +98,7 @@ def test_svd():
         else:
             return B.svd(a, compute_uv=False)
 
-    check_function(svd, (Tensor(3, 2),), {'compute_uv': Bool()})
+    check_function(svd, (Tensor(3, 2),), {"compute_uv": Bool()})
     # Torch does not allow batch computation.
 
 
@@ -127,38 +131,42 @@ def test_logm():
     check_function(B.logm, (Tensor(mat=mat),))
 
 
-@pytest.mark.parametrize('f', [B.cholesky, B.chol])
+@pytest.mark.parametrize("f", [B.cholesky, B.chol])
 def test_cholesky(f):
     check_function(f, (PSD(),))
     check_function(f, (PSD(4, 3, 3),))
 
 
-@pytest.mark.parametrize('f', [B.cholesky_solve, B.cholsolve])
+@pytest.mark.parametrize("f", [B.cholesky_solve, B.cholsolve])
 def test_cholesky_solve(f):
     check_function(f, (PSDTriangular(3, 3), Matrix(3, 4)))
     check_function(f, (PSDTriangular(5, 3, 3), Matrix(5, 3, 4)))
 
 
-@pytest.mark.parametrize('f', [B.triangular_solve, B.trisolve])
+@pytest.mark.parametrize("f", [B.triangular_solve, B.trisolve])
 def test_triangular_solve(f):
-    check_function(f, (PSDTriangular(3, 3), Matrix(3, 4)),
-                   {'lower_a': Value(True)})
-    check_function(f, (PSDTriangular(5, 3, 3), Matrix(5, 3, 4)),
-                   {'lower_a': Value(True)})
-    check_function(f, (PSDTriangular(3, 3, upper=True), Matrix(3, 4)),
-                   {'lower_a': Value(False)})
-    check_function(f, (PSDTriangular(5, 3, 3, upper=True), Matrix(5, 3, 4)),
-                   {'lower_a': Value(False)})
+    check_function(f, (PSDTriangular(3, 3), Matrix(3, 4)), {"lower_a": Value(True)})
+    check_function(
+        f, (PSDTriangular(5, 3, 3), Matrix(5, 3, 4)), {"lower_a": Value(True)}
+    )
+    check_function(
+        f, (PSDTriangular(3, 3, upper=True), Matrix(3, 4)), {"lower_a": Value(False)}
+    )
+    check_function(
+        f,
+        (PSDTriangular(5, 3, 3, upper=True), Matrix(5, 3, 4)),
+        {"lower_a": Value(False)},
+    )
 
 
-@pytest.mark.parametrize('f', [B.toeplitz_solve, B.toepsolve])
+@pytest.mark.parametrize("f", [B.toeplitz_solve, B.toepsolve])
 def test_toeplitz_solve(f):
     check_function(f, (Tensor(3), Tensor(2), Matrix(3, 4)))
     check_function(f, (Tensor(3), Matrix(3, 4)))
 
 
-@pytest.mark.parametrize('a', [Tensor(5).np(), Tensor(5, 1).np()])
-@pytest.mark.parametrize('b', [Tensor(5).np(), Tensor(5, 1).np()])
+@pytest.mark.parametrize("a", [Tensor(5).np(), Tensor(5, 1).np()])
+@pytest.mark.parametrize("b", [Tensor(5).np(), Tensor(5, 1).np()])
 def test_outer(a, b):
     allclose(B.outer(a, b), B.matmul(B.uprank(a), B.uprank(b), tr_b=True))
     allclose(B.outer(a), B.outer(a, a))
@@ -204,12 +212,12 @@ def test_pw_2d():
 
     approx_allclose(B.pw_dists2(a, b), dists2_ab)
     approx_allclose(B.pw_dists2(a), dists2_aa)
-    approx_allclose(B.pw_dists(a, b), np.maximum(dists2_ab, 1e-30) ** .5)
-    approx_allclose(B.pw_dists(a), np.maximum(dists2_aa, 1e-30) ** .5)
+    approx_allclose(B.pw_dists(a, b), np.maximum(dists2_ab, 1e-30) ** 0.5)
+    approx_allclose(B.pw_dists(a), np.maximum(dists2_aa, 1e-30) ** 0.5)
     approx_allclose(B.pw_sums2(a, b), sums2_ab)
     approx_allclose(B.pw_sums2(a), sums2_aa)
-    approx_allclose(B.pw_sums(a, b), np.maximum(sums2_ab, 1e-30) ** .5)
-    approx_allclose(B.pw_sums(a), np.maximum(sums2_aa, 1e-30) ** .5)
+    approx_allclose(B.pw_sums(a, b), np.maximum(sums2_ab, 1e-30) ** 0.5)
+    approx_allclose(B.pw_sums(a), np.maximum(sums2_aa, 1e-30) ** 0.5)
 
 
 def test_pw_1d():
@@ -239,12 +247,12 @@ def test_ew_2d():
 
     allclose(B.ew_dists2(a, b), dists2_ab)
     allclose(B.ew_dists2(a), dists2_aa)
-    allclose(B.ew_dists(a, b), np.maximum(dists2_ab, 1e-30) ** .5)
-    allclose(B.ew_dists(a), np.maximum(dists2_aa, 1e-30) ** .5)
+    allclose(B.ew_dists(a, b), np.maximum(dists2_ab, 1e-30) ** 0.5)
+    allclose(B.ew_dists(a), np.maximum(dists2_aa, 1e-30) ** 0.5)
     allclose(B.ew_sums2(a, b), sums2_ab)
     allclose(B.ew_sums2(a), sums2_aa)
-    allclose(B.ew_sums(a, b), np.maximum(sums2_ab, 1e-30) ** .5)
-    allclose(B.ew_sums(a), np.maximum(sums2_aa, 1e-30) ** .5)
+    allclose(B.ew_sums(a, b), np.maximum(sums2_ab, 1e-30) ** 0.5)
+    allclose(B.ew_sums(a), np.maximum(sums2_aa, 1e-30) ** 0.5)
 
 
 def test_ew_1d():

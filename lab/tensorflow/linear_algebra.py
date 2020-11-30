@@ -2,11 +2,7 @@ import tensorflow as tf
 
 from . import dispatch, B, Numeric
 from .custom import tensorflow_register
-from ..custom import (
-    toeplitz_solve, s_toeplitz_solve,
-    expm, s_expm,
-    logm, s_logm
-)
+from ..custom import toeplitz_solve, s_toeplitz_solve, expm, s_expm, logm, s_logm
 from ..linear_algebra import _default_perm
 
 __all__ = []
@@ -46,7 +42,7 @@ def kron(a, b):
 
     # Check that ranks are equal.
     if len(shape_a) != len(shape_b):
-        raise ValueError('Inputs must have equal rank.')
+        raise ValueError("Inputs must have equal rank.")
 
     for i in range(len(shape_a)):
         a = tf.expand_dims(a, axis=2 * i + 1)

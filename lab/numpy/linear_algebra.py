@@ -87,10 +87,9 @@ def cholesky_solve(a, b):
 @dispatch(Numeric, Numeric)
 def triangular_solve(a, b, lower_a=True):
     def _triangular_solve(a_, b_):
-        return sla.solve_triangular(a_, b_,
-                                    trans='N',
-                                    lower=lower_a,
-                                    check_finite=False)
+        return sla.solve_triangular(
+            a_, b_, trans="N", lower=lower_a, check_finite=False
+        )
 
     return batch_computation(_triangular_solve, (a, b), (2, 2))
 

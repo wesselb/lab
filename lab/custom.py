@@ -6,10 +6,16 @@ import scipy.linalg as sla
 # noinspection PyUnresolvedReferences
 from .bvn_cdf import bvn_cdf as bvn_cdf_, s_bvn_cdf
 
-__all__ = ['toeplitz_solve', 's_toeplitz_solve',
-           'bvn_cdf', 's_bvn_cdf',
-           'expm', 's_expm',
-           'logm', 's_logm']
+__all__ = [
+    "toeplitz_solve",
+    "s_toeplitz_solve",
+    "bvn_cdf",
+    "s_bvn_cdf",
+    "expm",
+    "s_expm",
+    "logm",
+    "s_logm",
+]
 
 log = logging.getLogger(__name__)
 
@@ -103,5 +109,6 @@ def logm(a):
 
 
 def s_logm(a):  # pragma: no cover
-    raise NotImplementedError('The derivative for the matrix logarithm is '
-                              'current not implemented.')
+    raise NotImplementedError(
+        "The derivative for the matrix logarithm is current not implemented."
+    )

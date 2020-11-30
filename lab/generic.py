@@ -11,62 +11,64 @@ from .types import (
     AGNumeric,
     TFNumeric,
     TorchNumeric,
-    JaxNumeric
+    JaxNumeric,
 )
 from .util import abstract
 
-__all__ = ['nan',
-           'pi',
-           'log_2_pi',
-           'isnan',
-           'zeros',
-           'ones',
-           'zero',
-           'one',
-           'eye',
-           'linspace',
-           'range',
-           'cast',
-           'identity',
-           'negative',
-           'abs',
-           'sign',
-           'sqrt',
-           'exp',
-           'log',
-           'sin',
-           'cos',
-           'tan',
-           'tanh',
-           'erf',
-           'sigmoid',
-           'softplus',
-           'relu',
-           'add',
-           'subtract',
-           'multiply',
-           'divide',
-           'power',
-           'minimum',
-           'maximum',
-           'leaky_relu',
-           'min',
-           'max',
-           'sum',
-           'mean',
-           'std',
-           'logsumexp',
-           'all',
-           'any',
-           'lt',
-           'le',
-           'gt',
-           'ge',
-           'bvn_cdf',
-           'scan',
-           'sort',
-           'argsort',
-           'to_numpy']
+__all__ = [
+    "nan",
+    "pi",
+    "log_2_pi",
+    "isnan",
+    "zeros",
+    "ones",
+    "zero",
+    "one",
+    "eye",
+    "linspace",
+    "range",
+    "cast",
+    "identity",
+    "negative",
+    "abs",
+    "sign",
+    "sqrt",
+    "exp",
+    "log",
+    "sin",
+    "cos",
+    "tan",
+    "tanh",
+    "erf",
+    "sigmoid",
+    "softplus",
+    "relu",
+    "add",
+    "subtract",
+    "multiply",
+    "divide",
+    "power",
+    "minimum",
+    "maximum",
+    "leaky_relu",
+    "min",
+    "max",
+    "sum",
+    "mean",
+    "std",
+    "logsumexp",
+    "all",
+    "any",
+    "lt",
+    "le",
+    "gt",
+    "ge",
+    "bvn_cdf",
+    "scan",
+    "sort",
+    "argsort",
+    "to_numpy",
+]
 
 _dispatch = Dispatcher()
 
@@ -105,8 +107,7 @@ def zeros(dtype, *shape):  # pragma: no cover
     """
 
 
-@dispatch.multi((Int,),  # Single integer is not a reference.
-                ([Int],))
+@dispatch.multi((Int,), ([Int],))  # Single integer is not a reference.
 def zeros(*shape):
     return zeros(B.default_dtype, *shape)
 
@@ -133,8 +134,7 @@ def ones(dtype, *shape):  # pragma: no cover
     """
 
 
-@dispatch.multi((Int,),  # Single integer is not a reference.
-                ([Int],))
+@dispatch.multi((Int,), ([Int],))  # Single integer is not a reference.
 def ones(*shape):
     return ones(B.default_dtype, *shape)
 
@@ -296,6 +296,7 @@ def cast(dtype, a):  # pragma: no cover
 
 
 # Unary functions:
+
 
 @dispatch(Numeric)
 @abstract()
@@ -812,7 +813,7 @@ def bvn_cdf(a, b, c):
 
 @_dispatch(object)
 def _as_tuple(x):
-    return x,
+    return (x,)
 
 
 @_dispatch(tuple)
@@ -849,8 +850,10 @@ def scan(f, xs, *init_state):
 
         # Check that the state shape remained constant.
         if new_state_shape != state_shape:
-            raise RuntimeError('Shape of state changed from {} to {}.'
-                               ''.format(state_shape, new_state_shape))
+            raise RuntimeError(
+                "Shape of state changed from {} to {}."
+                "".format(state_shape, new_state_shape)
+            )
 
         # Record the state, stacked over the various elements.
         states.append(B.stack(*state, axis=0))

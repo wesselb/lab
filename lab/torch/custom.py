@@ -5,7 +5,7 @@ from plum import convert, Dispatcher
 
 from . import B
 
-__all__ = ['torch_register', 'as_torch']
+__all__ = ["torch_register", "as_torch"]
 
 _dispatch = Dispatcher()
 

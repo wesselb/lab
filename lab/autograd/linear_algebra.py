@@ -5,11 +5,7 @@ import autograd.scipy.linalg as asla
 
 from . import dispatch, B, Numeric
 from .custom import autograd_register
-from ..custom import (
-    toeplitz_solve, s_toeplitz_solve,
-    expm, s_expm,
-    logm, s_logm
-)
+from ..custom import toeplitz_solve, s_toeplitz_solve, expm, s_expm, logm, s_logm
 from ..linear_algebra import _default_perm
 from ..util import batch_computation
 
@@ -41,8 +37,7 @@ def transpose(a, perm=None):
 @dispatch(Numeric)
 def trace(a, axis1=0, axis2=1):
     if axis1 == axis2:
-        raise ValueError('Keyword arguments axis1 and axis2 cannot be the '
-                         'same.')
+        raise ValueError("Keyword arguments axis1 and axis2 cannot be the same.")
 
     # AutoGrad does not support the `axis1` and `axis2` arguments...
 
@@ -52,8 +47,9 @@ def trace(a, axis1=0, axis2=1):
 
     # Bring the trace axes forward.
     if (axis1, axis2) != (0, 1):
-        perm = [axis1, axis2] + \
-               [i for i in range(B.rank(a)) if i != axis1 and i != axis2]
+        perm = [axis1, axis2] + [
+            i for i in range(B.rank(a)) if i != axis1 and i != axis2
+        ]
         a = anp.transpose(a, axes=perm)
 
     return anp.trace(a)
@@ -110,10 +106,9 @@ def cholesky_solve(a, b):
 @dispatch(Numeric, Numeric)
 def triangular_solve(a, b, lower_a=True):
     def _triangular_solve(a_, b_):
-        return asla.solve_triangular(a_, b_,
-                                     trans='N',
-                                     lower=lower_a,
-                                     check_finite=False)
+        return asla.solve_triangular(
+            a_, b_, trans="N", lower=lower_a, check_finite=False
+        )
 
     return batch_computation(_triangular_solve, (a, b), (2, 2))
 

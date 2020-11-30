@@ -5,7 +5,7 @@ from plum import convert, Dispatcher
 
 from . import B
 
-__all__ = ['tensorflow_register', 'as_tf']
+__all__ = ["tensorflow_register", "as_tf"]
 
 _dispatch = Dispatcher()
 
@@ -41,9 +41,9 @@ def _np_apply(f, out_dtypes, *args, **kw_args):
     Returns:
         tensor: Result as a TensorFlow operation.
     """
-    return tf.py_function(lambda *args_: f(*[arg.numpy() for arg in args_],
-                                           **kw_args),
-                          args, out_dtypes)
+    return tf.py_function(
+        lambda *args_: f(*[arg.numpy() for arg in args_], **kw_args), args, out_dtypes
+    )
 
 
 def tensorflow_register(f, s_f):
@@ -59,18 +59,17 @@ def tensorflow_register(f, s_f):
 
     @wraps(f)
     def primitive(*args, **kw_args):
-        # TODO: This assumes that the output is of the data type of the first
-        # input. Generally, this is *not* true. How to best approach this?
+        # TODO: This assumes that the output is of the data type of the first input.
+        #  Generally, this is *not* true. How to best approach this?
         y = _np_apply(f, args[0].dtype, *args, **kw_args)
 
         def grad(s_y):
-            # TODO: This assumes that the sensitivities of the inputs are of
-            # the data types of the inputs. Again, generally, this is *not*
-            # true. How to best approach this?
-            return _np_apply(s_f,
-                             [arg.dtype for arg in args],
-                             *((s_y, y) + args),
-                             **kw_args)
+            # TODO: This assumes that the sensitivities of the inputs are of the data
+            # types of the inputs. Again, generally, this is *not* true. How to best
+            # approach this?
+            return _np_apply(
+                s_f, [arg.dtype for arg in args], *((s_y, y) + args), **kw_args
+            )
 
         return y, grad
 

@@ -3,31 +3,37 @@ import pytest
 import tensorflow as tf
 
 import lab as B
-from .util import (
-    check_function,
-    Tensor,
-    Matrix,
-    Value,
-    List,
-    Tuple,
-    allclose
-)
+from .util import check_function, Tensor, Matrix, Value, List, Tuple, allclose
 
 
-@pytest.mark.parametrize('f', [B.shape, B.rank, B.length, B.size])
+@pytest.mark.parametrize("f", [B.shape, B.rank, B.length, B.size])
 def test_sizing(f):
     check_function(f, (Tensor(),), {}, assert_dtype=False)
-    check_function(f, (Tensor(3, ),), {}, assert_dtype=False)
+    check_function(
+        f,
+        (
+            Tensor(
+                3,
+            ),
+        ),
+        {},
+        assert_dtype=False,
+    )
     check_function(f, (Tensor(3, 4),), {}, assert_dtype=False)
     check_function(f, (Tensor(3, 4, 5),), {}, assert_dtype=False)
 
 
-@pytest.mark.parametrize('x,shape', [([], (0,)),
-                                     ([5], (1,)),
-                                     ([[5], [6]], (2, 1)),
-                                     ((), (0,)),
-                                     ((5,), (1,)),
-                                     (((5,), (2,)), (2, 1))])
+@pytest.mark.parametrize(
+    "x,shape",
+    [
+        ([], (0,)),
+        ([5], (1,)),
+        ([[5], [6]], (2, 1)),
+        ((), (0,)),
+        ((5,), (1,)),
+        (((5,), (2,)), (2, 1)),
+    ],
+)
 def test_shape_other(x, shape):
     assert B.shape(x) == shape
 
@@ -38,7 +44,7 @@ def test_isscalar():
 
 
 def test_expand_dims():
-    check_function(B.expand_dims, (Tensor(3, 4, 5),), {'axis': Value(0, 1)})
+    check_function(B.expand_dims, (Tensor(3, 4, 5),), {"axis": Value(0, 1)})
 
 
 def test_squeeze():
@@ -68,17 +74,17 @@ def test_flatten():
     check_function(B.flatten, (Tensor(3, 4),))
 
 
-@pytest.mark.parametrize('offset', [-2, -1, 0, 1, 2])
+@pytest.mark.parametrize("offset", [-2, -1, 0, 1, 2])
 def test_vec_to_tril(offset):
     n = B.length(B.tril_to_vec(B.ones(7, 7), offset=offset))
-    check_function(B.vec_to_tril, (Tensor(n),), {'offset': Value(offset)})
+    check_function(B.vec_to_tril, (Tensor(n),), {"offset": Value(offset)})
 
 
 def test_tril_to_vec():
-    check_function(B.tril_to_vec, (Matrix(6),), {'offset': Value(0, 1, -1)})
+    check_function(B.tril_to_vec, (Matrix(6),), {"offset": Value(0, 1, -1)})
 
 
-@pytest.mark.parametrize('offset', [-2, -1, 0, 1, 2])
+@pytest.mark.parametrize("offset", [-2, -1, 0, 1, 2])
 def test_vec_to_tril_and_back_correctness(offset):
     n = B.length(B.tril_to_vec(B.ones(7, 7), offset=offset))
     vec = Tensor(n).np()
@@ -98,12 +104,11 @@ def test_vec_to_tril_and_back_exceptions():
 
 
 def test_stack():
-    check_function(B.stack, (Matrix(3), Matrix(3), Matrix(3)),
-                   {'axis': Value(0, 1)})
+    check_function(B.stack, (Matrix(3), Matrix(3), Matrix(3)), {"axis": Value(0, 1)})
 
 
 def test_unstack():
-    check_function(B.unstack, (Tensor(3, 4, 5),), {'axis': Value(0, 1, 2)})
+    check_function(B.unstack, (Tensor(3, 4, 5),), {"axis": Value(0, 1, 2)})
 
 
 def test_reshape():
@@ -112,34 +117,34 @@ def test_reshape():
 
 
 def test_concat():
-    check_function(B.concat, (Matrix(3), Matrix(3), Matrix(3)),
-                   {'axis': Value(0, 1)})
+    check_function(B.concat, (Matrix(3), Matrix(3), Matrix(3)), {"axis": Value(0, 1)})
 
 
 def test_concat2d():
-    check_function(B.concat2d,
-                   (List(Matrix(3), Matrix(3)), List(Matrix(3), Matrix(3))))
-    check_function(B.concat2d,
-                   (Tuple(Matrix(3), Matrix(3)), Tuple(Matrix(3), Matrix(3))))
+    check_function(B.concat2d, (List(Matrix(3), Matrix(3)), List(Matrix(3), Matrix(3))))
+    check_function(
+        B.concat2d, (Tuple(Matrix(3), Matrix(3)), Tuple(Matrix(3), Matrix(3)))
+    )
 
 
-@pytest.mark.parametrize('r1', [1, 2])
-@pytest.mark.parametrize('r2', [1, 2])
+@pytest.mark.parametrize("r1", [1, 2])
+@pytest.mark.parametrize("r2", [1, 2])
 def test_tile(r1, r2):
     check_function(B.tile, (Tensor(3, 4), Value(r1), Value(r2)))
 
 
 def test_take_consistency():
     # Check consistency between indices and mask.
-    check_function(B.take, (Matrix(3, 3), Value([0, 1], [True, True, False])),
-                   {'axis': Value(0, 1)})
+    check_function(
+        B.take,
+        (Matrix(3, 3), Value([0, 1], [True, True, False])),
+        {"axis": Value(0, 1)},
+    )
 
 
 def test_take_consistency_order():
     # Check order of indices.
-    check_function(B.take,
-                   (Matrix(3, 4), Value([2, 1])),
-                   {'axis': Value(0, 1)})
+    check_function(B.take, (Matrix(3, 4), Value([2, 1])), {"axis": Value(0, 1)})
 
 
 def test_take_indices_rank():
@@ -151,7 +156,7 @@ def test_take_indices_rank():
 
 def test_take_empty_list():
     # Check empty list.
-    check_function(B.take, (Matrix(3, 4), Value([])), {'axis': Value(0, 1)})
+    check_function(B.take, (Matrix(3, 4), Value([])), {"axis": Value(0, 1)})
 
 
 def test_take_tf():
@@ -159,5 +164,4 @@ def test_take_tf():
     a = Matrix(3, 4, 5)
     ref = Tensor(3)
     allclose(B.take(a.tf(), ref.tf() > 0), B.take(a.np(), ref.np() > 0))
-    allclose(B.take(a.tf(), B.range(tf.int64, 2)),
-             B.take(a.np(), B.range(2)))
+    allclose(B.take(a.tf(), B.range(tf.int64, 2)), B.take(a.np(), B.range(2)))

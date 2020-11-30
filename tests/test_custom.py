@@ -6,10 +6,14 @@ from fdm import check_sensitivity, gradient
 
 import lab as B
 from lab.custom import (
-    toeplitz_solve, s_toeplitz_solve,
-    bvn_cdf, s_bvn_cdf,
-    expm, s_expm,
-    logm, s_logm
+    toeplitz_solve,
+    s_toeplitz_solve,
+    bvn_cdf,
+    s_bvn_cdf,
+    expm,
+    s_expm,
+    logm,
+    s_logm,
 )
 from lab.tensorflow.custom import as_tf
 from lab.torch.custom import as_torch
@@ -53,7 +57,7 @@ def check_grad(f, args, kw_args=None, digits=6):
     def create_f_i(i, args_):
         # Create a function that only varies the `i`th argument.
         def f_i(x):
-            return B.mean(lab_f(*(args_[:i] + (x,) + args_[i + 1:]), **kw_args))
+            return B.mean(lab_f(*(args_[:i] + (x,) + args_[i + 1 :]), **kw_args))
 
         return f_i
 
@@ -89,10 +93,12 @@ def check_grad(f, args, kw_args=None, digits=6):
 
 
 def test_toeplitz_solve():
-    check_sensitivity(toeplitz_solve, s_toeplitz_solve,
-                      (B.randn(3), B.randn(2), B.randn(3)))
-    check_sensitivity(toeplitz_solve, s_toeplitz_solve,
-                      (B.randn(3), B.randn(2), B.randn(3, 4)))
+    check_sensitivity(
+        toeplitz_solve, s_toeplitz_solve, (B.randn(3), B.randn(2), B.randn(3))
+    )
+    check_sensitivity(
+        toeplitz_solve, s_toeplitz_solve, (B.randn(3), B.randn(2), B.randn(3, 4))
+    )
     check_grad(toeplitz_solve, (B.randn(3), B.randn(2), B.randn(3)))
     check_grad(toeplitz_solve, (B.randn(3), B.randn(2), B.randn(3, 4)))
 

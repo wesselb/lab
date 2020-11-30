@@ -12,15 +12,25 @@ from plum import Dispatcher
 
 import lab as B
 
-__all__ = ['autograd_box',
-           'to_np',
-           'allclose',
-           'check_function',
-           'Tensor', 'PositiveTensor', 'BoolTensor', 'NaNTensor',
-           'Matrix', 'PSD', 'PSDTriangular',
-           'Tuple', 'List', 'Value', 'Bool']
+__all__ = [
+    "autograd_box",
+    "to_np",
+    "allclose",
+    "check_function",
+    "Tensor",
+    "PositiveTensor",
+    "BoolTensor",
+    "NaNTensor",
+    "Matrix",
+    "PSD",
+    "PSDTriangular",
+    "Tuple",
+    "List",
+    "Value",
+    "Bool",
+]
 
-log = logging.getLogger('lab.' + __name__)
+log = logging.getLogger("lab." + __name__)
 
 _dispatch = Dispatcher()
 
@@ -65,7 +75,6 @@ def to_np(lst):
     return to_np(tuple(lst))
 
 
-
 @_dispatch(object, object, [bool])
 def allclose(x, y, assert_dtype=False):
     """Assert that two numeric objects are close."""
@@ -85,10 +94,7 @@ def allclose(x, y, assert_dtype=False):
         allclose(xi, yi, assert_dtype)
 
 
-def check_function(f, args_spec,
-                   kw_args_spec=None,
-                   assert_dtype=True,
-                   skip=None):
+def check_function(f, args_spec, kw_args_spec=None, assert_dtype=True, skip=None):
     """Check that a function produces consistent output. Moreover, if the first
     argument is a data type, check that the result is exactly of that type."""
     skip = [] if skip is None else skip
@@ -97,8 +103,9 @@ def check_function(f, args_spec,
         kw_args_spec = {}
 
     # Construct product of keyword arguments.
-    kw_args_prod = list(product(*[[(k, v) for v in vs.forms()]
-                                  for k, vs in kw_args_spec.items()]))
+    kw_args_prod = list(
+        product(*[[(k, v) for v in vs.forms()] for k, vs in kw_args_spec.items()])
+    )
     kw_args_prod = [{k: v for k, v in kw_args} for kw_args in kw_args_prod]
 
     # Add default call.
@@ -108,8 +115,10 @@ def check_function(f, args_spec,
     args_prod = list(product(*[arg.forms() for arg in args_spec]))
 
     # Construct framework types to skip mixes of.
-    fw_types = [plum.Union(t, plum.List(t), plum.Tuple(t))
-                for t in [B.AGNumeric, B.TorchNumeric, B.TFNumeric, B.JaxNumeric]]
+    fw_types = [
+        plum.Union(t, plum.List(t), plum.Tuple(t))
+        for t in [B.AGNumeric, B.TorchNumeric, B.TFNumeric, B.JaxNumeric]
+    ]
 
     # Construct other types to skip entirely.
     skip_types = [plum.Union(t, plum.List(t), plum.Tuple(t)) for t in skip]
@@ -125,21 +134,24 @@ def check_function(f, args_spec,
 
         for args in args_prod:
             # Skip mixes of FW types.
-            fw_count = sum([any(isinstance(arg, t) for arg in args)
-                            for t in fw_types])
+            fw_count = sum([any(isinstance(arg, t) for arg in args) for t in fw_types])
 
             # Skip all skips.
-            skip_count = sum([any(isinstance(arg, t) for arg in args)
-                              for t in skip_types])
+            skip_count = sum(
+                [any(isinstance(arg, t) for arg in args) for t in skip_types]
+            )
 
             if fw_count >= 2 or skip_count >= 1:
-                log.debug('Skipping call with arguments {} and keyword '
-                          'arguments {}.'.format(args, kw_args))
+                log.debug(
+                    f"Skipping call with arguments {args} and keyword "
+                    f"arguments {kw_args}."
+                )
                 continue
 
             # Check consistency.
-            log.debug('Call with arguments {} and keyword arguments {}.'
-                      ''.format(args, kw_args))
+            log.debug(
+                f"Call with arguments {args} and keyword arguments {kw_args}."
+            )
             result = f(*args, **kw_args)
             allclose(first_result, result, assert_dtype)
 
@@ -152,10 +164,10 @@ class Tensor:
     """Tensor placeholder."""
 
     def __init__(self, *dims, **kw_args):
-        if 'mat' not in kw_args or kw_args['mat'] is None:
+        if "mat" not in kw_args or kw_args["mat"] is None:
             self.mat = np.array(np.random.randn(*dims))
         else:
-            self.mat = kw_args['mat']
+            self.mat = kw_args["mat"]
 
     def forms(self):
         return [self.np(), self.tf(), self.torch(), self.ag(), self.jax()]
@@ -173,17 +185,17 @@ class Tensor:
         return autograd_box(self.mat)
 
     def jax(self):
-        return jnp. array(self.mat)
+        return jnp.array(self.mat)
 
 
 class PositiveTensor(Tensor):
     """Positive tensor placeholder."""
 
     def __init__(self, *dims, **kw_args):
-        if 'mat' not in kw_args or kw_args['mat'] is None:
+        if "mat" not in kw_args or kw_args["mat"] is None:
             mat = np.array(np.random.rand(*dims))
         else:
-            mat = kw_args['mat']
+            mat = kw_args["mat"]
         Tensor.__init__(self, mat=mat)
 
 
@@ -191,10 +203,10 @@ class BoolTensor(Tensor):
     """Boolean tensor placeholder."""
 
     def __init__(self, *dims, **kw_args):
-        if 'mat' not in kw_args or kw_args['mat'] is None:
-            mat = np.array(np.random.rand(*dims) > .5)
+        if "mat" not in kw_args or kw_args["mat"] is None:
+            mat = np.array(np.random.rand(*dims) > 0.5)
         else:
-            mat = kw_args['mat']
+            mat = kw_args["mat"]
         Tensor.__init__(self, mat=mat)
 
     def torch(self):
@@ -205,12 +217,12 @@ class NaNTensor(Tensor):
     """Tensor containing NaNs placeholder."""
 
     def __init__(self, *dims, **kw_args):
-        if 'mat' not in kw_args or kw_args['mat'] is None:
+        if "mat" not in kw_args or kw_args["mat"] is None:
             mat = np.array(np.random.randn(*dims))
-            set_nan = np.array(np.random.rand(*dims) > .5)
+            set_nan = np.array(np.random.rand(*dims) > 0.5)
             mat[set_nan] = np.nan
         else:
-            mat = kw_args['mat']
+            mat = kw_args["mat"]
         Tensor.__init__(self, mat=mat)
 
 
@@ -238,7 +250,7 @@ class PSD(Matrix):
             shape = shape * 2
 
         if not shape[-2] == shape[-1]:
-            raise ValueError('PSD matrix must be square.')
+            raise ValueError("PSD matrix must be square.")
 
         a = np.random.randn(*shape)
         perm = list(range(len(a.shape)))
@@ -257,7 +269,7 @@ class PSDTriangular(PSD):
                 self.mat[..., i, j] = 0
 
         # Create upper-triangular matrices, if asked for.
-        if kw_args.get('upper', False):
+        if kw_args.get("upper", False):
             perm = list(range(len(self.mat.shape)))
             perm[-2], perm[-1] = perm[-1], perm[-2]
             self.mat = np.transpose(self.mat, perm)

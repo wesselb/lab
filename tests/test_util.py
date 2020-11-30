@@ -13,12 +13,12 @@ from lab.util import (
     abstract,
     batch_computation,
     _common_shape,
-    _translate_index
+    _translate_index,
 )
 from .util import allclose
 
 
-@pytest.mark.parametrize('other', [B_tf, B_torch, B_autograd, B_jax])
+@pytest.mark.parametrize("other", [B_tf, B_torch, B_autograd, B_jax])
 def test_module_mapping(other):
     assert B is other
 
@@ -29,21 +29,22 @@ def test_as_tuple():
     assert as_tuple((1, 2)) == (1, 2)
 
 
-@pytest.mark.parametrize('shapes,common_shape',
-                         [([(), ()], ()),
-                          ([(5,), (1,)], (5,)),
-                          ([(2, 5), (1, 5)], (2, 5)),
-                          ([(5,), (1, 5)], (1, 5)),
-                          ([(3, 5), (1,)], (3, 5))])
+@pytest.mark.parametrize(
+    "shapes,common_shape",
+    [
+        ([(), ()], ()),
+        ([(5,), (1,)], (5,)),
+        ([(2, 5), (1, 5)], (2, 5)),
+        ([(5,), (1, 5)], (1, 5)),
+        ([(3, 5), (1,)], (3, 5)),
+    ],
+)
 def test_common_shape(shapes, common_shape):
     assert _common_shape(*shapes) == common_shape
     assert _common_shape(*reversed(shapes)) == common_shape
 
 
-@pytest.mark.parametrize('shapes',
-                         [[(5,), (6,)],
-                          [(5, 2), (5, 3)],
-                          [(5, 2), (3,)]])
+@pytest.mark.parametrize("shapes", [[(5,), (6,)], [(5, 2), (5, 3)], [(5, 2), (3,)]])
 def test_common_shape_errors(shapes):
     with pytest.raises(RuntimeError):
         _common_shape(*shapes)
@@ -51,36 +52,37 @@ def test_common_shape_errors(shapes):
         _common_shape(*reversed(shapes))
 
 
-@pytest.mark.parametrize('index,batch_shape,translated_index',
-                         [((5, 2), (3,), (2,)),
-                          ((2, 3, 4), (5, 5), (3, 4)),
-                          ((2, 3, 4), (1, 5), (0, 4)),
-                          ((2, 3, 4), (5, 1), (3, 0))])
+@pytest.mark.parametrize(
+    "index,batch_shape,translated_index",
+    [
+        ((5, 2), (3,), (2,)),
+        ((2, 3, 4), (5, 5), (3, 4)),
+        ((2, 3, 4), (1, 5), (0, 4)),
+        ((2, 3, 4), (5, 1), (3, 0)),
+    ],
+)
 def test_translate_index(index, batch_shape, translated_index):
     assert _translate_index(index, batch_shape) == translated_index
 
 
-@pytest.mark.parametrize('index,batch_shape',
-                         [((5, 3), (3,)),
-                          ((2, 3, 4), (4, 4))])
+@pytest.mark.parametrize("index,batch_shape", [((5, 3), (3,)), ((2, 3, 4), (4, 4))])
 def test_translate_index_errors(index, batch_shape):
     with pytest.raises(RuntimeError):
         _translate_index(index, batch_shape)
 
 
-@pytest.mark.parametrize('x1_batch', [(), (1,), (2,), (2, 2), (2, 1), (1, 2)])
-@pytest.mark.parametrize('x2_batch', [(), (1,), (2,), (2, 2), (2, 1), (1, 2)])
+@pytest.mark.parametrize("x1_batch", [(), (1,), (2,), (2, 2), (2, 1), (1, 2)])
+@pytest.mark.parametrize("x2_batch", [(), (1,), (2,), (2, 2), (2, 1), (1, 2)])
 def test_batch_computation(x1_batch, x2_batch):
     x1 = np.random.randn(*(x1_batch + (3, 4)))
     x2 = np.random.randn(*(x2_batch + (4, 5)))
-    allclose(batch_computation(np.matmul, (x1, x2), (2, 2)),
-             np.matmul(x1, x2))
+    allclose(batch_computation(np.matmul, (x1, x2), (2, 2)), np.matmul(x1, x2))
 
 
 def test_metadata():
     # Test that the name and docstrings for functions are available.
-    assert B.transpose.__name__ == 'transpose'
-    assert B.transpose.__doc__ != ''
+    assert B.transpose.__name__ == "transpose"
+    assert B.transpose.__doc__ != ""
 
 
 def test_abstract():
