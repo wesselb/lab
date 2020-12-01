@@ -1,7 +1,7 @@
 import numpy as np
 import scipy.special as sps
 
-from . import dispatch, Numeric
+from . import B, dispatch, Numeric
 from ..custom import bvn_cdf
 from ..types import NPDType, Int
 
@@ -40,6 +40,8 @@ def range(dtype, start, stop, step):
 
 @dispatch(NPDType, Numeric)
 def cast(dtype, a):
+    if B.dtype(a) == dtype:
+        return a
     if hasattr(a, "astype"):
         return a.astype(dtype, copy=False)
     else:

@@ -152,6 +152,8 @@ def test_cast():
 
     # Test that casting to its own data type does nothing.
     for x in [
+        1,
+        np.float32(1),
         B.randn(np.float32),
         autograd_box(B.randn(np.float32)),
         B.randn(tf.float32),
