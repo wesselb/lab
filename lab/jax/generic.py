@@ -1,5 +1,7 @@
 import jax.numpy as jnp
 import jax.scipy.special as jsps
+import jax.lax as lax
+from types import FunctionType
 
 from . import dispatch, Numeric
 from .custom import jax_register
@@ -201,6 +203,11 @@ def ge(a, b):
 
 f = jax_register(bvn_cdf, s_bvn_cdf)
 dispatch(Numeric, Numeric, Numeric)(f)
+
+
+@dispatch(Numeric, FunctionType, FunctionType, JaxNumeric, [JaxNumeric])
+def cond(condition, f_true, f_false, *xs):
+    return lax.cond(condition, lambda xs_: f_true(*xs_), lambda xs_: f_false(*xs), xs)
 
 
 @dispatch(Numeric)

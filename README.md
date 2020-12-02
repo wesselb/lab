@@ -307,6 +307,7 @@ ge(a, b)
 
 bvn_cdf(a, b, c)
 
+cond(condition, f_true, f_false, xs**)
 scan(f, xs, *init_state)
 
 sort(a, axis=-1, descending=False)

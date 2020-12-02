@@ -1,5 +1,6 @@
 import tensorflow as tf
 from plum import Callable
+from types import FunctionType
 
 from . import dispatch, B, Numeric, TFNumeric
 from .custom import tensorflow_register
@@ -201,6 +202,11 @@ def ge(a, b):
 
 f = tensorflow_register(bvn_cdf, s_bvn_cdf)
 dispatch(Numeric, Numeric, Numeric)(f)
+
+
+@dispatch(Numeric, FunctionType, FunctionType, [TFNumeric])
+def cond(condition, f_true, f_false, *xs):
+    return tf.cond(condition, lambda: f_true(*xs), lambda: f_false(*xs))
 
 
 # If `Numeric` types are used here, this implementation is more specific than the

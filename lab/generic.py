@@ -1,5 +1,6 @@
 import numpy as np
 from plum import Callable, convert, add_conversion_method
+from types import FunctionType
 
 from . import dispatch, B, Dispatcher
 from .types import (
@@ -63,6 +64,7 @@ __all__ = [
     "le",
     "gt",
     "ge",
+    "cond",
     "bvn_cdf",
     "scan",
     "sort",
@@ -811,22 +813,20 @@ def bvn_cdf(a, b, c):
     """
 
 
-@_dispatch(object)
-def _as_tuple(x):
-    return (x,)
+@dispatch(Numeric, FunctionType, FunctionType, [Numeric])
+def cond(condition, f_true, f_false, *args):
+    """An if-else statement that is part of the control flow.
 
-
-@_dispatch(tuple)
-def _as_tuple(x):
-    return x
-
-
-@_dispatch(tuple)
-def _compress(x):
-    if len(x) == 1:
-        return x[0]
+    Args:
+        condition (bool): Condition to check.
+        f_true (function): Function to execute if `condition` is true.
+        f_false (function): Function to execute if `condition` is false.
+        *args (object): Arguments to pass to `f_true` or `f_false` upon execution.
+    """
+    if condition:
+        return f_true(*args)
     else:
-        return x
+        return f_false(*args)
 
 
 @dispatch(Callable, object, [object])
@@ -845,7 +845,7 @@ def scan(f, xs, *init_state):
     # Cannot simply iterate, because that breaks TensorFlow.
     for i in range(int(B.shape(xs)[0])):
 
-        state = _as_tuple(f(_compress(state), xs[i]))
+        state = convert(f(B.squeeze(state), xs[i]), tuple)
         new_state_shape = [B.shape(s) for s in state]
 
         # Check that the state shape remained constant.

@@ -53,6 +53,12 @@ def test_squeeze():
     check_function(B.squeeze, (Tensor(3, 1, 5),))
     check_function(B.squeeze, (Tensor(1, 4, 1),))
 
+    # Test squeezing lists and tuples
+    assert B.squeeze((1,)) == 1
+    assert B.squeeze((1, 2)) == (1, 2)
+    assert B.squeeze([1]) == 1
+    assert B.squeeze([1, 2]) == [1, 2]
+
 
 def test_uprank():
     allclose(B.uprank(1.0), np.array([[1.0]]))

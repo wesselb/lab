@@ -254,6 +254,14 @@ def test_bvn_cdf():
     )
 
 
+def test_cond():
+    def f(v, x):
+        return B.cond(v > 0, lambda y: 2 * y, lambda y: y ** 2, x)
+
+    for _ in range(10):
+        check_function(f, (Tensor(), Tensor(4)))
+
+
 def test_scan():
     # Check consistency by inputting various shapes for a simple scanning
     # function.

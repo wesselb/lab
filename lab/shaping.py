@@ -119,6 +119,14 @@ def squeeze(a):  # pragma: no cover
     """
 
 
+@dispatch({tuple, list})
+def squeeze(a):
+    if len(a) == 1:
+        return a[0]
+    else:
+        return a
+
+
 @dispatch(Numeric)
 def uprank(a):
     """Convert the input into a rank two tensor.
@@ -131,9 +139,7 @@ def uprank(a):
     """
     a_rank = rank(a)
     if a_rank > 2:
-        raise ValueError(
-            f"Cannot convert a tensor of rank {a_rank} to rank 2."
-        )
+        raise ValueError(f"Cannot convert a tensor of rank {a_rank} to rank 2.")
     while a_rank < 2:
         a = expand_dims(a, axis=-1)
         a_rank += 1
