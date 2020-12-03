@@ -205,7 +205,7 @@ dispatch(Numeric, Numeric, Numeric)(f)
 
 
 @dispatch(Numeric, FunctionType, FunctionType, [TFNumeric])
-def cond(condition, f_true, f_false, *xs):
+def _cond(condition, f_true, f_false, *xs):
     return tf.cond(condition, lambda: f_true(*xs), lambda: f_false(*xs))
 
 

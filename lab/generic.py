@@ -15,6 +15,7 @@ from .types import (
     JaxNumeric,
 )
 from .util import abstract
+from .control_flow import control_flow
 
 __all__ = [
     "nan",
@@ -815,7 +816,7 @@ def bvn_cdf(a, b, c):
 
 @dispatch(Numeric, FunctionType, FunctionType, [Numeric])
 def cond(condition, f_true, f_false, *args):
-    """An if-else statement that is part of the control flow.
+    """An if-else statement that is part of the computation graph.
 
     Args:
         condition (bool): Condition to check.
@@ -823,6 +824,18 @@ def cond(condition, f_true, f_false, *args):
         f_false (function): Function to execute if `condition` is false.
         *args (object): Arguments to pass to `f_true` or `f_false` upon execution.
     """
+    if control_flow.caching:
+        control_flow.set_outcome("cond", condition, type=bool)
+    elif control_flow.use_cache:
+        if control_flow.get_outcome("cond"):
+            return f_true(*args)
+        else:
+            return f_false(*args)
+    return _cond(condition, f_true, f_false, *args)
+
+
+@dispatch(Numeric, FunctionType, FunctionType, [Numeric])
+def _cond(condition, f_true, f_false, *args):
     if condition:
         return f_true(*args)
     else:

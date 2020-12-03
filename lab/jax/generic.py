@@ -206,8 +206,8 @@ dispatch(Numeric, Numeric, Numeric)(f)
 
 
 @dispatch(Numeric, FunctionType, FunctionType, JaxNumeric, [JaxNumeric])
-def cond(condition, f_true, f_false, *xs):
-    return lax.cond(condition, lambda xs_: f_true(*xs_), lambda xs_: f_false(*xs), xs)
+def _cond(condition, f_true, f_false, *xs):
+    return lax.cond(condition, lambda xs_: f_true(*xs_), lambda xs_: f_false(*xs_), xs)
 
 
 @dispatch(Numeric)
