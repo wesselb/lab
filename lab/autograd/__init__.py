@@ -10,7 +10,6 @@ from .linear_algebra import *
 from .random import *
 
 # noinspection PyUnresolvedReferences
-import autograd.numpy as anp
 from ..types import _ag_retrievables
 
 # Retrieve types.

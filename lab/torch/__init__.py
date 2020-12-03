@@ -10,7 +10,6 @@ from .linear_algebra import *
 from .random import *
 
 # noinspection PyUnresolvedReferences
-import torch
 from ..types import _torch_retrievables
 
 # Retrieve types.

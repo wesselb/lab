@@ -10,7 +10,6 @@ from .linear_algebra import *
 from .random import *
 
 # noinspection PyUnresolvedReferences
-import tensorflow as tf
 from ..types import _tf_retrievables
 
 # Retrieve types.
