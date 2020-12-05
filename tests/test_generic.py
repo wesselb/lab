@@ -7,6 +7,8 @@ import torch
 from plum import NotFoundLookupError
 
 import lab as B
+
+# noinspection PyUnresolvedReferences
 from .util import (
     autograd_box,
     check_function,
@@ -17,23 +19,24 @@ from .util import (
     NaNTensor,
     Bool,
     allclose,
+    check_lazy_shapes,
 )
 
 
-def test_constants():
+def test_constants(check_lazy_shapes):
     assert B.pi == np.pi
     assert B.log_2_pi == np.log(2 * np.pi)
     assert B.nan is np.nan
 
 
-def test_isnan():
+def test_isnan(check_lazy_shapes):
     check_function(B.isnan, (NaNTensor(),), {}, assert_dtype=False)
     check_function(B.isnan, (NaNTensor(2),), {}, assert_dtype=False)
     check_function(B.isnan, (NaNTensor(2, 3),), {}, assert_dtype=False)
 
 
 @pytest.mark.parametrize("f", [B.zeros, B.ones, B.eye])
-def test_zeros_ones_eye(f):
+def test_zeros_ones_eye(f, check_lazy_shapes):
     # Check consistency.
     check_function(
         f,
@@ -69,7 +72,7 @@ def test_zeros_ones_eye(f):
 
 
 @pytest.mark.parametrize("f", [B.zero, B.one])
-def test_zero_one(f):
+def test_zero_one(f, check_lazy_shapes):
     # Check consistency.
     check_function(f, (Value(np.float32, tf.float32, torch.float32, jnp.float32),))
 
@@ -78,7 +81,7 @@ def test_zero_one(f):
         assert B.dtype(f(B.randn(t))) is t
 
 
-def test_eye_exceptions():
+def test_eye_exceptions(check_lazy_shapes):
     with pytest.raises(NotFoundLookupError):
         B.eye(3, 4, 5)
     for t in [np.float32, tf.float32, torch.float32, jnp.float32]:
@@ -86,7 +89,7 @@ def test_eye_exceptions():
             B.eye(t, 3, 4, 5)
 
 
-def test_linspace():
+def test_linspace(check_lazy_shapes):
     # Check correctness.
     allclose(B.linspace(0, 1, 10), np.linspace(0, 1, 10, dtype=B.default_dtype))
 
@@ -102,7 +105,7 @@ def test_linspace():
     )
 
 
-def test_range():
+def test_range(check_lazy_shapes):
     # Check correctness.
     allclose(B.range(5), np.arange(5))
     allclose(B.range(2, 5), np.arange(2, 5))
@@ -132,7 +135,7 @@ def test_range():
     )
 
 
-def test_cast():
+def test_cast(check_lazy_shapes):
     # Test casting to a given data type.
     assert B.dtype(B.cast(np.float64, 1)) is np.float64
     assert B.dtype(B.cast(np.float64, np.array(1))) is np.float64
@@ -150,8 +153,10 @@ def test_cast():
     assert B.dtype(B.cast(jnp.float64, np.array(1))) is jnp.float64
     assert B.dtype(B.cast(jnp.float64, jnp.array(1))) is jnp.float64
 
-    # Test that casting to its own data type does nothing.
-    for x in [
+
+@pytest.mark.parametrize(
+    "x",
+    [
         1,
         np.float32(1),
         B.randn(np.float32),
@@ -159,8 +164,16 @@ def test_cast():
         B.randn(tf.float32),
         B.randn(torch.float32),
         B.randn(jnp.float32),
-    ]:
-        assert x is B.cast(B.dtype(x), x)
+    ],
+)
+def test_cast_own_dtype(x, check_lazy_shapes):
+    # Test that casting to its own data type does nothing.
+    assert x is B.cast(B.dtype(x), x)
+
+
+@pytest.mark.parametrize("dtype", [np.float64, tf.float64, torch.float64, jnp.float64])
+def test_cast_shape_element(dtype, check_lazy_shapes):
+    assert B.dtype(B.cast(dtype, B.shape(B.ones(dtype, 1))[0])) is dtype
 
 
 @pytest.mark.parametrize(
@@ -181,42 +194,42 @@ def test_cast():
         B.relu,
     ],
 )
-def test_unary_signed(f):
+def test_unary_signed(f, check_lazy_shapes):
     check_function(f, (Tensor(),))
     check_function(f, (Tensor(2),))
     check_function(f, (Tensor(2, 3),))
 
 
 @pytest.mark.parametrize("f", [B.log, B.sqrt])
-def test_unary_positive(f):
+def test_unary_positive(f, check_lazy_shapes):
     check_function(f, (PositiveTensor(),))
     check_function(f, (PositiveTensor(2),))
     check_function(f, (PositiveTensor(2, 3),))
 
 
 @pytest.mark.parametrize("a", [0, -1, 1])
-def test_softplus_correctness(a):
+def test_softplus_correctness(a, check_lazy_shapes):
     allclose(B.softplus(a), np.log(1 + np.exp(a)))
 
 
 @pytest.mark.parametrize(
     "f", [B.add, B.subtract, B.multiply, B.divide, B.minimum, B.maximum, B.leaky_relu]
 )
-def test_binary_signed(f):
+def test_binary_signed(f, check_lazy_shapes):
     check_function(f, (Tensor(), Tensor()))
     check_function(f, (Tensor(2), Tensor(2)))
     check_function(f, (Tensor(2, 3), Tensor(2, 3)))
 
 
 @pytest.mark.parametrize("f", [B.power])
-def test_binary_positive_first(f):
+def test_binary_positive_first(f, check_lazy_shapes):
     check_function(f, (PositiveTensor(), Tensor()))
     check_function(f, (PositiveTensor(2), Tensor(2)))
     check_function(f, (PositiveTensor(2, 3), Tensor(2, 3)))
 
 
 @pytest.mark.parametrize("f", [B.min, B.max, B.sum, B.mean, B.std, B.logsumexp])
-def test_reductions(f):
+def test_reductions(f, check_lazy_shapes):
     check_function(f, (Tensor(),))
     check_function(f, (Tensor(2),))
     check_function(f, (Tensor(2),), {"axis": Value(0)})
@@ -224,13 +237,13 @@ def test_reductions(f):
     check_function(f, (Tensor(2, 3),), {"axis": Value(0, 1)})
 
 
-def test_logsumexp_correctness():
+def test_logsumexp_correctness(check_lazy_shapes):
     mat = PositiveTensor(3, 4).np()
     allclose(B.logsumexp(mat, axis=1), scipy.special.logsumexp(mat, axis=1))
 
 
 @pytest.mark.parametrize("f", [B.all, B.any])
-def test_logical_reductions(f):
+def test_logical_reductions(f, check_lazy_shapes):
     check_function(f, (BoolTensor(),), {}, assert_dtype=False)
     check_function(f, (BoolTensor(2),), {}, assert_dtype=False)
     check_function(f, (BoolTensor(2),), {"axis": Value(0)}, assert_dtype=False)
@@ -239,13 +252,13 @@ def test_logical_reductions(f):
 
 
 @pytest.mark.parametrize("f", [B.lt, B.le, B.gt, B.ge])
-def test_logical_comparisons(f):
+def test_logical_comparisons(f, check_lazy_shapes):
     check_function(f, (Tensor(), Tensor()), {}, assert_dtype=False)
     check_function(f, (Tensor(2), Tensor(2)), {}, assert_dtype=False)
     check_function(f, (Tensor(2, 3), Tensor(2, 3)), {}, assert_dtype=False)
 
 
-def test_bvn_cdf():
+def test_bvn_cdf(check_lazy_shapes):
     check_function(
         B.bvn_cdf,
         (PositiveTensor(5), PositiveTensor(5), PositiveTensor(5)),
@@ -254,7 +267,7 @@ def test_bvn_cdf():
     )
 
 
-def test_cond():
+def test_cond(check_lazy_shapes):
     def f(v, x):
         return B.cond(v > 0, lambda y: 2 * y, lambda y: y ** 2, x)
 
@@ -262,7 +275,7 @@ def test_cond():
         check_function(f, (Tensor(), Tensor(4)))
 
 
-def test_scan():
+def test_scan(check_lazy_shapes):
     # Check consistency by inputting various shapes for a simple scanning
     # function.
 
@@ -302,7 +315,7 @@ def test_scan():
         B.scan(incorrect_scan_f, Tensor(4).torch(), Tensor().torch(), Tensor().torch())
 
 
-def test_sort():
+def test_sort(check_lazy_shapes):
     check_function(B.sort, (Tensor(4),), {"axis": Value(-1, 0), "descending": Bool()})
     # AutoGrad cannot sort multidimensional arrays.
     check_function(
@@ -313,7 +326,7 @@ def test_sort():
     )
 
 
-def test_argsort():
+def test_argsort(check_lazy_shapes):
     check_function(
         B.argsort,
         (Tensor(4),),
@@ -330,25 +343,25 @@ def test_argsort():
     )
 
 
-def test_to_numpy():
+def test_to_numpy(check_lazy_shapes):
     check_function(B.to_numpy, (Tensor(),))
     check_function(B.to_numpy, (Tensor(4),))
 
 
-def test_to_numpy_multiple_objects():
+def test_to_numpy_multiple_objects(check_lazy_shapes):
     assert B.to_numpy(tf.constant(1), tf.constant(1)) == (1, 1)
 
 
-def test_to_numpy_list():
+def test_to_numpy_list(check_lazy_shapes):
     x = B.to_numpy([tf.constant(1)])
     assert isinstance(x[0], (B.Number, B.NPNumeric))
 
 
-def test_to_numpy_tuple():
+def test_to_numpy_tuple(check_lazy_shapes):
     x = B.to_numpy((tf.constant(1),))
     assert isinstance(x[0], (B.Number, B.NPNumeric))
 
 
-def test_to_numpy_dict():
+def test_to_numpy_dict(check_lazy_shapes):
     x = B.to_numpy({"a": tf.constant(1)})
     assert isinstance(x["a"], (B.Number, B.NPNumeric))

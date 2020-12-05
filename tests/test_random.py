@@ -7,11 +7,13 @@ import tensorflow as tf
 import torch
 
 import lab as B
-from .util import Tensor, allclose, to_np
+
+# noinspection PyUnresolvedReferences
+from .util import Tensor, allclose, to_np, check_lazy_shapes
 
 
 @pytest.mark.parametrize("dtype", [np.float32, tf.float32, torch.float32, jnp.float32])
-def test_set_seed(dtype):
+def test_set_seed(dtype, check_lazy_shapes):
     B.set_random_seed(0)
     x = to_np(B.rand(dtype))
     B.set_random_seed(0)
@@ -20,7 +22,7 @@ def test_set_seed(dtype):
 
 
 @pytest.mark.parametrize("f", [B.rand, B.randn])
-def test_random_generators(f):
+def test_random_generators(f, check_lazy_shapes):
     # Test without specifying data type.
     assert B.dtype(f()) is B.default_dtype
     assert B.shape(f()) == ()
@@ -49,7 +51,7 @@ def test_random_generators(f):
 
 
 @pytest.mark.parametrize("f", [B.rand, B.randn])
-def test_conversion_warnings(f):
+def test_conversion_warnings(f, check_lazy_shapes):
     with warnings.catch_warnings(record=True) as w:
         warnings.simplefilter("always")
 
@@ -59,7 +61,7 @@ def test_conversion_warnings(f):
         assert len(w) == 1
 
 
-def test_choice():
+def test_choice(check_lazy_shapes):
     # TODO: Can we use a parametrised test here?
     for x in Tensor(2).forms() + Tensor(2, 3).forms() + Tensor(2, 3, 4).forms():
         # Check shape.

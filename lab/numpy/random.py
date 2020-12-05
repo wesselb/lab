@@ -4,6 +4,7 @@ import numpy as np
 
 from . import dispatch, B, Numeric
 from ..types import NPDType, Int
+from ..shape import unwrap_dimension
 
 __all__ = []
 
@@ -27,6 +28,6 @@ def randn(dtype, *shape):
 
 @dispatch(Numeric, Int)
 def choice(a, n):
-    inds = np.random.choice(a.shape[0], n, replace=True)
+    inds = np.random.choice(unwrap_dimension(B.shape(a)[0]), n, replace=True)
     choices = a[inds]
     return choices[0] if n == 1 else choices

@@ -1,6 +1,10 @@
 # noinspection PyUnresolvedReferences
 from .. import *
+from .. import dispatch as dispatch_original
+from ..shape import dispatch_unwrap_dimensions
 from ..types import Number, TorchNumeric
+
+dispatch = dispatch_unwrap_dimensions(dispatch_original)
 
 Numeric = {Number, TorchNumeric}
 

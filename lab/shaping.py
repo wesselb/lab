@@ -4,8 +4,10 @@ import math
 from . import dispatch
 from .types import Numeric, Int
 from .util import abstract
+from .shape import Shape
 
 __all__ = [
+    "lazy_shapes",
     "shape",
     "rank",
     "length",
@@ -28,6 +30,26 @@ __all__ = [
 ]
 
 
+class LazyShapes:
+    """Simple context manager that tracks the status for lazy shape.
+
+    Attributes:
+        enabled (bool): Are lazy shapes enabled?
+    """
+
+    def __init__(self):
+        self.enabled = False
+
+    def __enter__(self):
+        self.enabled = True
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.enabled = False
+
+
+lazy_shapes = LazyShapes()  #: Enable lazy shapes.
+
+
 @dispatch(Numeric)
 def shape(a):  # pragma: no cover
     """Get the shape of a tensor.
@@ -39,7 +61,10 @@ def shape(a):  # pragma: no cover
         object: Shape of `a`.
     """
     try:
-        return a.shape
+        if lazy_shapes.enabled:
+            return Shape(*a.shape)
+        else:
+            return a.shape
     except AttributeError:
         # `a` must be a number.
         return ()

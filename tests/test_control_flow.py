@@ -1,8 +1,10 @@
 import pytest
 import lab.jax as B
+# noinspection PyUnresolvedReferences
+from .util import check_lazy_shapes
 
 
-def test_controlflowcache():
+def test_controlflowcache(check_lazy_shapes):
     cache = B.ControlFlowCache()
 
     assert not cache.populated
@@ -19,7 +21,7 @@ def test_controlflowcache():
         B.control_flow.get_outcome("test")
 
 
-def test_cache_cond():
+def test_cache_cond(check_lazy_shapes):
     outcome = {}
 
     def f_true(x, y):

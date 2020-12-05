@@ -1,3 +1,4 @@
+import pytest
 import logging
 from itertools import product
 
@@ -11,8 +12,10 @@ from autograd.tracer import trace_stack, new_box
 from plum import Dispatcher
 
 import lab as B
+from lab.shape import Shape, Dimension, unwrap_dimension
 
 __all__ = [
+    "check_lazy_shapes",
     "autograd_box",
     "to_np",
     "allclose",
@@ -34,7 +37,14 @@ log = logging.getLogger("lab." + __name__)
 
 _dispatch = Dispatcher()
 
-approx = np.testing.assert_array_almost_equal
+
+@pytest.fixture(params=[False, True])
+def check_lazy_shapes(request):
+    if request.param:
+        with B.lazy_shapes:
+            yield
+    else:
+        yield
 
 
 def autograd_box(x):
@@ -48,6 +58,11 @@ def autograd_box(x):
 def to_np(x):
     """Convert a tensor to NumPy."""
     return x
+
+
+@_dispatch(Dimension)
+def to_np(x):
+    return unwrap_dimension(x)
 
 
 @_dispatch(B.AGNumeric)
@@ -65,7 +80,7 @@ def to_np(x):
     return np.array(x)
 
 
-@_dispatch({tuple, tf.TensorShape, torch.Size})
+@_dispatch({tuple, tf.TensorShape, torch.Size, Shape})
 def to_np(tup):
     return tuple(to_np(x) for x in tup)
 
@@ -76,7 +91,7 @@ def to_np(lst):
 
 
 @_dispatch(object, object, [bool])
-def allclose(x, y, assert_dtype=False):
+def allclose(x, y, assert_dtype=False, **kw_args):
     """Assert that two numeric objects are close."""
     x, y = to_np(x), to_np(y)
 
@@ -84,14 +99,14 @@ def allclose(x, y, assert_dtype=False):
     if assert_dtype:
         assert np.array(x).dtype == np.array(y).dtype
 
-    np.testing.assert_allclose(x, y)
+    np.testing.assert_allclose(x, y, **kw_args)
 
 
 @_dispatch(tuple, tuple, [bool])
-def allclose(x, y, assert_dtype=False):
+def allclose(x, y, assert_dtype=False, **kw_args):
     assert len(x) == len(y)
     for xi, yi in zip(x, y):
-        allclose(xi, yi, assert_dtype)
+        allclose(xi, yi, assert_dtype=assert_dtype, **kw_args)
 
 
 def check_function(f, args_spec, kw_args_spec=None, assert_dtype=True, skip=None):
@@ -149,9 +164,7 @@ def check_function(f, args_spec, kw_args_spec=None, assert_dtype=True, skip=None
                 continue
 
             # Check consistency.
-            log.debug(
-                f"Call with arguments {args} and keyword arguments {kw_args}."
-            )
+            log.debug(f"Call with arguments {args} and keyword arguments {kw_args}.")
             result = f(*args, **kw_args)
             allclose(first_result, result, assert_dtype)
 

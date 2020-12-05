@@ -5,6 +5,7 @@ from .custom import torch_register
 from ..custom import toeplitz_solve, s_toeplitz_solve, expm, s_expm, logm, s_logm
 from ..linear_algebra import _default_perm
 from ..util import batch_computation
+from ..shape import unwrap_dimension
 
 __all__ = []
 
@@ -44,8 +45,8 @@ def kron(a, b):
     if len(shape_a) != len(shape_b):
         raise ValueError("Inputs must have equal rank.")
 
-    a = a.view(*sum([[i, 1] for i in shape_a], []))
-    b = b.view(*sum([[1, i] for i in shape_b], []))
+    a = a.view(*sum([[unwrap_dimension(i), 1] for i in shape_a], []))
+    b = b.view(*sum([[1, unwrap_dimension(i)] for i in shape_b], []))
     return torch.reshape(a * b, tuple(x * y for x, y in zip(shape_a, shape_b)))
 
 

@@ -4,6 +4,7 @@ from . import dispatch, Numeric
 from .custom import torch_register
 from ..custom import bvn_cdf, s_bvn_cdf
 from ..types import TorchNumeric, NPNumeric, TorchDType, Number, Int
+from ..shape import Dimension
 
 __all__ = []
 
@@ -46,6 +47,12 @@ def cast(dtype, a):
 @dispatch(TorchDType, {Number, NPNumeric})
 def cast(dtype, a):
     return torch.tensor(a, dtype=dtype)
+
+
+@dispatch(TorchDType, Dimension)
+def cast(dtype, a):
+    # A dimension may automatically unwrap to a PyTorch tensor.
+    return cast(dtype, a)
 
 
 @dispatch(Numeric)

@@ -15,15 +15,16 @@ from lab.util import (
     _common_shape,
     _translate_index,
 )
-from .util import allclose
+# noinspections PyUnresolvedReferences
+from .util import allclose, check_lazy_shapes
 
 
 @pytest.mark.parametrize("other", [B_tf, B_torch, B_autograd, B_jax])
-def test_module_mapping(other):
+def test_module_mapping(other, check_lazy_shapes):
     assert B is other
 
 
-def test_as_tuple():
+def test_as_tuple(check_lazy_shapes):
     assert as_tuple(1) == (1,)
     assert as_tuple((1,)) == (1,)
     assert as_tuple((1, 2)) == (1, 2)
@@ -39,13 +40,13 @@ def test_as_tuple():
         ([(3, 5), (1,)], (3, 5)),
     ],
 )
-def test_common_shape(shapes, common_shape):
+def test_common_shape(shapes, common_shape, check_lazy_shapes):
     assert _common_shape(*shapes) == common_shape
     assert _common_shape(*reversed(shapes)) == common_shape
 
 
 @pytest.mark.parametrize("shapes", [[(5,), (6,)], [(5, 2), (5, 3)], [(5, 2), (3,)]])
-def test_common_shape_errors(shapes):
+def test_common_shape_errors(shapes, check_lazy_shapes):
     with pytest.raises(RuntimeError):
         _common_shape(*shapes)
     with pytest.raises(RuntimeError):
@@ -61,31 +62,31 @@ def test_common_shape_errors(shapes):
         ((2, 3, 4), (5, 1), (3, 0)),
     ],
 )
-def test_translate_index(index, batch_shape, translated_index):
+def test_translate_index(index, batch_shape, translated_index, check_lazy_shapes):
     assert _translate_index(index, batch_shape) == translated_index
 
 
 @pytest.mark.parametrize("index,batch_shape", [((5, 3), (3,)), ((2, 3, 4), (4, 4))])
-def test_translate_index_errors(index, batch_shape):
+def test_translate_index_errors(index, batch_shape, check_lazy_shapes):
     with pytest.raises(RuntimeError):
         _translate_index(index, batch_shape)
 
 
 @pytest.mark.parametrize("x1_batch", [(), (1,), (2,), (2, 2), (2, 1), (1, 2)])
 @pytest.mark.parametrize("x2_batch", [(), (1,), (2,), (2, 2), (2, 1), (1, 2)])
-def test_batch_computation(x1_batch, x2_batch):
+def test_batch_computation(x1_batch, x2_batch, check_lazy_shapes):
     x1 = np.random.randn(*(x1_batch + (3, 4)))
     x2 = np.random.randn(*(x2_batch + (4, 5)))
     allclose(batch_computation(np.matmul, (x1, x2), (2, 2)), np.matmul(x1, x2))
 
 
-def test_metadata():
+def test_metadata(check_lazy_shapes):
     # Test that the name and docstrings for functions are available.
     assert B.transpose.__name__ == "transpose"
     assert B.transpose.__doc__ != ""
 
 
-def test_abstract():
+def test_abstract(check_lazy_shapes):
     class General:
         pass
 

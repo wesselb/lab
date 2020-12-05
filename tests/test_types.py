@@ -9,8 +9,11 @@ from plum.promotion import _promotion_rule, convert
 
 import lab as B
 
+# noinspection PyUnresolvedReferences
+from .util import check_lazy_shapes
 
-def test_numeric():
+
+def test_numeric(check_lazy_shapes):
     # Test convenient types.
     assert isinstance(1, B.Int)
     assert isinstance(np.int32(1), B.Int)
@@ -58,7 +61,7 @@ def test_numeric():
     assert isinstance(convert(np.array(1), B.JaxNumeric), B.JaxNumeric)
 
 
-def test_autograd_tracing():
+def test_autograd_tracing(check_lazy_shapes):
     found_objs = []
 
     def f(x):
@@ -77,7 +80,7 @@ def test_autograd_tracing():
         assert isinstance(obj, B.AGNumeric)
 
 
-def test_jax_tracing():
+def test_jax_tracing(check_lazy_shapes):
     found_objs = []
 
     def f(x):
@@ -93,7 +96,7 @@ def test_jax_tracing():
         assert isinstance(obj, B.JaxNumeric)
 
 
-def test_data_type():
+def test_data_type(check_lazy_shapes):
     assert isinstance(np.float32, B.NPDType)
     assert isinstance(np.float32, B.DType)
     assert isinstance(tf.float32, B.TFDType)
@@ -122,7 +125,7 @@ def test_data_type():
     assert convert(jnp.float32, B.TorchDType) is torch.float32
 
 
-def test_issubdtype():
+def test_issubdtype(check_lazy_shapes):
     assert B.issubdtype(np.float32, np.floating)
     assert B.issubdtype(tf.float32, np.floating)
     assert B.issubdtype(torch.float32, np.floating)
@@ -133,7 +136,7 @@ def test_issubdtype():
     assert not B.issubdtype(jnp.float32, np.integer)
 
 
-def test_dtype():
+def test_dtype(check_lazy_shapes):
     assert B.dtype(1) is int
     assert B.dtype(1.0) is float
     assert B.dtype(np.array(1, dtype=np.int32)) is np.int32
@@ -147,23 +150,23 @@ def test_dtype():
 
 
 @pytest.mark.parametrize("t", [B.NP, B.Framework])
-def test_framework_np(t):
+def test_framework_np(t, check_lazy_shapes):
     assert isinstance(np.array(1), t)
     assert isinstance(np.float32, t)
 
 
 @pytest.mark.parametrize("t", [B.TF, B.Framework])
-def test_framework_tf(t):
+def test_framework_tf(t, check_lazy_shapes):
     assert isinstance(tf.constant(1), t)
     assert isinstance(tf.float32, t)
 
 
 @pytest.mark.parametrize("t", [B.Torch, B.Framework])
-def test_framework_torch(t):
+def test_framework_torch(t, check_lazy_shapes):
     assert isinstance(torch.tensor(1), t)
     assert isinstance(torch.float32, t)
 
 
 @pytest.mark.parametrize("t", [B.Jax, B.Framework])
-def test_framework_jax(t):
+def test_framework_jax(t, check_lazy_shapes):
     assert isinstance(jnp.asarray(1), t)

@@ -4,6 +4,8 @@ import numpy as np
 import pytest
 
 import lab as B
+
+# noinspection PyUnresolvedReferences
 from .util import (
     check_function,
     Tensor,
@@ -13,15 +15,16 @@ from .util import (
     Value,
     Bool,
     allclose,
+    check_lazy_shapes,
 )
 
 
-def test_constants():
+def test_constants(check_lazy_shapes):
     assert B.epsilon == 1e-12
 
 
 @pytest.mark.parametrize("f", [B.transpose, B.T, B.t])
-def test_transpose(f):
+def test_transpose(f, check_lazy_shapes):
     # Check consistency.
     check_function(f, (Tensor(),))
     check_function(f, (Tensor(2),), {"perm": Value(None, (0,))})
@@ -51,14 +54,14 @@ def test_transpose(f):
 
 
 @pytest.mark.parametrize("f", [B.matmul, B.mm, B.dot])
-def test_matmul(f):
+def test_matmul(f, check_lazy_shapes):
     check_function(f, (Tensor(3, 3), Tensor(3, 3)), {"tr_a": Bool(), "tr_b": Bool()})
     check_function(
         f, (Tensor(4, 3, 3), Tensor(4, 3, 3)), {"tr_a": Bool(), "tr_b": Bool()}
     )
 
 
-def test_trace():
+def test_trace(check_lazy_shapes):
     # Check default call.
     check_function(
         B.trace, (Tensor(2, 3, 4, 5),), {"axis1": Value(0), "axis2": Value(1)}
@@ -79,7 +82,7 @@ def test_trace():
         B.trace(Matrix().ag(), axis1=0, axis2=0)
 
 
-def test_kron():
+def test_kron(check_lazy_shapes):
     check_function(B.kron, (Tensor(2, 3), Tensor(4, 5)))
     # Cannot test tensors of higher rank, because TensorFlows broadcasting
     # behaviour does not allow that.
@@ -89,7 +92,7 @@ def test_kron():
         B.kron(Tensor(2).torch(), Tensor(4, 5).torch())
 
 
-def test_svd():
+def test_svd(check_lazy_shapes):
     # Take absolute value because the sign of the result is undetermined.
     def svd(a, compute_uv=True):
         if compute_uv:
@@ -102,49 +105,49 @@ def test_svd():
     # Torch does not allow batch computation.
 
 
-def test_solve():
+def test_solve(check_lazy_shapes):
     check_function(B.solve, (Matrix(3, 3), Matrix(3, 4)))
     check_function(B.solve, (Matrix(5, 3, 3), Matrix(5, 3, 4)))
 
 
-def test_inv():
+def test_inv(check_lazy_shapes):
     check_function(B.inv, (Matrix(),))
     check_function(B.inv, (Matrix(4, 3, 3),))
 
 
-def test_det():
+def test_det(check_lazy_shapes):
     check_function(B.det, (Matrix(),))
     check_function(B.det, (Matrix(4, 3, 3),))
 
 
-def test_logdet():
+def test_logdet(check_lazy_shapes):
     check_function(B.logdet, (PSD(),))
     check_function(B.logdet, (PSD(4, 3, 3),))
 
 
-def test_expm():
+def test_expm(check_lazy_shapes):
     check_function(B.expm, (Matrix(),))
 
 
-def test_logm():
+def test_logm(check_lazy_shapes):
     mat = B.eye(3) + 0.1 * B.randn(3, 3)
     check_function(B.logm, (Tensor(mat=mat),))
 
 
 @pytest.mark.parametrize("f", [B.cholesky, B.chol])
-def test_cholesky(f):
+def test_cholesky(f, check_lazy_shapes):
     check_function(f, (PSD(),))
     check_function(f, (PSD(4, 3, 3),))
 
 
 @pytest.mark.parametrize("f", [B.cholesky_solve, B.cholsolve])
-def test_cholesky_solve(f):
+def test_cholesky_solve(f, check_lazy_shapes):
     check_function(f, (PSDTriangular(3, 3), Matrix(3, 4)))
     check_function(f, (PSDTriangular(5, 3, 3), Matrix(5, 3, 4)))
 
 
 @pytest.mark.parametrize("f", [B.triangular_solve, B.trisolve])
-def test_triangular_solve(f):
+def test_triangular_solve(f, check_lazy_shapes):
     check_function(f, (PSDTriangular(3, 3), Matrix(3, 4)), {"lower_a": Value(True)})
     check_function(
         f, (PSDTriangular(5, 3, 3), Matrix(5, 3, 4)), {"lower_a": Value(True)}
@@ -160,27 +163,27 @@ def test_triangular_solve(f):
 
 
 @pytest.mark.parametrize("f", [B.toeplitz_solve, B.toepsolve])
-def test_toeplitz_solve(f):
+def test_toeplitz_solve(f, check_lazy_shapes):
     check_function(f, (Tensor(3), Tensor(2), Matrix(3, 4)))
     check_function(f, (Tensor(3), Matrix(3, 4)))
 
 
 @pytest.mark.parametrize("a", [Tensor(5).np(), Tensor(5, 1).np()])
 @pytest.mark.parametrize("b", [Tensor(5).np(), Tensor(5, 1).np()])
-def test_outer(a, b):
+def test_outer(a, b, check_lazy_shapes):
     allclose(B.outer(a, b), B.matmul(B.uprank(a), B.uprank(b), tr_b=True))
     allclose(B.outer(a), B.outer(a, a))
     allclose(B.outer(b), B.outer(b, b))
 
 
-def test_outer_high_rank():
+def test_outer_high_rank(check_lazy_shapes):
     a = Tensor(5, 3).np()
     b = Tensor(5, 3).np()
     allclose(B.outer(a), B.outer(a, a))
     allclose(B.outer(b), B.outer(b, b))
 
 
-def test_reg():
+def test_reg(check_lazy_shapes):
     old_epsilon = B.epsilon
     B.epsilon = 10
     a = Matrix(2, 3).np()
@@ -193,7 +196,7 @@ def test_reg():
     B.epsilon = old_epsilon
 
 
-def test_pw_2d():
+def test_pw_2d(check_lazy_shapes):
     # In this case, allow for 1e-7 absolute error, because the computation is
     # approximate.
     def approx_allclose(a, b):
@@ -220,7 +223,7 @@ def test_pw_2d():
     approx_allclose(B.pw_sums(a), np.maximum(sums2_aa, 1e-30) ** 0.5)
 
 
-def test_pw_1d():
+def test_pw_1d(check_lazy_shapes):
     a, b = Matrix(5, 1).np(), Matrix(10, 1).np()
 
     # Check that we can feed both rank 1 and rank 2 tensors.
@@ -235,7 +238,7 @@ def test_pw_1d():
         allclose(B.pw_sums(f(a)), np.abs(a + a.T))
 
 
-def test_ew_2d():
+def test_ew_2d(check_lazy_shapes):
     a, b = Matrix(10, 2).np(), Matrix(10, 2).np()
     dists2_ab, dists2_aa = np.zeros((10, 1)), np.zeros((10, 1))
     sums2_ab, sums2_aa = np.zeros((10, 1)), np.zeros((10, 1))
@@ -255,7 +258,7 @@ def test_ew_2d():
     allclose(B.ew_sums(a), np.maximum(sums2_aa, 1e-30) ** 0.5)
 
 
-def test_ew_1d():
+def test_ew_1d(check_lazy_shapes):
     a, b = Matrix(10, 1).np(), Matrix(10, 1).np()
 
     # Check that we can feed both rank 1 and rank 2 tensors.

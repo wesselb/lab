@@ -13,6 +13,7 @@ from plum import (
 )
 
 from . import dispatch
+from .shape import Dimension
 
 __all__ = [
     "Int",
@@ -116,7 +117,9 @@ _jax_dtype = ModuleType("jax._src.numpy.lax_numpy", "_ScalarMeta")
 _jax_retrievables = [_jax_tensor, _jax_tracer, _jax_dtype]
 
 # Numeric types:
-Int = Union(*([int] + np.sctypes["int"] + np.sctypes["uint"]), alias="Int")
+Int = Union(
+    *([int, Dimension] + np.sctypes["int"] + np.sctypes["uint"]), alias="Int"
+)
 Float = Union(*([float] + np.sctypes["float"]), alias="Float")
 Bool = Union(bool, np.bool_, alias="Bool")
 Number = Union(Int, Bool, Float, alias="Number")
