@@ -61,7 +61,7 @@ class ControlFlow:
         Args:
             name (str): Name of the operation.
             outcome (object): Outcome.
-            type (:obj:`type`, optional): Type to convert the outcome to.
+            type (type, optional): Type to convert the outcome to.
         """
         if self.caching:
             self._counter += 1
