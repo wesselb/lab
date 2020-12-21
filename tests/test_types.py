@@ -35,8 +35,8 @@ def test_numeric(check_lazy_shapes):
     # Test Torch.
     assert isinstance(torch.tensor(1), B.TorchNumeric)
 
-    # Test Jax.
-    assert isinstance(jnp.array(1), B.JaxNumeric)
+    # Test JAX.
+    assert isinstance(jnp.array(1), B.JAXNumeric)
 
     # Test general numeric type.
     assert isinstance(1, B.Numeric)
@@ -51,14 +51,14 @@ def test_numeric(check_lazy_shapes):
     assert _promotion_rule(np.array(1), tf.Variable(1)) == B.TFNumeric
     assert _promotion_rule(tf.constant(1), tf.Variable(1)) == B.TFNumeric
     assert _promotion_rule(np.array(1), torch.tensor(1)) == B.TorchNumeric
-    assert _promotion_rule(np.array(1), jnp.array(1)) == B.JaxNumeric
+    assert _promotion_rule(np.array(1), jnp.array(1)) == B.JAXNumeric
     with pytest.raises(TypeError):
         _promotion_rule(B.TFNumeric, B.TorchNumeric)
 
     # Test conversion.
     assert isinstance(convert(np.array(1), B.TFNumeric), B.TFNumeric)
     assert isinstance(convert(np.array(1), B.TorchNumeric), B.TorchNumeric)
-    assert isinstance(convert(np.array(1), B.JaxNumeric), B.JaxNumeric)
+    assert isinstance(convert(np.array(1), B.JAXNumeric), B.JAXNumeric)
 
 
 def test_autograd_tracing(check_lazy_shapes):
@@ -87,13 +87,13 @@ def test_jax_tracing(check_lazy_shapes):
         found_objs.append(x)
         return B.sum(x)
 
-    # Catch Jax object during JIT and during gradient computation.
+    # Catch JAX object during JIT and during gradient computation.
     jax.grad(f)(np.ones(5))
     jax.jit(f)(np.ones(5))
 
     # Test that objects are of the right type.
     for obj in found_objs:
-        assert isinstance(obj, B.JaxNumeric)
+        assert isinstance(obj, B.JAXNumeric)
 
 
 def test_data_type(check_lazy_shapes):
@@ -103,23 +103,23 @@ def test_data_type(check_lazy_shapes):
     assert isinstance(tf.float32, B.DType)
     assert isinstance(torch.float32, B.TorchDType)
     assert isinstance(torch.float32, B.DType)
-    assert isinstance(jnp.float32, B.JaxDType)
+    assert isinstance(jnp.float32, B.JAXDType)
     assert isinstance(jnp.float32, B.DType)
 
-    # Check that the AutoGrad and Jax data types are just the NumPy data type. Then
+    # Check that the AutoGrad and JAX data types are just the NumPy data type. Then
     # there is nothing left to check.
     assert B.AGDType == B.NPDType
 
     # Test conversion between data types.
     assert convert(np.float32, B.TFDType) is tf.float32
     assert convert(np.float32, B.TorchDType) is torch.float32
-    assert convert(np.float32, B.JaxDType) is jnp.float32
+    assert convert(np.float32, B.JAXDType) is jnp.float32
     assert convert(tf.float32, B.NPDType) is np.float32
     assert convert(tf.float32, B.TorchDType) is torch.float32
-    assert convert(tf.float32, B.JaxDType) is jnp.float32
+    assert convert(tf.float32, B.JAXDType) is jnp.float32
     assert convert(torch.float32, B.NPDType) is np.float32
     assert convert(torch.float32, B.TFDType) is tf.float32
-    assert convert(torch.float32, B.JaxDType) is jnp.float32
+    assert convert(torch.float32, B.JAXDType) is jnp.float32
     assert convert(jnp.float32, B.NPDType) is np.float32
     assert convert(jnp.float32, B.TFDType) is tf.float32
     assert convert(jnp.float32, B.TorchDType) is torch.float32
@@ -167,6 +167,6 @@ def test_framework_torch(t, check_lazy_shapes):
     assert isinstance(torch.float32, t)
 
 
-@pytest.mark.parametrize("t", [B.Jax, B.Framework])
+@pytest.mark.parametrize("t", [B.JAX, B.Framework])
 def test_framework_jax(t, check_lazy_shapes):
     assert isinstance(jnp.asarray(1), t)

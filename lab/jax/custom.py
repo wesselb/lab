@@ -14,13 +14,13 @@ _dispatch = Dispatcher()
 
 @_dispatch(B.Numeric)
 def as_jax(x):
-    """Convert object to Jax.
+    """Convert object to JAX.
 
     Args:
         x (object): Object to convert.
 
     Returns:
-        object: `x` as a Jax object.
+        object: `x` as a JAX object.
     """
     return jnp.asarray(x)
 
@@ -47,14 +47,14 @@ def _as_primitive(f):
 
 
 def jax_register(f, s_f):
-    """Register a function and its sensitivity for Jax.
+    """Register a function and its sensitivity for JAX.
 
     Args:
         f (function): Function to register.
         s_f (function): Sensitivity of `f`.
 
     Returns:
-        function: Jax function.
+        function: JAX function.
     """
     f = _as_primitive(f)
     s_f = _as_primitive(s_f)

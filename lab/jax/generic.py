@@ -6,7 +6,7 @@ from types import FunctionType
 from . import dispatch, Numeric
 from .custom import jax_register
 from ..custom import bvn_cdf, s_bvn_cdf
-from ..types import JaxDType, JaxNumeric, NPNumeric, Number, Int
+from ..types import JAXDType, JAXNumeric, NPNumeric, Number, Int
 
 __all__ = []
 
@@ -16,37 +16,37 @@ def isnan(a):
     return jnp.isnan(a)
 
 
-@dispatch(JaxDType, [Int])
+@dispatch(JAXDType, [Int])
 def zeros(dtype, *shape):
     return jnp.zeros(shape, dtype=dtype)
 
 
-@dispatch(JaxDType, [Int])
+@dispatch(JAXDType, [Int])
 def ones(dtype, *shape):
     return jnp.ones(shape, dtype=dtype)
 
 
-@dispatch(JaxDType, Int, Int)
+@dispatch(JAXDType, Int, Int)
 def eye(dtype, *shape):
     return jnp.eye(shape[0], shape[1], dtype=dtype)
 
 
-@dispatch(JaxDType, object, object, Int)
+@dispatch(JAXDType, object, object, Int)
 def linspace(dtype, a, b, num):
     return jnp.linspace(a, b, num, dtype=dtype)
 
 
-@dispatch(JaxDType, object, object, object)
+@dispatch(JAXDType, object, object, object)
 def range(dtype, start, stop, step):
     return jnp.arange(start, stop, step, dtype=dtype)
 
 
-@dispatch(JaxDType, JaxNumeric)
+@dispatch(JAXDType, JAXNumeric)
 def cast(dtype, a):
     return a.astype(dtype)
 
 
-@dispatch(JaxDType, {Number, NPNumeric})
+@dispatch(JAXDType, {Number, NPNumeric})
 def cast(dtype, a):
     return jnp.array(a, dtype=dtype)
 
@@ -205,7 +205,7 @@ f = jax_register(bvn_cdf, s_bvn_cdf)
 dispatch(Numeric, Numeric, Numeric)(f)
 
 
-@dispatch(Numeric, FunctionType, FunctionType, JaxNumeric, [JaxNumeric])
+@dispatch(Numeric, FunctionType, FunctionType, JAXNumeric, [JAXNumeric])
 def _cond(condition, f_true, f_false, *xs):
     return lax.cond(condition, lambda xs_: f_true(*xs_), lambda xs_: f_false(*xs_), xs)
 

@@ -24,13 +24,13 @@ __all__ = [
     "AGNumeric",
     "TFNumeric",
     "TorchNumeric",
-    "JaxNumeric",
+    "JAXNumeric",
     "Numeric",
     "NPDType",
     "AGDType",
     "TFDType",
     "TorchDType",
-    "JaxDType",
+    "JAXDType",
     "DType",
     "default_dtype",
     "issubdtype",
@@ -39,7 +39,7 @@ __all__ = [
     "AG",
     "TF",
     "Torch",
-    "Jax",
+    "JAX",
     "Framework",
     "_tf_retrievables",
     "_torch_retrievables",
@@ -110,7 +110,7 @@ _torch_retrievables = [_torch_tensor, _torch_dtype]
 _ag_tensor = ModuleType("autograd.tracer", "Box")
 _ag_retrievables = [_ag_tensor]
 
-# Define Jax module types.
+# Define JAX module types.
 _jax_tensor = ModuleType("jax.interpreters.xla", "DeviceArray")
 _jax_tracer = ModuleType("jax.core", "Tracer")
 _jax_dtype = ModuleType("jax._src.numpy.lax_numpy", "_ScalarMeta")
@@ -127,15 +127,15 @@ NPNumeric = Union(np.ndarray, alias="NPNumeric")
 AGNumeric = Union(_ag_tensor, alias="AGNumeric")
 TFNumeric = Union(_tf_tensor, _tf_variable, _tf_indexedslices, alias="TFNumeric")
 TorchNumeric = Union(_torch_tensor, alias="TorchNumeric")
-JaxNumeric = Union(_jax_tensor, _jax_tracer, alias="JaxNumeric")
+JAXNumeric = Union(_jax_tensor, _jax_tracer, alias="JAXNumeric")
 Numeric = Union(
-    Number, NPNumeric, AGNumeric, TFNumeric, JaxNumeric, TorchNumeric, alias="Numeric"
+    Number, NPNumeric, AGNumeric, TFNumeric, JAXNumeric, TorchNumeric, alias="Numeric"
 )
 
 # Define corresponding promotion rules and conversion methods.
 add_promotion_rule(NPNumeric, TFNumeric, TFNumeric)
 add_promotion_rule(NPNumeric, TorchNumeric, TorchNumeric)
-add_promotion_rule(NPNumeric, JaxNumeric, JaxNumeric)
+add_promotion_rule(NPNumeric, JAXNumeric, JAXNumeric)
 add_promotion_rule(_tf_tensor, _tf_variable, TFNumeric)
 add_conversion_method(
     NPNumeric, TFNumeric, lambda x: _module_call("tensorflow", "constant", x)
@@ -144,7 +144,7 @@ add_conversion_method(
     NPNumeric, TorchNumeric, lambda x: _module_call("torch", "tensor", x)
 )
 add_conversion_method(
-    NPNumeric, JaxNumeric, lambda x: _module_call("jax.numpy", "asarray", x)
+    NPNumeric, JAXNumeric, lambda x: _module_call("jax.numpy", "asarray", x)
 )
 
 # Data types:
@@ -152,8 +152,8 @@ NPDType = Union(type, np.dtype, alias="NPDType")
 AGDType = Union(NPDType, alias="AGDType")
 TFDType = Union(_tf_dtype, alias="TFDType")
 TorchDType = Union(_torch_dtype, alias="TorchDType")
-JaxDType = Union(_jax_dtype, alias="JaxDType")
-DType = Union(NPDType, TFDType, TorchDType, JaxDType, alias="DType")
+JAXDType = Union(_jax_dtype, alias="JAXDType")
+DType = Union(NPDType, TFDType, TorchDType, JAXDType, alias="DType")
 
 # Create lookup for PyTorch data types that loads upon the first request.
 _torch_lookup_cache = {}
@@ -188,26 +188,26 @@ def _name(x):
 
 add_conversion_method(NPDType, TFDType, lambda x: _module_attr("tensorflow", _name(x)))
 add_conversion_method(NPDType, TorchDType, lambda x: _module_attr("torch", _name(x)))
-add_conversion_method(NPDType, JaxDType, lambda x: _module_attr("jax.numpy", _name(x)))
+add_conversion_method(NPDType, JAXDType, lambda x: _module_attr("jax.numpy", _name(x)))
 add_conversion_method(TorchDType, NPDType, _torch_lookup)
 add_conversion_method(
     TorchDType, TFDType, lambda x: _module_attr("tensorflow", _name(_torch_lookup(x)))
 )
 add_conversion_method(
-    TorchDType, JaxDType, lambda x: _module_attr("jax.numpy", _name(_torch_lookup(x)))
+    TorchDType, JAXDType, lambda x: _module_attr("jax.numpy", _name(_torch_lookup(x)))
 )
 add_conversion_method(TFDType, NPDType, lambda x: x.as_numpy_dtype)
 add_conversion_method(
     TFDType, TorchDType, lambda x: _module_attr("torch", _name(x.as_numpy_dtype))
 )
 add_conversion_method(
-    TFDType, JaxDType, lambda x: _module_attr("jax.numpy", _name(x.as_numpy_dtype))
+    TFDType, JAXDType, lambda x: _module_attr("jax.numpy", _name(x.as_numpy_dtype))
 )
-add_conversion_method(JaxDType, NPDType, lambda x: x.dtype.type)
+add_conversion_method(JAXDType, NPDType, lambda x: x.dtype.type)
 add_conversion_method(
-    JaxDType, TFDType, lambda x: _module_attr("tensorflow", _name(x.dtype))
+    JAXDType, TFDType, lambda x: _module_attr("tensorflow", _name(x.dtype))
 )
-add_conversion_method(JaxDType, TorchDType, lambda x: _module_attr("torch", _name(x)))
+add_conversion_method(JAXDType, TorchDType, lambda x: _module_attr("torch", _name(x)))
 
 default_dtype = np.float64  #: Default dtype.
 
@@ -258,10 +258,10 @@ def dtype(a):
     return a.dtype.type
 
 
-@dispatch(JaxNumeric)
+@dispatch(JAXNumeric)
 def dtype(a):
-    # Jax gives NumPy data types back. Convert to Jax ones.
-    return convert(a.dtype, JaxDType)
+    # JAX gives NumPy data types back. Convert to JAX ones.
+    return convert(a.dtype, JAXDType)
 
 
 # Framework types:
@@ -269,5 +269,5 @@ NP = Union(NPNumeric, NPDType, alias="NP")
 AG = Union(AGNumeric, AGDType, alias="AG")
 TF = Union(TFNumeric, TFDType, alias="TF")
 Torch = Union(TorchNumeric, TorchDType, alias="Torch")
-Jax = Union(JaxNumeric, JaxDType, alias="Jax")
-Framework = Union(NP, TF, Torch, Jax, alias="Framework")
+JAX = Union(JAXNumeric, JAXDType, alias="JAX")
+Framework = Union(NP, TF, Torch, JAX, alias="Framework")

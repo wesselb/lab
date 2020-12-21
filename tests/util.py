@@ -75,7 +75,7 @@ def to_np(x):
     return x.numpy()
 
 
-@_dispatch(B.JaxNumeric)
+@_dispatch(B.JAXNumeric)
 def to_np(x):
     return np.array(x)
 
@@ -132,7 +132,7 @@ def check_function(f, args_spec, kw_args_spec=None, assert_dtype=True, skip=None
     # Construct framework types to skip mixes of.
     fw_types = [
         plum.Union(t, plum.List(t), plum.Tuple(t))
-        for t in [B.AGNumeric, B.TorchNumeric, B.TFNumeric, B.JaxNumeric]
+        for t in [B.AGNumeric, B.TorchNumeric, B.TFNumeric, B.JAXNumeric]
     ]
 
     # Construct other types to skip entirely.

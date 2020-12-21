@@ -31,6 +31,10 @@ def set_random_seed(seed):
 
         torch.manual_seed(seed)
 
+    # Set seed for JAX, if it is loaded.
+    if "jax" in sys.modules:
+        B.jax_rng.set_seed(seed)
+
 
 @dispatch(DType, [Int])
 @abstract()

@@ -16,7 +16,7 @@ backend
     - [AutoGrad](#autograd)
     - [TensorFlow](#tensorflow)
     - [PyTorch](#pytorch)
-    - [Jax](#jax)
+    - [JAX](#jax)
 * [List of Methods](#list-of-methods)
     - [Constants](#constants)
     - [Generic](#generic)
@@ -45,7 +45,7 @@ import lab as B
 import lab.autograd    # Load the AutoGrad extension.
 import lab.torch       # Load the PyTorch extension.
 import lab.tensorflow  # Load the TensorFlow extension.
-import lab.jax         # Load the Jax extension.
+import lab.jax         # Load the JAX extension.
 
 
 def objective(matrix):
@@ -53,7 +53,7 @@ def objective(matrix):
     return B.mean(outer_product)
 ```
 
-The AutoGrad, PyTorch, TensorFlow, and Jax extensions are not loaded automatically to
+The AutoGrad, PyTorch, TensorFlow, and JAX extensions are not loaded automatically to
 not enforce a dependency on all three frameworks.
 An extension can alternatively be loaded via `import lab.autograd as B`.
 
@@ -86,7 +86,7 @@ Run it with PyTorch:
 tensor(1.9557, dtype=torch.float64)
 ```
 
-Run it with Jax:
+Run it with JAX:
 ```python
 >>> import jax
 
@@ -177,13 +177,13 @@ Torch        # Anything PyTorch
 ```
 
 
-### Jax
+### JAX
 
 ```
-JaxNumeric
-JaxDType
+JAXNumeric
+JAXDType
  
-Jax          # Anything Jax
+JAX          # Anything JAX
 ```
 
 

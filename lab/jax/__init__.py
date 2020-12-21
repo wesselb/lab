@@ -2,11 +2,11 @@
 from .. import *
 from .. import dispatch as dispatch_original
 from ..shape import dispatch_unwrap_dimensions
-from ..types import Number, NPNumeric, JaxNumeric
+from ..types import Number, NPNumeric, JAXNumeric
 
 dispatch = dispatch_unwrap_dimensions(dispatch_original)
 
-Numeric = {Number, NPNumeric, JaxNumeric}
+Numeric = {Number, NPNumeric, JAXNumeric}
 
 from .generic import *
 from .shaping import *

@@ -34,8 +34,8 @@ def test_as_torch(check_lazy_shapes):
 
 
 def test_as_jax(check_lazy_shapes):
-    assert isinstance(as_jax(B.randn()), B.JaxNumeric)
-    assert isinstance(as_jax((B.randn(),))[0], B.JaxNumeric)
+    assert isinstance(as_jax(B.randn()), B.JAXNumeric)
+    assert isinstance(as_jax((B.randn(),))[0], B.JAXNumeric)
 
 
 def check_grad(f, args, kw_args=None, rtol=1e-8):
@@ -86,7 +86,7 @@ def check_grad(f, args, kw_args=None, rtol=1e-8):
         f_i(torch_args[i]).backward()
         allclose(numerical_grad, torch_args[i].grad, rtol=rtol)
 
-        # Check Jax gradient.
+        # Check JAX gradient.
         torch_args = tuple([jax.device_put(arg) for arg in args])
         f_i = create_f_i(i, torch_args)
         jax_grad = jax.grad(f_i)(args[i])
