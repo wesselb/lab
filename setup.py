@@ -5,6 +5,16 @@ import numpy as np
 from Cython.Build import build_ext
 from setuptools import find_packages, setup, Extension
 
+
+# Include libraries from the OS X Command Line Tools. On OS X Big Sur, these libraries
+# are not automatically included anymore.
+osx_library_path = "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib"
+if os.path.exists(osx_library_path):
+    if "LIBRARY_PATH" in os.environ and os.environ["LIBRARY_PATH"]:
+        os.environ["LIBRARY_PATH"] += ":" + osx_library_path
+    else:
+        os.environ["LIBRARY_PATH"] = osx_library_path
+
 # Check that `gfortran` is available.
 if subprocess.call("which gfortran", shell=True) != 0:
     raise RuntimeError(
@@ -28,7 +38,7 @@ if subprocess.call("which xcrun", shell=True) == 0:
     os.environ["CPATH"] += path
 
 # Default to use gcc as the compiler if `$CC` is not set.
-if not "CC" in os.environ or not os.environ["CC"]:
+if "CC" not in os.environ or not os.environ["CC"]:
     os.environ["CC"] = "gcc"
 
 # Ensure that `$CC` is not symlinked to `clang`, because the default shipped
@@ -49,9 +59,9 @@ if "clang" in out.decode("ascii"):
     # Ensure that one was found.
     if not found:
         raise RuntimeError(
-            "Your gcc runs clang, and no version of gcc could "
-            "be found. Please install gcc. On OS X, this can "
-            'be done with "brew install gcc".'
+            "Your gcc runs clang, and no version of gcc could be found. "
+            "Please install gcc. "
+            'On OS X, this can be done with "brew install gcc".'
         )
 
 # Compile TVPACK.
