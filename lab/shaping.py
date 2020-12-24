@@ -31,7 +31,7 @@ __all__ = [
 
 
 class LazyShapes:
-    """Simple context manager that tracks the status for lazy shape.
+    """Simple context manager that tracks the status for lazy shapes.
 
     Attributes:
         enabled (bool): Are lazy shapes enabled?
