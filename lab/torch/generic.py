@@ -1,6 +1,6 @@
 import torch
 
-from . import dispatch, Numeric
+from . import B, dispatch, Numeric
 from .custom import torch_register
 from ..custom import bvn_cdf, s_bvn_cdf
 from ..types import TorchNumeric, NPNumeric, TorchDType, Number, Int
@@ -14,29 +14,34 @@ def isnan(a):
     return torch.isnan(a)
 
 
+@dispatch(Numeric)
+def device(a):
+    return str(a.device)
+
+
 @dispatch(TorchDType, [Int])
 def zeros(dtype, *shape):
-    return torch.zeros(shape, dtype=dtype)
+    return torch.zeros(shape, dtype=dtype, device=B.Device.active_name)
 
 
 @dispatch(TorchDType, [Int])
 def ones(dtype, *shape):
-    return torch.ones(shape, dtype=dtype)
+    return torch.ones(shape, dtype=dtype, device=B.Device.active_name)
 
 
 @dispatch(TorchDType, Int, Int)
 def eye(dtype, *shape):
-    return torch.eye(shape[0], shape[1], dtype=dtype)
+    return torch.eye(shape[0], shape[1], dtype=dtype, device=B.Device.active_name)
 
 
 @dispatch(TorchDType, object, object, Int)
 def linspace(dtype, a, b, num):
-    return torch.linspace(a, b, num, dtype=dtype)
+    return torch.linspace(a, b, num, dtype=dtype, device=B.Device.active_name)
 
 
 @dispatch(TorchDType, object, object, object)
 def range(dtype, start, stop, step):
-    return torch.arange(start, stop, step, dtype=dtype)
+    return torch.arange(start, stop, step, dtype=dtype, device=B.Device.active_name)
 
 
 @dispatch(TorchDType, TorchNumeric)
@@ -46,7 +51,7 @@ def cast(dtype, a):
 
 @dispatch(TorchDType, {Number, NPNumeric})
 def cast(dtype, a):
-    return torch.tensor(a, dtype=dtype)
+    return torch.tensor(a, dtype=dtype, device=B.Device.active_name)
 
 
 @dispatch(TorchDType, Dimension)
@@ -57,7 +62,7 @@ def cast(dtype, a):
 
 @dispatch(Numeric)
 def identity(a):
-    return a.clone()
+    return 1 * a
 
 
 @dispatch(Numeric)

@@ -15,6 +15,11 @@ def isnan(a):
     return tf.math.is_nan(a)
 
 
+@dispatch(Numeric)
+def device(a):
+    return str(a.device)
+
+
 @dispatch(TFDType, [Int])
 def zeros(dtype, *shape):
     return tf.zeros(shape, dtype=dtype)

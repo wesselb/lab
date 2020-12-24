@@ -23,6 +23,9 @@ backend
     - [Linear Algebra](#linear-algebra)
     - [Random](#random)
     - [Shaping](#shaping)
+* [Devices](#devices)
+* [Lazy Shapes](#lazy-shapes)
+* [Control Flow Cache](#control-flow-cache)
 
 ## Requirements and Installation
 
@@ -235,6 +238,9 @@ log_2_pi
 ```
 isnan(a)
 
+device(a)
+device(name)
+
 zeros(dtype, *shape)
 zeros(*shape)
 zeros(ref)
@@ -397,3 +403,34 @@ concat2d(*rows)
 tile(a, *repeats)
 take(a, indices, axis=0)
 ```
+
+## Devices
+You can get the device of a tensor with `B.device(a)`.
+The device of a tensor is always returned as a string.
+
+You can execute a computation on a device by entering `B.device(name)` as a context:
+
+```python
+with B.device("gpu:0"):
+    a = B.randn(tf.float32, 2, 2)
+    b = B.randn(tf.float32, 2, 2)
+    c = a @ b
+```
+
+## Lazy Shapes
+If a function is evaluated abstractly, then elements of the shape of a tensor, e.g.
+`B.shape(a)[0]`, may also be tensors, which can break dispatch.
+By entering `B.lazy_shapes`, shapes and elements of shapes will be wrapped in a shape 
+type to fix this issue.
+
+```python
+with B.lazy_shapes:
+    a = B.eye(2)
+    print(type(B.shape(a)))
+    # <class 'lab.shape.Shape'>
+    print(type(B.shape(a)[0]))
+    # <class 'lab.shape.Dimension'>
+```
+
+## Control Flow Cache
+Coming soon!

@@ -14,6 +14,11 @@ def isnan(a):
     return anp.isnan(a)
 
 
+@dispatch(Numeric)
+def device(a):
+    return "cpu"
+
+
 @dispatch(AGDType, AGNumeric)
 def cast(dtype, a):
     # AutoGrad does not respect the `copy` flag, so check that manually.
@@ -25,7 +30,7 @@ def cast(dtype, a):
 
 @dispatch(Numeric)
 def identity(a):
-    return anp.array(a)
+    return 1 * a
 
 
 @dispatch(Numeric)

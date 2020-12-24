@@ -1,9 +1,10 @@
 import jax.numpy as jnp
 import jax.scipy.special as jsps
 import jax.lax as lax
+import jax
 from types import FunctionType
 
-from . import dispatch, Numeric
+from . import B, dispatch, Numeric
 from .custom import jax_register
 from ..custom import bvn_cdf, s_bvn_cdf
 from ..types import JAXDType, JAXNumeric, NPNumeric, Number, Int
@@ -11,34 +12,54 @@ from ..types import JAXDType, JAXNumeric, NPNumeric, Number, Int
 __all__ = []
 
 
+def _move(a):
+    if B.Device.active_name:
+        parts = B.Device.active_name.lower().split(":")
+        if len(parts) == 1:
+            return jax.device_put(a, jax.devices(parts[0])[0])
+        elif len(parts) == 2:
+            return jax.device_put(a, jax.devices(parts[0])[int(parts[1])])
+        else:
+            raise ValueError(
+                f'Cannot parse device specification "{B.Device.active_name}".'
+            )
+    else:
+        return a
+
+
 @dispatch(Numeric)
 def isnan(a):
     return jnp.isnan(a)
 
 
+@dispatch(Numeric)
+def device(a):
+    return str(a.device_buffer.device())
+
+
 @dispatch(JAXDType, [Int])
 def zeros(dtype, *shape):
-    return jnp.zeros(shape, dtype=dtype)
+    return _move(jnp.zeros(shape, dtype=dtype))
 
 
 @dispatch(JAXDType, [Int])
 def ones(dtype, *shape):
-    return jnp.ones(shape, dtype=dtype)
+    return _move(jnp.ones(shape, dtype=dtype))
 
 
 @dispatch(JAXDType, Int, Int)
 def eye(dtype, *shape):
-    return jnp.eye(shape[0], shape[1], dtype=dtype)
+    return _move(jnp.eye(shape[0], shape[1], dtype=dtype))
 
 
 @dispatch(JAXDType, object, object, Int)
 def linspace(dtype, a, b, num):
-    return jnp.linspace(a, b, num, dtype=dtype)
+    return _move(jnp.linspace(a, b, num, dtype=dtype))
 
 
 @dispatch(JAXDType, object, object, object)
 def range(dtype, start, stop, step):
-    return jnp.arange(start, stop, step, dtype=dtype)
+    return _move(jnp.arange(start, stop, step, dtype=dtype))
 
 
 @dispatch(JAXDType, JAXNumeric)
@@ -48,12 +69,13 @@ def cast(dtype, a):
 
 @dispatch(JAXDType, {Number, NPNumeric})
 def cast(dtype, a):
-    return jnp.array(a, dtype=dtype)
+    return _move(jnp.array(a, dtype=dtype))
 
 
 @dispatch(Numeric)
 def identity(a):
-    return jnp.array(a)
+    # Do not return `a` identically.
+    return 1 * a
 
 
 @dispatch(Numeric)

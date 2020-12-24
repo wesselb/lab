@@ -13,6 +13,11 @@ def isnan(a):
     return np.isnan(a)
 
 
+@dispatch(Numeric)
+def device(a):
+    return "cpu"
+
+
 @dispatch(NPDType, [Int])
 def zeros(dtype, *shape):
     return np.zeros(shape, dtype=dtype)

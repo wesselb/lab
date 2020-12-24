@@ -7,6 +7,7 @@ import torch
 from plum import NotFoundLookupError
 
 import lab as B
+from lab.jax.generic import _move
 
 # noinspection PyUnresolvedReferences
 from .util import (
@@ -33,6 +34,60 @@ def test_isnan(check_lazy_shapes):
     check_function(B.isnan, (NaNTensor(),), {}, assert_dtype=False)
     check_function(B.isnan, (NaNTensor(2),), {}, assert_dtype=False)
     check_function(B.isnan, (NaNTensor(2, 3),), {}, assert_dtype=False)
+
+
+def test_device(check_lazy_shapes):
+    for a in Tensor(2, 2).forms():
+        assert "cpu" in str(B.device(a)).lower()
+
+
+@pytest.mark.parametrize("t", [tf.float32, torch.float32, jnp.float32])
+@pytest.mark.parametrize(
+    "f",
+    [
+        lambda t: B.zeros(t, 2, 2),
+        lambda t: B.ones(t, 2, 2),
+        lambda t: B.eye(t, 2),
+        lambda t: B.linspace(t, 0, 5, 10),
+        lambda t: B.range(t, 10),
+    ],
+)
+def test_device_placement(f, t, check_lazy_shapes):
+    # Check that explicit allocation on CPU works.
+    with B.device("cpu"):
+        f(t)
+
+    # Check that allocation on a non-existing device breaks.
+    with pytest.raises(Exception):
+        with B.device("magic-device"):
+            f(t)
+
+    # Reset the active device. This is still set to "magic-device" due to the above
+    # test.
+    B.Device.active_name = None
+
+
+def test_device_jax_move():
+    a = jnp.ones(2)
+
+    # No device specified: should do nothing.
+    assert _move(a) is a
+
+    # Move to CPU without identifier.
+    with B.device("cpu"):
+        assert _move(a) is not a
+        allclose(_move(a), a)
+
+    # Move to CPU with identifier. Also check that capitalisation does not matter.
+    with B.device("CPU:0"):
+        assert _move(a) is not a
+        allclose(_move(a), a)
+
+    # Give invalid syntax.
+    B.Device.active_name = "::"
+    with pytest.raises(ValueError):
+        _move(a)
+    B.Device.active_name = None
 
 
 @pytest.mark.parametrize("f", [B.zeros, B.ones, B.eye])

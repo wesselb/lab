@@ -22,6 +22,8 @@ __all__ = [
     "pi",
     "log_2_pi",
     "isnan",
+    "Device",
+    "device",
     "zeros",
     "ones",
     "zero",
@@ -91,6 +93,64 @@ def isnan(a):  # pragma: no cover
     Returns:
         tensor[bool]: `a` is NaN.
     """
+
+
+class Device:
+    """Context manager that tracks and changes the active device.
+
+    Args:
+        name (str): Name of the device.
+
+    Attributes:
+        active_name (str or :obj:`None`): Name of the active device.
+        name (str): Name of the device.
+    """
+
+    active_name = None
+    _tf_manager = None
+
+    def __init__(self, name):
+        self.name = name
+        self._active_tf_manager = None
+
+    def __enter__(self):
+        # Set active name.
+        Device.active_name = self.name
+
+        # Active the TF device manager, if it is available.
+        if Device._tf_manager:
+            self._active_tf_manager = Device._tf_manager(self.name)
+            self._active_tf_manager.__enter__()
+
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        # Unset the active name.
+        Device.active_name = None
+
+        # Exit the TF device manager, if it was entered.
+        if self._active_tf_manager:
+            self._active_tf_manager.__exit__(exc_type, exc_val, exc_tb)
+
+
+@dispatch(Numeric)
+@abstract()
+def device(a):
+    """Get the device on which a tensor lives or change the active device.
+
+    Args:
+        a (tensor or str): Tensor to get device of or name of device to change the
+            active device to.
+
+    Returns:
+        str or `None`: Device of `a` if a tensor was given. Otherwise, there is no
+            return value.
+    """
+
+
+@dispatch(str)
+def device(name):
+    return Device(name)
 
 
 @dispatch(DType, [Int])
