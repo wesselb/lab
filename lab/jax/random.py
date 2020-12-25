@@ -1,5 +1,4 @@
 import jax
-import numpy as np
 
 from . import B, dispatch
 from ..types import Int, JAXDType, JAXNumeric
@@ -8,7 +7,11 @@ __all__ = []
 
 
 class JAXRNG:
-    """An RNG for JAX."""
+    """An RNG for JAX.
+
+    Attributes:
+        key (:class:`jax.DeviceArray`): Current key.
+    """
 
     def __init__(self):
         self.set_seed(0)
@@ -36,16 +39,20 @@ B.jax_rng = JAXRNG()
 
 @dispatch(JAXDType, [Int])
 def rand(dtype, *shape):
-    return jax.random.uniform(B.jax_rng.split_key(), shape, dtype=dtype)
+    return B.move_to_active_device(
+        jax.random.uniform(B.jax_rng.split_key(), shape, dtype=dtype)
+    )
 
 
 @dispatch(JAXDType, [Int])
 def randn(dtype, *shape):
-    return jax.random.normal(B.jax_rng.split_key(), shape, dtype=dtype)
+    return B.move_to_active_device(
+        jax.random.normal(B.jax_rng.split_key(), shape, dtype=dtype)
+    )
 
 
 @dispatch(JAXNumeric, Int)
 def choice(a, n):
-    inds = np.random.choice(a.shape[0], n, replace=True)
+    inds = jax.random.choice(B.jax_rng.split_key(), a.shape[0], (n,), replace=True)
     choices = a[inds]
     return choices[0] if n == 1 else choices

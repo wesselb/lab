@@ -3,7 +3,7 @@ import scipy.special as sps
 
 from . import B, dispatch, Numeric
 from ..custom import bvn_cdf
-from ..types import NPDType, Int
+from ..types import NPNumeric, NPDType, Int
 
 __all__ = []
 
@@ -13,9 +13,14 @@ def isnan(a):
     return np.isnan(a)
 
 
-@dispatch(Numeric)
+@dispatch(NPNumeric)
 def device(a):
     return "cpu"
+
+
+@dispatch(NPNumeric)
+def move_to_active_device(a):
+    return a
 
 
 @dispatch(NPDType, [Int])

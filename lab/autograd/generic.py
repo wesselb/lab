@@ -14,9 +14,14 @@ def isnan(a):
     return anp.isnan(a)
 
 
-@dispatch(Numeric)
+@dispatch(AGNumeric)
 def device(a):
     return "cpu"
+
+
+@dispatch(AGNumeric)
+def move_to_active_device(a):
+    return a
 
 
 @dispatch(AGDType, AGNumeric)

@@ -24,6 +24,7 @@ __all__ = [
     "isnan",
     "Device",
     "device",
+    "move_to_active_device",
     "zeros",
     "ones",
     "zero",
@@ -151,6 +152,19 @@ def device(a):
 @dispatch(str)
 def device(name):
     return Device(name)
+
+
+@dispatch(Numeric)
+@abstract(promote=None)
+def move_to_active_device(a):  # pragma: no cover
+    """Move a tensor to the active device.
+
+    Args:
+        a (tensor): Tensor to move.
+
+    Returns:
+        tensor: `a` on the active device.
+    """
 
 
 @dispatch(DType, [Int])

@@ -12,7 +12,18 @@ from ..types import JAXDType, JAXNumeric, NPNumeric, Number, Int
 __all__ = []
 
 
-def _move(a):
+@dispatch(Numeric)
+def isnan(a):
+    return jnp.isnan(a)
+
+
+@dispatch(JAXNumeric)
+def device(a):
+    return str(a.device_buffer.device())
+
+
+@dispatch(JAXNumeric)
+def move_to_active_device(a):
     if B.Device.active_name:
         parts = B.Device.active_name.lower().split(":")
         if len(parts) == 1:
@@ -27,39 +38,29 @@ def _move(a):
         return a
 
 
-@dispatch(Numeric)
-def isnan(a):
-    return jnp.isnan(a)
-
-
-@dispatch(Numeric)
-def device(a):
-    return str(a.device_buffer.device())
-
-
 @dispatch(JAXDType, [Int])
 def zeros(dtype, *shape):
-    return _move(jnp.zeros(shape, dtype=dtype))
+    return move_to_active_device(jnp.zeros(shape, dtype=dtype))
 
 
 @dispatch(JAXDType, [Int])
 def ones(dtype, *shape):
-    return _move(jnp.ones(shape, dtype=dtype))
+    return move_to_active_device(jnp.ones(shape, dtype=dtype))
 
 
 @dispatch(JAXDType, Int, Int)
 def eye(dtype, *shape):
-    return _move(jnp.eye(shape[0], shape[1], dtype=dtype))
+    return move_to_active_device(jnp.eye(shape[0], shape[1], dtype=dtype))
 
 
 @dispatch(JAXDType, object, object, Int)
 def linspace(dtype, a, b, num):
-    return _move(jnp.linspace(a, b, num, dtype=dtype))
+    return move_to_active_device(jnp.linspace(a, b, num, dtype=dtype))
 
 
 @dispatch(JAXDType, object, object, object)
 def range(dtype, start, stop, step):
-    return _move(jnp.arange(start, stop, step, dtype=dtype))
+    return move_to_active_device(jnp.arange(start, stop, step, dtype=dtype))
 
 
 @dispatch(JAXDType, JAXNumeric)
@@ -69,7 +70,7 @@ def cast(dtype, a):
 
 @dispatch(JAXDType, {Number, NPNumeric})
 def cast(dtype, a):
-    return _move(jnp.array(a, dtype=dtype))
+    return move_to_active_device(jnp.array(a, dtype=dtype))
 
 
 @dispatch(Numeric)

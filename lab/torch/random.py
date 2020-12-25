@@ -1,6 +1,6 @@
 import torch
 
-from . import dispatch
+from . import B, dispatch
 from ..types import TorchNumeric, TorchDType, Int
 
 __all__ = []
@@ -8,12 +8,12 @@ __all__ = []
 
 @dispatch(TorchDType, [Int])
 def rand(dtype, *shape):
-    return torch.rand(shape, dtype=dtype)
+    return torch.rand(shape, dtype=dtype, device=B.Device.active_name)
 
 
 @dispatch(TorchDType, [Int])
 def randn(dtype, *shape):
-    return torch.randn(shape, dtype=dtype)
+    return torch.randn(shape, dtype=dtype, device=B.Device.active_name)
 
 
 @dispatch(TorchNumeric, Int)

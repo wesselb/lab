@@ -15,9 +15,14 @@ def isnan(a):
     return tf.math.is_nan(a)
 
 
-@dispatch(Numeric)
+@dispatch(TFNumeric)
 def device(a):
     return str(a.device)
+
+
+@dispatch(TFNumeric)
+def move_to_active_device(a):
+    return a
 
 
 @dispatch(TFDType, [Int])

@@ -7,7 +7,6 @@ import torch
 from plum import NotFoundLookupError
 
 import lab as B
-from lab.jax.generic import _move
 
 # noinspection PyUnresolvedReferences
 from .util import (
@@ -36,9 +35,10 @@ def test_isnan(check_lazy_shapes):
     check_function(B.isnan, (NaNTensor(2, 3),), {}, assert_dtype=False)
 
 
-def test_device(check_lazy_shapes):
+def test_device_and_move_to_active_device(check_lazy_shapes):
     for a in Tensor(2, 2).forms():
         assert "cpu" in str(B.device(a)).lower()
+        allclose(B.move_to_active_device(a), a)
 
 
 @pytest.mark.parametrize("t", [tf.float32, torch.float32, jnp.float32])
@@ -50,6 +50,8 @@ def test_device(check_lazy_shapes):
         lambda t: B.eye(t, 2),
         lambda t: B.linspace(t, 0, 5, 10),
         lambda t: B.range(t, 10),
+        lambda t: B.rand(t, 10),
+        lambda t: B.randn(t, 10),
     ],
 )
 def test_device_placement(f, t, check_lazy_shapes):
@@ -67,26 +69,26 @@ def test_device_placement(f, t, check_lazy_shapes):
     B.Device.active_name = None
 
 
-def test_device_jax_move():
+def test_move_to_active_device_jax(check_lazy_shapes):
     a = jnp.ones(2)
 
     # No device specified: should do nothing.
-    assert _move(a) is a
+    assert B.move_to_active_device(a) is a
 
     # Move to CPU without identifier.
     with B.device("cpu"):
-        assert _move(a) is not a
-        allclose(_move(a), a)
+        assert B.move_to_active_device(a) is not a
+        allclose(B.move_to_active_device(a), a)
 
     # Move to CPU with identifier. Also check that capitalisation does not matter.
     with B.device("CPU:0"):
-        assert _move(a) is not a
-        allclose(_move(a), a)
+        assert B.move_to_active_device(a) is not a
+        allclose(B.move_to_active_device(a), a)
 
     # Give invalid syntax.
     B.Device.active_name = "::"
     with pytest.raises(ValueError):
-        _move(a)
+        B.move_to_active_device(a)
     B.Device.active_name = None
 
 

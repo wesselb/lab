@@ -240,6 +240,7 @@ isnan(a)
 
 device(a)
 device(name)
+move_to_active_device(a)
 
 zeros(dtype, *shape)
 zeros(*shape)

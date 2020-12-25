@@ -14,9 +14,14 @@ def isnan(a):
     return torch.isnan(a)
 
 
-@dispatch(Numeric)
+@dispatch(TorchNumeric)
 def device(a):
     return str(a.device)
+
+
+@dispatch(TorchNumeric)
+def move_to_active_device(a):
+    return a.to(B.Device.active_name)
 
 
 @dispatch(TorchDType, [Int])
