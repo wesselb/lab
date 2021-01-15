@@ -1,5 +1,6 @@
 import pytest
 import lab.jax as B
+
 # noinspection PyUnresolvedReferences
 from .util import check_lazy_shapes
 
@@ -65,3 +66,22 @@ def test_cache_cond(check_lazy_shapes):
         assert not outcome[0]
         assert f(-1) == -2
         assert outcome[0]
+
+
+def test_control_flow_outcome_conversion():
+    def f(x):
+        B.control_flow.set_outcome("f/x", x, type=str)
+        if B.control_flow.use_cache:
+            return B.control_flow.get_outcome("f/x")
+        else:
+            return x
+
+    control_flow_cache = B.ControlFlowCache()
+
+    # Populate cache. The `1` will be converted to a string when it is saved.
+    with control_flow_cache:
+        assert f(1) == 1
+
+    # Run with cache. Check that the conversion to a string indeed happened.
+    with control_flow_cache:
+        assert f(1) == "1"
