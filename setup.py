@@ -78,6 +78,7 @@ requirements = ["numpy>=1.16", "scipy>=1.3", "fdm", "plum-dispatch"]
 
 # Determine which external modules to compile.
 ext_modules = []
+
 if gfortran_available:
     ext_modules.append(
         Extension(
