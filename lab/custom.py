@@ -4,7 +4,22 @@ import numpy as np
 import scipy.linalg as sla
 
 # noinspection PyUnresolvedReferences
-from .bvn_cdf import bvn_cdf as bvn_cdf_, s_bvn_cdf
+try:
+    from .bvn_cdf import bvn_cdf as bvn_cdf_, s_bvn_cdf
+except ImportError:  # pragma: no cover
+
+    def bvn_cdf_(*args, **kw_args):
+        raise RuntimeError(
+            "bvn_cdf was not compiled. Please try to reinstall LAB with `gfortran` "
+            "available."
+        )
+
+    def s_bvn_cdf(*args, **kw_args):
+        raise RuntimeError(
+            "bvn_cdf was not compiled. Please try to reinstall LAB with `gfortran` "
+            "available."
+        )
+
 
 __all__ = [
     "toeplitz_solve",

@@ -15,14 +15,6 @@ if os.path.exists(osx_library_path):
     else:
         os.environ["LIBRARY_PATH"] = osx_library_path
 
-# Check that `gfortran` is available.
-if subprocess.call("which gfortran", shell=True) != 0:
-    raise RuntimeError(
-        "gfortran cannot be found. Please install gfortran. "
-        'On OS X, this can be done with "brew install gcc". '
-        'On Linux, "apt-get install gfortran" should suffice.'
-    )
-
 # If `xcrun` is available, make sure the includes are added to CPATH.
 if subprocess.call("which xcrun", shell=True) == 0:
     path = (
@@ -40,6 +32,12 @@ if subprocess.call("which xcrun", shell=True) == 0:
 # Default to use gcc as the compiler if `$CC` is not set.
 if "CC" not in os.environ or not os.environ["CC"]:
     os.environ["CC"] = "gcc"
+
+# Check whether `gfortran` is available.
+if subprocess.call("which gfortran", shell=True) != 0:
+    gfortran_available = False
+else:
+    gfortran_available = True
 
 # Ensure that `$CC` is not symlinked to `clang`, because the default shipped
 # one often does not support OpenMP, but `gcc` does.
@@ -64,24 +62,24 @@ if "clang" in out.decode("ascii"):
             'On OS X, this can be done with "brew install gcc".'
         )
 
-# Compile TVPACK.
-if (
-    subprocess.call(
-        "gfortran -fPIC -O2 -c lab/bvn_cdf/tvpack.f -o lab/bvn_cdf/tvpack.o",
-        shell=True,
-    )
-    != 0
-):
-    raise RuntimeError("Compilation of TVPACK failed.")
+# Compile TVPACK if `gfortran` is available.
+if gfortran_available:
+    if (
+        subprocess.call(
+            "gfortran -fPIC -O2 -c lab/bvn_cdf/tvpack.f -o lab/bvn_cdf/tvpack.o",
+            shell=True,
+        )
+        != 0
+    ):
+        raise RuntimeError("Compilation of TVPACK failed.")
 
 requirements = ["numpy>=1.16", "scipy>=1.3", "fdm", "plum-dispatch"]
 
-setup(
-    packages=find_packages(exclude=["docs"]),
-    python_requires=">=3.6",
-    install_requires=requirements,
-    cmdclass={"build_ext": build_ext},
-    ext_modules=[
+
+# Determine which external modules to compile.
+ext_modules = []
+if gfortran_available:
+    ext_modules.append(
         Extension(
             "lab.bvn_cdf",
             sources=["lab/bvn_cdf/bvn_cdf.pyx"],
@@ -90,6 +88,13 @@ setup(
             extra_objects=["lab/bvn_cdf/tvpack.o"],
             extra_link_args=["-lgfortran", "-fopenmp"],
         )
-    ],
+    )
+
+setup(
+    packages=find_packages(exclude=["docs"]),
+    python_requires=">=3.6",
+    install_requires=requirements,
+    cmdclass={"build_ext": build_ext},
+    ext_modules=ext_modules,
     include_package_data=True,
 )
