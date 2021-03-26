@@ -1,4 +1,4 @@
-from plum import Dispatcher
+from plum import Dispatcher, Referentiable, Self
 from functools import wraps
 
 __all__ = ["Shape", "Dimension", "dispatch_unwrap_dimensions"]
@@ -6,7 +6,7 @@ __all__ = ["Shape", "Dimension", "dispatch_unwrap_dimensions"]
 _dispatch = Dispatcher()
 
 
-class Shape:
+class Shape(metaclass=Referentiable):
     """A shape.
 
     Args:
@@ -15,12 +15,19 @@ class Shape:
     Attributes:
         dims (tuple[number]): Dimensions of the shape.
     """
+    _dispatch = Dispatcher(in_class=Self)
 
     def __init__(self, *dims):
-        self.dims = dims
+        # Be careful to not wrap dimensions twice.
+        self.dims = tuple(unwrap_dimension(dim) for dim in dims)
 
+    @_dispatch(object)
     def __getitem__(self, item):
         return Dimension(self.dims[item])
+
+    @_dispatch(slice)
+    def __getitem__(self, item):
+        return Shape(*self.dims[item])
 
     def __len__(self):
         return len(self.dims)
@@ -28,6 +35,12 @@ class Shape:
     def __iter__(self):
         for dim in self.dims:
             yield Dimension(dim)
+
+    def __add__(self, other):
+        return Shape(*(tuple(self) + tuple(other)))
+
+    def __radd__(self, other):
+        return Shape(*(tuple(other) + tuple(self)))
 
     def __eq__(self, other):
         return len(self) == len(other) and all(x == y for x, y in zip(self, other))

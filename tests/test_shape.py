@@ -5,14 +5,39 @@ from lab.shape import Shape, Dimension
 def test_shape():
     shape = Shape(5, 2, 3)
 
+    # Test indexing.
     assert shape[0] == 5
     assert shape[1] == 2
     assert shape[2] == 3
-    assert len(shape) == 3
-    assert tuple(shape) == (Dimension(5), Dimension(2), Dimension(3))
+    assert isinstance(shape[0:1], Shape)
+    assert shape[0:2] == Shape(5, 2)
+
+    # Test comparisons.
     assert shape == Shape(5, 2, 3)
     assert shape != Shape(5, 2, 4)
+
+    # Test concatenation with another shape.
+    shape2 = Shape(7, 8, 9)
+    assert shape + shape2 == Shape(5, 2, 3, 7, 8, 9)
+    assert shape.__radd__(shape2) == Shape(7, 8, 9, 5, 2, 3)
+    assert isinstance((shape + shape2).dims[0], int)
+    assert isinstance((shape.__radd__(shape2)).dims[0], int)
+
+    # Test concatenation with a tuple.
+    assert shape + (7, 8, 9) == Shape(5, 2, 3, 7, 8, 9)
+    assert (7, 8, 9) + shape == Shape(7, 8, 9, 5, 2, 3)
+    assert isinstance((shape + (7, 8, 9)).dims[0], int)
+    assert isinstance(((7, 8, 9) + shape).dims[0], int)
+
+    # Test conversion of doubly wrapped indices.
+    assert isinstance(Shape(Dimension(1)).dims[0], int)
+
+    # Test other operations.
     assert reversed(shape) == Shape(3, 2, 5)
+    assert len(shape) == 3
+    assert tuple(shape) == (Dimension(5), Dimension(2), Dimension(3))
+
+    # Test representation.
     assert repr(shape) == str(shape) == "Shape(5, 2, 3)"
 
 
@@ -44,4 +69,6 @@ def test_dimension():
     assert isinstance(d / 5, float)
     assert d / 5 == 1
     assert d ** 2 is 25
+
+    # Test representation.
     assert repr(d) == str(d) == "5"

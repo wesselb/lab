@@ -87,7 +87,10 @@ def batch_computation(f, xs, ranks):
 
     # Find the common shape.
     batch_shape = _common_shape(*batch_shapes)
-    indices = np.indices(batch_shape)
+    # Force evaluation of the element of the shape: if the shapes are lazy or when
+    # a function is evaluated abstractly, the dimensions of the shape may still be
+    # wrapped.
+    indices = np.indices(tuple(int(x) for x in batch_shape))
 
     # Handle the edge case that there is no batching.
     if len(indices) == 0:
@@ -108,6 +111,8 @@ def batch_computation(f, xs, ranks):
 
     # Construct result, reshape, and return.
     res = B.stack(*batches, axis=0)
+    print(batch_shape + B.shape(res)[1:])
+    print([type(x) for x in batch_shape + B.shape(res)[1:]])
     return B.reshape(res, *(batch_shape + B.shape(res)[1:]))
 
 
