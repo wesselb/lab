@@ -1,7 +1,7 @@
 import numpy as np
 import math
 
-from . import dispatch
+from . import B, dispatch
 from .types import Numeric, Int
 from .util import abstract
 from .shape import Shape
@@ -198,7 +198,7 @@ def flatten(a):  # pragma: no cover
     return reshape(a, -1)
 
 
-def _vec_to_tril_shape_upper_perm(a, offset=0):
+def _vec_to_tril_side_upper_perm(a, offset=0):
     # Compute the length of a side of the square result.
     m = shape(a)[0]
     k = offset
@@ -220,8 +220,7 @@ def _vec_to_tril_shape_upper_perm(a, offset=0):
 
 
 @dispatch(Numeric)
-@abstract()
-def vec_to_tril(a, offset=0):  # pragma: no cover
+def vec_to_tril(a, offset=0):
     """Construct a lower triangular matrix from a vector.
 
     Args:
@@ -231,11 +230,15 @@ def vec_to_tril(a, offset=0):  # pragma: no cover
     Returns:
         tensor: Lower triangular matrix.
     """
+    if B.rank(a) != 1:
+        raise ValueError("Input must be rank 1.")
+    side, upper, perm = _vec_to_tril_side_upper_perm(a, offset=offset)
+    a = B.concat(a, B.zeros(B.dtype(a), upper))
+    return B.reshape(a[perm], side, side)
 
 
 @dispatch(Numeric)
-@abstract()
-def tril_to_vec(a, offset=0):  # pragma: no cover
+def tril_to_vec(a, offset=0):
     """Construct a vector from a lower triangular matrix.
 
     Args:
@@ -245,6 +248,12 @@ def tril_to_vec(a, offset=0):  # pragma: no cover
     Returns:
         tensor: Vector
     """
+    if B.rank(a) != 2:
+        raise ValueError("Input must be rank 2.")
+    n, m = B.shape(a)
+    if n != m:
+        raise ValueError("Input must be square.")
+    return a[np.tril_indices(n, k=offset)]
 
 
 @dispatch([object])
@@ -332,7 +341,6 @@ def tile(a, *repeats):  # pragma: no cover
 
 
 @dispatch(Numeric, object)
-@abstract(promote=None)
 def take(a, indices_or_mask, axis=0):  # pragma: no cover
     """Take particular elements along an axis.
 
@@ -345,3 +353,10 @@ def take(a, indices_or_mask, axis=0):  # pragma: no cover
     Returns:
         tensor: Selected subtensor.
     """
+    if B.rank(indices_or_mask) != 1:
+        raise ValueError("Indices or mask must be rank 1.")
+    slices = tuple(
+        indices_or_mask if i == axis else slice(None, None, None)
+        for i in range(B.rank(a))
+    )
+    return a[slices]

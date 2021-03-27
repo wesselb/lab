@@ -2,8 +2,8 @@ import numpy as np
 import tensorflow as tf
 
 from . import dispatch, B, Numeric
-from ..shaping import _vec_to_tril_shape_upper_perm
-from ..types import Int
+from ..shaping import _vec_to_tril_side_upper_perm
+from ..types import Int, TFNumeric
 
 __all__ = []
 
@@ -37,7 +37,7 @@ def diag(a):
 def vec_to_tril(a, offset=0):
     if B.rank(a) != 1:
         raise ValueError("Input must be rank 1.")
-    side, upper, perm = _vec_to_tril_shape_upper_perm(a, offset=offset)
+    side, upper, perm = _vec_to_tril_side_upper_perm(a, offset=offset)
     a = tf.concat((a, tf.zeros(upper, dtype=a.dtype)), axis=0)
     return tf.reshape(tf.gather(a, perm), [side, side])
 
@@ -53,8 +53,8 @@ def tril_to_vec(a, offset=0):
 
 
 @dispatch([Numeric])
-def stack(*elements, **kw_args):
-    return tf.stack(elements, axis=kw_args.get("axis", 0))
+def stack(*elements, axis=0):
+    return tf.stack(elements, axis=axis)
 
 
 @dispatch(Numeric)
@@ -77,32 +77,21 @@ def tile(a, *repeats):
     return tf.tile(a, repeats)
 
 
-@dispatch(Numeric, object)
+@dispatch(TFNumeric, object)
 def take(a, indices_or_mask, axis=0):
     if B.rank(indices_or_mask) != 1:
         raise ValueError("Indices or mask must be rank 1.")
-
-    # Put axis `axis` first.
-    if axis > 0:
-        # Create a permutation to switch `axis` and `0`.
-        perm = list(range(B.rank(a)))
-        perm[0], perm[axis] = perm[axis], perm[0]
-        a = tf.transpose(a, perm)
-
-    # Figure out whether we're given indices or a mask.
-    if isinstance(indices_or_mask, B.TF):
-        mask = indices_or_mask.dtype == bool
+    if _is_mask(indices_or_mask):
+        return tf.boolean_mask(a, indices_or_mask, axis=axis)
     else:
-        mask = len(indices_or_mask) > 0 and B.dtype(indices_or_mask[0]) == bool
+        return tf.gather(a, indices_or_mask, axis=axis)
 
-    # Take the relevant part.
-    if mask:
-        a = tf.boolean_mask(a, indices_or_mask)
-    else:
-        a = tf.gather(a, indices_or_mask)
 
-    # Put axis `axis` back again.
-    if axis > 0:
-        a = tf.transpose(a, perm)
+@dispatch({tuple, list})
+def _is_mask(indices_or_mask):
+    return B.dtype(indices_or_mask[0]) == bool
 
-    return a
+
+@dispatch(TFNumeric)
+def _is_mask(indices_or_mask):
+    return indices_or_mask.dtype == bool
