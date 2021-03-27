@@ -1,10 +1,11 @@
-import numpy as np
 import math
 
+import numpy as np
+
 from . import B, dispatch
+from .shape import Shape
 from .types import Numeric, Int
 from .util import abstract
-from .shape import Shape
 
 __all__ = [
     "lazy_shapes",
@@ -153,19 +154,18 @@ def squeeze(a):
 
 
 @dispatch(Numeric)
-def uprank(a):
-    """Convert the input into a rank two tensor.
+def uprank(a, rank=2):
+    """Convert the input into a tensor of at least rank `rank`.
 
     Args:
         a (tensor): Tensor.
+        rank (int, optional): Rank. Defaults to `2`.
 
     Returns:
         tensor: `a`, but of rank two.
     """
-    a_rank = rank(a)
-    if a_rank > 2:
-        raise ValueError(f"Cannot convert a tensor of rank {a_rank} to rank 2.")
-    while a_rank < 2:
+    a_rank = B.rank(a)
+    while a_rank < rank:
         a = expand_dims(a, axis=-1)
         a_rank += 1
     return a
@@ -198,9 +198,8 @@ def flatten(a):  # pragma: no cover
     return reshape(a, -1)
 
 
-def _vec_to_tril_side_upper_perm(a, offset=0):
+def _vec_to_tril_side_upper_perm(m, offset=0):
     # Compute the length of a side of the square result.
-    m = shape(a)[0]
     k = offset
     if k <= 0:
         side = int((math.sqrt(1 + 8 * m) - 1) / 2) - k
@@ -230,11 +229,12 @@ def vec_to_tril(a, offset=0):
     Returns:
         tensor: Lower triangular matrix.
     """
-    if B.rank(a) != 1:
-        raise ValueError("Input must be rank 1.")
-    side, upper, perm = _vec_to_tril_side_upper_perm(a, offset=offset)
-    a = B.concat(a, B.zeros(B.dtype(a), upper))
-    return B.reshape(a[perm], side, side)
+    if B.rank(a) < 1:
+        raise ValueError("Input must be at least rank 1.")
+    batch_shape = B.shape(a)[:-1]
+    side, upper, perm = _vec_to_tril_side_upper_perm(B.shape(a)[-1], offset=offset)
+    a = B.concat(a, B.zeros(B.dtype(a), *batch_shape, upper), axis=-1)
+    return B.reshape(B.take(a, perm, axis=-1), *batch_shape, side, side)
 
 
 @dispatch(Numeric)
@@ -248,12 +248,16 @@ def tril_to_vec(a, offset=0):
     Returns:
         tensor: Vector
     """
-    if B.rank(a) != 2:
-        raise ValueError("Input must be rank 2.")
-    n, m = B.shape(a)
+    if B.rank(a) < 2:
+        raise ValueError("Input must be at least rank 2.")
+    batch_shape = B.shape(a)[:-2]
+    n, m = B.shape(a)[-2:]
     if n != m:
         raise ValueError("Input must be square.")
-    return a[np.tril_indices(n, k=offset)]
+    indices = np.tril_indices(n, k=offset)
+    # Convert to linear indices to be able to use `B.take`.
+    indices = n * indices[0] + indices[1]
+    return B.take(B.reshape(a, *batch_shape, n * n), indices, axis=-1)
 
 
 @dispatch([object])
@@ -355,6 +359,10 @@ def take(a, indices_or_mask, axis=0):  # pragma: no cover
     """
     if B.rank(indices_or_mask) != 1:
         raise ValueError("Indices or mask must be rank 1.")
+    # Resolve negative axis specification.
+    if axis < 0:
+        axis += B.rank(a)
+    # Construct slices.
     slices = tuple(
         indices_or_mask if i == axis else slice(None, None, None)
         for i in range(B.rank(a))

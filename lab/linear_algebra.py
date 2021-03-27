@@ -313,14 +313,19 @@ def outer(a, b):
     Returns:
         tensor: Outer product of `a` and `b`.
     """
-    a = B.uprank(a)
-    b = B.uprank(b)
+    a, b = _a_b_uprank(a, b)
 
     # Optimise the case that both are column vectors.
-    if B.shape(a)[1] == 1 and B.shape(b)[1] == 1:
+    if B.shape(a)[-1] == 1 and B.shape(b)[-1] == 1:
         return a * B.transpose(b)
 
     return B.matmul(a, b, tr_b=True)
+
+
+def _a_b_uprank(a, b):
+    # Needs to be at least rank two.
+    target_rank = max(B.rank(a), B.rank(b), 2)
+    return B.uprank(a, rank=target_rank), B.uprank(b, rank=target_rank)
 
 
 @dispatch(object)
@@ -353,9 +358,8 @@ def reg(a, diag=None, clip=True):
 
 @dispatch(object, object)
 def pw_dists2(a, b):
-    """Compute the square the Euclidean norm of the pairwise
-    differences between two matrices where rows correspond to elements and
-    columns to features.
+    """Compute the square the Euclidean norm of the pairwise differences between two
+    matrices where rows correspond to elements and columns to features.
 
     Args:
         a (matrix): First matrix.
@@ -365,15 +369,14 @@ def pw_dists2(a, b):
         matrix: Square of the Euclidean norm of the pairwise differences
             between the elements of `a` and `b`.
     """
-    a = B.uprank(a)
-    b = B.uprank(b)
+    a, b = _a_b_uprank(a, b)
 
     # Optimise the one-dimensional case.
-    if B.shape(a)[1] == 1 and B.shape(b)[1] == 1:
+    if B.shape(a)[-1] == 1 and B.shape(b)[-1] == 1:
         return (a - B.transpose(b)) ** 2
 
-    norms_a = B.sum(a ** 2, axis=1)[:, None]
-    norms_b = B.sum(b ** 2, axis=1)[None, :]
+    norms_a = B.sum(a ** 2, axis=-1)[..., :, None]
+    norms_b = B.sum(b ** 2, axis=-1)[..., None, :]
     return norms_a + norms_b - 2 * B.matmul(a, b, tr_b=True)
 
 
@@ -384,8 +387,8 @@ def pw_dists2(a):
 
 @dispatch(object, object)
 def pw_dists(a, b):
-    """Compute the Euclidean norm of the pairwise differences between two
-    matrices where rows correspond to elements and columns to features.
+    """Compute the Euclidean norm of the pairwise differences between two matrices
+    where rows correspond to elements and columns to features.
 
     Args:
         a (matrix): First matrix.
@@ -395,11 +398,10 @@ def pw_dists(a, b):
         matrix: Euclidean norm of the pairwise differences between the
             elements of `a` and `b`.
     """
-    a = B.uprank(a)
-    b = B.uprank(b)
+    a, b = _a_b_uprank(a, b)
 
     # Optimise the one-dimensional case.
-    if B.shape(a)[1] == 1 and B.shape(b)[1] == 1:
+    if B.shape(a)[-1] == 1 and B.shape(b)[-1] == 1:
         return B.abs(a - B.transpose(b))
 
     return B.sqrt(B.maximum(B.pw_dists2(a, b), B.cast(B.dtype(a), 1e-30)))
@@ -412,9 +414,8 @@ def pw_dists(a):
 
 @dispatch(object, object)
 def ew_dists2(a, b):
-    """Compute the square the Euclidean norm of the element-wise
-    differences between two matrices where rows correspond to elements and
-    columns to features.
+    """Compute the square the Euclidean norm of the element-wise differences between
+    two matrices where rows correspond to elements and columns to features.
 
     Args:
         a (matrix): First matrix.
@@ -424,9 +425,8 @@ def ew_dists2(a, b):
         matrix: Square of the Euclidean norm of the element-wise differences
             between the elements of `a` and `b`.
     """
-    a = B.uprank(a)
-    b = B.uprank(b)
-    return B.sum((a - b) ** 2, axis=1)[:, None]
+    a, b = _a_b_uprank(a, b)
+    return B.sum((a - b) ** 2, axis=-1)[..., :, None]
 
 
 @dispatch(object)
@@ -447,11 +447,10 @@ def ew_dists(a, b):
         matrix: Euclidean norm of the element-wise differences between the
             elements of `a` and `b`.
     """
-    a = B.uprank(a)
-    b = B.uprank(b)
+    a, b = _a_b_uprank(a, b)
 
     # Optimise the one-dimensional case.
-    if B.shape(a)[1] == 1 and B.shape(b)[1] == 1:
+    if B.shape(a)[-1] == 1 and B.shape(b)[-1] == 1:
         return B.abs(a - b)
 
     return B.sqrt(B.maximum(B.ew_dists2(a, b), B.cast(B.dtype(a), 1e-30)))
@@ -464,9 +463,8 @@ def ew_dists(a):
 
 @dispatch(object, object)
 def pw_sums2(a, b):
-    """Compute the square the Euclidean norm of the pairwise
-    sums between two matrices where rows correspond to elements and
-    columns to features.
+    """Compute the square the Euclidean norm of the pairwise sums between two
+    matrices where rows correspond to elements and columns to features.
 
     Args:
         a (matrix): First matrix.
@@ -476,15 +474,14 @@ def pw_sums2(a, b):
         matrix: Square of the Euclidean norm of the pairwise sums
             between the elements of `a` and `b`.
     """
-    a = B.uprank(a)
-    b = B.uprank(b)
+    a, b = _a_b_uprank(a, b)
 
     # Optimise the one-dimensional case.
-    if B.shape(a)[1] == 1 and B.shape(b)[1] == 1:
+    if B.shape(a)[-1] == 1 and B.shape(b)[-1] == 1:
         return (a + B.transpose(b)) ** 2
 
-    norms_a = B.sum(a ** 2, axis=1)[:, None]
-    norms_b = B.sum(b ** 2, axis=1)[None, :]
+    norms_a = B.sum(a ** 2, axis=-1)[..., :, None]
+    norms_b = B.sum(b ** 2, axis=-1)[..., None, :]
     return norms_a + norms_b + 2 * B.matmul(a, b, tr_b=True)
 
 
@@ -506,11 +503,10 @@ def pw_sums(a, b):
         matrix: Euclidean norm of the pairwise sums between the
             elements of `a` and `b`.
     """
-    a = B.uprank(a)
-    b = B.uprank(b)
+    a, b = _a_b_uprank(a, b)
 
     # Optimise the one-dimensional case.
-    if B.shape(a)[1] == 1 and B.shape(b)[1] == 1:
+    if B.shape(a)[-1] == 1 and B.shape(b)[-1] == 1:
         return B.abs(a + B.transpose(b))
 
     return B.sqrt(B.maximum(B.pw_sums2(a, b), B.cast(B.dtype(a), 1e-30)))
@@ -535,9 +531,8 @@ def ew_sums2(a, b):
         matrix: Square of the Euclidean norm of the element-wise sums
             between the elements of `a` and `b`.
     """
-    a = B.uprank(a)
-    b = B.uprank(b)
-    return B.sum((a + b) ** 2, axis=1)[:, None]
+    a, b = _a_b_uprank(a, b)
+    return B.sum((a + b) ** 2, axis=-1)[..., :, None]
 
 
 @dispatch(object)
@@ -558,11 +553,10 @@ def ew_sums(a, b):
         matrix: Euclidean norm of the element-wise sums between the
             elements of `a` and `b`.
     """
-    a = B.uprank(a)
-    b = B.uprank(b)
+    a, b = _a_b_uprank(a, b)
 
     # Optimise the one-dimensional case.
-    if B.shape(a)[1] == 1 and B.shape(b)[1] == 1:
+    if B.shape(a)[-1] == 1 and B.shape(b)[-1] == 1:
         return B.abs(a + b)
 
     return B.sqrt(B.maximum(B.ew_sums2(a, b), B.cast(B.dtype(a), 1e-30)))

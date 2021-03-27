@@ -72,11 +72,16 @@ def test_squeeze(check_lazy_shapes):
 
 
 def test_uprank(check_lazy_shapes):
+    # `rank=2`, the default:
     allclose(B.uprank(1.0), np.array([[1.0]]))
     allclose(B.uprank(np.array([1.0, 2.0])), np.array([[1.0], [2.0]]))
     allclose(B.uprank(np.array([[1.0, 2.0]])), np.array([[1.0, 2.0]]))
-    with pytest.raises(ValueError):
-        B.uprank(np.array([[[1.0]]]))
+    allclose(B.uprank(np.array([[[1.0]]])), np.array([[[1.0]]]))
+
+    # `rank=1`:
+    allclose(B.uprank(1.0, rank=1), np.array([1.0]))
+    allclose(B.uprank(np.array([1.0, 2.0]), rank=1), np.array([1.0, 2.0]))
+    allclose(B.uprank(np.array([[1.0, 2.0]]), rank=1), np.array([[1.0, 2.0]]))
 
 
 def test_diag(check_lazy_shapes):
@@ -92,30 +97,44 @@ def test_flatten(check_lazy_shapes):
 
 
 @pytest.mark.parametrize("offset", [-2, -1, 0, 1, 2])
-def test_vec_to_tril(offset, check_lazy_shapes):
+@pytest.mark.parametrize("batch_shape", [(), (5,)])
+def test_vec_to_tril(offset, batch_shape, check_lazy_shapes):
     n = B.length(B.tril_to_vec(B.ones(7, 7), offset=offset))
-    check_function(B.vec_to_tril, (Tensor(n),), {"offset": Value(offset)})
+    check_function(B.vec_to_tril, (Tensor(*batch_shape, n),), {"offset": Value(offset)})
 
 
-def test_tril_to_vec(check_lazy_shapes):
-    check_function(B.tril_to_vec, (Matrix(6),), {"offset": Value(0, 1, -1)})
+@pytest.mark.parametrize("batch_shape", [(), (5,)])
+def test_tril_to_vec(batch_shape, check_lazy_shapes):
+    check_function(
+        B.tril_to_vec, (Tensor(*batch_shape, 6, 6),), {"offset": Value(-1, 0, 1)}
+    )
 
 
 @pytest.mark.parametrize("offset", [-2, -1, 0, 1, 2])
-def test_vec_to_tril_and_back_correctness(offset, check_lazy_shapes):
+@pytest.mark.parametrize("batch_shape", [(), (5,)])
+def test_vec_to_tril_and_back_correctness(offset, batch_shape, check_lazy_shapes):
     n = B.length(B.tril_to_vec(B.ones(7, 7), offset=offset))
-    vec = Tensor(n).np()
-    mat = B.vec_to_tril(vec, offset=offset)
-    allclose(B.tril_to_vec(mat, offset=offset), vec)
+    for vec in Tensor(*batch_shape, n).forms():
+        mat = B.vec_to_tril(vec, offset=offset)
+        allclose(B.tril_to_vec(mat, offset=offset), vec)
 
 
 def test_vec_to_tril_and_back_exceptions(check_lazy_shapes):
-    for x in Matrix(3, 4).forms():
+    # Check rank checks.
+    for x in Tensor().forms():
         with pytest.raises(ValueError):
             B.vec_to_tril(x)
         with pytest.raises(ValueError):
             B.tril_to_vec(x)
-    for x in Matrix(3, 4, 5).forms():
+    for x in Tensor(3).forms():
+        with pytest.raises(ValueError):
+            B.tril_to_vec(x)
+
+    # Check square checks.
+    for x in Tensor(3, 4).forms():
+        with pytest.raises(ValueError):
+            B.tril_to_vec(x)
+    for x in Tensor(3, 4, 5).forms():
         with pytest.raises(ValueError):
             B.tril_to_vec(x)
 
