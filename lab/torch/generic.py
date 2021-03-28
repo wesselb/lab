@@ -35,7 +35,7 @@ def ones(dtype, *shape):
 
 
 @dispatch(TorchDType, Int, Int)
-def eye(dtype, *shape):
+def _eye2(dtype, *shape):
     return torch.eye(shape[0], shape[1], dtype=dtype, device=B.Device.active_name)
 
 

@@ -49,7 +49,7 @@ def ones(dtype, *shape):
 
 
 @dispatch(JAXDType, Int, Int)
-def eye(dtype, *shape):
+def _eye2(dtype, *shape):
     return move_to_active_device(jnp.eye(shape[0], shape[1], dtype=dtype))
 
 

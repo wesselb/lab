@@ -34,7 +34,7 @@ def ones(dtype, *shape):
 
 
 @dispatch(NPDType, Int, Int)
-def eye(dtype, *shape):
+def _eye2(dtype, *shape):
     return np.eye(shape[0], shape[1], dtype=dtype)
 
 

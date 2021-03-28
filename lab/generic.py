@@ -257,8 +257,7 @@ def one(ref):
     return one(B.dtype(ref))
 
 
-@dispatch(DType, Int, Int)
-@abstract(promote=None)
+@dispatch(DType, Int, Int, [Int])
 def eye(dtype, *shape):  # pragma: no cover
     """Create an identity matrix.
 
@@ -272,6 +271,21 @@ def eye(dtype, *shape):  # pragma: no cover
     Returns:
         tensor: Identity matrix of shape `shape` and data type `dtype`.
     """
+    if len(shape) == 2:
+        return _eye2(dtype, *shape)
+    else:
+        # It must be that `len(shape) > 2`.
+        identity_matrix = _eye2(dtype, *shape[-2:])
+        batch_shape = shape[:-2]
+        for _ in range(len(batch_shape)):
+            identity_matrix = B.expand_dims(identity_matrix, axis=0)
+        return B.tile(identity_matrix, *batch_shape, 1, 1)
+
+
+@dispatch(DType, Int, Int)
+@abstract(promote=None)
+def _eye2(dtype, *shape):  # pragma: no cover
+    pass
 
 
 @dispatch(DType, Int)

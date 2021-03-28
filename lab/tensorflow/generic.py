@@ -36,7 +36,7 @@ def ones(dtype, *shape):
 
 
 @dispatch(TFDType, Int, Int)
-def eye(dtype, *shape):
+def _eye2(dtype, *shape):
     return tf.eye(shape[0], shape[1], dtype=dtype)
 
 

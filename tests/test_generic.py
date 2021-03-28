@@ -103,29 +103,34 @@ def test_zeros_ones_eye(f, check_lazy_shapes):
     # Check shape of calls.
     assert B.shape(f(2)) == (2, 2) if f is B.eye else (2,)
     assert B.shape(f(2, 3)) == (2, 3)
+    assert B.shape(f(2, 3, 4)) == (2, 3, 4)
 
     # Check type of calls.
     assert B.dtype(f(2)) == B.default_dtype
     assert B.dtype(f(2, 3)) == B.default_dtype
+    assert B.dtype(f(2, 3, 4)) == B.default_dtype
 
-    # Check reference calls.
+    # Specify a data type:
     for t1, t2 in [
         (np.float32, np.int64),
         (tf.float32, tf.int64),
         (torch.float32, torch.int64),
         (jnp.float32, jnp.int64),
     ]:
-        ref = B.randn(t1, 4, 5)
-
         # Check shape of calls.
         assert B.shape(f(t2, 2)) == (2, 2) if f is B.eye else (2,)
         assert B.shape(f(t2, 2, 3)) == (2, 3)
-        assert B.shape(f(ref)) == (4, 5)
+        assert B.shape(f(t2, 2, 3, 4)) == (2, 3, 4)
 
         # Check type of calls.
         assert B.dtype(f(t2, 2)) is t2
         assert B.dtype(f(t2, 2, 3)) is t2
-        assert B.dtype(f(ref)) is t1
+        assert B.dtype(f(t2, 2, 3, 4)) is t2
+
+        # Check reference calls.
+        for ref in [B.randn(t1, 4, 5), B.randn(t1, 3, 4, 5)]:
+            assert B.shape(f(ref)) == B.shape(ref)
+            assert B.dtype(f(ref)) is t1
 
 
 @pytest.mark.parametrize("f", [B.zero, B.one])
@@ -136,14 +141,6 @@ def test_zero_one(f, check_lazy_shapes):
     # Check reference calls.
     for t in [np.float32, tf.float32, torch.float32, jnp.float32]:
         assert B.dtype(f(B.randn(t))) is t
-
-
-def test_eye_exceptions(check_lazy_shapes):
-    with pytest.raises(NotFoundLookupError):
-        B.eye(3, 4, 5)
-    for t in [np.float32, tf.float32, torch.float32, jnp.float32]:
-        with pytest.raises(NotFoundLookupError):
-            B.eye(t, 3, 4, 5)
 
 
 def test_linspace(check_lazy_shapes):
