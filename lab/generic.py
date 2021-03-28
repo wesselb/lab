@@ -1001,7 +1001,7 @@ def argsort(a, axis=-1, descending=False):
 NPOrNum = {NPNumeric, Number}  #: Type NumPy numeric or number.
 add_conversion_method(AGNumeric, NPOrNum, lambda x: x._value)
 add_conversion_method(TFNumeric, NPOrNum, lambda x: x.numpy())
-add_conversion_method(TorchNumeric, NPOrNum, lambda x: x.detach().numpy())
+add_conversion_method(TorchNumeric, NPOrNum, lambda x: x.detach().cpu().numpy())
 add_conversion_method(JAXNumeric, NPOrNum, np.array)
 
 
