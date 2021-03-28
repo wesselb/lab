@@ -26,9 +26,14 @@ def diag(a):
     return anp.diag(a)
 
 
+@dispatch(Numeric)
+def diag_extract(a):
+    return anp.diagonal(a, axis1=-2, axis2=-1)
+
+
 @dispatch([Numeric])
-def stack(*elements, **kw_args):
-    return anp.stack(elements, axis=kw_args.get("axis", 0))
+def stack(*elements, axis=0):
+    return anp.stack(elements, axis=axis)
 
 
 @dispatch(Numeric)
@@ -43,8 +48,8 @@ def reshape(a, *shape):
 
 
 @dispatch([Numeric])
-def concat(*elements, **kw_args):
-    return anp.concatenate(elements, axis=kw_args.get("axis", 0))
+def concat(*elements, axis=0):
+    return anp.concatenate(elements, axis=axis)
 
 
 @dispatch(Numeric, [Int])

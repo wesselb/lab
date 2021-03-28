@@ -26,9 +26,19 @@ def diag(a):
     return torch.diag(a)
 
 
+@dispatch(Numeric)
+def diag_extract(a):
+    return torch.diagonal(a, dim1=-2, dim2=-1)
+
+
+@dispatch(Numeric)
+def diag_construct(a):
+    return torch.diag_embed(a, dim1=-2, dim2=-1)
+
+
 @dispatch([Numeric])
-def stack(*elements, **kw_args):
-    return torch.stack(elements, dim=kw_args.get("axis", 0))
+def stack(*elements, axis=0):
+    return torch.stack(elements, dim=axis)
 
 
 @dispatch(Numeric)
@@ -42,8 +52,8 @@ def reshape(a, *shape):
 
 
 @dispatch([Numeric])
-def concat(*elements, **kw_args):
-    return torch.cat(elements, dim=kw_args.get("axis", 0))
+def concat(*elements, axis=0):
+    return torch.cat(elements, dim=axis)
 
 
 @dispatch(Numeric, [Int])

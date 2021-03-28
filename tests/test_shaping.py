@@ -87,8 +87,22 @@ def test_uprank(check_lazy_shapes):
 def test_diag(check_lazy_shapes):
     check_function(B.diag, (Tensor(3),))
     check_function(B.diag, (Tensor(3, 3),))
+    # Test rank check for TensorFlow.
     with pytest.raises(ValueError):
         B.diag(Tensor().tf())
+
+
+def test_diag_extract(check_lazy_shapes):
+    check_function(B.diag_extract, (Tensor(3, 3),))
+    check_function(B.diag_extract, (Tensor(2, 3, 3),))
+
+
+def test_diag_construct(check_lazy_shapes):
+    check_function(B.diag_construct, (Tensor(3),))
+    check_function(B.diag_construct, (Tensor(2, 3),))
+    # Test rank check for fallback.
+    with pytest.raises(ValueError):
+        B.diag_construct(Tensor().np())
 
 
 def test_flatten(check_lazy_shapes):

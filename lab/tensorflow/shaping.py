@@ -28,7 +28,17 @@ def diag(a):
     elif B.rank(a) == 2:
         return tf.linalg.diag_part(a)
     else:
-        raise ValueError("Argument must have rank 1 or 2.")
+        raise ValueError("Input must have rank 1 or 2.")
+
+
+@dispatch(Numeric)
+def diag_extract(a):
+    return tf.linalg.diag_part(a)
+
+
+@dispatch(TFNumeric)  # This function already has a generic implementation.
+def diag_construct(a):
+    return tf.linalg.diag(a)
 
 
 @dispatch([Numeric])
@@ -56,7 +66,7 @@ def tile(a, *repeats):
     return tf.tile(a, repeats)
 
 
-@dispatch(TFNumeric, object)
+@dispatch(TFNumeric, object)  # This function already has a generic implementation.
 def take(a, indices_or_mask, axis=0):
     if B.rank(indices_or_mask) != 1:
         raise ValueError("Indices or mask must be rank 1.")

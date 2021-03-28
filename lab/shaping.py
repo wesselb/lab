@@ -18,6 +18,8 @@ __all__ = [
     "squeeze",
     "uprank",
     "diag",
+    "diag_extract",
+    "diag_construct",
     "flatten",
     "vec_to_tril",
     "tril_to_vec",
@@ -173,7 +175,7 @@ def uprank(a, rank=2):
 
 @dispatch(Numeric)
 @abstract()
-def diag(a):  # pragma: no cover
+def diag(a):
     """Take the diagonal of a matrix, or construct a diagonal matrix from its
     diagonal.
 
@@ -183,6 +185,44 @@ def diag(a):  # pragma: no cover
     Returns:
         tensor: Diagonal or matrix.
     """
+
+
+@dispatch(Numeric)
+@abstract()
+def diag_extract(a):  # pragma: no cover
+    """Take the diagonal of a matrix.
+
+    Args:
+        a (tensor): Matrix.
+
+    Returns:
+        tensor: Diagonal of matrix.
+    """
+
+
+@dispatch(Numeric)
+def diag_construct(a):  # pragma: no cover
+    """Construct a diagonal matrix from its diagonal.
+
+    Args:
+        a (tensor): Diagonal.
+
+    Returns:
+        tensor: Matrix.
+    """
+    if B.rank(a) == 0:
+        raise ValueError("Input must have at least rank 1.")
+
+    # The one-dimensional case is better handled by `diag`.
+    if B.rank(a) == 1:
+        return B.diag(a)
+
+    identity_matrix = B.eye(B.dtype(a), B.shape(a)[-1])
+    # Deal with the batch dimensions.
+    for i in range(B.rank(a) - 1):
+        identity_matrix = B.expand_dims(identity_matrix, axis=0)
+    # Use broadcasting to get the desired output.
+    return B.expand_dims(a, axis=-1) * identity_matrix
 
 
 @dispatch(Numeric)

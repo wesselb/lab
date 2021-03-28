@@ -111,8 +111,6 @@ def batch_computation(f, xs, ranks):
 
     # Construct result, reshape, and return.
     res = B.stack(*batches, axis=0)
-    print(batch_shape + B.shape(res)[1:])
-    print([type(x) for x in batch_shape + B.shape(res)[1:]])
     return B.reshape(res, *(batch_shape + B.shape(res)[1:]))
 
 
