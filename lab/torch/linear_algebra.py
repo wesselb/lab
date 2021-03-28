@@ -4,7 +4,6 @@ from . import dispatch, B, Numeric
 from .custom import torch_register
 from ..custom import toeplitz_solve, s_toeplitz_solve, expm, s_expm, logm, s_logm
 from ..linear_algebra import _default_perm
-from ..util import batch_computation
 from ..shape import unwrap_dimension
 
 __all__ = []
@@ -68,12 +67,12 @@ def inv(a):
 
 @dispatch(Numeric)
 def det(a):
-    return batch_computation(torch.det, (a,), (2,))
+    return torch.det(a)
 
 
 @dispatch(Numeric)
 def logdet(a):
-    return batch_computation(torch.logdet, (a,), (2,))
+    return torch.logdet(a)
 
 
 f = torch_register(expm, s_expm)
@@ -90,11 +89,7 @@ def cholesky(a):
 
 @dispatch(Numeric, Numeric)
 def cholesky_solve(a, b):
-    # The sensitivity for `torch.cholesky_solve` is not implemented, so instead we
-    # use `triangular_solve` and `transpose`. This should be reverted once the
-    # sensitivity is implemented.
-    # return torch.cholesky_solve(b, a, upper=False)
-    return triangular_solve(transpose(a), triangular_solve(a, b), lower_a=False)
+    return torch.cholesky_solve(b, a, upper=False)
 
 
 @dispatch(Numeric, Numeric)
