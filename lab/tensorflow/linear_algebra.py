@@ -28,7 +28,11 @@ def transpose(a, perm=None):
 
 
 @dispatch(Numeric)
-def trace(a, axis1=0, axis2=1):
+def trace(a, axis1=-2, axis2=-1):
+    if axis1 < 0:
+        axis1 += B.rank(a)
+    if axis2 < 0:
+        axis2 += B.rank(a)
     perm = [i for i in range(B.rank(a)) if i not in [axis1, axis2]]
     perm += [axis1, axis2]
     a = tf.transpose(a, perm=perm)
