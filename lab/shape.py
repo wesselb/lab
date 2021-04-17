@@ -1,3 +1,5 @@
+from . import B, dispatch
+
 from plum import Dispatcher, Referentiable, Self
 from functools import wraps
 
@@ -15,6 +17,7 @@ class Shape(metaclass=Referentiable):
     Attributes:
         dims (tuple[number]): Dimensions of the shape.
     """
+
     _dispatch = Dispatcher(in_class=Self)
 
     def __init__(self, *dims):
@@ -52,7 +55,17 @@ class Shape(metaclass=Referentiable):
         return "Shape(" + ", ".join(repr(x) for x in self) + ")"
 
     def __str__(self):
-        return "Shape(" + ", ".join(str(x) for x in self) + ")"
+        if len(self) == 0:
+            return "()"
+        elif len(self) == 1:
+            return f"({self[0]!r},)"
+        else:
+            return "(" + ", ".join(repr(x) for x in self) + ")"
+
+
+@dispatch(Shape)
+def to_numpy(shape):
+    return B.to_numpy(shape.dims)
 
 
 class Dimension:

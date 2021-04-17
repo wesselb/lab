@@ -38,7 +38,12 @@ def test_shape():
     assert tuple(shape) == (Dimension(5), Dimension(2), Dimension(3))
 
     # Test representation.
-    assert repr(shape) == str(shape) == "Shape(5, 2, 3)"
+    assert str(Shape()) == "()"
+    assert repr(Shape()) == "Shape()"
+    assert str(Shape(1)) == "(1,)"
+    assert repr(Shape(1)) == "Shape(1)"
+    assert str(Shape(1, 2)) == "(1, 2)"
+    assert repr(Shape(1, 2)) == "Shape(1, 2)"
 
 
 def test_dimension():
