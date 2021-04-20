@@ -4,6 +4,7 @@ from plum import Dispatcher
 from ..util import as_tuple
 
 __all__ = ["autograd_register"]
+
 _dispatch = Dispatcher()
 
 

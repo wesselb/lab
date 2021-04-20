@@ -10,8 +10,8 @@ __all__ = ["tensorflow_register", "as_tf"]
 _dispatch = Dispatcher()
 
 
-@_dispatch(B.Numeric)
-def as_tf(x):
+@_dispatch
+def as_tf(x: B.Numeric):
     """Convert object to TensorFlow.
 
     Args:
@@ -24,8 +24,8 @@ def as_tf(x):
     return tf.constant(x, dtype=dtype)
 
 
-@_dispatch(tuple)
-def as_tf(xs):
+@_dispatch
+def as_tf(xs: tuple):
     return tuple([as_tf(x) for x in xs])
 
 

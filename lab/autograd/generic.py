@@ -9,23 +9,23 @@ from ..types import AGDType, AGNumeric
 __all__ = []
 
 
-@dispatch(Numeric)
-def isnan(a):
+@dispatch
+def isnan(a: Numeric):
     return anp.isnan(a)
 
 
-@dispatch(AGNumeric)
-def device(a):
+@dispatch
+def device(a: AGNumeric):
     return "cpu"
 
 
-@dispatch(AGNumeric)
-def move_to_active_device(a):
+@dispatch
+def move_to_active_device(a: AGNumeric):
     return a
 
 
-@dispatch(AGDType, AGNumeric)
-def cast(dtype, a):
+@dispatch
+def cast(dtype: AGDType, a: AGNumeric):
     # AutoGrad does not respect the `copy` flag, so check that manually.
     if dtype == a.dtype:
         return a
@@ -33,170 +33,174 @@ def cast(dtype, a):
         return a.astype(dtype)
 
 
-@dispatch(Numeric)
-def identity(a):
+@dispatch
+def identity(a: Numeric):
     return 1 * a
 
 
-@dispatch(Numeric)
-def negative(a):
+@dispatch
+def negative(a: Numeric):
     return anp.negative(a)
 
 
-@dispatch(Numeric)
-def abs(a):
+@dispatch
+def abs(a: Numeric):
     return anp.abs(a)
 
 
-@dispatch(Numeric)
-def sign(a):
+@dispatch
+def sign(a: Numeric):
     return anp.sign(a)
 
 
-@dispatch(Numeric)
-def sqrt(a):
+@dispatch
+def sqrt(a: Numeric):
     return anp.sqrt(a)
 
 
-@dispatch(Numeric)
-def exp(a):
+@dispatch
+def exp(a: Numeric):
     return anp.exp(a)
 
 
-@dispatch(Numeric)
-def log(a):
+@dispatch
+def log(a: Numeric):
     return anp.log(a)
 
 
-@dispatch(Numeric)
-def sin(a):
+@dispatch
+def sin(a: Numeric):
     return anp.sin(a)
 
 
-@dispatch(Numeric)
-def cos(a):
+@dispatch
+def cos(a: Numeric):
     return anp.cos(a)
 
 
-@dispatch(Numeric)
-def tan(a):
+@dispatch
+def tan(a: Numeric):
     return anp.tan(a)
 
 
-@dispatch(Numeric)
-def tanh(a):
+@dispatch
+def tanh(a: Numeric):
     return anp.tanh(a)
 
 
-@dispatch(Numeric)
-def erf(a):
+@dispatch
+def erf(a: Numeric):
     return asps.erf(a)
 
 
-@dispatch(Numeric, Numeric)
-def add(a, b):
+@dispatch
+def add(a: Numeric, b: Numeric):
     return anp.add(a, b)
 
 
-@dispatch(Numeric, Numeric)
-def subtract(a, b):
+@dispatch
+def subtract(a: Numeric, b: Numeric):
     return anp.subtract(a, b)
 
 
-@dispatch(Numeric, Numeric)
-def multiply(a, b):
+@dispatch
+def multiply(a: Numeric, b: Numeric):
     return anp.multiply(a, b)
 
 
-@dispatch(Numeric, Numeric)
-def divide(a, b):
+@dispatch
+def divide(a: Numeric, b: Numeric):
     return anp.divide(a, b)
 
 
-@dispatch(Numeric, Numeric)
-def power(a, b):
+@dispatch
+def power(a: Numeric, b: Numeric):
     return anp.power(a, b)
 
 
-@dispatch(Numeric, Numeric)
-def minimum(a, b):
+@dispatch
+def minimum(a: Numeric, b: Numeric):
     return anp.minimum(a, b)
 
 
-@dispatch(Numeric, Numeric)
-def maximum(a, b):
+@dispatch
+def maximum(a: Numeric, b: Numeric):
     return anp.maximum(a, b)
 
 
-@dispatch(Numeric)
-def min(a, axis=None):
+@dispatch
+def min(a: Numeric, axis=None):
     return anp.min(a, axis=axis)
 
 
-@dispatch(Numeric)
-def max(a, axis=None):
+@dispatch
+def max(a: Numeric, axis=None):
     return anp.max(a, axis=axis)
 
 
-@dispatch(Numeric)
-def sum(a, axis=None):
+@dispatch
+def sum(a: Numeric, axis=None):
     return anp.sum(a, axis=axis)
 
 
-@dispatch(Numeric)
-def mean(a, axis=None):
+@dispatch
+def mean(a: Numeric, axis=None):
     return anp.mean(a, axis=axis)
 
 
-@dispatch(Numeric)
-def std(a, axis=None):
+@dispatch
+def std(a: Numeric, axis=None):
     return anp.std(a, axis=axis, ddof=0)
 
 
-@dispatch(Numeric)
-def all(a, axis=None):
+@dispatch
+def all(a: Numeric, axis=None):
     return anp.all(a, axis=axis)
 
 
-@dispatch(Numeric)
-def any(a, axis=None):
+@dispatch
+def any(a: Numeric, axis=None):
     return anp.any(a, axis=axis)
 
 
-@dispatch(Numeric, Numeric)
-def lt(a, b):
+@dispatch
+def lt(a: Numeric, b: Numeric):
     return anp.less(a, b)
 
 
-@dispatch(Numeric, Numeric)
-def le(a, b):
+@dispatch
+def le(a: Numeric, b: Numeric):
     return anp.less_equal(a, b)
 
 
-@dispatch(Numeric, Numeric)
-def gt(a, b):
+@dispatch
+def gt(a: Numeric, b: Numeric):
     return anp.greater(a, b)
 
 
-@dispatch(Numeric, Numeric)
-def ge(a, b):
+@dispatch
+def ge(a: Numeric, b: Numeric):
     return anp.greater_equal(a, b)
 
 
-f = autograd_register(bvn_cdf, s_bvn_cdf)
-dispatch(Numeric, Numeric, Numeric)(f)
+_bvn_cdf = autograd_register(bvn_cdf, s_bvn_cdf)
 
 
-@dispatch(Numeric)
-def sort(a, axis=-1, descending=False):
+@dispatch
+def bvn_cdf(a: Numeric, b: Numeric, c: Numeric):
+    return _bvn_cdf(a, b, c)
+
+
+@dispatch
+def sort(a: Numeric, axis=-1, descending=False):
     if descending:
         return -anp.sort(-a, axis=axis)
     else:
         return anp.sort(a, axis=axis)
 
 
-@dispatch(Numeric)
-def argsort(a, axis=-1, descending=False):
+@dispatch
+def argsort(a: Numeric, axis=-1, descending=False):
     if descending:
         return anp.argsort(-a, axis=axis)
     else:

@@ -57,9 +57,9 @@ def _default_perm(a):
     return perm
 
 
-@dispatch(Numeric)
+@dispatch
 @abstract()
-def transpose(a, perm=None):  # pragma: no cover
+def transpose(a: Numeric, perm=None):  # pragma: no cover
     """Transpose a matrix.
 
     Args:
@@ -76,7 +76,7 @@ t = transpose  #: Shorthand for `transpose`.
 T = transpose  #: Shorthand for `transpose`.
 
 
-@dispatch(object, object)
+@dispatch
 @abstract(promote=2)
 def matmul(a, b, tr_a=False, tr_b=False):  # pragma: no cover
     """Matrix multiplication.
@@ -96,9 +96,9 @@ mm = matmul  #: Shorthand for `matmul`.
 dot = matmul  #: Shorthand for `matmul`.
 
 
-@dispatch(Numeric)
+@dispatch
 @abstract()
-def trace(a, axis1=0, axis2=1):  # pragma: no cover
+def trace(a: Numeric, axis1=0, axis2=1):  # pragma: no cover
     """Compute the trace of a tensor.
 
     Args:
@@ -113,7 +113,7 @@ def trace(a, axis1=0, axis2=1):  # pragma: no cover
     """
 
 
-@dispatch(object, object)
+@dispatch
 @abstract(promote=2)
 def kron(a, b):  # pragma: no cover
     """Kronecker product.
@@ -127,9 +127,9 @@ def kron(a, b):  # pragma: no cover
     """
 
 
-@dispatch(Numeric)
+@dispatch
 @abstract()
-def svd(a, compute_uv=True):  # pragma: no cover
+def svd(a: Numeric, compute_uv=True):  # pragma: no cover
     """Compute the singular value decomposition.
 
     Note:
@@ -145,7 +145,7 @@ def svd(a, compute_uv=True):  # pragma: no cover
     """
 
 
-@dispatch(object, object)
+@dispatch
 @abstract(promote=2)
 def solve(a, b):  # pragma: no cover
     """Solve the linear system `a x = b`.
@@ -159,7 +159,7 @@ def solve(a, b):  # pragma: no cover
     """
 
 
-@dispatch(object)
+@dispatch
 @abstract()
 def inv(a):  # pragma: no cover
     """Compute the inverse of `a`.
@@ -172,7 +172,7 @@ def inv(a):  # pragma: no cover
     """
 
 
-@dispatch(object)
+@dispatch
 @abstract()
 def det(a):  # pragma: no cover
     """Compute the determinant of `a`.
@@ -185,7 +185,7 @@ def det(a):  # pragma: no cover
     """
 
 
-@dispatch(object)
+@dispatch
 @abstract()
 def logdet(a):  # pragma: no cover
     """Compute the log-determinant of `a`.
@@ -198,7 +198,7 @@ def logdet(a):  # pragma: no cover
     """
 
 
-@dispatch(object)
+@dispatch
 @abstract()
 def expm(a):  # pragma: no cover
     """Compute the matrix exponential of `a`.
@@ -211,7 +211,7 @@ def expm(a):  # pragma: no cover
     """
 
 
-@dispatch(object)
+@dispatch
 @abstract()
 def logm(a):  # pragma: no cover
     """Compute the matrix logarithm of `a`.
@@ -224,9 +224,9 @@ def logm(a):  # pragma: no cover
     """
 
 
-@dispatch(Numeric)
+@dispatch
 @abstract()
-def cholesky(a):  # pragma: no cover
+def cholesky(a: Numeric):  # pragma: no cover
     """Compute the Cholesky decomposition.
 
     Args:
@@ -240,7 +240,7 @@ def cholesky(a):  # pragma: no cover
 chol = cholesky  #: Shorthand for `cholesky`.
 
 
-@dispatch(object, object)
+@dispatch
 @abstract(promote=2)
 def cholesky_solve(a, b):  # pragma: no cover
     """Solve the linear system `a x = b` given the Cholesky factorisation of
@@ -258,7 +258,7 @@ def cholesky_solve(a, b):  # pragma: no cover
 cholsolve = cholesky_solve  #: Shorthand for `cholesky_solve`.
 
 
-@dispatch(object, object)
+@dispatch
 @abstract(promote=2)
 def triangular_solve(a, b, lower_a=True):  # pragma: no cover
     """Solve the linear system `a x = b` where `a` is triangular.
@@ -277,7 +277,7 @@ def triangular_solve(a, b, lower_a=True):  # pragma: no cover
 trisolve = triangular_solve  #: Shorthand for `triangular_solve`.
 
 
-@dispatch(object, object, object)
+@dispatch
 @abstract(promote=3)
 def toeplitz_solve(a, b, c):  # pragma: no cover
     """Solve the linear system `toep(a, b) x = c` where `toep(a, b)` is a
@@ -294,7 +294,7 @@ def toeplitz_solve(a, b, c):  # pragma: no cover
     """
 
 
-@dispatch(object, object)
+@dispatch
 def toeplitz_solve(a, c):
     return toeplitz_solve(a, a[1:], c)
 
@@ -302,7 +302,7 @@ def toeplitz_solve(a, c):
 toepsolve = toeplitz_solve  #: Shorthand for `toeplitz_solve`.
 
 
-@dispatch(object, object)
+@dispatch
 def outer(a, b):
     """Compute the outer product between two vectors or matrices.
 
@@ -328,12 +328,12 @@ def _a_b_uprank(a, b):
     return B.uprank(a, rank=target_rank), B.uprank(b, rank=target_rank)
 
 
-@dispatch(object)
+@dispatch
 def outer(a):
     return outer(a, a)
 
 
-@dispatch(object)
+@dispatch
 def reg(a, diag=None, clip=True):
     """Add a diagonal to a matrix.
 
@@ -356,7 +356,7 @@ def reg(a, diag=None, clip=True):
     return a + diag * B.eye(a)
 
 
-@dispatch(object, object)
+@dispatch
 def pw_dists2(a, b):
     """Compute the square the Euclidean norm of the pairwise differences between two
     matrices where rows correspond to elements and columns to features.
@@ -380,12 +380,12 @@ def pw_dists2(a, b):
     return norms_a + norms_b - 2 * B.matmul(a, b, tr_b=True)
 
 
-@dispatch(object)
+@dispatch
 def pw_dists2(a):
     return pw_dists2(a, a)
 
 
-@dispatch(object, object)
+@dispatch
 def pw_dists(a, b):
     """Compute the Euclidean norm of the pairwise differences between two matrices
     where rows correspond to elements and columns to features.
@@ -407,12 +407,12 @@ def pw_dists(a, b):
     return B.sqrt(B.maximum(B.pw_dists2(a, b), B.cast(B.dtype(a), 1e-30)))
 
 
-@dispatch(object)
+@dispatch
 def pw_dists(a):
     return pw_dists(a, a)
 
 
-@dispatch(object, object)
+@dispatch
 def ew_dists2(a, b):
     """Compute the square the Euclidean norm of the element-wise differences between
     two matrices where rows correspond to elements and columns to features.
@@ -429,12 +429,12 @@ def ew_dists2(a, b):
     return B.sum((a - b) ** 2, axis=-1)[..., :, None]
 
 
-@dispatch(object)
+@dispatch
 def ew_dists2(a):
     return ew_dists2(a, a)
 
 
-@dispatch(object, object)
+@dispatch
 def ew_dists(a, b):
     """Compute the Euclidean norm of the element-wise differences between two
     matrices where rows correspond to elements and columns to features.
@@ -456,12 +456,12 @@ def ew_dists(a, b):
     return B.sqrt(B.maximum(B.ew_dists2(a, b), B.cast(B.dtype(a), 1e-30)))
 
 
-@dispatch(object)
+@dispatch
 def ew_dists(a):
     return ew_dists(a, a)
 
 
-@dispatch(object, object)
+@dispatch
 def pw_sums2(a, b):
     """Compute the square the Euclidean norm of the pairwise sums between two
     matrices where rows correspond to elements and columns to features.
@@ -485,12 +485,12 @@ def pw_sums2(a, b):
     return norms_a + norms_b + 2 * B.matmul(a, b, tr_b=True)
 
 
-@dispatch(object)
+@dispatch
 def pw_sums2(a):
     return pw_sums2(a, a)
 
 
-@dispatch(object, object)
+@dispatch
 def pw_sums(a, b):
     """Compute the Euclidean norm of the pairwise sums between two
     matrices where rows correspond to elements and columns to features.
@@ -512,12 +512,12 @@ def pw_sums(a, b):
     return B.sqrt(B.maximum(B.pw_sums2(a, b), B.cast(B.dtype(a), 1e-30)))
 
 
-@dispatch(object)
+@dispatch
 def pw_sums(a):
     return pw_sums(a, a)
 
 
-@dispatch(object, object)
+@dispatch
 def ew_sums2(a, b):
     """Compute the square the Euclidean norm of the element-wise
     sums between two matrices where rows correspond to elements and
@@ -535,12 +535,12 @@ def ew_sums2(a, b):
     return B.sum((a + b) ** 2, axis=-1)[..., :, None]
 
 
-@dispatch(object)
+@dispatch
 def ew_sums2(a):
     return ew_sums2(a, a)
 
 
-@dispatch(object, object)
+@dispatch
 def ew_sums(a, b):
     """Compute the Euclidean norm of the element-wise sums between two
     matrices where rows correspond to elements and columns to features.
@@ -562,6 +562,6 @@ def ew_sums(a, b):
     return B.sqrt(B.maximum(B.ew_sums2(a, b), B.cast(B.dtype(a), 1e-30)))
 
 
-@dispatch(object)
+@dispatch
 def ew_sums(a):
     return ew_sums(a, a)

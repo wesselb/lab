@@ -1,15 +1,15 @@
-import pytest
 import logging
 from itertools import product
 
 import jax.numpy as jnp
 import numpy as np
 import plum
+import pytest
 import tensorflow as tf
 import torch
 from autograd.core import VJPNode, getval
 from autograd.tracer import trace_stack, new_box
-from plum import Dispatcher
+from plum import Dispatcher, Union
 
 import lab as B
 from lab.shape import Shape, Dimension, unwrap_dimension
@@ -54,44 +54,44 @@ def autograd_box(x):
     return new_box(x, t, n)
 
 
-@_dispatch({B.NPNumeric, B.Number}, precedence=1)
-def to_np(x):
+@_dispatch(precedence=1)
+def to_np(x: Union[B.NPNumeric, B.Number]):
     """Convert a tensor to NumPy."""
     return x
 
 
-@_dispatch(Dimension)
-def to_np(x):
+@_dispatch
+def to_np(x: Dimension):
     return unwrap_dimension(x)
 
 
-@_dispatch(B.AGNumeric)
-def to_np(x):
+@_dispatch
+def to_np(x: B.AGNumeric):
     return getval(x)
 
 
-@_dispatch({B.TorchNumeric, B.TFNumeric})
-def to_np(x):
+@_dispatch
+def to_np(x: Union[B.TorchNumeric, B.TFNumeric]):
     return x.numpy()
 
 
-@_dispatch(B.JAXNumeric)
-def to_np(x):
+@_dispatch
+def to_np(x: B.JAXNumeric):
     return np.array(x)
 
 
-@_dispatch({tuple, tf.TensorShape, torch.Size, Shape})
-def to_np(tup):
+@_dispatch
+def to_np(tup: Union[tuple, tf.TensorShape, torch.Size, Shape]):
     return tuple(to_np(x) for x in tup)
 
 
-@_dispatch(list)
-def to_np(lst):
+@_dispatch
+def to_np(lst: list):
     return to_np(tuple(lst))
 
 
-@_dispatch(object, object, [bool])
-def allclose(x, y, assert_dtype=False, **kw_args):
+@_dispatch
+def allclose(x, y, assert_dtype: bool = False, **kw_args):
     """Assert that two numeric objects are close."""
     x, y = to_np(x), to_np(y)
 
@@ -102,8 +102,8 @@ def allclose(x, y, assert_dtype=False, **kw_args):
     np.testing.assert_allclose(x, y, **kw_args)
 
 
-@_dispatch(tuple, tuple, [bool])
-def allclose(x, y, assert_dtype=False, **kw_args):
+@_dispatch
+def allclose(x: tuple, y: tuple, assert_dtype: bool = False, **kw_args):
     assert len(x) == len(y)
     for xi, yi in zip(x, y):
         allclose(xi, yi, assert_dtype=assert_dtype, **kw_args)
@@ -166,7 +166,7 @@ def check_function(f, args_spec, kw_args_spec=None, assert_dtype=True, skip=None
             # Check consistency.
             log.debug(f"Call with arguments {args} and keyword arguments {kw_args}.")
             result = f(*args, **kw_args)
-            allclose(first_result, result, assert_dtype)
+            allclose(first_result, result, assert_dtype=assert_dtype)
 
             # If first argument is a data type, then again check that.
             if isinstance(args[0], B.DType):
@@ -295,7 +295,7 @@ class Tuple:
         self.xs = xs
 
     def forms(self):
-        return tuple(zip(*(x.forms() for x in self.xs)))
+        return map(tuple, zip(*(x.forms() for x in self.xs)))
 
 
 class List:
@@ -305,7 +305,7 @@ class List:
         self.xs = xs
 
     def forms(self):
-        return list(zip(*(x.forms() for x in self.xs)))
+        return map(list, zip(*(x.forms() for x in self.xs)))
 
 
 class Value:

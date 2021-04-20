@@ -6,7 +6,9 @@ from ..types import Number, TorchNumeric
 
 dispatch = dispatch_unwrap_dimensions(dispatch_original)
 
-Numeric = {Number, TorchNumeric}
+from plum import Union
+
+Numeric = Union[Number, TorchNumeric]
 
 from .generic import *
 from .shaping import *

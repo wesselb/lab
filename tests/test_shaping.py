@@ -172,9 +172,6 @@ def test_concat(check_lazy_shapes):
 
 def test_concat2d(check_lazy_shapes):
     check_function(B.concat2d, (List(Matrix(3), Matrix(3)), List(Matrix(3), Matrix(3))))
-    check_function(
-        B.concat2d, (Tuple(Matrix(3), Matrix(3)), Tuple(Matrix(3), Matrix(3)))
-    )
 
 
 @pytest.mark.parametrize("r1", [1, 2])

@@ -37,22 +37,22 @@ class JAXRNG:
 B.jax_rng = JAXRNG()
 
 
-@dispatch(JAXDType, [Int])
-def rand(dtype, *shape):
+@dispatch
+def rand(dtype: JAXDType, *shape: Int):
     return B.move_to_active_device(
         jax.random.uniform(B.jax_rng.split_key(), shape, dtype=dtype)
     )
 
 
-@dispatch(JAXDType, [Int])
-def randn(dtype, *shape):
+@dispatch
+def randn(dtype: JAXDType, *shape: Int):
     return B.move_to_active_device(
         jax.random.normal(B.jax_rng.split_key(), shape, dtype=dtype)
     )
 
 
-@dispatch(JAXNumeric, Int)
-def choice(a, n):
+@dispatch
+def choice(a: JAXNumeric, n: Int):
     inds = jax.random.choice(B.jax_rng.split_key(), a.shape[0], (n,), replace=True)
     choices = a[inds]
     return choices[0] if n == 1 else choices

@@ -6,7 +6,9 @@ from ..types import Number, NPNumeric, JAXNumeric
 
 dispatch = dispatch_unwrap_dimensions(dispatch_original)
 
-Numeric = {Number, NPNumeric, JAXNumeric}
+from plum import Union
+
+Numeric = Union[Number, NPNumeric, JAXNumeric]
 
 from .generic import *
 from .shaping import *

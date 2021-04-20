@@ -10,8 +10,8 @@ __all__ = ["torch_register", "as_torch"]
 _dispatch = Dispatcher()
 
 
-@_dispatch(B.Numeric)
-def as_torch(x, grad=False):
+@_dispatch
+def as_torch(x: B.Numeric, grad=False):
     """Convert object to PyTorch.
 
     Args:
@@ -25,8 +25,8 @@ def as_torch(x, grad=False):
     return torch.tensor(x, dtype=dtype, requires_grad=grad)
 
 
-@_dispatch(tuple)
-def as_torch(xs, grad=False):
+@_dispatch
+def as_torch(xs: tuple, grad=False):
     return tuple([as_torch(x, grad=grad) for x in xs])
 
 

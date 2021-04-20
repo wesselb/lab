@@ -1,14 +1,15 @@
-from . import B, dispatch
-
-from plum import Dispatcher, Referentiable, Self
 from functools import wraps
+
+from plum import Dispatcher
+
+from . import B, dispatch
 
 __all__ = ["Shape", "Dimension", "dispatch_unwrap_dimensions"]
 
 _dispatch = Dispatcher()
 
 
-class Shape(metaclass=Referentiable):
+class Shape:
     """A shape.
 
     Args:
@@ -18,18 +19,16 @@ class Shape(metaclass=Referentiable):
         dims (tuple[number]): Dimensions of the shape.
     """
 
-    _dispatch = Dispatcher(in_class=Self)
-
     def __init__(self, *dims):
         # Be careful to not wrap dimensions twice.
         self.dims = tuple(unwrap_dimension(dim) for dim in dims)
 
-    @_dispatch(object)
+    @_dispatch
     def __getitem__(self, item):
         return Dimension(self.dims[item])
 
-    @_dispatch(slice)
-    def __getitem__(self, item):
+    @_dispatch
+    def __getitem__(self, item: slice):
         return Shape(*self.dims[item])
 
     def __len__(self):
@@ -63,8 +62,8 @@ class Shape(metaclass=Referentiable):
             return "(" + ", ".join(repr(x) for x in self) + ")"
 
 
-@dispatch(Shape)
-def to_numpy(shape):
+@dispatch
+def to_numpy(shape: Shape):
     return B.to_numpy(shape.dims)
 
 
@@ -136,7 +135,7 @@ class Dimension:
         return str(self.dim)
 
 
-@_dispatch(object)
+@_dispatch
 def unwrap_dimension(a):
     """Unwrap a dimension.
 
@@ -150,8 +149,8 @@ def unwrap_dimension(a):
     return a
 
 
-@_dispatch(Dimension)
-def unwrap_dimension(a):
+@_dispatch
+def unwrap_dimension(a: Dimension):
     return a.dim
 
 
@@ -162,14 +161,11 @@ def dispatch_unwrap_dimensions(dispatch):
         dispatch (decorator): Dispatch decorator.
     """
 
-    def unwrapped_dispatch(*dispatch_args, **dispatch_kw_args):
-        def decorator(f):
-            @wraps(f)
-            def f_wrapped(*args, **kw_args):
-                return f(*(unwrap_dimension(arg) for arg in args), **kw_args)
+    def unwrapped_dispatch(f):
+        @wraps(f)
+        def f_wrapped(*args, **kw_args):
+            return f(*(unwrap_dimension(arg) for arg in args), **kw_args)
 
-            return dispatch(*dispatch_args, **dispatch_kw_args)(f_wrapped)
-
-        return decorator
+        return dispatch(f_wrapped)
 
     return unwrapped_dispatch

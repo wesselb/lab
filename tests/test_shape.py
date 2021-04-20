@@ -1,4 +1,6 @@
 import pytest
+
+import lab as B
 from lab.shape import Shape, Dimension
 
 
@@ -44,6 +46,10 @@ def test_shape():
     assert repr(Shape(1)) == "Shape(1)"
     assert str(Shape(1, 2)) == "(1, 2)"
     assert repr(Shape(1, 2)) == "Shape(1, 2)"
+
+    # Test conversion to NumPy.
+    assert isinstance(B.to_numpy(Shape(1, 2)), tuple)
+    assert B.to_numpy(Shape(1, 2)) == (1, 2)
 
 
 def test_dimension():

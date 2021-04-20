@@ -2,15 +2,14 @@ import sys
 
 import numpy as np
 from plum import (
-    Union,
     add_conversion_method,
     convert,
     add_promotion_rule,
-    ResolvableType,
-    as_type,
     parametric,
     clear_all_cache,
+    Union,
 )
+from plum.type import ResolvableType, ptype
 
 from . import dispatch
 from .shape import Dimension
@@ -76,7 +75,7 @@ class ModuleType(ResolvableType):
 
         Clears all cache after retrieval.
         """
-        self._type = as_type(getattr(sys.modules[self.module], self.name))
+        self._type = ptype(getattr(sys.modules[self.module], self.name))
         clear_all_cache()
 
     def resolve(self):
@@ -117,9 +116,7 @@ _jax_dtype = ModuleType("jax._src.numpy.lax_numpy", "_ScalarMeta")
 _jax_retrievables = [_jax_tensor, _jax_tracer, _jax_dtype]
 
 # Numeric types:
-Int = Union(
-    *([int, Dimension] + np.sctypes["int"] + np.sctypes["uint"]), alias="Int"
-)
+Int = Union(*([int, Dimension] + np.sctypes["int"] + np.sctypes["uint"]), alias="Int")
 Float = Union(*([float] + np.sctypes["float"]), alias="Float")
 Bool = Union(bool, np.bool_, alias="Bool")
 Number = Union(Int, Bool, Float, alias="Number")
@@ -212,8 +209,8 @@ add_conversion_method(JAXDType, TorchDType, lambda x: _module_attr("torch", _nam
 default_dtype = np.float64  #: Default dtype.
 
 
-@dispatch(NPDType, NPDType)
-def issubdtype(dtype1, dtype2):
+@dispatch
+def issubdtype(dtype1: NPDType, dtype2: NPDType):
     """Check whether one data type is a subtype of another.
 
     Args:
@@ -226,12 +223,12 @@ def issubdtype(dtype1, dtype2):
     return np.issubdtype(dtype1, dtype2)
 
 
-@dispatch(object, object)
+@dispatch
 def issubdtype(dtype1, dtype2):
     return issubdtype(convert(dtype1, NPDType), convert(dtype2, NPDType))
 
 
-@dispatch(object)
+@dispatch
 def dtype(a):
     """Determine the data type of an object.
 
@@ -241,8 +238,8 @@ def dtype(a):
     return a.dtype
 
 
-@dispatch({Number, NPNumeric})
-def dtype(a):
+@dispatch
+def dtype(a: Union[Number, NPNumeric]):
     try:
         # For the sake of consistency, return the underlying data type, and not a
         # `np.type`.
@@ -252,14 +249,14 @@ def dtype(a):
         return type(a)
 
 
-@dispatch(AGNumeric)
-def dtype(a):
+@dispatch
+def dtype(a: AGNumeric):
     # See above.
     return a.dtype.type
 
 
-@dispatch(JAXNumeric)
-def dtype(a):
+@dispatch
+def dtype(a: JAXNumeric):
     # JAX gives NumPy data types back. Convert to JAX ones.
     return convert(a.dtype, JAXDType)
 

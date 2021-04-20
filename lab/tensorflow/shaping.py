@@ -1,4 +1,5 @@
 import tensorflow as tf
+from plum import Union
 
 from . import dispatch, B, Numeric
 from ..types import Int, TFNumeric, NPNumeric
@@ -6,23 +7,23 @@ from ..types import Int, TFNumeric, NPNumeric
 __all__ = []
 
 
-@dispatch(Numeric)
-def length(a):
+@dispatch
+def length(a: Numeric):
     return tf.size(a)
 
 
-@dispatch(Numeric)
-def expand_dims(a, axis=0):
+@dispatch
+def expand_dims(a: Numeric, axis=0):
     return tf.expand_dims(a, axis=axis)
 
 
-@dispatch(Numeric)
-def squeeze(a):
+@dispatch
+def squeeze(a: Numeric):
     return tf.squeeze(a)
 
 
-@dispatch(Numeric)
-def diag(a):
+@dispatch
+def diag(a: Numeric):
     if B.rank(a) == 1:
         return tf.linalg.diag(a)
     elif B.rank(a) == 2:
@@ -31,43 +32,43 @@ def diag(a):
         raise ValueError("Input must have rank 1 or 2.")
 
 
-@dispatch(Numeric)
-def diag_extract(a):
+@dispatch
+def diag_extract(a: Numeric):
     return tf.linalg.diag_part(a)
 
 
-@dispatch(TFNumeric)  # This function already has a generic implementation.
-def diag_construct(a):
+@dispatch
+def diag_construct(a: TFNumeric):
     return tf.linalg.diag(a)
 
 
-@dispatch([Numeric])
-def stack(*elements, axis=0):
+@dispatch
+def stack(*elements: Numeric, axis=0):
     return tf.stack(elements, axis=axis)
 
 
-@dispatch(Numeric)
-def unstack(a, axis=0):
+@dispatch
+def unstack(a: Numeric, axis=0):
     return tf.unstack(a, axis=axis)
 
 
-@dispatch(Numeric, [Int])
-def reshape(a, *shape):
+@dispatch
+def reshape(a: Numeric, *shape: Int):
     return tf.reshape(a, shape=shape)
 
 
-@dispatch([Numeric])
-def concat(*elements, axis=0):
+@dispatch
+def concat(*elements: Numeric, axis=0):
     return tf.concat(elements, axis=axis)
 
 
-@dispatch(Numeric, [Int])
-def tile(a, *repeats):
+@dispatch
+def tile(a: Numeric, *repeats: Int):
     return tf.tile(a, repeats)
 
 
-@dispatch(TFNumeric, object)  # This function already has a generic implementation.
-def take(a, indices_or_mask, axis=0):
+@dispatch
+def take(a: TFNumeric, indices_or_mask, axis=0):
     if B.rank(indices_or_mask) != 1:
         raise ValueError("Indices or mask must be rank 1.")
     is_mask, indices_or_mask = _is_mask_and_convert(indices_or_mask)
@@ -77,16 +78,16 @@ def take(a, indices_or_mask, axis=0):
         return tf.gather(a, indices_or_mask, axis=axis)
 
 
-@dispatch(TFNumeric)
-def _is_mask_and_convert(indices_or_mask):
+@dispatch
+def _is_mask_and_convert(indices_or_mask: TFNumeric):
     return indices_or_mask.dtype == bool, indices_or_mask
 
 
-@dispatch(NPNumeric)
-def _is_mask_and_convert(indices_or_mask):
+@dispatch
+def _is_mask_and_convert(indices_or_mask: NPNumeric):
     return indices_or_mask.dtype == bool, tf.constant(indices_or_mask)
 
 
-@dispatch({tuple, list})
-def _is_mask_and_convert(indices_or_mask):
+@dispatch
+def _is_mask_and_convert(indices_or_mask: Union[tuple, list]):
     return B.dtype(indices_or_mask[0]) == bool, indices_or_mask

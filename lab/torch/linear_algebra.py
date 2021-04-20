@@ -9,15 +9,15 @@ from ..shape import unwrap_dimension
 __all__ = []
 
 
-@dispatch(Numeric, Numeric)
-def matmul(a, b, tr_a=False, tr_b=False):
+@dispatch
+def matmul(a: Numeric, b: Numeric, tr_a=False, tr_b=False):
     a = transpose(a) if tr_a else a
     b = transpose(b) if tr_b else b
     return torch.matmul(a, b)
 
 
-@dispatch(Numeric)
-def transpose(a, perm=None):
+@dispatch
+def transpose(a: Numeric, perm=None):
     # Correctly handle special cases.
     rank_a = B.rank(a)
     if rank_a == 0:
@@ -30,13 +30,13 @@ def transpose(a, perm=None):
     return a.permute(*perm)
 
 
-@dispatch(Numeric)
-def trace(a, axis1=0, axis2=1):
+@dispatch
+def trace(a: Numeric, axis1=-2, axis2=-1):
     return torch.sum(torch.diagonal(a, dim1=axis1, dim2=axis2), dim=-1)
 
 
-@dispatch(Numeric, Numeric)
-def kron(a, b):
+@dispatch
+def kron(a: Numeric, b: Numeric):
     shape_a = B.shape(a)
     shape_b = B.shape(b)
 
@@ -49,53 +49,66 @@ def kron(a, b):
     return torch.reshape(a * b, tuple(x * y for x, y in zip(shape_a, shape_b)))
 
 
-@dispatch(Numeric)
-def svd(a, compute_uv=True):
+@dispatch
+def svd(a: Numeric, compute_uv=True):
     u, s, v = torch.svd(a, compute_uv=compute_uv)
     return (u, s, v) if compute_uv else s
 
 
-@dispatch(Numeric, Numeric)
-def solve(a, b):
+@dispatch
+def solve(a: Numeric, b: Numeric):
     return torch.solve(b, a)[0]
 
 
-@dispatch(Numeric)
-def inv(a):
+@dispatch
+def inv(a: Numeric):
     return torch.inverse(a)
 
 
-@dispatch(Numeric)
-def det(a):
+@dispatch
+def det(a: Numeric):
     return torch.det(a)
 
 
-@dispatch(Numeric)
-def logdet(a):
+@dispatch
+def logdet(a: Numeric):
     return torch.logdet(a)
 
 
-f = torch_register(expm, s_expm)
-dispatch(Numeric)(f)
-
-f = torch_register(logm, s_logm)
-dispatch(Numeric)(f)
+_expm = torch_register(expm, s_expm)
 
 
-@dispatch(Numeric)
-def cholesky(a):
+@dispatch
+def expm(a: Numeric):
+    return _expm(a)
+
+
+_logm = torch_register(logm, s_logm)
+
+
+@dispatch
+def logm(a: Numeric):
+    return _logm(a)
+
+
+@dispatch
+def cholesky(a: Numeric):
     return torch.cholesky(a, upper=False)
 
 
-@dispatch(Numeric, Numeric)
-def cholesky_solve(a, b):
+@dispatch
+def cholesky_solve(a: Numeric, b: Numeric):
     return torch.cholesky_solve(b, a, upper=False)
 
 
-@dispatch(Numeric, Numeric)
-def triangular_solve(a, b, lower_a=True):
+@dispatch
+def triangular_solve(a: Numeric, b: Numeric, lower_a=True):
     return torch.triangular_solve(b, a, upper=not lower_a)[0]
 
 
-f = torch_register(toeplitz_solve, s_toeplitz_solve)
-dispatch(Numeric, Numeric, Numeric)(f)
+_toeplitz_solve = torch_register(toeplitz_solve, s_toeplitz_solve)
+
+
+@dispatch
+def toeplitz_solve(a: Numeric, b: Numeric, c: Numeric):
+    return _toeplitz_solve(a, b, c)

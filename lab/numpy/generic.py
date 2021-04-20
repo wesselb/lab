@@ -2,54 +2,54 @@ import numpy as np
 import scipy.special as sps
 
 from . import B, dispatch, Numeric
-from ..custom import bvn_cdf
+from ..custom import bvn_cdf as _bvn_cdf
 from ..types import NPNumeric, NPDType, Int
 
 __all__ = []
 
 
-@dispatch(Numeric)
-def isnan(a):
+@dispatch
+def isnan(a: Numeric):
     return np.isnan(a)
 
 
-@dispatch(NPNumeric)
-def device(a):
+@dispatch
+def device(a: NPNumeric):
     return "cpu"
 
 
-@dispatch(NPNumeric)
-def move_to_active_device(a):
+@dispatch
+def move_to_active_device(a: NPNumeric):
     return a
 
 
-@dispatch(NPDType, [Int])
-def zeros(dtype, *shape):
+@dispatch
+def zeros(dtype: NPDType, *shape: Int):
     return np.zeros(shape, dtype=dtype)
 
 
-@dispatch(NPDType, [Int])
-def ones(dtype, *shape):
+@dispatch
+def ones(dtype: NPDType, *shape: Int):
     return np.ones(shape, dtype=dtype)
 
 
-@dispatch(NPDType, Int, Int)
-def _eye2(dtype, *shape):
+@dispatch
+def _eye2(dtype: NPDType, *shape: Int):
     return np.eye(shape[0], shape[1], dtype=dtype)
 
 
-@dispatch(NPDType, object, object, Int)
-def linspace(dtype, a, b, num):
+@dispatch
+def linspace(dtype: NPDType, a, b, num: Int):
     return np.linspace(a, b, num, dtype=dtype)
 
 
-@dispatch(NPDType, object, object, object)
-def range(dtype, start, stop, step):
+@dispatch
+def range(dtype: NPDType, start, stop, step):
     return np.arange(start, stop, step, dtype=dtype)
 
 
-@dispatch(NPDType, Numeric)
-def cast(dtype, a):
+@dispatch
+def cast(dtype: NPDType, a: Numeric):
     if B.dtype(a) == dtype:
         return a
     if hasattr(a, "astype"):
@@ -58,169 +58,171 @@ def cast(dtype, a):
         return np.array(a, dtype=dtype)
 
 
-@dispatch(Numeric)
-def identity(a):
+@dispatch
+def identity(a: Numeric):
     return np.array(a)
 
 
-@dispatch(Numeric)
-def negative(a):
+@dispatch
+def negative(a: Numeric):
     return np.negative(a)
 
 
-@dispatch(Numeric)
-def abs(a):
+@dispatch
+def abs(a: Numeric):
     return np.abs(a)
 
 
-@dispatch(Numeric)
-def sign(a):
+@dispatch
+def sign(a: Numeric):
     return np.sign(a)
 
 
-@dispatch(Numeric)
-def sqrt(a):
+@dispatch
+def sqrt(a: Numeric):
     return np.sqrt(a)
 
 
-@dispatch(Numeric)
-def exp(a):
+@dispatch
+def exp(a: Numeric):
     return np.exp(a)
 
 
-@dispatch(Numeric)
-def log(a):
+@dispatch
+def log(a: Numeric):
     return np.log(a)
 
 
-@dispatch(Numeric)
-def sin(a):
+@dispatch
+def sin(a: Numeric):
     return np.sin(a)
 
 
-@dispatch(Numeric)
-def cos(a):
+@dispatch
+def cos(a: Numeric):
     return np.cos(a)
 
 
-@dispatch(Numeric)
-def tan(a):
+@dispatch
+def tan(a: Numeric):
     return np.tan(a)
 
 
-@dispatch(Numeric)
-def tanh(a):
+@dispatch
+def tanh(a: Numeric):
     return np.tanh(a)
 
 
-@dispatch(Numeric)
-def erf(a):
+@dispatch
+def erf(a: Numeric):
     return sps.erf(a)
 
 
-@dispatch(Numeric, Numeric)
-def add(a, b):
+@dispatch
+def add(a: Numeric, b: Numeric):
     return np.add(a, b)
 
 
-@dispatch(Numeric, Numeric)
-def subtract(a, b):
+@dispatch
+def subtract(a: Numeric, b: Numeric):
     return np.subtract(a, b)
 
 
-@dispatch(Numeric, Numeric)
-def multiply(a, b):
+@dispatch
+def multiply(a: Numeric, b: Numeric):
     return np.multiply(a, b)
 
 
-@dispatch(Numeric, Numeric)
-def divide(a, b):
+@dispatch
+def divide(a: Numeric, b: Numeric):
     return np.divide(a, b)
 
 
-@dispatch(Numeric, Numeric)
-def power(a, b):
+@dispatch
+def power(a: Numeric, b: Numeric):
     return np.power(a, b)
 
 
-@dispatch(Numeric, Numeric)
-def minimum(a, b):
+@dispatch
+def minimum(a: Numeric, b: Numeric):
     return np.minimum(a, b)
 
 
-@dispatch(Numeric, Numeric)
-def maximum(a, b):
+@dispatch
+def maximum(a: Numeric, b: Numeric):
     return np.maximum(a, b)
 
 
-@dispatch(Numeric)
-def min(a, axis=None):
+@dispatch
+def min(a: Numeric, axis=None):
     return np.min(a, axis=axis)
 
 
-@dispatch(Numeric)
-def max(a, axis=None):
+@dispatch
+def max(a: Numeric, axis=None):
     return np.max(a, axis=axis)
 
 
-@dispatch(Numeric)
-def sum(a, axis=None):
+@dispatch
+def sum(a: Numeric, axis=None):
     return np.sum(a, axis=axis)
 
 
-@dispatch(Numeric)
-def mean(a, axis=None):
+@dispatch
+def mean(a: Numeric, axis=None):
     return np.mean(a, axis=axis)
 
 
-@dispatch(Numeric)
-def std(a, axis=None):
+@dispatch
+def std(a: Numeric, axis=None):
     return np.std(a, axis=axis, ddof=0)
 
 
-@dispatch(Numeric)
-def all(a, axis=None):
+@dispatch
+def all(a: Numeric, axis=None):
     return np.all(a, axis=axis)
 
 
-@dispatch(Numeric)
-def any(a, axis=None):
+@dispatch
+def any(a: Numeric, axis=None):
     return np.any(a, axis=axis)
 
 
-@dispatch(Numeric, Numeric)
-def lt(a, b):
+@dispatch
+def lt(a: Numeric, b: Numeric):
     return np.less(a, b)
 
 
-@dispatch(Numeric, Numeric)
-def le(a, b):
+@dispatch
+def le(a: Numeric, b: Numeric):
     return np.less_equal(a, b)
 
 
-@dispatch(Numeric, Numeric)
-def gt(a, b):
+@dispatch
+def gt(a: Numeric, b: Numeric):
     return np.greater(a, b)
 
 
-@dispatch(Numeric, Numeric)
-def ge(a, b):
+@dispatch
+def ge(a: Numeric, b: Numeric):
     return np.greater_equal(a, b)
 
 
-dispatch(Numeric, Numeric, Numeric)(bvn_cdf)
+@dispatch
+def bvn_cdf(a: Numeric, b: Numeric, c: Numeric):
+    return _bvn_cdf(a, b, c)
 
 
-@dispatch(Numeric)
-def sort(a, axis=-1, descending=False):
+@dispatch
+def sort(a: Numeric, axis=-1, descending=False):
     if descending:
         return -np.sort(-a, axis=axis)
     else:
         return np.sort(a, axis=axis)
 
 
-@dispatch(Numeric)
-def argsort(a, axis=-1, descending=False):
+@dispatch
+def argsort(a: Numeric, axis=-1, descending=False):
     if descending:
         return np.argsort(-a, axis=axis)
     else:

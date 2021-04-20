@@ -1,250 +1,255 @@
 import torch
+from plum import Union
 
 from . import B, dispatch, Numeric
 from .custom import torch_register
 from ..custom import bvn_cdf, s_bvn_cdf
-from ..types import TorchNumeric, NPNumeric, TorchDType, Number, Int
 from ..shape import Dimension
+from ..types import TorchNumeric, NPNumeric, TorchDType, Number, Int
 
 __all__ = []
 
 
-@dispatch(Numeric)
-def isnan(a):
+@dispatch
+def isnan(a: Numeric):
     return torch.isnan(a)
 
 
-@dispatch(TorchNumeric)
-def device(a):
+@dispatch
+def device(a: TorchNumeric):
     return str(a.device)
 
 
-@dispatch(TorchNumeric)
-def move_to_active_device(a):
+@dispatch
+def move_to_active_device(a: TorchNumeric):
     return a.to(B.Device.active_name)
 
 
-@dispatch(TorchDType, [Int])
-def zeros(dtype, *shape):
+@dispatch
+def zeros(dtype: TorchDType, *shape: Int):
     return torch.zeros(shape, dtype=dtype, device=B.Device.active_name)
 
 
-@dispatch(TorchDType, [Int])
-def ones(dtype, *shape):
+@dispatch
+def ones(dtype: TorchDType, *shape: Int):
     return torch.ones(shape, dtype=dtype, device=B.Device.active_name)
 
 
-@dispatch(TorchDType, Int, Int)
-def _eye2(dtype, *shape):
+@dispatch
+def _eye2(dtype: TorchDType, *shape: Int):
     return torch.eye(shape[0], shape[1], dtype=dtype, device=B.Device.active_name)
 
 
-@dispatch(TorchDType, object, object, Int)
-def linspace(dtype, a, b, num):
+@dispatch
+def linspace(dtype: TorchDType, a, b, num: Int):
     return torch.linspace(a, b, num, dtype=dtype, device=B.Device.active_name)
 
 
-@dispatch(TorchDType, object, object, object)
-def range(dtype, start, stop, step):
+@dispatch
+def range(dtype: TorchDType, start, stop, step):
     return torch.arange(start, stop, step, dtype=dtype, device=B.Device.active_name)
 
 
-@dispatch(TorchDType, TorchNumeric)
-def cast(dtype, a):
+@dispatch
+def cast(dtype: TorchDType, a: TorchNumeric):
     return a.type(dtype)
 
 
-@dispatch(TorchDType, {Number, NPNumeric})
-def cast(dtype, a):
+@dispatch
+def cast(dtype: TorchDType, a: Union[Number, NPNumeric]):
     return torch.tensor(a, dtype=dtype, device=B.Device.active_name)
 
 
-@dispatch(TorchDType, Dimension)
-def cast(dtype, a):
+@dispatch
+def cast(dtype: TorchDType, a: Dimension):
     # A dimension may automatically unwrap to a PyTorch tensor.
     return cast(dtype, a)
 
 
-@dispatch(Numeric)
-def identity(a):
+@dispatch
+def identity(a: Numeric):
     return 1 * a
 
 
-@dispatch(Numeric)
-def negative(a):
+@dispatch
+def negative(a: Numeric):
     return torch.neg(a)
 
 
-@dispatch(Numeric)
-def abs(a):
+@dispatch
+def abs(a: Numeric):
     return torch.abs(a)
 
 
-@dispatch(Numeric)
-def sign(a):
+@dispatch
+def sign(a: Numeric):
     return torch.sign(a)
 
 
-@dispatch(Numeric)
-def sqrt(a):
+@dispatch
+def sqrt(a: Numeric):
     return torch.sqrt(a)
 
 
-@dispatch(Numeric)
-def exp(a):
+@dispatch
+def exp(a: Numeric):
     return torch.exp(a)
 
 
-@dispatch(Numeric)
-def log(a):
+@dispatch
+def log(a: Numeric):
     return torch.log(a)
 
 
-@dispatch(Numeric)
-def sin(a):
+@dispatch
+def sin(a: Numeric):
     return torch.sin(a)
 
 
-@dispatch(Numeric)
-def cos(a):
+@dispatch
+def cos(a: Numeric):
     return torch.cos(a)
 
 
-@dispatch(Numeric)
-def tan(a):
+@dispatch
+def tan(a: Numeric):
     return torch.tan(a)
 
 
-@dispatch(Numeric)
-def tanh(a):
+@dispatch
+def tanh(a: Numeric):
     return torch.tanh(a)
 
 
-@dispatch(Numeric)
-def erf(a):
+@dispatch
+def erf(a: Numeric):
     return torch.erf(a)
 
 
-@dispatch(Numeric, Numeric)
-def add(a, b):
+@dispatch
+def add(a: Numeric, b: Numeric):
     return a + b
 
 
-@dispatch(Numeric, Numeric)
-def subtract(a, b):
+@dispatch
+def subtract(a: Numeric, b: Numeric):
     return a - b
 
 
-@dispatch(Numeric, Numeric)
-def multiply(a, b):
+@dispatch
+def multiply(a: Numeric, b: Numeric):
     return a * b
 
 
-@dispatch(Numeric, Numeric)
-def divide(a, b):
+@dispatch
+def divide(a: Numeric, b: Numeric):
     return a / b
 
 
-@dispatch(Numeric, Numeric)
-def power(a, b):
+@dispatch
+def power(a: Numeric, b: Numeric):
     return torch.pow(a, b)
 
 
-@dispatch(Numeric, Numeric)
-def minimum(a, b):
+@dispatch
+def minimum(a: Numeric, b: Numeric):
     return torch.min(a, b)
 
 
-@dispatch(Numeric, Numeric)
-def maximum(a, b):
+@dispatch
+def maximum(a: Numeric, b: Numeric):
     return torch.max(a, b)
 
 
-@dispatch(Numeric)
-def min(a, axis=None):
+@dispatch
+def min(a: Numeric, axis=None):
     if axis is None:
         return torch.min(a)
     else:
         return torch.min(a, dim=axis)[0]
 
 
-@dispatch(Numeric)
-def max(a, axis=None):
+@dispatch
+def max(a: Numeric, axis=None):
     if axis is None:
         return torch.max(a)
     else:
         return torch.max(a, dim=axis)[0]
 
 
-@dispatch(Numeric)
-def sum(a, axis=None):
+@dispatch
+def sum(a: Numeric, axis=None):
     if axis is None:
         return torch.sum(a)
     else:
         return torch.sum(a, dim=axis)
 
 
-@dispatch(Numeric)
-def mean(a, axis=None):
+@dispatch
+def mean(a: Numeric, axis=None):
     if axis is None:
         return torch.mean(a)
     else:
         return torch.mean(a, dim=axis)
 
 
-@dispatch(Numeric)
-def std(a, axis=None):
+@dispatch
+def std(a: Numeric, axis=None):
     if axis is None:
         return torch.std(a, unbiased=False)
     else:
         return torch.std(a, dim=axis, unbiased=False)
 
 
-@dispatch(Numeric)
-def all(a, axis=None):
+@dispatch
+def all(a: Numeric, axis=None):
     if axis is None:
         return a.all()
     else:
         return a.all(dim=axis)
 
 
-@dispatch(Numeric)
-def any(a, axis=None):
+@dispatch
+def any(a: Numeric, axis=None):
     if axis is None:
         return a.any()
     else:
         return a.any(dim=axis)
 
 
-@dispatch(Numeric, Numeric)
-def lt(a, b):
+@dispatch
+def lt(a: Numeric, b: Numeric):
     return torch.lt(a, b)
 
 
-@dispatch(Numeric, Numeric)
-def le(a, b):
+@dispatch
+def le(a: Numeric, b: Numeric):
     return torch.le(a, b)
 
 
-@dispatch(Numeric, Numeric)
-def gt(a, b):
+@dispatch
+def gt(a: Numeric, b: Numeric):
     return torch.gt(a, b)
 
 
-@dispatch(Numeric, Numeric)
-def ge(a, b):
+@dispatch
+def ge(a: Numeric, b: Numeric):
     return torch.ge(a, b)
 
 
-f = torch_register(bvn_cdf, s_bvn_cdf)
-dispatch(Numeric, Numeric, Numeric)(f)
+_bvn_cdf = torch_register(bvn_cdf, s_bvn_cdf)
 
 
-@dispatch(Numeric)
-def sort(a, axis=-1, descending=False):
+@dispatch
+def bvn_cdf(a: Numeric, b: Numeric, c: Numeric):
+    return _bvn_cdf(a, b, c)
+
+
+@dispatch
+def sort(a: Numeric, axis=-1, descending=False):
     return torch.sort(a, dim=axis, descending=descending)[0]
 
 
-@dispatch(Numeric)
-def argsort(a, axis=-1, descending=False):
+@dispatch
+def argsort(a: Numeric, axis=-1, descending=False):
     return torch.argsort(a, dim=axis, descending=descending)

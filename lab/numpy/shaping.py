@@ -6,52 +6,52 @@ from ..types import Int
 __all__ = []
 
 
-@dispatch(Numeric)
-def length(a):
+@dispatch
+def length(a: Numeric):
     return np.size(a)
 
 
-@dispatch(Numeric)
-def expand_dims(a, axis=0):
+@dispatch
+def expand_dims(a: Numeric, axis=0):
     return np.expand_dims(a, axis=axis)
 
 
-@dispatch(Numeric)
-def squeeze(a):
+@dispatch
+def squeeze(a: Numeric):
     return np.squeeze(a)
 
 
-@dispatch(Numeric)
-def diag(a):
+@dispatch
+def diag(a: Numeric):
     return np.diag(a)
 
 
-@dispatch(Numeric)
-def diag_extract(a):
+@dispatch
+def diag_extract(a: Numeric):
     return np.diagonal(a, axis1=-2, axis2=-1)
 
 
-@dispatch([Numeric])
-def stack(*elements, axis=0):
+@dispatch
+def stack(*elements: Numeric, axis=0):
     return np.stack(elements, axis=axis)
 
 
-@dispatch(Numeric)
-def unstack(a, axis=0):
+@dispatch
+def unstack(a: Numeric, axis=0):
     out = np.split(a, np.arange(1, a.shape[axis]), axis)
     return [x.squeeze(axis=axis) for x in out]
 
 
-@dispatch(Numeric, [Int])
-def reshape(a, *shape):
+@dispatch
+def reshape(a: Numeric, *shape: Int):
     return np.reshape(a, shape)
 
 
-@dispatch([Numeric])
-def concat(*elements, axis=0):
+@dispatch
+def concat(*elements: Numeric, axis=0):
     return np.concatenate(elements, axis=axis)
 
 
-@dispatch(Numeric, [Int])
-def tile(a, *repeats):
+@dispatch
+def tile(a: Numeric, *repeats: Int):
     return np.tile(a, repeats)

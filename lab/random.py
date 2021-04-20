@@ -1,6 +1,7 @@
 import sys
 
 import numpy as np
+from plum.type import VarArgs
 
 from . import dispatch, B
 from .types import DType, Int, Numeric
@@ -9,8 +10,8 @@ from .util import abstract
 __all__ = ["set_random_seed", "rand", "randn", "choice"]
 
 
-@dispatch(Int)
-def set_random_seed(seed):
+@dispatch
+def set_random_seed(seed: Int):
     """Set the random seed for all frameworks.
 
     Args:
@@ -36,9 +37,9 @@ def set_random_seed(seed):
         B.jax_rng.set_seed(seed)
 
 
-@dispatch(DType, [Int])
+@dispatch
 @abstract()
-def rand(dtype, *shape):  # pragma: no cover
+def rand(dtype: DType, *shape: Int):  # pragma: no cover
     """Construct a U[0, 1] random tensor.
 
     Args:
@@ -50,19 +51,19 @@ def rand(dtype, *shape):  # pragma: no cover
     """
 
 
-@dispatch.multi((Int,), ([Int],))  # Single integer is a not a reference.
-def rand(*shape):
+@dispatch.multi((Int,), (VarArgs(Int),))  # Single integer is a not a reference.
+def rand(*shape: Int):
     return rand(B.default_dtype, *shape)
 
 
-@dispatch(Numeric)
-def rand(ref):
+@dispatch
+def rand(ref: Numeric):
     return rand(B.dtype(ref), *B.shape(ref))
 
 
-@dispatch(DType, [Int])
+@dispatch
 @abstract(promote=None)
-def randn(dtype, *shape):  # pragma: no cover
+def randn(dtype: DType, *shape: Int):  # pragma: no cover
     """Construct a N(0, 1) random tensor.
 
     Args:
@@ -74,19 +75,19 @@ def randn(dtype, *shape):  # pragma: no cover
     """
 
 
-@dispatch.multi((Int,), ([Int],))  # Single integer is a not a reference.
-def randn(*shape):
+@dispatch.multi((Int,), (VarArgs(Int),))  # Single integer is a not a reference.
+def randn(*shape: Int):
     return randn(B.default_dtype, *shape)
 
 
-@dispatch(Numeric)
-def randn(ref):
+@dispatch
+def randn(ref: Numeric):
     return randn(B.dtype(ref), *B.shape(ref))
 
 
-@dispatch(Numeric, Int)
+@dispatch
 @abstract(promote=None)
-def choice(a, n):
+def choice(a: Numeric, n: Int):
     """Randomly choose from a tensor *with* replacement.
 
     Args:
@@ -98,6 +99,6 @@ def choice(a, n):
     """
 
 
-@dispatch(Numeric)
-def choice(a):
+@dispatch
+def choice(a: Numeric):
     return choice(a, 1)

@@ -9,11 +9,12 @@ from . import B
 from ..util import as_tuple
 
 __all__ = ["jax_register"]
+
 _dispatch = Dispatcher()
 
 
-@_dispatch(B.Numeric)
-def as_jax(x):
+@_dispatch
+def as_jax(x: B.Numeric):
     """Convert object to JAX.
 
     Args:
@@ -25,8 +26,8 @@ def as_jax(x):
     return jnp.asarray(x)
 
 
-@_dispatch(tuple)
-def as_jax(xs):
+@_dispatch
+def as_jax(xs: tuple):
     return tuple([as_jax(x) for x in xs])
 
 

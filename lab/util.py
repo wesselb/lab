@@ -2,15 +2,34 @@ from functools import wraps
 
 import numpy as np
 import plum
+import plum.signature
+import plum.type
 
 from . import B
 
-__all__ = ["as_tuple", "batch_computation", "abstract"]
+__all__ = ["resolve_axis", "as_tuple", "batch_computation", "abstract"]
+
 _dispatch = plum.Dispatcher()
 
 
-@_dispatch(tuple)
-def as_tuple(x):
+def resolve_axis(a, axis):
+    """Resolve axis for a tensor `a`.
+
+    Args:
+        a (tensor): Tensor of the axis.
+        axis (int): Axis to resolve.
+
+    Return:
+        int: Resolved axis.
+    """
+    if axis < 0:
+        return B.rank(a) + axis
+    else:
+        return axis
+
+
+@_dispatch
+def as_tuple(x: tuple):
     """Get `x` as a tuple. Will be wrapped in a one-tuple if it is not a tuple.
 
     Args:
@@ -22,7 +41,7 @@ def as_tuple(x):
     return x
 
 
-@_dispatch(object)
+@_dispatch
 def as_tuple(x):
     return (x,)
 
@@ -147,7 +166,7 @@ def abstract(promote=-1):
             # means that an implementation is not available.
             types_after = tuple(plum.type_of(arg) for arg in args)
             if types_before == types_after:
-                signature = plum.Signature(*types_after)
+                signature = plum.signature.Signature(*types_after)
                 # TODO: Use the message from Plum directly here.
                 raise plum.NotFoundLookupError(
                     f'For function "{f.__name__}", signature {signature} could not be '

@@ -1,6 +1,7 @@
 import math
 
 import numpy as np
+from plum import Union
 
 from . import B, dispatch
 from .shape import Shape
@@ -53,8 +54,8 @@ class LazyShapes:
 lazy_shapes = LazyShapes()  #: Enable lazy shapes.
 
 
-@dispatch(Numeric)
-def shape(a):  # pragma: no cover
+@dispatch
+def shape(a: Numeric):  # pragma: no cover
     """Get the shape of a tensor.
 
     Args:
@@ -73,13 +74,13 @@ def shape(a):  # pragma: no cover
         return ()
 
 
-@dispatch({list, tuple})
-def shape(a):
+@dispatch
+def shape(a: Union[list, tuple]):
     return np.array(a).shape
 
 
-@dispatch({Numeric, list, tuple})
-def rank(a):  # pragma: no cover
+@dispatch
+def rank(a: Union[Numeric, list, tuple]):  # pragma: no cover
     """Get the shape of a tensor.
 
     Args:
@@ -91,9 +92,9 @@ def rank(a):  # pragma: no cover
     return len(shape(a))
 
 
-@dispatch(Numeric)
+@dispatch
 @abstract()
-def length(a):  # pragma: no cover
+def length(a: Numeric):  # pragma: no cover
     """Get the length of a tensor.
 
     Args:
@@ -107,8 +108,8 @@ def length(a):  # pragma: no cover
 size = length  #: Alias for `length`.
 
 
-@dispatch(Numeric)
-def isscalar(a):
+@dispatch
+def isscalar(a: Numeric):
     """Check whether a tensor is a scalar.
 
     Args:
@@ -120,9 +121,9 @@ def isscalar(a):
     return rank(a) == 0
 
 
-@dispatch(Numeric)
+@dispatch
 @abstract()
-def expand_dims(a, axis=0):  # pragma: no cover
+def expand_dims(a: Numeric, axis=0):  # pragma: no cover
     """Insert an empty axis.
 
     Args:
@@ -134,9 +135,9 @@ def expand_dims(a, axis=0):  # pragma: no cover
     """
 
 
-@dispatch(Numeric)
+@dispatch
 @abstract()
-def squeeze(a):  # pragma: no cover
+def squeeze(a: Numeric):  # pragma: no cover
     """Remove all axes containing only a single element.
 
     Args:
@@ -147,16 +148,16 @@ def squeeze(a):  # pragma: no cover
     """
 
 
-@dispatch({tuple, list})
-def squeeze(a):
+@dispatch
+def squeeze(a: Union[tuple, list]):
     if len(a) == 1:
         return a[0]
     else:
         return a
 
 
-@dispatch(Numeric)
-def uprank(a, rank=2):
+@dispatch
+def uprank(a: Numeric, rank=2):
     """Convert the input into a tensor of at least rank `rank`.
 
     Args:
@@ -173,9 +174,9 @@ def uprank(a, rank=2):
     return a
 
 
-@dispatch(Numeric)
+@dispatch
 @abstract()
-def diag(a):
+def diag(a: Numeric):
     """Take the diagonal of a matrix, or construct a diagonal matrix from its
     diagonal.
 
@@ -187,9 +188,9 @@ def diag(a):
     """
 
 
-@dispatch(Numeric)
+@dispatch
 @abstract()
-def diag_extract(a):  # pragma: no cover
+def diag_extract(a: Numeric):  # pragma: no cover
     """Take the diagonal of a matrix.
 
     Args:
@@ -200,8 +201,8 @@ def diag_extract(a):  # pragma: no cover
     """
 
 
-@dispatch(Numeric)
-def diag_construct(a):  # pragma: no cover
+@dispatch
+def diag_construct(a: Numeric):  # pragma: no cover
     """Construct a diagonal matrix from its diagonal.
 
     Args:
@@ -225,8 +226,8 @@ def diag_construct(a):  # pragma: no cover
     return B.expand_dims(a, axis=-1) * identity_matrix
 
 
-@dispatch(Numeric)
-def flatten(a):  # pragma: no cover
+@dispatch
+def flatten(a: Numeric):  # pragma: no cover
     """Flatten a tensor.
 
     Args:
@@ -258,8 +259,8 @@ def _vec_to_tril_side_upper_perm(m, offset=0):
     return side, len(ind_upper[0]), perm
 
 
-@dispatch(Numeric)
-def vec_to_tril(a, offset=0):
+@dispatch
+def vec_to_tril(a: Numeric, offset=0):
     """Construct a lower triangular matrix from a vector.
 
     Args:
@@ -277,8 +278,8 @@ def vec_to_tril(a, offset=0):
     return B.reshape(B.take(a, perm, axis=-1), *batch_shape, side, side)
 
 
-@dispatch(Numeric)
-def tril_to_vec(a, offset=0):
+@dispatch
+def tril_to_vec(a: Numeric, offset=0):
     """Construct a vector from a lower triangular matrix.
 
     Args:
@@ -300,7 +301,7 @@ def tril_to_vec(a, offset=0):
     return B.take(B.reshape(a, *batch_shape, n * n), indices, axis=-1)
 
 
-@dispatch([object])
+@dispatch
 @abstract()
 def stack(*elements, **kw_args):  # pragma: no cover
     """Concatenate tensors along a new axis.
@@ -314,9 +315,9 @@ def stack(*elements, **kw_args):  # pragma: no cover
     """
 
 
-@dispatch(Numeric)
+@dispatch
 @abstract()
-def unstack(a, axis=0):  # pragma: no cover
+def unstack(a: Numeric, axis=0):  # pragma: no cover
     """Unstack tensors along an axis.
 
     Args:
@@ -328,9 +329,9 @@ def unstack(a, axis=0):  # pragma: no cover
     """
 
 
-@dispatch(Numeric, [Int])
+@dispatch
 @abstract()
-def reshape(a, *shape):  # pragma: no cover
+def reshape(a: Numeric, *shape: Int):  # pragma: no cover
     """Reshape a tensor.
 
     Args:
@@ -342,7 +343,7 @@ def reshape(a, *shape):  # pragma: no cover
     """
 
 
-@dispatch([object])
+@dispatch
 @abstract()
 def concat(*elements, **kw_args):  # pragma: no cover
     """Concatenate tensors along an axis.
@@ -356,8 +357,8 @@ def concat(*elements, **kw_args):  # pragma: no cover
     """
 
 
-@dispatch([{list, tuple}])
-def concat2d(*rows):
+@dispatch
+def concat2d(*rows: Union[list]):
     """Concatenate tensors into a matrix.
 
     Args:
@@ -370,9 +371,9 @@ def concat2d(*rows):
     return concat(*[concat(*row, axis=1) for row in rows], axis=0)
 
 
-@dispatch(Numeric, [Int])
+@dispatch
 @abstract()
-def tile(a, *repeats):  # pragma: no cover
+def tile(a: Numeric, *repeats: Int):  # pragma: no cover
     """Tile a tensor.
 
     Args:
@@ -384,8 +385,8 @@ def tile(a, *repeats):  # pragma: no cover
     """
 
 
-@dispatch(Numeric, object)
-def take(a, indices_or_mask, axis=0):  # pragma: no cover
+@dispatch
+def take(a: Numeric, indices_or_mask, axis=0):  # pragma: no cover
     """Take particular elements along an axis.
 
     Args:

@@ -1,8 +1,12 @@
-import numpy as np
-from plum import Callable, convert, add_conversion_method
 from types import FunctionType
+from typing import Callable
+
+import numpy as np
+from plum import convert, add_conversion_method
+from plum.type import VarArgs, Union
 
 from . import dispatch, B, Dispatcher
+from .control_flow import control_flow
 from .types import (
     Number,
     Numeric,
@@ -15,7 +19,6 @@ from .types import (
     JAXNumeric,
 )
 from .util import abstract
-from .control_flow import control_flow
 
 __all__ = [
     "nan",
@@ -83,9 +86,9 @@ pi = np.pi  #: Value of pi.
 log_2_pi = np.log(2 * pi)  #: Value of log(2 * pi).
 
 
-@dispatch(Numeric)
+@dispatch
 @abstract()
-def isnan(a):  # pragma: no cover
+def isnan(a: Numeric):  # pragma: no cover
     """Check whether a tensor is NaN.
 
     Args:
@@ -134,9 +137,9 @@ class Device:
             self._active_tf_manager.__exit__(exc_type, exc_val, exc_tb)
 
 
-@dispatch(Numeric)
+@dispatch
 @abstract()
-def device(a):
+def device(a: Numeric):
     """Get the device on which a tensor lives or change the active device.
 
     Args:
@@ -149,14 +152,14 @@ def device(a):
     """
 
 
-@dispatch(str)
-def device(name):
+@dispatch
+def device(name: str):
     return Device(name)
 
 
-@dispatch(Numeric)
+@dispatch
 @abstract(promote=None)
-def move_to_active_device(a):  # pragma: no cover
+def move_to_active_device(a: Numeric):  # pragma: no cover
     """Move a tensor to the active device.
 
     Args:
@@ -167,9 +170,9 @@ def move_to_active_device(a):  # pragma: no cover
     """
 
 
-@dispatch(DType, [Int])
+@dispatch
 @abstract(promote=None)
-def zeros(dtype, *shape):  # pragma: no cover
+def zeros(dtype: DType, *shape: Int):  # pragma: no cover
     """Create a tensor of zeros.
 
     Can also give a reference tensor whose data type and shape will be used to
@@ -184,19 +187,19 @@ def zeros(dtype, *shape):  # pragma: no cover
     """
 
 
-@dispatch.multi((Int,), ([Int],))  # Single integer is not a reference.
-def zeros(*shape):
+@dispatch.multi((Int,), (VarArgs(Int),))  # Single integer is not a reference.
+def zeros(*shape: Int):
     return zeros(B.default_dtype, *shape)
 
 
-@dispatch(Numeric)
-def zeros(ref):
+@dispatch
+def zeros(ref: Numeric):
     return zeros(B.dtype(ref), *B.shape(ref))
 
 
-@dispatch(DType, [Int])
+@dispatch
 @abstract(promote=None)
-def ones(dtype, *shape):  # pragma: no cover
+def ones(dtype: DType, *shape: Int):  # pragma: no cover
     """Create a tensor of ones.
 
     Can also give a reference tensor whose data type and shape will be used to
@@ -211,18 +214,18 @@ def ones(dtype, *shape):  # pragma: no cover
     """
 
 
-@dispatch.multi((Int,), ([Int],))  # Single integer is not a reference.
-def ones(*shape):
+@dispatch.multi((Int,), (VarArgs(Int),))  # Single integer is not a reference.
+def ones(*shape: Int):
     return ones(B.default_dtype, *shape)
 
 
-@dispatch(Numeric)
-def ones(ref):
+@dispatch
+def ones(ref: Numeric):
     return ones(B.dtype(ref), *B.shape(ref))
 
 
-@dispatch(DType)
-def zero(dtype):
+@dispatch
+def zero(dtype: DType):
     """Create a `0` with a particular data type.
 
     Args:
@@ -234,13 +237,13 @@ def zero(dtype):
     return B.cast(dtype, 0)
 
 
-@dispatch(Numeric)
-def zero(ref):
+@dispatch
+def zero(ref: Numeric):
     return zero(B.dtype(ref))
 
 
-@dispatch(DType)
-def one(dtype):
+@dispatch
+def one(dtype: DType):
     """Create a `1` with a particular data type.
 
     Args:
@@ -252,13 +255,13 @@ def one(dtype):
     return B.cast(dtype, 1)
 
 
-@dispatch(Numeric)
-def one(ref):
+@dispatch
+def one(ref: Numeric):
     return one(B.dtype(ref))
 
 
-@dispatch(DType, Int, Int, [Int])
-def eye(dtype, *shape):  # pragma: no cover
+@dispatch
+def eye(dtype: DType, *shape: Int):  # pragma: no cover
     """Create an identity matrix.
 
     Can also give a reference tensor whose data type and shape will be used to
@@ -282,35 +285,35 @@ def eye(dtype, *shape):  # pragma: no cover
         return B.tile(identity_matrix, *batch_shape, 1, 1)
 
 
-@dispatch(DType, Int, Int)
+@dispatch
 @abstract(promote=None)
-def _eye2(dtype, *shape):  # pragma: no cover
+def _eye2(dtype: DType, *shape: Int):  # pragma: no cover
     pass
 
 
-@dispatch(DType, Int)
-def eye(dtype, *shape):
-    return eye(dtype, shape[0], shape[0])
+@dispatch
+def eye(dtype: DType, shape: Int):
+    return eye(dtype, shape, shape)
 
 
-@dispatch(Int, [Int])
-def eye(*shape):
+@dispatch
+def eye(*shape: Int):
     return eye(B.default_dtype, *shape)
 
 
-@dispatch(Int)  # Single integer is not a reference.
-def eye(shape):
+@dispatch
+def eye(shape: Int):
     return eye(B.default_dtype, shape, shape)
 
 
-@dispatch(Numeric)
-def eye(ref):
+@dispatch
+def eye(ref: Numeric):
     return eye(B.dtype(ref), *B.shape(ref))
 
 
-@dispatch(DType, object, object, Int)
+@dispatch
 @abstract(promote=None)
-def linspace(dtype, a, b, num):
+def linspace(dtype: DType, a, b, num: Int):
     """Create a vector of `c` numbers ranging from `a` to `c`, distributed
     linearly.
 
@@ -325,14 +328,14 @@ def linspace(dtype, a, b, num):
     """
 
 
-@dispatch(object, object, Int)
-def linspace(a, b, num):
+@dispatch
+def linspace(a, b, num: Int):
     return linspace(B.default_dtype, a, b, num)
 
 
-@dispatch(DType, object, object, object)
+@dispatch
 @abstract(promote=None)
-def range(dtype, start, stop, step):
+def range(dtype: DType, start, stop, step):
     """Create a vector of numbers ranging from `start` to `stop` with step
     size `step`.
 
@@ -347,34 +350,34 @@ def range(dtype, start, stop, step):
     """
 
 
-@dispatch(object, object, object)
+@dispatch
 def range(start, stop, step):
     return range(int, start, stop, step)
 
 
-@dispatch(DType, object, object)
-def range(dtype, start, stop):
+@dispatch
+def range(dtype: DType, start, stop):
     return range(dtype, start, stop, 1)
 
 
-@dispatch(object, object)
+@dispatch
 def range(start, stop):
     return range(int, start, stop, 1)
 
 
-@dispatch(DType, object)
-def range(dtype, stop):
+@dispatch
+def range(dtype: DType, stop):
     return range(dtype, 0, stop, 1)
 
 
-@dispatch(object)
+@dispatch
 def range(stop):
     return range(int, 0, stop, 1)
 
 
-@dispatch(Numeric, DType)
+@dispatch
 @abstract(promote=None)
-def cast(dtype, a):  # pragma: no cover
+def cast(dtype: Numeric, a: DType):  # pragma: no cover
     """Cast an object to another data type.
 
     Args:
@@ -389,9 +392,9 @@ def cast(dtype, a):  # pragma: no cover
 # Unary functions:
 
 
-@dispatch(Numeric)
+@dispatch
 @abstract()
-def identity(a):  # pragma: no cover
+def identity(a: Numeric):  # pragma: no cover
     """Identity function
 
     Args:
@@ -402,9 +405,9 @@ def identity(a):  # pragma: no cover
     """
 
 
-@dispatch(Numeric)
+@dispatch
 @abstract()
-def negative(a):  # pragma: no cover
+def negative(a: Numeric):  # pragma: no cover
     """Negate a tensor.
 
     Args:
@@ -415,9 +418,9 @@ def negative(a):  # pragma: no cover
     """
 
 
-@dispatch(Numeric)
+@dispatch
 @abstract()
-def abs(a):  # pragma: no cover
+def abs(a: Numeric):  # pragma: no cover
     """Absolute value.
 
     Args:
@@ -428,9 +431,9 @@ def abs(a):  # pragma: no cover
     """
 
 
-@dispatch(Numeric)
+@dispatch
 @abstract()
-def sign(a):  # pragma: no cover
+def sign(a: Numeric):  # pragma: no cover
     """Sign function.
 
     Args:
@@ -441,9 +444,9 @@ def sign(a):  # pragma: no cover
     """
 
 
-@dispatch(Numeric)
+@dispatch
 @abstract()
-def sqrt(a):  # pragma: no cover
+def sqrt(a: Numeric):  # pragma: no cover
     """Square root.
 
     Args:
@@ -454,9 +457,9 @@ def sqrt(a):  # pragma: no cover
     """
 
 
-@dispatch(Numeric)
+@dispatch
 @abstract()
-def exp(a):  # pragma: no cover
+def exp(a: Numeric):  # pragma: no cover
     """Exponential function.
 
     Args:
@@ -467,9 +470,9 @@ def exp(a):  # pragma: no cover
     """
 
 
-@dispatch(Numeric)
+@dispatch
 @abstract()
-def log(a):  # pragma: no cover
+def log(a: Numeric):  # pragma: no cover
     """Logarithmic function
 
     Args:
@@ -480,9 +483,9 @@ def log(a):  # pragma: no cover
     """
 
 
-@dispatch(Numeric)
+@dispatch
 @abstract()
-def sin(a):  # pragma: no cover
+def sin(a: Numeric):  # pragma: no cover
     """Sine function.
 
     Args:
@@ -493,9 +496,9 @@ def sin(a):  # pragma: no cover
     """
 
 
-@dispatch(Numeric)
+@dispatch
 @abstract()
-def cos(a):  # pragma: no cover
+def cos(a: Numeric):  # pragma: no cover
     """Cosine function.
 
     Args:
@@ -506,9 +509,9 @@ def cos(a):  # pragma: no cover
     """
 
 
-@dispatch(Numeric)
+@dispatch
 @abstract()
-def tan(a):  # pragma: no cover
+def tan(a: Numeric):  # pragma: no cover
     """Tangent function.
 
     Args:
@@ -519,9 +522,9 @@ def tan(a):  # pragma: no cover
     """
 
 
-@dispatch(Numeric)
+@dispatch
 @abstract()
-def tanh(a):  # pragma: no cover
+def tanh(a: Numeric):  # pragma: no cover
     """Tangent hyperbolic function.
 
     Args:
@@ -532,9 +535,9 @@ def tanh(a):  # pragma: no cover
     """
 
 
-@dispatch(Numeric)
+@dispatch
 @abstract()
-def erf(a):  # pragma: no cover
+def erf(a: Numeric):  # pragma: no cover
     """Error function.
 
     Args:
@@ -545,7 +548,7 @@ def erf(a):  # pragma: no cover
     """
 
 
-@dispatch(object)
+@dispatch
 def sigmoid(a):
     """Sigmoid function.
 
@@ -558,7 +561,7 @@ def sigmoid(a):
     return 1 / (1 + exp(-a))
 
 
-@dispatch(object)
+@dispatch
 def softplus(a):
     """Softplus function.
 
@@ -572,7 +575,7 @@ def softplus(a):
     return log(1 + exp(-abs(a))) + maximum(a, zero)
 
 
-@dispatch(object)
+@dispatch
 def relu(a):
     """Rectified linear unit.
 
@@ -589,7 +592,7 @@ def relu(a):
 # Binary functions:
 
 
-@dispatch(object, object)
+@dispatch
 @abstract(promote=2)
 def add(a, b):  # pragma: no cover
     """Add two tensors.
@@ -603,7 +606,7 @@ def add(a, b):  # pragma: no cover
     """
 
 
-@dispatch(object, object)
+@dispatch
 @abstract(promote=2)
 def subtract(a, b):  # pragma: no cover
     """Subtract two tensors.
@@ -617,7 +620,7 @@ def subtract(a, b):  # pragma: no cover
     """
 
 
-@dispatch(object, object)
+@dispatch
 @abstract(promote=2)
 def multiply(a, b):  # pragma: no cover
     """Multiply two tensors.
@@ -631,7 +634,7 @@ def multiply(a, b):  # pragma: no cover
     """
 
 
-@dispatch(object, object)
+@dispatch
 @abstract(promote=2)
 def divide(a, b):  # pragma: no cover
     """Divide two tensors.
@@ -645,7 +648,7 @@ def divide(a, b):  # pragma: no cover
     """
 
 
-@dispatch(object, object)
+@dispatch
 @abstract(promote=2)
 def power(a, power):  # pragma: no cover
     """Raise a tensor to a power.
@@ -659,7 +662,7 @@ def power(a, power):  # pragma: no cover
     """
 
 
-@dispatch(object, object)
+@dispatch
 @abstract(promote=2)
 def minimum(a, b):  # pragma: no cover
     """Take the minimum of two tensors.
@@ -673,7 +676,7 @@ def minimum(a, b):  # pragma: no cover
     """
 
 
-@dispatch(object, object)
+@dispatch
 @abstract(promote=2)
 def maximum(a, b):  # pragma: no cover
     """Take the maximum of two tensors.
@@ -687,7 +690,7 @@ def maximum(a, b):  # pragma: no cover
     """
 
 
-@dispatch(object, object)
+@dispatch
 def leaky_relu(a, alpha):  # pragma: no cover
     """Leaky rectified linear unit.
 
@@ -704,9 +707,9 @@ def leaky_relu(a, alpha):  # pragma: no cover
 # Reductions:
 
 
-@dispatch(Numeric)
+@dispatch
 @abstract()
-def min(a, axis=None):  # pragma: no cover
+def min(a: Numeric, axis=None):  # pragma: no cover
     """Take the minimum of a tensor, possibly along an axis.
 
     Args:
@@ -718,9 +721,9 @@ def min(a, axis=None):  # pragma: no cover
     """
 
 
-@dispatch(Numeric)
+@dispatch
 @abstract()
-def max(a, axis=None):  # pragma: no cover
+def max(a: Numeric, axis=None):  # pragma: no cover
     """Take the maximum of a tensor, possibly along an axis.
 
     Args:
@@ -732,9 +735,9 @@ def max(a, axis=None):  # pragma: no cover
     """
 
 
-@dispatch(Numeric)
+@dispatch
 @abstract()
-def sum(a, axis=None):  # pragma: no cover
+def sum(a: Numeric, axis=None):  # pragma: no cover
     """Sum a tensor, possibly along an axis.
 
     Args:
@@ -746,9 +749,9 @@ def sum(a, axis=None):  # pragma: no cover
     """
 
 
-@dispatch(Numeric)
+@dispatch
 @abstract()
-def mean(a, axis=None):  # pragma: no cover
+def mean(a: Numeric, axis=None):  # pragma: no cover
     """Take the mean of a tensor, possibly along an axis.
 
     Args:
@@ -760,9 +763,9 @@ def mean(a, axis=None):  # pragma: no cover
     """
 
 
-@dispatch(Numeric)
+@dispatch
 @abstract()
-def std(a, axis=None):  # pragma: no cover
+def std(a: Numeric, axis=None):  # pragma: no cover
     """Compute the standard deviation of a tensor, possibly along an axis.
 
     Args:
@@ -774,7 +777,7 @@ def std(a, axis=None):  # pragma: no cover
     """
 
 
-@dispatch(object)
+@dispatch
 def logsumexp(a, axis=None):  # pragma: no cover
     """Exponentiate a tensor, sum it, and then take the logarithm, possibly
     along an axis.
@@ -798,9 +801,9 @@ def logsumexp(a, axis=None):  # pragma: no cover
 # Logical reductions:
 
 
-@dispatch(Numeric)
+@dispatch
 @abstract()
-def all(a, axis=None):  # pragma: no cover
+def all(a: Numeric, axis=None):  # pragma: no cover
     """Logical all of a tensor, possibly along an axis.
 
     Args:
@@ -812,9 +815,9 @@ def all(a, axis=None):  # pragma: no cover
     """
 
 
-@dispatch(Numeric)
+@dispatch
 @abstract()
-def any(a, axis=None):  # pragma: no cover
+def any(a: Numeric, axis=None):  # pragma: no cover
     """Logical any of a tensor, possibly along an axis.
 
     Args:
@@ -829,7 +832,7 @@ def any(a, axis=None):  # pragma: no cover
 # Logical comparisons:
 
 
-@dispatch(object, object)
+@dispatch
 @abstract(promote=2)
 def lt(a, b):  # pragma: no cover
     """Check whether one tensor is strictly less than another.
@@ -843,7 +846,7 @@ def lt(a, b):  # pragma: no cover
     """
 
 
-@dispatch(object, object)
+@dispatch
 @abstract(promote=2)
 def le(a, b):  # pragma: no cover
     """Check whether one tensor is less than or equal to another.
@@ -857,7 +860,7 @@ def le(a, b):  # pragma: no cover
     """
 
 
-@dispatch(object, object)
+@dispatch
 @abstract(promote=2)
 def gt(a, b):  # pragma: no cover
     """Check whether one tensor is strictly greater than another.
@@ -871,7 +874,7 @@ def gt(a, b):  # pragma: no cover
     """
 
 
-@dispatch(object, object)
+@dispatch
 @abstract(promote=2)
 def ge(a, b):  # pragma: no cover
     """Check whether one tensor is greater than or equal to another.
@@ -885,7 +888,7 @@ def ge(a, b):  # pragma: no cover
     """
 
 
-@dispatch(object, object, object)
+@dispatch
 @abstract(promote=3)
 def bvn_cdf(a, b, c):
     """Standard bivariate normal CDF. Computes the probability that `X < a`
@@ -902,8 +905,10 @@ def bvn_cdf(a, b, c):
     """
 
 
-@dispatch(Numeric, FunctionType, FunctionType, [Numeric])
-def cond(condition, f_true, f_false, *args):
+@dispatch
+def cond(
+    condition: Numeric, f_true: FunctionType, f_false: FunctionType, *args: Numeric
+):
     """An if-else statement that is part of the computation graph.
 
     Args:
@@ -922,16 +927,18 @@ def cond(condition, f_true, f_false, *args):
     return _cond(condition, f_true, f_false, *args)
 
 
-@dispatch(Numeric, FunctionType, FunctionType, [Numeric])
-def _cond(condition, f_true, f_false, *args):
+@dispatch
+def _cond(
+    condition: Numeric, f_true: FunctionType, f_false: FunctionType, *args: Numeric
+):
     if condition:
         return f_true(*args)
     else:
         return f_false(*args)
 
 
-@dispatch(Callable, object, [object])
-def scan(f, xs, *init_state):
+@dispatch
+def scan(f: Callable, xs, *init_state):
     """Perform a TensorFlow-style scanning operation.
 
     Args:
@@ -966,9 +973,9 @@ def scan(f, xs, *init_state):
     return B.transpose(states, perm=(1, 0) + tuple(range(2, B.rank(states))))
 
 
-@dispatch(Numeric)
+@dispatch
 @abstract(promote=None)
-def sort(a, axis=-1, descending=False):
+def sort(a: Numeric, axis=-1, descending=False):
     """Sort a tensor along an axis in ascending order.
 
     Args:
@@ -982,9 +989,9 @@ def sort(a, axis=-1, descending=False):
     """
 
 
-@dispatch(Numeric)
+@dispatch
 @abstract(promote=None)
-def argsort(a, axis=-1, descending=False):
+def argsort(a: Numeric, axis=-1, descending=False):
     """Get the indices that would a tensor along an axis in ascending order.
 
     Args:
@@ -998,14 +1005,14 @@ def argsort(a, axis=-1, descending=False):
     """
 
 
-NPOrNum = {NPNumeric, Number}  #: Type NumPy numeric or number.
+NPOrNum = Union[NPNumeric, Number]  #: Type NumPy numeric or number.
 add_conversion_method(AGNumeric, NPOrNum, lambda x: x._value)
 add_conversion_method(TFNumeric, NPOrNum, lambda x: x.numpy())
 add_conversion_method(TorchNumeric, NPOrNum, lambda x: x.detach().cpu().numpy())
 add_conversion_method(JAXNumeric, NPOrNum, np.array)
 
 
-@dispatch(object)
+@dispatch
 def to_numpy(a):
     """Convert an object to NumPy.
 
@@ -1018,21 +1025,21 @@ def to_numpy(a):
     return convert(a, NPOrNum)
 
 
-@dispatch([object])
+@dispatch
 def to_numpy(*elements):
     return to_numpy(elements)
 
 
-@dispatch(list)
-def to_numpy(a):
+@dispatch
+def to_numpy(a: list):
     return [to_numpy(x) for x in a]
 
 
-@dispatch(tuple)
-def to_numpy(a):
+@dispatch
+def to_numpy(a: tuple):
     return tuple(to_numpy(x) for x in a)
 
 
-@dispatch(dict)
-def to_numpy(a):
+@dispatch
+def to_numpy(a: dict):
     return {k: to_numpy(v) for k, v in a.items()}

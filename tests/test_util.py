@@ -15,6 +15,7 @@ from lab.util import (
     _common_shape,
     _translate_index,
 )
+
 # noinspections PyUnresolvedReferences
 from .util import allclose, check_lazy_shapes
 
@@ -101,59 +102,59 @@ def test_abstract(check_lazy_shapes):
     plum.promote = lambda *args: (b,) * len(args)
 
     # Define some abstract functions.
-    @B.dispatch([General])
+    @B.dispatch
     @abstract()
-    def f1(*args):
+    def f1(*args: General):
         return args
 
-    @B.dispatch([Specific])
-    def f1(*args):
+    @B.dispatch
+    def f1(*args: Specific):
         return args
 
-    @B.dispatch([General])
+    @B.dispatch
     @abstract(promote=None)
-    def f2(*args):
+    def f2(*args: General):
         return args
 
-    @B.dispatch([Specific])
-    def f2(*args):
+    @B.dispatch
+    def f2(*args: Specific):
         return args
 
-    @B.dispatch([General])
+    @B.dispatch
     @abstract(promote=-1)
-    def f3(*args):
+    def f3(*args: General):
         return args
 
-    @B.dispatch([Specific])
-    def f3(*args):
+    @B.dispatch
+    def f3(*args: Specific):
         return args
 
-    @B.dispatch([General])
+    @B.dispatch
     @abstract(promote=0)
-    def f4(*args):
+    def f4(*args: General):
         return args
 
-    @B.dispatch([Specific])
-    def f4(*args):
+    @B.dispatch
+    def f4(*args: Specific):
         return args
 
-    @B.dispatch([General])
+    @B.dispatch
     @abstract(promote=1)
-    def f5(*args):
+    def f5(*args: General):
         return args
 
-    @B.dispatch(Specific, [General])
-    def f5(*args):
-        return args
+    @B.dispatch
+    def f5(arg: Specific, *args: General):
+        return (arg,) + args
 
-    @B.dispatch([General])
+    @B.dispatch
     @abstract(promote=2)
-    def f6(*args):
+    def f6(*args: General):
         return args
 
-    @B.dispatch(Specific, Specific, [General])
-    def f6(*args):
-        return args
+    @B.dispatch
+    def f6(arg1: Specific, arg2: Specific, *args: General):
+        return (arg1, arg2) + args
 
     # Register methods.
     B.f1 = f1
