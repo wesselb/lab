@@ -73,7 +73,7 @@ if gfortran_available:
     ):
         raise RuntimeError("Compilation of TVPACK failed.")
 
-requirements = ["numpy>=1.16", "scipy>=1.3", "fdm", "plum-dispatch"]
+requirements = ["numpy>=1.16", "scipy>=1.3", "fdm", "plum-dispatch>=1"]
 
 
 # Determine which external modules to compile.
