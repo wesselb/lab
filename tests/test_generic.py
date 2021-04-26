@@ -4,7 +4,6 @@ import pytest
 import scipy.special
 import tensorflow as tf
 import torch
-from plum import NotFoundLookupError
 
 import lab as B
 
@@ -12,6 +11,7 @@ import lab as B
 from .util import (
     autograd_box,
     check_function,
+    Matrix,
     Tensor,
     Value,
     PositiveTensor,
@@ -27,6 +27,49 @@ def test_constants(check_lazy_shapes):
     assert B.pi == np.pi
     assert B.log_2_pi == np.log(2 * np.pi)
     assert B.nan is np.nan
+
+
+def test_isabstract_false(check_lazy_shapes):
+    for a in Tensor().forms():
+        assert not B.isabstract(a)
+
+
+@pytest.mark.parametrize("t", [tf.float32, torch.float32, jnp.float32])
+def test_isabstract_true(t, check_lazy_shapes):
+    tracked = []
+
+    @B.jit
+    def f(x):
+        tracked.append(B.isabstract(x))
+        return B.sum(x)
+
+    f(B.randn(t, 2, 2))
+
+    # First the function should be run concretely.
+    assert not tracked[0]
+    # In the next runs, at least one should be abstract.
+    assert any(tracked[1:])
+
+
+@pytest.mark.parametrize("jit", [B.jit, B.jit()])
+def test_jit(jit, check_lazy_shapes):
+    @jit
+    def f(x, option=None):
+        # Check that keyword arguments are passed on correctly. Only the compilation
+        # with PyTorch does not pass on its keyword arguments.
+        if not isinstance(x, B.TorchNumeric):
+            assert option is not None
+        # This requires lazy shapes:
+        x = B.ones(B.dtype(x), *B.shape(x))
+        # This requires control flow cache:
+        return B.cond(x[0, 0] > 0, lambda: x[1], lambda: x[2])
+
+    for a in Matrix().forms():
+        if isinstance(a, B.Torch):
+            # PyTorch doesn't support keyword arguments.
+            f(a)
+        else:
+            f(a, option=1)
 
 
 def test_isnan(check_lazy_shapes):

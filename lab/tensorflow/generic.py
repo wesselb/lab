@@ -12,6 +12,32 @@ __all__ = []
 
 
 @dispatch
+def isabstract(a: Numeric):
+    return not tf.executing_eagerly()
+
+
+@dispatch
+def _jit_run(
+    f: FunctionType,
+    compilation_cache: dict,
+    jit_kw_args: dict,
+    *args: Numeric,
+    **kw_args,
+):
+    if "jax" not in compilation_cache:
+        # Run once to populate the control flow cache.
+        f(*args, **kw_args)
+        # Default `autograph` to `False`.
+        jit_kw_args = dict(jit_kw_args)
+        if "autograph" not in jit_kw_args:
+            jit_kw_args["autograph"] = False
+        # Compile.
+        compilation_cache["tensorflow"] = tf.function(f, **jit_kw_args)
+
+    return compilation_cache["tensorflow"](*args, **kw_args)
+
+
+@dispatch
 def isnan(a: Numeric):
     return tf.math.is_nan(a)
 
@@ -220,10 +246,8 @@ def bvn_cdf(a: Numeric, b: Numeric, c: Numeric):
 
 
 @dispatch
-def _cond(
-    condition: Numeric, f_true: FunctionType, f_false: FunctionType, *xs: TFNumeric
-):
-    return tf.cond(condition, lambda: f_true(*xs), lambda: f_false(*xs))
+def _cond(condition: TFNumeric, f_true: FunctionType, f_false: FunctionType, *args):
+    return tf.cond(condition, lambda: f_true(*args), lambda: f_false(*args))
 
 
 # If `Numeric` types are used here, this implementation is more specific than the

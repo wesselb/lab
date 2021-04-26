@@ -1,7 +1,6 @@
 from types import FunctionType
 
 import jax
-import jax.lax as lax
 import jax.numpy as jnp
 import jax.scipy.special as jsps
 from plum import Union
@@ -9,9 +8,31 @@ from plum import Union
 from . import B, dispatch, Numeric
 from .custom import jax_register
 from ..custom import bvn_cdf, s_bvn_cdf
-from ..types import JAXDType, JAXNumeric, NPNumeric, Number, Int
+from ..types import JAXDType, JAXNumeric, NPNumeric, Number, Int, _jax_tracer
 
 __all__ = []
+
+
+@dispatch
+def isabstract(a: Numeric):
+    return isinstance(a, _jax_tracer)
+
+
+@dispatch
+def _jit_run(
+    f: FunctionType,
+    compilation_cache: dict,
+    jit_kw_args: dict,
+    *args: Numeric,
+    **kw_args,
+):
+    if "jax" not in compilation_cache:
+        # Run once to populate the control flow cache.
+        f(*args, **kw_args)
+        # Compile.
+        compilation_cache["jax"] = jax.jit(f, **jit_kw_args)
+
+    return compilation_cache["jax"](*args, **kw_args)
 
 
 @dispatch
@@ -235,10 +256,13 @@ def bvn_cdf(a: Numeric, b: Numeric, c: Numeric):
 
 
 @dispatch
-def _cond(
-    condition: Numeric, f_true: FunctionType, f_false: FunctionType, *xs: JAXNumeric
-):
-    return lax.cond(condition, lambda xs_: f_true(*xs_), lambda xs_: f_false(*xs_), xs)
+def _cond(condition: JAXNumeric, f_true: FunctionType, f_false: FunctionType, *args):
+    # We could use `jax.lax.cond` here, but that invokes compilation, which makes
+    # repeated application of `B.cond` extremely slow.
+    if condition:
+        return f_true(*args)
+    else:
+        return f_false(*args)
 
 
 @dispatch

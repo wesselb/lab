@@ -236,6 +236,9 @@ log_2_pi
 
 ### Generic
 ```
+isabstract(a)
+jit(f, **kw_args)
+
 isnan(a)
 
 device(a)

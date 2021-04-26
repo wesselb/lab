@@ -6,7 +6,7 @@ from plum import Union
 from . import B, dispatch
 from .shape import Shape
 from .types import Numeric, Int
-from .util import abstract
+from .util import abstract, resolve_axis
 
 __all__ = [
     "lazy_shapes",
@@ -41,17 +41,20 @@ class LazyShapes:
         enabled (bool): Are lazy shapes enabled?
     """
 
+    enabled = False
+
     def __init__(self):
-        self.enabled = False
+        self._prev = None
 
     def __enter__(self):
-        self.enabled = True
+        self._prev = LazyShapes.enabled
+        LazyShapes.enabled = True
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.enabled = False
+        LazyShapes.enabled = self._prev
 
 
-lazy_shapes = LazyShapes()  #: Enable lazy shapes.
+lazy_shapes = LazyShapes  #: Enable lazy shapes.
 
 
 @dispatch
@@ -65,7 +68,7 @@ def shape(a: Numeric):  # pragma: no cover
         object: Shape of `a`.
     """
     try:
-        if lazy_shapes.enabled:
+        if LazyShapes.enabled:
             return Shape(*a.shape)
         else:
             return a.shape
@@ -400,9 +403,7 @@ def take(a: Numeric, indices_or_mask, axis=0):  # pragma: no cover
     """
     if B.rank(indices_or_mask) != 1:
         raise ValueError("Indices or mask must be rank 1.")
-    # Resolve negative axis specification.
-    if axis < 0:
-        axis += B.rank(a)
+    axis = resolve_axis(a, axis)
     # Construct slices.
     slices = tuple(
         indices_or_mask if i == axis else slice(None, None, None)

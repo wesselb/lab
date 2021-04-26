@@ -1,5 +1,8 @@
+from types import FunctionType
+
 import torch
 from plum import Union
+from torch.jit import is_tracing, trace
 
 from . import B, dispatch, Numeric
 from .custom import torch_register
@@ -8,6 +11,24 @@ from ..shape import Dimension
 from ..types import TorchNumeric, NPNumeric, TorchDType, Number, Int
 
 __all__ = []
+
+
+@dispatch
+def isabstract(a: Numeric):
+    return is_tracing()
+
+
+@dispatch
+def _jit_run(
+    f: FunctionType, compilation_cache: dict, jit_kw_args: dict, *args: Numeric
+):
+    if "torch" not in compilation_cache:
+        # Run once to populate the control flow cache.
+        f(*args)
+        # Compile.
+        compilation_cache["torch"] = trace(f, args, **jit_kw_args)
+
+    return compilation_cache["torch"](*args)
 
 
 @dispatch

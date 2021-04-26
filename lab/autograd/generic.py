@@ -1,3 +1,5 @@
+from types import FunctionType
+
 import autograd.numpy as anp
 import autograd.scipy.special as asps
 
@@ -7,6 +9,23 @@ from ..custom import bvn_cdf, s_bvn_cdf
 from ..types import AGDType, AGNumeric
 
 __all__ = []
+
+
+@dispatch
+def isabstract(a: Numeric):
+    return False
+
+
+@dispatch
+def _jit_run(
+    f: FunctionType,
+    compilation_cache: dict,
+    jit_kw_args: dict,
+    *args: Numeric,
+    **kw_args
+):
+    # There is no JIT for AutoGrad, so just run the function.
+    return f(*args, **kw_args)
 
 
 @dispatch

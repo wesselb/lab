@@ -3,6 +3,7 @@ import pytest
 import tensorflow as tf
 
 import lab as B
+from lab.shape import Shape
 
 # noinspection PyUnresolvedReferences
 from .util import (
@@ -45,8 +46,30 @@ def test_sizing(f, check_lazy_shapes):
         (((5,), (2,)), (2, 1)),
     ],
 )
-def test_shape_other(x, shape, check_lazy_shapes):
+def test_shape(x, shape, check_lazy_shapes):
     assert B.shape(x) == shape
+
+
+def test_lazy_shape():
+    a = B.randn(2, 2)
+
+    # By default, it should be off.
+    assert isinstance(B.shape(a), tuple)
+
+    # Turn on.
+    with B.lazy_shapes():
+        assert isinstance(B.shape(a), Shape)
+
+        # Force lazy shapes to be off again.
+        B.lazy_shapes.enabled = False
+        assert isinstance(B.shape(a), tuple)
+
+        # Turn on again.
+        with B.lazy_shapes():
+            assert isinstance(B.shape(a), Shape)
+
+        # Should remain off.
+        assert isinstance(B.shape(a), tuple)
 
 
 def test_isscalar(check_lazy_shapes):

@@ -1,3 +1,4 @@
+from functools import wraps
 from types import FunctionType
 from typing import Callable
 
@@ -24,6 +25,8 @@ __all__ = [
     "nan",
     "pi",
     "log_2_pi",
+    "isabstract",
+    "jit",
     "isnan",
     "Device",
     "device",
@@ -84,6 +87,87 @@ _dispatch = Dispatcher()
 nan = np.nan  #: NaN.
 pi = np.pi  #: Value of pi.
 log_2_pi = np.log(2 * pi)  #: Value of log(2 * pi).
+
+
+@dispatch
+@abstract()
+def isabstract(a: Numeric):  # pragma: no cover
+    """Check whether a tensor is abstract.
+
+    Args:
+        a (tensor): Tensor.
+
+    Returns:
+        bool: `True` if `a` is abstract, otherwise `False`.
+    """
+
+
+class JittedFunction:
+    """A function that will be compiled just-in-time.
+
+    Args:
+        f_python (function): Python function to compile.
+        jit_kw_args (dict): Keyword arguments to pass to the JIT.
+    """
+
+    def __init__(self, f_python, jit_kw_args):
+        self._f_python = f_python
+        self._compilation_cache = {}
+        self._jit_kw_args = jit_kw_args
+
+    def __call__(self, *args, **kw_args):
+        return _jit_run(
+            self._f_python,
+            self._compilation_cache,
+            self._jit_kw_args,
+            *args,
+            **kw_args,
+        )
+
+
+def jit(f: FunctionType = None, **kw_args):
+    """Decorator to compile a function just-in-time.
+
+    Further takes in keyword arguments which will be passed to the JIT.
+
+    Args:
+        f (function): Function to compile just-in-time.
+    """
+    # Support partial setting of `**kw_args`.
+    if f is None:
+
+        def dec(f_):
+            return jit(f_, **kw_args)
+
+        return dec
+
+    # Use a control flow cache and lazy shapes to make sure that the JIT compilation
+    # doesn't evaluate abstract tensors.
+
+    cache = B.ControlFlowCache()
+
+    @wraps(f)
+    def f_safe(*args_, **kw_args_):
+        with cache:
+            with B.lazy_shapes():
+                return f(*args_, **kw_args_)
+
+    # The function needs to be run once before it can safe be compiled. That will be
+    # handled by :func:`._jit_run`.
+
+    return JittedFunction(f_safe, jit_kw_args=kw_args)
+
+
+@dispatch
+@abstract()
+def _jit_run(
+    f: FunctionType,
+    compilation_cache: dict,
+    jit_kw_args: dict,
+    *args: Numeric,
+    **kw_args
+):  # pragma: no cover
+    pass
 
 
 @dispatch
@@ -906,9 +990,7 @@ def bvn_cdf(a, b, c):
 
 
 @dispatch
-def cond(
-    condition: Numeric, f_true: FunctionType, f_false: FunctionType, *args: Numeric
-):
+def cond(condition: Numeric, f_true: FunctionType, f_false: FunctionType, *args):
     """An if-else statement that is part of the computation graph.
 
     Args:
@@ -928,9 +1010,7 @@ def cond(
 
 
 @dispatch
-def _cond(
-    condition: Numeric, f_true: FunctionType, f_false: FunctionType, *args: Numeric
-):
+def _cond(condition: Numeric, f_true: FunctionType, f_false: FunctionType, *args):
     if condition:
         return f_true(*args)
     else:

@@ -41,7 +41,7 @@ _dispatch = Dispatcher()
 @pytest.fixture(params=[False, True])
 def check_lazy_shapes(request):
     if request.param:
-        with B.lazy_shapes:
+        with B.lazy_shapes():
             yield
     else:
         yield
