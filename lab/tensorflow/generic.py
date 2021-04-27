@@ -24,7 +24,7 @@ def _jit_run(
     *args: Numeric,
     **kw_args,
 ):
-    if "jax" not in compilation_cache:
+    if "tensorflow" not in compilation_cache:
         # Run once to populate the control flow cache.
         f(*args, **kw_args)
         # Default `autograph` to `False`.
