@@ -52,9 +52,10 @@ def test_shape(x, shape, check_lazy_shapes):
 
 
 def test_subshape(check_lazy_shapes):
-    assert B.shape(B.zeros(2), 0) == (2,)
-    assert B.shape(B.zeros(2, 3, 4), 1) == (3,)
+    assert B.shape(B.zeros(2), 0) == 2
+    assert B.shape(B.zeros(2, 3, 4), 1) == 3
     assert B.shape(B.zeros(2, 3, 4), 0, 2) == (2, 4)
+    assert B.shape(B.zeros(2, 3, 4), 0, 1, 2) == (2, 3, 4)
 
 
 def test_lazy_shape():

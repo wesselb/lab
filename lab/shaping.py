@@ -84,6 +84,11 @@ def shape(a: Union[list, tuple]):
 
 
 @dispatch
+def shape(a, dim: Int):
+    return B.shape(a)[dim]
+
+
+@dispatch
 def shape(a, *dims: Int):
     a_shape = B.shape(a)
     subshape = tuple(a_shape[i] for i in dims)
