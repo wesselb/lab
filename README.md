@@ -387,7 +387,7 @@ choice(a)
 
 ### Shaping
 ```
-shape(a)
+shape(a, *dims)
 rank(a)
 length(a) (alias: size)
 isscalar(a)

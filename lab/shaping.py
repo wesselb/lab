@@ -63,6 +63,7 @@ def shape(a: Numeric):  # pragma: no cover
 
     Args:
         a (tensor): Tensor.
+        *dims (int, optional): Dimensions to get.
 
     Returns:
         object: Shape of `a`.
@@ -80,6 +81,16 @@ def shape(a: Numeric):  # pragma: no cover
 @dispatch
 def shape(a: Union[list, tuple]):
     return np.array(a).shape
+
+
+@dispatch
+def shape(a, *dims: Int):
+    a_shape = B.shape(a)
+    subshape = tuple(a_shape[i] for i in dims)
+    if LazyShapes.enabled:
+        return Shape(*subshape)
+    else:
+        return subshape
 
 
 @dispatch
