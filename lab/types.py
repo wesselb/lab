@@ -269,7 +269,7 @@ def issubdtype(dtype1: DType, dtype2: DType):
 
 
 @dispatch
-def promote_dtypes(dtype: DType, *dtypes: DType):
+def promote_dtypes(first_dtype: DType, *dtypes: DType):
     """Find the smallest data type to which safely a number of the given data types can
     be cast.
 
@@ -284,14 +284,14 @@ def promote_dtypes(dtype: DType, *dtypes: DType):
     """
     if len(dtypes) == 0:
         # There is just one data type given.
-        return dtype
+        return first_dtype
     # Perform promotion.
     common_dtype = np.promote_types(
-        convert(dtype, NPDType), convert(dtypes[0], NPDType)
+        convert(first_dtype, NPDType), convert(dtypes[0], NPDType)
     )
     for dtype in dtypes[1:]:
         common_dtype = np.promote_types(common_dtype, convert(dtype, NPDType))
-    return _convert_back(common_dtype.type, dtype)
+    return _convert_back(common_dtype.type, first_dtype)
 
 
 @dispatch
