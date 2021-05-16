@@ -234,6 +234,15 @@ pi
 log_2_pi
 ```
 
+### Data Types
+```
+dtype(a)
+dtype_float(a)
+
+promote_dtype(*dtype)
+issubdtype(dtype1, dtype2)
+```
+
 ### Generic
 ```
 isabstract(a)

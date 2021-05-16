@@ -32,8 +32,10 @@ __all__ = [
     "JAXDType",
     "DType",
     "default_dtype",
-    "issubdtype",
     "dtype",
+    "issubdtype",
+    "promote_dtype",
+    "dtype_float",
     "NP",
     "AG",
     "TF",
@@ -210,25 +212,6 @@ default_dtype = np.float64  #: Default dtype.
 
 
 @dispatch
-def issubdtype(dtype1: NPDType, dtype2: NPDType):
-    """Check whether one data type is a subtype of another.
-
-    Args:
-        dtype1 (dtype): First data type.
-        dtype2 (dtype): Second data type.
-
-    Returns:
-        bool: `dtype1` is a subtype of `dtype2`.
-    """
-    return np.issubdtype(dtype1, dtype2)
-
-
-@dispatch
-def issubdtype(dtype1, dtype2):
-    return issubdtype(convert(dtype1, NPDType), convert(dtype2, NPDType))
-
-
-@dispatch
 def dtype(a):
     """Determine the data type of an object.
 
@@ -259,6 +242,82 @@ def dtype(a: AGNumeric):
 def dtype(a: JAXNumeric):
     # JAX gives NumPy data types back. Convert to JAX ones.
     return convert(a.dtype, JAXDType)
+
+
+@dispatch
+def dtype(*elements):
+    return dtype(elements)
+
+
+@dispatch
+def dtype(elements: tuple):
+    return promote_dtype(*(dtype(a) for a in elements))
+
+
+@dispatch
+def issubdtype(dtype1: NPDType, dtype2: NPDType):
+    """Check whether one data type is a subtype of another.
+
+    Args:
+        dtype1 (dtype): First data type.
+        dtype2 (dtype): Second data type.
+
+    Returns:
+        bool: `dtype1` is a subtype of `dtype2`.
+    """
+    return np.issubdtype(dtype1, dtype2)
+
+
+@dispatch
+def issubdtype(dtype1, dtype2):
+    return issubdtype(convert(dtype1, NPDType), convert(dtype2, NPDType))
+
+
+@dispatch
+def promote_dtype(dtype1: DType, dtype2: DType, *dtypes: DType):
+    """Find the smallest data type to which a number of given data types can be cast.
+
+    This function is sensitive to the order of the arguments. The result, however, is
+    always valid.
+
+    Args:
+        *dtypes (dtype): Data types to promote. Must be at least two.
+
+    Returns:
+        dtype: Common data type. Will be of the type of the first given data type.
+    """
+    common_dtype = np.promote_types(convert(dtype1, NPDType), convert(dtype2, NPDType))
+    for dtype in dtypes:
+        common_dtype = np.promote_types(common_dtype, convert(dtype, NPDType))
+    return _convert_back(common_dtype.type, dtype1)
+
+
+@dispatch
+def _convert_back():  # pragma: no cover
+    pass
+
+
+def _implement_convert_back(target):
+    @dispatch
+    def _convert_back(dtype: NPDType, _: target):
+        return convert(dtype, target)
+
+
+for target in [NPDType, AGDType, TFDType, TorchDType, JAXDType]:
+    _implement_convert_back(target)
+
+
+@dispatch
+def dtype_float(x):
+    """Get the data type of an object and ensure that it is a floating type.
+
+    Args:
+        x (object): Object to get data type of.
+
+    Returns:
+        dtype: Data type of `x`, but ensured to be floating.
+    """
+    return promote_dtype(dtype(x), np.float16)
 
 
 # Framework types:

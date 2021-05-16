@@ -125,17 +125,6 @@ def test_data_type(check_lazy_shapes):
     assert convert(jnp.float32, B.TorchDType) is torch.float32
 
 
-def test_issubdtype(check_lazy_shapes):
-    assert B.issubdtype(np.float32, np.floating)
-    assert B.issubdtype(tf.float32, np.floating)
-    assert B.issubdtype(torch.float32, np.floating)
-    assert B.issubdtype(jnp.float32, np.floating)
-    assert not B.issubdtype(np.float32, np.integer)
-    assert not B.issubdtype(tf.float32, np.integer)
-    assert not B.issubdtype(torch.float32, np.integer)
-    assert not B.issubdtype(jnp.float32, np.integer)
-
-
 def test_dtype(check_lazy_shapes):
     assert B.dtype(1) is int
     assert B.dtype(1.0) is float
@@ -147,6 +136,43 @@ def test_dtype(check_lazy_shapes):
     assert B.dtype(torch.tensor(1.0, dtype=torch.float32)) is torch.float32
     assert B.dtype(jnp.array(1, dtype=jnp.int32)) is jnp.int32
     assert B.dtype(jnp.array(1.0, dtype=jnp.float32)) is jnp.float32
+
+    # Test tuples, which promote.
+    assert B.dtype(1, 1) is np.int64
+    assert B.dtype((1, 1)) is np.int64
+    assert B.dtype(1, 1.0) is np.float64
+    assert B.dtype((1, 1.0)) is np.float64
+
+
+def test_issubdtype(check_lazy_shapes):
+    assert B.issubdtype(np.float32, np.floating)
+    assert B.issubdtype(tf.float32, np.floating)
+    assert B.issubdtype(torch.float32, np.floating)
+    assert B.issubdtype(jnp.float32, np.floating)
+    assert not B.issubdtype(np.float32, np.integer)
+    assert not B.issubdtype(tf.float32, np.integer)
+    assert not B.issubdtype(torch.float32, np.integer)
+    assert not B.issubdtype(jnp.float32, np.integer)
+
+
+def test_promote_dtype(check_lazy_shapes):
+    for t_int, t_float in [
+        (np.int64, np.float64),
+        (tf.int64, tf.float64),
+        (torch.int64, torch.float64),
+        (jnp.int64, jnp.float64),
+    ]:
+        # Also check that the conversion back is right.
+        assert B.promote_dtype(t_int, int) is t_int
+        assert B.promote_dtype(t_int, int, int) is t_int
+        assert B.promote_dtype(t_int, float) is t_float
+        assert B.promote_dtype(t_int, int, float) is t_float
+
+
+def test_dtype_float(check_lazy_shapes):
+    assert B.dtype_float(np.float32(1)) is np.float32
+    assert B.dtype_float(np.float64(1)) is np.float64
+    assert B.dtype_float(1) is np.float64
 
 
 @pytest.mark.parametrize("t", [B.NP, B.Framework])
