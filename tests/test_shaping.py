@@ -1,6 +1,7 @@
 import numpy as np
 import pytest
 import tensorflow as tf
+from plum import NotFoundLookupError
 
 import lab as B
 from lab.shape import Shape
@@ -56,6 +57,10 @@ def test_subshape(check_lazy_shapes):
     assert B.shape(B.zeros(2, 3, 4), 1) == 3
     assert B.shape(B.zeros(2, 3, 4), 0, 2) == (2, 4)
     assert B.shape(B.zeros(2, 3, 4), 0, 1, 2) == (2, 3, 4)
+
+    # Check for possible infinite recursion.
+    with pytest.raises(NotFoundLookupError):
+        B.shape(None, 1)
 
 
 def test_lazy_shape():
