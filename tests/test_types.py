@@ -156,6 +156,11 @@ def test_issubdtype(check_lazy_shapes):
 
 
 def test_promote_dtypes(check_lazy_shapes):
+    # Check one-argument case.
+    assert B.promote_dtypes(int) is int
+    assert B.promote_dtypes(float) is float
+
+    # Check multi-argument case.
     for t_int, t_float in [
         (np.int64, np.float64),
         (tf.int64, tf.float64),

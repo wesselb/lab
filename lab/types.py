@@ -177,7 +177,6 @@ def _torch_lookup(dtype):
     return _torch_lookup_cache[dtype]
 
 
-# Add conversions between data types.
 def _name(x):
     try:
         return x.name
@@ -185,6 +184,7 @@ def _name(x):
         return x.__name__
 
 
+# Add conversions between data types.
 add_conversion_method(NPDType, TFDType, lambda x: _module_attr("tensorflow", _name(x)))
 add_conversion_method(NPDType, TorchDType, lambda x: _module_attr("torch", _name(x)))
 add_conversion_method(NPDType, JAXDType, lambda x: _module_attr("jax.numpy", _name(x)))
@@ -255,7 +255,7 @@ def dtype(elements: tuple):
 
 
 @dispatch
-def issubdtype(dtype1: NPDType, dtype2: NPDType):
+def issubdtype(dtype1: DType, dtype2: DType):
     """Check whether one data type is a subtype of another.
 
     Args:
@@ -265,31 +265,33 @@ def issubdtype(dtype1: NPDType, dtype2: NPDType):
     Returns:
         bool: `dtype1` is a subtype of `dtype2`.
     """
-    return np.issubdtype(dtype1, dtype2)
+    return np.issubdtype(convert(dtype1, NPDType), convert(dtype2, NPDType))
 
 
 @dispatch
-def issubdtype(dtype1, dtype2):
-    return issubdtype(convert(dtype1, NPDType), convert(dtype2, NPDType))
-
-
-@dispatch
-def promote_dtypes(dtype1: DType, dtype2: DType, *dtypes: DType):
-    """Find the smallest data type to which a number of given data types can be cast.
+def promote_dtypes(dtype: DType, *dtypes: DType):
+    """Find the smallest data type to which safely a number of the given data types can
+    be cast.
 
     This function is sensitive to the order of the arguments. The result, however, is
     always valid.
 
     Args:
-        *dtypes (dtype): Data types to promote. Must be at least two.
+        *dtypes (dtype): Data types to promote. Must be at least one.
 
     Returns:
         dtype: Common data type. Will be of the type of the first given data type.
     """
-    common_dtype = np.promote_types(convert(dtype1, NPDType), convert(dtype2, NPDType))
-    for dtype in dtypes:
+    if len(dtypes) == 0:
+        # There is just one data type given.
+        return dtype
+    # Perform promotion.
+    common_dtype = np.promote_types(
+        convert(dtype, NPDType), convert(dtypes[0], NPDType)
+    )
+    for dtype in dtypes[1:]:
         common_dtype = np.promote_types(common_dtype, convert(dtype, NPDType))
-    return _convert_back(common_dtype.type, dtype1)
+    return _convert_back(common_dtype.type, dtype)
 
 
 @dispatch
