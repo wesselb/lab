@@ -90,7 +90,7 @@ def shape(a, dim: Int):
 
 @dispatch
 def shape(a, dim: Int, *dims: Int):
-    dims = (dim, dims)
+    dims = (dim,) + dims
     a_shape = B.shape(a)
     subshape = tuple(a_shape[i] for i in dims)
     if LazyShapes.enabled:
