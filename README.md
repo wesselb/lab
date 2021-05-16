@@ -239,7 +239,7 @@ log_2_pi
 dtype(a)
 dtype_float(a)
 
-promote_dtype(*dtype)
+promote_dtypes(*dtype)
 issubdtype(dtype1, dtype2)
 ```
 

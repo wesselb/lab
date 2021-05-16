@@ -34,7 +34,7 @@ __all__ = [
     "default_dtype",
     "dtype",
     "issubdtype",
-    "promote_dtype",
+    "promote_dtypes",
     "dtype_float",
     "NP",
     "AG",
@@ -251,7 +251,7 @@ def dtype(*elements):
 
 @dispatch
 def dtype(elements: tuple):
-    return promote_dtype(*(dtype(a) for a in elements))
+    return promote_dtypes(*(dtype(a) for a in elements))
 
 
 @dispatch
@@ -274,7 +274,7 @@ def issubdtype(dtype1, dtype2):
 
 
 @dispatch
-def promote_dtype(dtype1: DType, dtype2: DType, *dtypes: DType):
+def promote_dtypes(dtype1: DType, dtype2: DType, *dtypes: DType):
     """Find the smallest data type to which a number of given data types can be cast.
 
     This function is sensitive to the order of the arguments. The result, however, is
@@ -317,7 +317,7 @@ def dtype_float(x):
     Returns:
         dtype: Data type of `x`, but ensured to be floating.
     """
-    return promote_dtype(dtype(x), np.float16)
+    return promote_dtypes(dtype(x), np.float16)
 
 
 # Framework types:

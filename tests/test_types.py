@@ -155,7 +155,7 @@ def test_issubdtype(check_lazy_shapes):
     assert not B.issubdtype(jnp.float32, np.integer)
 
 
-def test_promote_dtype(check_lazy_shapes):
+def test_promote_dtypes(check_lazy_shapes):
     for t_int, t_float in [
         (np.int64, np.float64),
         (tf.int64, tf.float64),
@@ -163,10 +163,10 @@ def test_promote_dtype(check_lazy_shapes):
         (jnp.int64, jnp.float64),
     ]:
         # Also check that the conversion back is right.
-        assert B.promote_dtype(t_int, int) is t_int
-        assert B.promote_dtype(t_int, int, int) is t_int
-        assert B.promote_dtype(t_int, float) is t_float
-        assert B.promote_dtype(t_int, int, float) is t_float
+        assert B.promote_dtypes(t_int, int) is t_int
+        assert B.promote_dtypes(t_int, int, int) is t_int
+        assert B.promote_dtypes(t_int, float) is t_float
+        assert B.promote_dtypes(t_int, int, float) is t_float
 
 
 def test_dtype_float(check_lazy_shapes):
