@@ -266,6 +266,11 @@ def _cond(condition: JAXNumeric, f_true: FunctionType, f_false: FunctionType, *a
 
 
 @dispatch
+def where(condition: Numeric, a: Numeric, b: Numeric):
+    return jnp.where(condition, a, b)
+
+
+@dispatch
 def sort(a: Numeric, axis=-1, descending=False):
     if descending:
         return -jnp.sort(-a, axis=axis)

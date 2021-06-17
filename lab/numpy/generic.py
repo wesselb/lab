@@ -232,6 +232,11 @@ def bvn_cdf(a: Numeric, b: Numeric, c: Numeric):
 
 
 @dispatch
+def where(condition: Numeric, a: Numeric, b: Numeric):
+    return np.where(condition, a, b)
+
+
+@dispatch
 def sort(a: Numeric, axis=-1, descending=False):
     if descending:
         return -np.sort(-a, axis=axis)

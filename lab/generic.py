@@ -74,8 +74,9 @@ __all__ = [
     "le",
     "gt",
     "ge",
-    "cond",
     "bvn_cdf",
+    "cond",
+    "where",
     "scan",
     "sort",
     "argsort",
@@ -1015,6 +1016,22 @@ def _cond(condition: Numeric, f_true: FunctionType, f_false: FunctionType, *args
         return f_true(*args)
     else:
         return f_false(*args)
+
+
+@dispatch
+@abstract(promote=3)
+def where(condition: Numeric, a: Numeric, b: Numeric):  # pragma: no cover
+    """In a broadcasting fashion, take from `x` if `condition` is true; otherwise,
+    take from `y`.
+
+    Args:
+        condition (tensor): Condition.
+        a (tensor): Tensor to take from if `condition` is true.
+        b (tensor): Tensor to take from if `condition` is false.
+
+    Returns:
+        tensor: Tensor where every element is either from `x` or from `y`.
+    """
 
 
 @dispatch

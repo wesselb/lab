@@ -267,6 +267,11 @@ def bvn_cdf(a: Numeric, b: Numeric, c: Numeric):
 
 
 @dispatch
+def where(condition: Numeric, a: Numeric, b: Numeric):
+    return torch.where(condition, a, b)
+
+
+@dispatch
 def sort(a: Numeric, axis=-1, descending=False):
     return torch.sort(a, dim=axis, descending=descending)[0]
 

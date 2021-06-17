@@ -250,6 +250,11 @@ def _cond(condition: TFNumeric, f_true: FunctionType, f_false: FunctionType, *ar
     return tf.cond(condition, lambda: f_true(*args), lambda: f_false(*args))
 
 
+@dispatch
+def where(condition: Numeric, a: Numeric, b: Numeric):
+    return tf.where(condition, a, b)
+
+
 # If `Numeric` types are used here, this implementation is more specific than the
 # generic implementation, which will use TensorFlow unnecessarily.
 @dispatch

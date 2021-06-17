@@ -372,6 +372,13 @@ def test_cond(check_lazy_shapes):
         check_function(f, (Tensor(), Tensor(4)))
 
 
+def test_where(check_lazy_shapes):
+    def f(v, x, y):
+        return B.where(v > 0, x, y)
+
+    check_function(f, (Tensor(2, 3), Tensor(2, 3), Tensor(2, 3)))
+
+
 def test_scan(check_lazy_shapes):
     # Check consistency by inputting various shapes for a simple scanning
     # function.
