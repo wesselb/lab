@@ -63,7 +63,9 @@ __all__ = [
     "maximum",
     "leaky_relu",
     "min",
+    "argmin",
     "max",
+    "argmax",
     "sum",
     "mean",
     "std",
@@ -809,6 +811,21 @@ def min(a: Numeric, axis=None):  # pragma: no cover
 
 @dispatch
 @abstract()
+def argmin(a: Numeric, axis=None):  # pragma: no cover
+    """Take the indices corresponding to the minimum of a tensor, possibly along an
+    axis.
+
+    Args:
+        a (tensor): Tensor.
+        axis (int, optional): Optional axis.
+
+    Returns:
+        tensor: Indices.
+    """
+
+
+@dispatch
+@abstract()
 def max(a: Numeric, axis=None):  # pragma: no cover
     """Take the maximum of a tensor, possibly along an axis.
 
@@ -818,6 +835,21 @@ def max(a: Numeric, axis=None):  # pragma: no cover
 
     Returns:
         tensor: Reduced tensor.
+    """
+
+
+@dispatch
+@abstract()
+def argmax(a: Numeric, axis=None):  # pragma: no cover
+    """Take the indices corresponding to the maximum of a tensor, possibly along an
+    axis.
+
+    Args:
+        a (tensor): Tensor.
+        axis (int, optional): Optional axis.
+
+    Returns:
+        tensor: Indices.
     """
 
 

@@ -177,8 +177,18 @@ def min(a: Numeric, axis=None):
 
 
 @dispatch
+def argmin(a: Numeric, axis=None):
+    return np.argmin(a, axis=axis)
+
+
+@dispatch
 def max(a: Numeric, axis=None):
     return np.max(a, axis=axis)
+
+
+@dispatch
+def argmax(a: Numeric, axis=None):
+    return np.argmax(a, axis=axis)
 
 
 @dispatch
@@ -250,6 +260,7 @@ def argsort(a: Numeric, axis=-1, descending=False):
         return np.argsort(-a, axis=axis)
     else:
         return np.argsort(a, axis=axis)
+
 
 @dispatch
 def quantile(a: Numeric, q: Numeric, axis=None):

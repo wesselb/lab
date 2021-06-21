@@ -191,11 +191,21 @@ def min(a: Numeric, axis=None):
 
 
 @dispatch
+def argmin(a: Numeric, axis=None):
+    return torch.argmin(a, dim=axis)
+
+
+@dispatch
 def max(a: Numeric, axis=None):
     if axis is None:
         return torch.max(a)
     else:
         return torch.max(a, dim=axis)[0]
+
+
+@dispatch
+def argmax(a: Numeric, axis=None):
+    return torch.argmax(a, dim=axis)
 
 
 @dispatch

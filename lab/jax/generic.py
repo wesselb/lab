@@ -198,8 +198,18 @@ def min(a: Numeric, axis=None):
 
 
 @dispatch
+def argmin(a: Numeric, axis=None):
+    return jnp.argmin(a, axis=axis)
+
+
+@dispatch
 def max(a: Numeric, axis=None):
     return jnp.max(a, axis=axis)
+
+
+@dispatch
+def argmax(a: Numeric, axis=None):
+    return jnp.argmax(a, axis=axis)
 
 
 @dispatch

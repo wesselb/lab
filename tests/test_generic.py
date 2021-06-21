@@ -334,6 +334,11 @@ def test_reductions(f, check_lazy_shapes):
     check_function(f, (Tensor(2, 3),), {"axis": Value(0, 1)})
 
 
+@pytest.mark.parametrize("f", [B.argmin, B.argmax])
+def test_argmin_argmax(f, check_lazy_shapes):
+    check_function(f, (Tensor(2, 3, 4),), {"axis": Value(None, -1, 0, 1, 2)})
+
+
 def test_logsumexp_correctness(check_lazy_shapes):
     mat = PositiveTensor(3, 4).np()
     allclose(B.logsumexp(mat, axis=1), scipy.special.logsumexp(mat, axis=1))
@@ -453,14 +458,14 @@ def test_quantile(check_lazy_shapes):
         B.quantile,
         (Tensor(2, 3, 4), PositiveTensor(5, upper=1)),
         {"axis": Value(None, -1, 0, 1)},
-        skip=[B.AGNumeric]
+        skip=[B.AGNumeric],
     )
     for q in [0, 0.5, 1]:
         check_function(
             B.quantile,
             (Tensor(2, 3, 4), Value(q)),
             {"axis": Value(None, -1, 0, 1)},
-            skip=[B.AGNumeric]
+            skip=[B.AGNumeric],
         )
 
 

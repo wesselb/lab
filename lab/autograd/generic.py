@@ -153,8 +153,18 @@ def min(a: Numeric, axis=None):
 
 
 @dispatch
+def argmin(a: Numeric, axis=None):
+    return anp.argmin(a, axis=axis)
+
+
+@dispatch
 def max(a: Numeric, axis=None):
     return anp.max(a, axis=axis)
+
+
+@dispatch
+def argmax(a: Numeric, axis=None):
+    return anp.argmax(a, axis=axis)
 
 
 @dispatch

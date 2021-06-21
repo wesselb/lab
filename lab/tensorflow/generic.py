@@ -184,8 +184,26 @@ def min(a: Numeric, axis=None):
 
 
 @dispatch
+def argmin(a: Numeric, axis=None):
+    if axis is None:
+        # The default `None` reduces over the last dimension.
+        return tf.argmin(tf.reshape(a, -1), axis=0)
+    else:
+        return tf.argmin(a, axis=axis)
+
+
+@dispatch
 def max(a: Numeric, axis=None):
     return tf.reduce_max(a, axis=axis)
+
+
+@dispatch
+def argmax(a: Numeric, axis=None):
+    if axis is None:
+        # The default `None` reduces over the last dimension.
+        return tf.argmax(tf.reshape(a, -1), axis=0)
+    else:
+        return tf.argmax(a, axis=axis)
 
 
 @dispatch
