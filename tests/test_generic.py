@@ -455,10 +455,10 @@ def test_quantile(check_lazy_shapes):
         {"axis": Value(None, -1, 0, 1)},
         skip=[B.AGNumeric]
     )
-    for value in [0, 0.5, 1]:
+    for q in [0, 0.5, 1]:
         check_function(
             B.quantile,
-            (Tensor(2, 3, 4), Value(0)),
+            (Tensor(2, 3, 4), Value(q)),
             {"axis": Value(None, -1, 0, 1)},
             skip=[B.AGNumeric]
         )
