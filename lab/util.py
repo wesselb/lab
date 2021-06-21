@@ -133,13 +133,13 @@ def batch_computation(f, xs, ranks):
     return B.reshape(res, *(batch_shape + B.shape(res)[1:]))
 
 
-def abstract(promote=-1):
+def abstract(promote=None):
     """Create a decorator for an abstract function.
 
     Args:
         promote (int, optional): Number of arguments to promote. Set to `-1`
             to promote all arguments, and set to `None` or `0` to promote no
-            arguments. Defaults to `-1`.
+            arguments. Defaults to `None`.
 
     Returns:
         function: Decorator.

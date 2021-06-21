@@ -322,7 +322,7 @@ def tril_to_vec(a: Numeric, offset=0):
 
 
 @dispatch
-@abstract()
+@abstract(promote=-1)
 def stack(*elements, **kw_args):  # pragma: no cover
     """Concatenate tensors along a new axis.
 
@@ -364,7 +364,7 @@ def reshape(a: Numeric, *shape: Int):  # pragma: no cover
 
 
 @dispatch
-@abstract()
+@abstract(promote=-1)
 def concat(*elements, **kw_args):  # pragma: no cover
     """Concatenate tensors along an axis.
 

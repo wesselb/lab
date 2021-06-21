@@ -62,7 +62,7 @@ def rand(ref: Numeric):
 
 
 @dispatch
-@abstract(promote=None)
+@abstract()
 def randn(dtype: DType, *shape: Int):  # pragma: no cover
     """Construct a N(0, 1) random tensor.
 
@@ -86,7 +86,7 @@ def randn(ref: Numeric):
 
 
 @dispatch
-@abstract(promote=None)
+@abstract()
 def choice(a: Numeric, n: Int):
     """Randomly choose from a tensor *with* replacement.
 

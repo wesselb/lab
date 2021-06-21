@@ -165,7 +165,8 @@ def test_abstract(check_lazy_shapes):
     B.f6 = f6
 
     # Test promotion.
-    assert f1(a, a, a) == (b, b, b)
+    with pytest.raises(NotFoundLookupError):
+        f1(a, a, a)
     with pytest.raises(NotFoundLookupError):
         f2(a, a, a)
     assert f3(a, a, a) == (b, b, b)

@@ -97,7 +97,7 @@ dot = matmul  #: Shorthand for `matmul`.
 
 
 @dispatch
-@abstract()
+@abstract(promote=None)
 def trace(a: Numeric, axis1=0, axis2=1):  # pragma: no cover
     """Compute the trace of a tensor.
 

@@ -244,7 +244,7 @@ def device(name: str):
 
 
 @dispatch
-@abstract(promote=None)
+@abstract()
 def move_to_active_device(a: Numeric):  # pragma: no cover
     """Move a tensor to the active device.
 
@@ -257,7 +257,7 @@ def move_to_active_device(a: Numeric):  # pragma: no cover
 
 
 @dispatch
-@abstract(promote=None)
+@abstract()
 def zeros(dtype: DType, *shape: Int):  # pragma: no cover
     """Create a tensor of zeros.
 
@@ -284,7 +284,7 @@ def zeros(ref: Numeric):
 
 
 @dispatch
-@abstract(promote=None)
+@abstract()
 def ones(dtype: DType, *shape: Int):  # pragma: no cover
     """Create a tensor of ones.
 
@@ -372,7 +372,7 @@ def eye(dtype: DType, *shape: Int):  # pragma: no cover
 
 
 @dispatch
-@abstract(promote=None)
+@abstract()
 def _eye2(dtype: DType, *shape: Int):  # pragma: no cover
     pass
 
@@ -398,7 +398,7 @@ def eye(ref: Numeric):
 
 
 @dispatch
-@abstract(promote=None)
+@abstract()
 def linspace(dtype: DType, a, b, num: Int):
     """Create a vector of `c` numbers ranging from `a` to `c`, distributed
     linearly.
@@ -420,7 +420,7 @@ def linspace(a, b, num: Int):
 
 
 @dispatch
-@abstract(promote=None)
+@abstract()
 def range(dtype: DType, start, stop, step):
     """Create a vector of numbers ranging from `start` to `stop` with step
     size `step`.
@@ -462,7 +462,7 @@ def range(stop):
 
 
 @dispatch
-@abstract(promote=None)
+@abstract()
 def cast(dtype: Numeric, a: DType):  # pragma: no cover
     """Cast an object to another data type.
 
@@ -1072,7 +1072,7 @@ def scan(f: Callable, xs, *init_state):
 
 
 @dispatch
-@abstract(promote=None)
+@abstract()
 def sort(a: Numeric, axis=-1, descending=False):
     """Sort a tensor along an axis in ascending order.
 
@@ -1088,7 +1088,7 @@ def sort(a: Numeric, axis=-1, descending=False):
 
 
 @dispatch
-@abstract(promote=None)
+@abstract()
 def argsort(a: Numeric, axis=-1, descending=False):
     """Get the indices that would a tensor along an axis in ascending order.
 
