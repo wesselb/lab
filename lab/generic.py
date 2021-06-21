@@ -80,6 +80,7 @@ __all__ = [
     "scan",
     "sort",
     "argsort",
+    "quantile",
     "to_numpy",
 ]
 
@@ -1020,7 +1021,7 @@ def _cond(condition: Numeric, f_true: FunctionType, f_false: FunctionType, *args
 
 @dispatch
 @abstract(promote=3)
-def where(condition: Numeric, a: Numeric, b: Numeric):  # pragma: no cover
+def where(condition, a, b):  # pragma: no cover
     """In a broadcasting fashion, take from `x` if `condition` is true; otherwise,
     take from `y`.
 
@@ -1099,6 +1100,21 @@ def argsort(a: Numeric, axis=-1, descending=False):
 
     Returns:
         tensor: The indices that would sort `a`.
+    """
+
+
+@dispatch
+@abstract(promote=2)
+def quantile(a, q, axis=None):
+    """Compute quantiles.
+
+    Args:
+        a (tensor): Tensor to compute quantiles of.
+        q (tensor): Quantiles to compute. Must be numbers in `[0, 1]`.
+        axis (int, optional): Axis to compute quantiles along. Defaults to `None`.
+
+    Returns:
+        tensor: Quantiles.
     """
 
 

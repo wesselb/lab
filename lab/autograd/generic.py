@@ -229,3 +229,8 @@ def argsort(a: Numeric, axis=-1, descending=False):
         return anp.argsort(-a, axis=axis)
     else:
         return anp.argsort(a, axis=axis)
+
+
+@dispatch
+def quantile(a: Numeric, q: Numeric, axis=None):  # pragma: no cover
+    raise NotImplementedError("Function `quantile` is not available for AutoGrad.")

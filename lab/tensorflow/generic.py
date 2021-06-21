@@ -2,6 +2,7 @@ from types import FunctionType
 from typing import Callable
 
 import tensorflow as tf
+import tensorflow_probability as tfp
 
 from . import dispatch, B, Numeric, TFNumeric
 from .custom import tensorflow_register
@@ -278,3 +279,8 @@ def argsort(a: Numeric, axis=-1, descending=False):
     else:
         direction = "ASCENDING"
     return tf.argsort(a, axis=axis, direction=direction)
+
+
+@dispatch
+def quantile(a: Numeric, q: Numeric, axis=None):
+    return tfp.stats.percentile(a, 100 * q, axis=axis, interpolation="linear")

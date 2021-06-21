@@ -279,3 +279,8 @@ def sort(a: Numeric, axis=-1, descending=False):
 @dispatch
 def argsort(a: Numeric, axis=-1, descending=False):
     return torch.argsort(a, dim=axis, descending=descending)
+
+
+@dispatch
+def quantile(a: Numeric, q: Numeric, axis=None):
+    return torch.quantile(a, q, dim=axis)

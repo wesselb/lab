@@ -250,3 +250,7 @@ def argsort(a: Numeric, axis=-1, descending=False):
         return np.argsort(-a, axis=axis)
     else:
         return np.argsort(a, axis=axis)
+
+@dispatch
+def quantile(a: Numeric, q: Numeric, axis=None):
+    return np.quantile(a, q, axis=axis, interpolation="linear")

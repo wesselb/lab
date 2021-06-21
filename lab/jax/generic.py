@@ -284,3 +284,8 @@ def argsort(a: Numeric, axis=-1, descending=False):
         return jnp.argsort(-a, axis=axis)
     else:
         return jnp.argsort(a, axis=axis)
+
+
+@dispatch
+def quantile(a: Numeric, q: Numeric, axis=None):
+    return jnp.quantile(a, q, axis=axis, interpolation="linear")

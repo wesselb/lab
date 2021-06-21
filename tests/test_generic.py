@@ -447,6 +447,23 @@ def test_argsort(check_lazy_shapes):
     )
 
 
+def test_quantile(check_lazy_shapes):
+    # AutoGrad does not support `quantile`, so we skip it in both tests.
+    check_function(
+        B.quantile,
+        (Tensor(2, 3, 4), PositiveTensor(5, upper=1)),
+        {"axis": Value(None, -1, 0, 1)},
+        skip=[B.AGNumeric]
+    )
+    for value in [0, 0.5, 1]:
+        check_function(
+            B.quantile,
+            (Tensor(2, 3, 4), Value(0)),
+            {"axis": Value(None, -1, 0, 1)},
+            skip=[B.AGNumeric]
+        )
+
+
 def test_to_numpy(check_lazy_shapes):
     check_function(B.to_numpy, (Tensor(),))
     check_function(B.to_numpy, (Tensor(4),))
