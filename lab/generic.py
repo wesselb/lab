@@ -67,8 +67,11 @@ __all__ = [
     "max",
     "argmax",
     "sum",
+    "nansum",
     "mean",
+    "nanmean",
     "std",
+    "nanstd",
     "logsumexp",
     "all",
     "any",
@@ -797,12 +800,14 @@ def leaky_relu(a, alpha):  # pragma: no cover
 
 @dispatch
 @abstract()
-def min(a: Numeric, axis=None):  # pragma: no cover
+def min(a: Numeric, axis=None, squeeze=True):  # pragma: no cover
     """Take the minimum of a tensor, possibly along an axis.
 
     Args:
         a (tensor): Tensor.
         axis (int, optional): Optional axis.
+        squeeze (bool, optional): Squeeze the dimension after the reduction. Defaults
+            to `True`.
 
     Returns:
         tensor: Reduced tensor.
@@ -826,12 +831,14 @@ def argmin(a: Numeric, axis=None):  # pragma: no cover
 
 @dispatch
 @abstract()
-def max(a: Numeric, axis=None):  # pragma: no cover
+def max(a: Numeric, axis=None, squeeze=True):  # pragma: no cover
     """Take the maximum of a tensor, possibly along an axis.
 
     Args:
         a (tensor): Tensor.
         axis (int, optional): Optional axis.
+        squeeze (bool, optional): Squeeze the dimension after the reduction. Defaults
+            to `True`.
 
     Returns:
         tensor: Reduced tensor.
@@ -855,12 +862,14 @@ def argmax(a: Numeric, axis=None):  # pragma: no cover
 
 @dispatch
 @abstract()
-def sum(a: Numeric, axis=None):  # pragma: no cover
+def sum(a: Numeric, axis=None, squeeze=True):  # pragma: no cover
     """Sum a tensor, possibly along an axis.
 
     Args:
         a (tensor): Tensor.
         axis (int, optional): Optional axis.
+        squeeze (bool, optional): Squeeze the dimension after the reduction. Defaults
+            to `True`.
 
     Returns:
         tensor: Reduced tensor.
@@ -868,13 +877,23 @@ def sum(a: Numeric, axis=None):  # pragma: no cover
 
 
 @dispatch
+def nansum(x, **kw_args):
+    """Like :func:`sum`, but ignores `NaN`s."""
+    available = ~B.isnan(x)
+    x = B.where(available, x, B.zero(x))
+    return B.sum(x, **kw_args)
+
+
+@dispatch
 @abstract()
-def mean(a: Numeric, axis=None):  # pragma: no cover
+def mean(a: Numeric, axis=None, squeeze=True):  # pragma: no cover
     """Take the mean of a tensor, possibly along an axis.
 
     Args:
         a (tensor): Tensor.
         axis (int, optional): Optional axis.
+        squeeze (bool, optional): Squeeze the dimension after the reduction. Defaults
+            to `True`.
 
     Returns:
         tensor: Reduced tensor.
@@ -882,38 +901,64 @@ def mean(a: Numeric, axis=None):  # pragma: no cover
 
 
 @dispatch
+def nanmean(x, **kw_args):
+    """Like :func:`mean`, but ignores `NaN`s."""
+    available = ~B.isnan(x)
+    x = B.where(available, x, B.zero(x))
+    # Need to cast `available` away from booleans for `sum` to work reliably.
+    return B.sum(x, **kw_args) / B.sum(B.cast(B.dtype(x), available), **kw_args)
+
+
+@dispatch
 @abstract()
-def std(a: Numeric, axis=None):  # pragma: no cover
+def std(a: Numeric, axis=None, squeeze=True):  # pragma: no cover
     """Compute the standard deviation of a tensor, possibly along an axis.
 
     Args:
         a (tensor): Tensor.
         axis (int, optional): Optional axis.
+        squeeze (bool, optional): Squeeze the dimension after the reduction. Defaults
+            to `True`.
 
     Returns:
         tensor: Reduced tensor.
     """
 
+@dispatch
+def nanstd(x, **kw_args):
+    """Like :func:`std`, but ignores `NaN`s."""
+    inner_kw_args = kw_args.copy()
+    inner_kw_args["squeeze"] = False
+    mu = B.nanmean(x, **inner_kw_args)
+    return B.sqrt(B.nanmean(B.power(x - mu, 2), **kw_args))
+
 
 @dispatch
-def logsumexp(a, axis=None):  # pragma: no cover
+def logsumexp(a, axis=None, squeeze=True):  # pragma: no cover
     """Exponentiate a tensor, sum it, and then take the logarithm, possibly
     along an axis.
 
     Args:
         a (tensor): Tensor.
         axis (int, optional): Optional axis.
+        squeeze (bool, optional): Squeeze the dimension after the reduction. Defaults
+            to `True`.
 
     Returns:
         tensor: Reduced tensor.
     """
-    a_max = max(a, axis=axis)
-    # Put the axis back if one is specified.
-    if axis is None:
-        a_expanded = a_max
+    a_max = max(a, axis=axis, squeeze=True)
+    # Expand `a_max` if an axis is specified.
+    if axis is not None:
+        a_max_inner = B.expand_dims(a_max, axis=axis)
     else:
-        a_expanded = B.expand_dims(a_max, axis=axis)
-    return log(sum(exp(a - a_expanded), axis=axis)) + a_max
+        a_max_inner = a_max
+    # Handle `squeeze` correctly.
+    if axis is not None and not squeeze:
+        a_max_outer = B.expand_dims(a_max, axis=axis)
+    else:
+        a_max_outer = a_max
+    return log(sum(exp(a - a_max_inner), axis=axis, squeeze=squeeze)) + a_max_outer
 
 
 # Logical reductions:
@@ -921,12 +966,14 @@ def logsumexp(a, axis=None):  # pragma: no cover
 
 @dispatch
 @abstract()
-def all(a: Numeric, axis=None):  # pragma: no cover
+def all(a: Numeric, axis=None, squeeze=True):  # pragma: no cover
     """Logical all of a tensor, possibly along an axis.
 
     Args:
         a (tensor): Tensor.
         axis (int, optional): Optional axis.
+        squeeze (bool, optional): Squeeze the dimension after the reduction. Defaults
+            to `True`.
 
     Returns:
         tensor: Reduced tensor.
@@ -935,12 +982,14 @@ def all(a: Numeric, axis=None):  # pragma: no cover
 
 @dispatch
 @abstract()
-def any(a: Numeric, axis=None):  # pragma: no cover
+def any(a: Numeric, axis=None, squeeze=True):  # pragma: no cover
     """Logical any of a tensor, possibly along an axis.
 
     Args:
         a (tensor): Tensor.
         axis (int, optional): Optional axis.
+        squeeze (bool, optional): Squeeze the dimension after the reduction. Defaults
+            to `True`.
 
     Returns:
         tensor: Reduced tensor.

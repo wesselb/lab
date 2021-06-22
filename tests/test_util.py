@@ -17,7 +17,7 @@ from lab.util import (
 )
 
 # noinspections PyUnresolvedReferences
-from .util import allclose, check_lazy_shapes
+from .util import approx, check_lazy_shapes
 
 
 @pytest.mark.parametrize("other", [B_tf, B_torch, B_autograd, B_jax])
@@ -78,7 +78,7 @@ def test_translate_index_errors(index, batch_shape, check_lazy_shapes):
 def test_batch_computation(x1_batch, x2_batch, check_lazy_shapes):
     x1 = np.random.randn(*(x1_batch + (3, 4)))
     x2 = np.random.randn(*(x2_batch + (4, 5)))
-    allclose(batch_computation(np.matmul, (x1, x2), (2, 2)), np.matmul(x1, x2))
+    approx(batch_computation(np.matmul, (x1, x2), (2, 2)), np.matmul(x1, x2))
 
 
 def test_metadata(check_lazy_shapes):

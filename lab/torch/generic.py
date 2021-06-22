@@ -183,11 +183,11 @@ def maximum(a: Numeric, b: Numeric):
 
 
 @dispatch
-def min(a: Numeric, axis=None):
+def min(a: Numeric, axis=None, squeeze=True):
     if axis is None:
         return torch.min(a)
     else:
-        return torch.min(a, dim=axis)[0]
+        return torch.min(a, dim=axis, keepdim=not squeeze)[0]
 
 
 @dispatch
@@ -196,11 +196,11 @@ def argmin(a: Numeric, axis=None):
 
 
 @dispatch
-def max(a: Numeric, axis=None):
+def max(a: Numeric, axis=None, squeeze=True):
     if axis is None:
         return torch.max(a)
     else:
-        return torch.max(a, dim=axis)[0]
+        return torch.max(a, dim=axis, keepdim=not squeeze)[0]
 
 
 @dispatch
@@ -209,43 +209,43 @@ def argmax(a: Numeric, axis=None):
 
 
 @dispatch
-def sum(a: Numeric, axis=None):
+def sum(a: Numeric, axis=None, squeeze=True):
     if axis is None:
         return torch.sum(a)
     else:
-        return torch.sum(a, dim=axis)
+        return torch.sum(a, dim=axis, keepdim=not squeeze)
 
 
 @dispatch
-def mean(a: Numeric, axis=None):
+def mean(a: Numeric, axis=None, squeeze=True):
     if axis is None:
         return torch.mean(a)
     else:
-        return torch.mean(a, dim=axis)
+        return torch.mean(a, dim=axis, keepdim=not squeeze)
 
 
 @dispatch
-def std(a: Numeric, axis=None):
+def std(a: Numeric, axis=None, squeeze=True):
     if axis is None:
         return torch.std(a, unbiased=False)
     else:
-        return torch.std(a, dim=axis, unbiased=False)
+        return torch.std(a, dim=axis, unbiased=False, keepdim=not squeeze)
 
 
 @dispatch
-def all(a: Numeric, axis=None):
+def all(a: Numeric, axis=None, squeeze=True):
     if axis is None:
-        return a.all()
+        return torch.all(a)
     else:
-        return a.all(dim=axis)
+        return torch.all(a, dim=axis, keepdim=not squeeze)
 
 
 @dispatch
-def any(a: Numeric, axis=None):
+def any(a: Numeric, axis=None, squeeze=True):
     if axis is None:
-        return a.any()
+        return torch.any(a)
     else:
-        return a.any(dim=axis)
+        return torch.any(a, dim=axis, keepdim=not squeeze)
 
 
 @dispatch

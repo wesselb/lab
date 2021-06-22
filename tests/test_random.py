@@ -9,7 +9,7 @@ import torch
 import lab as B
 
 # noinspection PyUnresolvedReferences
-from .util import Tensor, allclose, to_np, check_lazy_shapes
+from .util import Tensor, approx, to_np, check_lazy_shapes
 
 
 @pytest.mark.parametrize("dtype", [np.float32, tf.float32, torch.float32, jnp.float32])
@@ -27,7 +27,7 @@ def test_random_generators(f, check_lazy_shapes):
     assert B.dtype(f()) is B.default_dtype
     assert B.shape(f()) == ()
     assert B.dtype(f(2)) is B.default_dtype
-    allclose(B.shape(f(2)), (2,))
+    approx(B.shape(f(2)), (2,))
     assert B.dtype(f(2, 3)) is B.default_dtype
     assert B.shape(f(2, 3)) == (2, 3)
 

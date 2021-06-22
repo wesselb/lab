@@ -179,8 +179,8 @@ def maximum(a: Numeric, b: Numeric):
 
 
 @dispatch
-def min(a: Numeric, axis=None):
-    return tf.reduce_min(a, axis=axis)
+def min(a: Numeric, axis=None, squeeze=True):
+    return tf.reduce_min(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
@@ -193,8 +193,8 @@ def argmin(a: Numeric, axis=None):
 
 
 @dispatch
-def max(a: Numeric, axis=None):
-    return tf.reduce_max(a, axis=axis)
+def max(a: Numeric, axis=None, squeeze=True):
+    return tf.reduce_max(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
@@ -207,33 +207,33 @@ def argmax(a: Numeric, axis=None):
 
 
 @dispatch
-def sum(a: Numeric, axis=None):
-    return tf.reduce_sum(a, axis=axis)
+def sum(a: Numeric, axis=None, squeeze=True):
+    return tf.reduce_sum(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
-def mean(a: Numeric, axis=None):
-    return tf.reduce_mean(a, axis=axis)
+def mean(a: Numeric, axis=None, squeeze=True):
+    return tf.reduce_mean(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
-def std(a: Numeric, axis=None):
+def std(a: Numeric, axis=None, squeeze=True):
     if axis is None:
         axes = list(range(B.rank(a)))
     else:
         axes = [axis]
-    _, var = tf.nn.moments(a, axes=axes)
+    _, var = tf.nn.moments(a, axes=axes, keepdims=not squeeze)
     return tf.sqrt(var)
 
 
 @dispatch
-def all(a: Numeric, axis=None):
-    return tf.reduce_all(a, axis=axis)
+def all(a: Numeric, axis=None, squeeze=True):
+    return tf.reduce_all(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
-def any(a: Numeric, axis=None):
-    return tf.reduce_any(a, axis=axis)
+def any(a: Numeric, axis=None, squeeze=True):
+    return tf.reduce_any(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch

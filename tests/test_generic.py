@@ -18,7 +18,7 @@ from .util import (
     BoolTensor,
     NaNTensor,
     Bool,
-    allclose,
+    approx,
     check_lazy_shapes,
 )
 
@@ -81,7 +81,7 @@ def test_isnan(check_lazy_shapes):
 def test_device_and_move_to_active_device(check_lazy_shapes):
     for a in Tensor(2, 2).forms():
         assert "cpu" in str(B.device(a)).lower()
-        allclose(B.move_to_active_device(a), a)
+        approx(B.move_to_active_device(a), a)
 
 
 @pytest.mark.parametrize("t", [tf.float32, torch.float32, jnp.float32])
@@ -121,12 +121,12 @@ def test_move_to_active_device_jax(check_lazy_shapes):
     # Move to CPU without identifier.
     with B.device("cpu"):
         assert B.move_to_active_device(a) is not a
-        allclose(B.move_to_active_device(a), a)
+        approx(B.move_to_active_device(a), a)
 
     # Move to CPU with identifier. Also check that capitalisation does not matter.
     with B.device("CPU:0"):
         assert B.move_to_active_device(a) is not a
-        allclose(B.move_to_active_device(a), a)
+        approx(B.move_to_active_device(a), a)
 
     # Give invalid syntax.
     B.Device.active_name = "::"
@@ -188,7 +188,7 @@ def test_zero_one(f, check_lazy_shapes):
 
 def test_linspace(check_lazy_shapes):
     # Check correctness.
-    allclose(B.linspace(0, 1, 10), np.linspace(0, 1, 10, dtype=B.default_dtype))
+    approx(B.linspace(0, 1, 10), np.linspace(0, 1, 10, dtype=B.default_dtype))
 
     # Check consistency.
     check_function(
@@ -204,9 +204,9 @@ def test_linspace(check_lazy_shapes):
 
 def test_range(check_lazy_shapes):
     # Check correctness.
-    allclose(B.range(5), np.arange(5))
-    allclose(B.range(2, 5), np.arange(2, 5))
-    allclose(B.range(2, 5, 2), np.arange(2, 5, 2))
+    approx(B.range(5), np.arange(5))
+    approx(B.range(2, 5), np.arange(2, 5))
+    approx(B.range(2, 5, 2), np.arange(2, 5, 2))
 
     # Check various step sizes.
     for step in [1, 1.0, 0.25]:
@@ -306,7 +306,7 @@ def test_unary_positive(f, check_lazy_shapes):
 
 @pytest.mark.parametrize("a", [0, -1, 1])
 def test_softplus_correctness(a, check_lazy_shapes):
-    allclose(B.softplus(a), np.log(1 + np.exp(a)))
+    approx(B.softplus(a), np.log(1 + np.exp(a)))
 
 
 @pytest.mark.parametrize(
@@ -325,23 +325,95 @@ def test_binary_positive_first(f, check_lazy_shapes):
     check_function(f, (PositiveTensor(2, 3), Tensor(2, 3)))
 
 
-@pytest.mark.parametrize("f", [B.min, B.max, B.sum, B.mean, B.std, B.logsumexp])
-def test_reductions(f, check_lazy_shapes):
+@pytest.mark.parametrize(
+    "f, check_squeeze",
+    [
+        (B.min, True),
+        (B.max, True),
+        (B.sum, True),
+        (B.nansum, True),
+        (B.mean, True),
+        (B.nanmean, True),
+        (B.std, True),
+        (B.nanstd, True),
+        (B.logsumexp, True),
+        (B.argmin, False),
+        (B.argmax, False),
+    ],
+)
+def test_reductions(f, check_squeeze, check_lazy_shapes):
     check_function(f, (Tensor(),))
     check_function(f, (Tensor(2),))
-    check_function(f, (Tensor(2),), {"axis": Value(0)})
     check_function(f, (Tensor(2, 3),))
-    check_function(f, (Tensor(2, 3),), {"axis": Value(0, 1)})
+    check_function(f, (Tensor(2),), {"axis": Value(None, -1, 0)})
+    check_function(f, (Tensor(2, 3),), {"axis": Value(None, -1, 0, 1)})
+    if check_squeeze:
+        check_function(
+            f,
+            (Tensor(2),),
+            {"axis": Value(None, -1, 0), "squeeze": Value(True, False)},
+        )
+        check_function(
+            f,
+            (Tensor(2, 3),),
+            {"axis": Value(None, -1, 0, 1), "squeeze": Value(True, False)},
+        )
 
 
-@pytest.mark.parametrize("f", [B.argmin, B.argmax])
-def test_argmin_argmax(f, check_lazy_shapes):
-    check_function(f, (Tensor(2, 3, 4),), {"axis": Value(None, -1, 0, 1, 2)})
+@pytest.mark.parametrize(
+    "f, f_ref",
+    [(B.nansum, B.sum), (B.nanmean, B.mean), (B.nanstd, B.std)],
+)
+def test_nanreductions(f, f_ref, check_lazy_shapes):
+    # Check consistency.
+    check_function(f, (NaNTensor(),), contains_nans=False)
+    check_function(f, (NaNTensor(2),), contains_nans=False)
+    check_function(f, (NaNTensor(2, 3),), contains_nans=False)
+    check_function(
+        f,
+        (NaNTensor(2),),
+        {"axis": Value(None, -1, 0)},
+        contains_nans=False,
+    )
+    check_function(
+        f,
+        (NaNTensor(2, 3),),
+        {"axis": Value(None, -1, 0, 1)},
+        contains_nans=False,
+    )
+    check_function(
+        f,
+        (Tensor(2),),
+        {"axis": Value(None, -1, 0), "squeeze": Value(True, False)},
+        contains_nans=False,
+    )
+    check_function(
+        f,
+        (Tensor(2, 3),),
+        {"axis": Value(None, -1, 0, 1), "squeeze": Value(True, False)},
+        contains_nans=False,
+    )
+
+    # Check against reference.
+    for x in Tensor(2, 3).forms():
+        approx(f(x), f_ref(x))
+        for axis in [None, -1, 0, 1]:
+            for squeeze in [True, False]:
+                approx(
+                    f(x, axis=axis, squeeze=squeeze),
+                    f_ref(x, axis=axis, squeeze=squeeze),
+                )
 
 
 def test_logsumexp_correctness(check_lazy_shapes):
     mat = PositiveTensor(3, 4).np()
-    allclose(B.logsumexp(mat, axis=1), scipy.special.logsumexp(mat, axis=1))
+    approx(B.logsumexp(mat), scipy.special.logsumexp(mat))
+    for axis in [None, -1, 0, 1]:
+        for squeeze in [True, False]:
+            approx(
+                B.logsumexp(mat, axis=axis, squeeze=squeeze),
+                scipy.special.logsumexp(mat, axis=axis, keepdims=not squeeze),
+            )
 
 
 @pytest.mark.parametrize("f", [B.all, B.any])
@@ -410,7 +482,7 @@ def test_scan(check_lazy_shapes):
     xs = Tensor(10, 3, 4)
     init_h = Tensor(3, 4)
     init_y = Tensor(3, 4)
-    allclose(
+    approx(
         B.scan(scan_f, xs.np(), init_h.np(), init_y.np()),
         B.scan(scan_f, xs.tf(), init_h.tf(), init_y.tf()),
     )

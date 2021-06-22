@@ -14,7 +14,7 @@ from .util import (
     Value,
     List,
     Tuple,
-    allclose,
+    approx,
     check_lazy_shapes,
 )
 
@@ -109,15 +109,15 @@ def test_squeeze(check_lazy_shapes):
 
 def test_uprank(check_lazy_shapes):
     # `rank=2`, the default:
-    allclose(B.uprank(1.0), np.array([[1.0]]))
-    allclose(B.uprank(np.array([1.0, 2.0])), np.array([[1.0], [2.0]]))
-    allclose(B.uprank(np.array([[1.0, 2.0]])), np.array([[1.0, 2.0]]))
-    allclose(B.uprank(np.array([[[1.0]]])), np.array([[[1.0]]]))
+    approx(B.uprank(1.0), np.array([[1.0]]))
+    approx(B.uprank(np.array([1.0, 2.0])), np.array([[1.0], [2.0]]))
+    approx(B.uprank(np.array([[1.0, 2.0]])), np.array([[1.0, 2.0]]))
+    approx(B.uprank(np.array([[[1.0]]])), np.array([[[1.0]]]))
 
     # `rank=1`:
-    allclose(B.uprank(1.0, rank=1), np.array([1.0]))
-    allclose(B.uprank(np.array([1.0, 2.0]), rank=1), np.array([1.0, 2.0]))
-    allclose(B.uprank(np.array([[1.0, 2.0]]), rank=1), np.array([[1.0, 2.0]]))
+    approx(B.uprank(1.0, rank=1), np.array([1.0]))
+    approx(B.uprank(np.array([1.0, 2.0]), rank=1), np.array([1.0, 2.0]))
+    approx(B.uprank(np.array([[1.0, 2.0]]), rank=1), np.array([[1.0, 2.0]]))
 
 
 def test_diag(check_lazy_shapes):
@@ -166,7 +166,7 @@ def test_vec_to_tril_and_back_correctness(offset, batch_shape, check_lazy_shapes
     n = B.length(B.tril_to_vec(B.ones(7, 7), offset=offset))
     for vec in Tensor(*batch_shape, n).forms():
         mat = B.vec_to_tril(vec, offset=offset)
-        allclose(B.tril_to_vec(mat, offset=offset), vec)
+        approx(B.tril_to_vec(mat, offset=offset), vec)
 
 
 def test_vec_to_tril_and_back_exceptions(check_lazy_shapes):
@@ -246,5 +246,5 @@ def test_take_tf(check_lazy_shapes):
     # Check that TensorFlow also takes in tensors.
     a = Matrix(3, 4, 5)
     ref = Tensor(3)
-    allclose(B.take(a.tf(), ref.tf() > 0), B.take(a.np(), ref.np() > 0))
-    allclose(B.take(a.tf(), B.range(tf.int64, 2)), B.take(a.np(), B.range(2)))
+    approx(B.take(a.tf(), ref.tf() > 0), B.take(a.np(), ref.np() > 0))
+    approx(B.take(a.tf(), B.range(tf.int64, 2)), B.take(a.np(), B.range(2)))

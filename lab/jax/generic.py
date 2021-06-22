@@ -193,8 +193,8 @@ def maximum(a: Numeric, b: Numeric):
 
 
 @dispatch
-def min(a: Numeric, axis=None):
-    return jnp.min(a, axis=axis)
+def min(a: Numeric, axis=None, squeeze=True):
+    return jnp.min(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
@@ -203,8 +203,8 @@ def argmin(a: Numeric, axis=None):
 
 
 @dispatch
-def max(a: Numeric, axis=None):
-    return jnp.max(a, axis=axis)
+def max(a: Numeric, axis=None, squeeze=True):
+    return jnp.max(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
@@ -213,28 +213,28 @@ def argmax(a: Numeric, axis=None):
 
 
 @dispatch
-def sum(a: Numeric, axis=None):
-    return jnp.sum(a, axis=axis)
+def sum(a: Numeric, axis=None, squeeze=True):
+    return jnp.sum(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
-def mean(a: Numeric, axis=None):
-    return jnp.mean(a, axis=axis)
+def mean(a: Numeric, axis=None, squeeze=True):
+    return jnp.mean(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
-def std(a: Numeric, axis=None):
-    return jnp.std(a, axis=axis, ddof=0)
+def std(a: Numeric, axis=None, squeeze=True):
+    return jnp.std(a, axis=axis, ddof=0, keepdims=not squeeze)
 
 
 @dispatch
-def all(a: Numeric, axis=None):
-    return jnp.all(a, axis=axis)
+def all(a: Numeric, axis=None, squeeze=True):
+    return jnp.all(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
-def any(a: Numeric, axis=None):
-    return jnp.any(a, axis=axis)
+def any(a: Numeric, axis=None, squeeze=True):
+    return jnp.any(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch

@@ -20,7 +20,7 @@ from lab.torch.custom import as_torch
 from lab.jax.custom import as_jax
 
 # noinspection PyUnresolvedReferences
-from .util import allclose, check_lazy_shapes
+from .util import approx, check_lazy_shapes
 
 
 def test_as_tf(check_lazy_shapes):
@@ -70,7 +70,7 @@ def check_grad(f, args, kw_args=None, rtol=1e-8):
 
         # Check AutoGrad gradient.
         autograd_grad = grad(f_i)(args[i])
-        allclose(numerical_grad, autograd_grad, rtol=rtol)
+        approx(numerical_grad, autograd_grad, rtol=rtol)
 
         # Check TensorFlow gradient.
         tf_args = tuple([as_tf(arg) for arg in args])
@@ -78,19 +78,19 @@ def check_grad(f, args, kw_args=None, rtol=1e-8):
         with tf.GradientTape() as t:
             t.watch(tf_args[i])
             tf_grad = t.gradient(f_i(tf_args[i]), tf_args[i]).numpy()
-        allclose(numerical_grad, tf_grad, rtol=rtol)
+        approx(numerical_grad, tf_grad, rtol=rtol)
 
         # Check PyTorch gradient.
         torch_args = tuple([as_torch(arg, grad=True) for arg in args])
         f_i = create_f_i(i, torch_args)
         f_i(torch_args[i]).backward()
-        allclose(numerical_grad, torch_args[i].grad, rtol=rtol)
+        approx(numerical_grad, torch_args[i].grad, rtol=rtol)
 
         # Check JAX gradient.
         torch_args = tuple([jax.device_put(arg) for arg in args])
         f_i = create_f_i(i, torch_args)
         jax_grad = jax.grad(f_i)(args[i])
-        allclose(numerical_grad, jax_grad, rtol=rtol)
+        approx(numerical_grad, jax_grad, rtol=rtol)
 
 
 def test_toeplitz_solve(check_lazy_shapes):

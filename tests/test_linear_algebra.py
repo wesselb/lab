@@ -14,7 +14,7 @@ from .util import (
     PSDTriangular,
     Value,
     Bool,
-    allclose,
+    approx,
     check_lazy_shapes,
 )
 
@@ -44,13 +44,13 @@ def test_transpose(f, check_lazy_shapes):
 
     # Check correctness of one-dimensional case.
     a = Tensor(2).np()
-    allclose(f(a, perm=None), a[None, :])
-    allclose(f(a, perm=(0,)), a)
+    approx(f(a, perm=None), a[None, :])
+    approx(f(a, perm=(0,)), a)
 
     # Check correctness of three-dimensional case.
     a = Tensor(2, 3, 4).np()
-    allclose(f(a), np.transpose(a, axes=(0, 2, 1)))
-    allclose(f(a, perm=(1, 2, 0)), np.transpose(a, axes=(1, 2, 0)))
+    approx(f(a), np.transpose(a, axes=(0, 2, 1)))
+    approx(f(a, perm=(1, 2, 0)), np.transpose(a, axes=(1, 2, 0)))
 
 
 @pytest.mark.parametrize("f", [B.matmul, B.mm, B.dot])
@@ -172,21 +172,21 @@ def test_toeplitz_solve(f, check_lazy_shapes):
 def test_outer(shape, check_lazy_shapes):
     a = Tensor(*shape).np()
     b = Tensor(*shape).np()
-    allclose(B.outer(a, b), B.matmul(B.uprank(a), B.uprank(b), tr_b=True))
-    allclose(B.outer(a), B.outer(a, a))
-    allclose(B.outer(b), B.outer(b, b))
+    approx(B.outer(a, b), B.matmul(B.uprank(a), B.uprank(b), tr_b=True))
+    approx(B.outer(a), B.outer(a, a))
+    approx(B.outer(b), B.outer(b, b))
 
 
 def test_reg(check_lazy_shapes):
     old_epsilon = B.epsilon
     B.epsilon = 10
     a = Matrix(2, 3).np()
-    allclose(B.reg(a, diag=None, clip=False), a + 10 * np.eye(*a.shape))
-    allclose(B.reg(a, diag=None, clip=True), a + 10 * np.eye(*a.shape))
-    allclose(B.reg(a, diag=1, clip=False), a + 1 * np.eye(*a.shape))
-    allclose(B.reg(a, diag=1, clip=True), a + 10 * np.eye(*a.shape))
-    allclose(B.reg(a, diag=100, clip=False), a + 100 * np.eye(*a.shape))
-    allclose(B.reg(a, diag=100, clip=True), a + 100 * np.eye(*a.shape))
+    approx(B.reg(a, diag=None, clip=False), a + 10 * np.eye(*a.shape))
+    approx(B.reg(a, diag=None, clip=True), a + 10 * np.eye(*a.shape))
+    approx(B.reg(a, diag=1, clip=False), a + 1 * np.eye(*a.shape))
+    approx(B.reg(a, diag=1, clip=True), a + 10 * np.eye(*a.shape))
+    approx(B.reg(a, diag=100, clip=False), a + 100 * np.eye(*a.shape))
+    approx(B.reg(a, diag=100, clip=True), a + 100 * np.eye(*a.shape))
     B.epsilon = old_epsilon
 
 
@@ -195,7 +195,7 @@ def test_pw_2d(check_lazy_shapes, batch_shape):
     # In this case, allow for 1e-7 absolute error, because the computation is
     # approximate.
     def approx_allclose(a, b):
-        allclose(a, b, atol=1e-7)
+        approx(a, b, atol=1e-7)
 
     a, b = Tensor(*batch_shape, 5, 2).np(), Tensor(*batch_shape, 10, 2).np()
     dists2_ab = np.zeros((*batch_shape, 5, 10))
@@ -247,14 +247,14 @@ def test_pw_1d(check_lazy_shapes, batch_shape):
             else:
                 a2, b2 = a, b
 
-            allclose(B.pw_dists2(a2, b2), np.abs(a - B.t(b)) ** 2)
-            allclose(B.pw_dists2(a1), np.abs(a - B.t(a)) ** 2)
-            allclose(B.pw_dists(a2, b2), np.abs(a - B.t(b)))
-            allclose(B.pw_dists(a1), np.abs(a - B.t(a)))
-            allclose(B.pw_sums2(a2, b2), np.abs(a + B.t(b)) ** 2)
-            allclose(B.pw_sums2(a1), np.abs(a + B.t(a)) ** 2)
-            allclose(B.pw_sums(a2, b2), np.abs(a + B.t(b)))
-            allclose(B.pw_sums(a1), np.abs(a + B.t(a)))
+            approx(B.pw_dists2(a2, b2), np.abs(a - B.t(b)) ** 2)
+            approx(B.pw_dists2(a1), np.abs(a - B.t(a)) ** 2)
+            approx(B.pw_dists(a2, b2), np.abs(a - B.t(b)))
+            approx(B.pw_dists(a1), np.abs(a - B.t(a)))
+            approx(B.pw_sums2(a2, b2), np.abs(a + B.t(b)) ** 2)
+            approx(B.pw_sums2(a1), np.abs(a + B.t(a)) ** 2)
+            approx(B.pw_sums(a2, b2), np.abs(a + B.t(b)))
+            approx(B.pw_sums(a1), np.abs(a + B.t(a)))
 
 
 @pytest.mark.parametrize("batch_shape", [(), (3,)])
@@ -270,14 +270,14 @@ def test_ew_2d(check_lazy_shapes, batch_shape):
         sums2_ab[..., i, 0] = np.sum((a[..., i, :] + b[..., i, :]) ** 2, axis=-1)
         sums2_aa[..., i, 0] = np.sum((a[..., i, :] + a[..., i, :]) ** 2, axis=-1)
 
-    allclose(B.ew_dists2(a, b), dists2_ab)
-    allclose(B.ew_dists2(a), dists2_aa)
-    allclose(B.ew_dists(a, b), np.maximum(dists2_ab, 1e-30) ** 0.5)
-    allclose(B.ew_dists(a), np.maximum(dists2_aa, 1e-30) ** 0.5)
-    allclose(B.ew_sums2(a, b), sums2_ab)
-    allclose(B.ew_sums2(a), sums2_aa)
-    allclose(B.ew_sums(a, b), np.maximum(sums2_ab, 1e-30) ** 0.5)
-    allclose(B.ew_sums(a), np.maximum(sums2_aa, 1e-30) ** 0.5)
+    approx(B.ew_dists2(a, b), dists2_ab)
+    approx(B.ew_dists2(a), dists2_aa)
+    approx(B.ew_dists(a, b), np.maximum(dists2_ab, 1e-30) ** 0.5)
+    approx(B.ew_dists(a), np.maximum(dists2_aa, 1e-30) ** 0.5)
+    approx(B.ew_sums2(a, b), sums2_ab)
+    approx(B.ew_sums2(a), sums2_aa)
+    approx(B.ew_sums(a, b), np.maximum(sums2_ab, 1e-30) ** 0.5)
+    approx(B.ew_sums(a), np.maximum(sums2_aa, 1e-30) ** 0.5)
 
 
 @pytest.mark.parametrize("batch_shape", [(), (3,)])
@@ -307,11 +307,11 @@ def test_ew_1d(check_lazy_shapes, batch_shape):
             else:
                 a2, b2 = a, b
 
-            allclose(B.ew_dists2(a2, b2), np.abs(a - b) ** 2)
-            allclose(B.ew_dists2(a1), np.zeros((*batch_shape, 10, 1)))
-            allclose(B.ew_dists(a2, b2), np.abs(a - b))
-            allclose(B.ew_dists(a1), np.zeros((*batch_shape, 10, 1)))
-            allclose(B.ew_sums2(a2, b2), np.abs(a + b) ** 2)
-            allclose(B.ew_sums2(a1), np.abs(a + a) ** 2)
-            allclose(B.ew_sums(a2, b2), np.abs(a + b))
-            allclose(B.ew_sums(a1), np.abs(a + a))
+            approx(B.ew_dists2(a2, b2), np.abs(a - b) ** 2)
+            approx(B.ew_dists2(a1), np.zeros((*batch_shape, 10, 1)))
+            approx(B.ew_dists(a2, b2), np.abs(a - b))
+            approx(B.ew_dists(a1), np.zeros((*batch_shape, 10, 1)))
+            approx(B.ew_sums2(a2, b2), np.abs(a + b) ** 2)
+            approx(B.ew_sums2(a1), np.abs(a + a) ** 2)
+            approx(B.ew_sums(a2, b2), np.abs(a + b))
+            approx(B.ew_sums(a1), np.abs(a + a))

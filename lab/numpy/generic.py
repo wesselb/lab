@@ -172,8 +172,8 @@ def maximum(a: Numeric, b: Numeric):
 
 
 @dispatch
-def min(a: Numeric, axis=None):
-    return np.min(a, axis=axis)
+def min(a: Numeric, axis=None, squeeze=True):
+    return np.min(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
@@ -182,8 +182,8 @@ def argmin(a: Numeric, axis=None):
 
 
 @dispatch
-def max(a: Numeric, axis=None):
-    return np.max(a, axis=axis)
+def max(a: Numeric, axis=None, squeeze=True):
+    return np.max(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
@@ -192,28 +192,28 @@ def argmax(a: Numeric, axis=None):
 
 
 @dispatch
-def sum(a: Numeric, axis=None):
-    return np.sum(a, axis=axis)
+def sum(a: Numeric, axis=None, squeeze=True):
+    return np.sum(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
-def mean(a: Numeric, axis=None):
-    return np.mean(a, axis=axis)
+def mean(a: Numeric, axis=None, squeeze=True):
+    return np.mean(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
-def std(a: Numeric, axis=None):
-    return np.std(a, axis=axis, ddof=0)
+def std(a: Numeric, axis=None, squeeze=True):
+    return np.std(a, axis=axis, ddof=0, keepdims=not squeeze)
 
 
 @dispatch
-def all(a: Numeric, axis=None):
-    return np.all(a, axis=axis)
+def all(a: Numeric, axis=None, squeeze=True):
+    return np.all(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
-def any(a: Numeric, axis=None):
-    return np.any(a, axis=axis)
+def any(a: Numeric, axis=None, squeeze=True):
+    return np.any(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch

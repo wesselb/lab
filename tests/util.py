@@ -18,7 +18,7 @@ __all__ = [
     "check_lazy_shapes",
     "autograd_box",
     "to_np",
-    "allclose",
+    "approx",
     "check_function",
     "Tensor",
     "PositiveTensor",
@@ -91,7 +91,7 @@ def to_np(lst: list):
 
 
 @_dispatch
-def allclose(x, y, assert_dtype: bool = False, **kw_args):
+def approx(x, y, assert_dtype: bool = False, **kw_args):
     """Assert that two numeric objects are close."""
     x, y = to_np(x), to_np(y)
 
@@ -103,13 +103,20 @@ def allclose(x, y, assert_dtype: bool = False, **kw_args):
 
 
 @_dispatch
-def allclose(x: tuple, y: tuple, assert_dtype: bool = False, **kw_args):
+def approx(x: tuple, y: tuple, assert_dtype: bool = False, **kw_args):
     assert len(x) == len(y)
     for xi, yi in zip(x, y):
-        allclose(xi, yi, assert_dtype=assert_dtype, **kw_args)
+        approx(xi, yi, assert_dtype=assert_dtype, **kw_args)
 
 
-def check_function(f, args_spec, kw_args_spec=None, assert_dtype=True, skip=None):
+def check_function(
+    f,
+    args_spec,
+    kw_args_spec=None,
+    assert_dtype=True,
+    skip=None,
+    contains_nans=None,
+):
     """Check that a function produces consistent output. Moreover, if the first
     argument is a data type, check that the result is exactly of that type."""
     skip = [] if skip is None else skip
@@ -166,11 +173,15 @@ def check_function(f, args_spec, kw_args_spec=None, assert_dtype=True, skip=None
             # Check consistency.
             log.debug(f"Call with arguments {args} and keyword arguments {kw_args}.")
             result = f(*args, **kw_args)
-            allclose(first_result, result, assert_dtype=assert_dtype)
+            approx(first_result, result, assert_dtype=assert_dtype)
 
             # If first argument is a data type, then again check that.
             if isinstance(args[0], B.DType):
                 assert B.dtype(result) is args[0]
+
+            # Check NaNs.
+            if contains_nans is not None:
+                assert B.any(B.isnan(result)) == contains_nans
 
 
 class Tensor:
@@ -232,8 +243,10 @@ class NaNTensor(Tensor):
     def __init__(self, *dims, **kw_args):
         if "mat" not in kw_args or kw_args["mat"] is None:
             mat = np.array(np.random.randn(*dims))
-            set_nan = np.array(np.random.rand(*dims) > 0.5)
-            mat[set_nan] = np.nan
+            if len(dims) > 0:
+                # Checkboard from https://stackoverflow.com/q/2169478.
+                checkerboard = np.indices(dims).sum(axis=0) % 2
+                mat[checkerboard == 1] = np.nan
         else:
             mat = kw_args["mat"]
         Tensor.__init__(self, mat=mat)
