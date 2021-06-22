@@ -295,6 +295,10 @@ def to_active_device(a: Numeric):  # pragma: no cover
     """
 
 
+def to_active_device(a: Number):
+    return a
+
+
 @dispatch
 @abstract()
 def zeros(dtype: DType, *shape: Int):  # pragma: no cover

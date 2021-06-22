@@ -79,9 +79,14 @@ def test_isnan(check_lazy_shapes):
 
 
 def test_device_and_to_active_device(check_lazy_shapes):
+    # Check moving a device to the CPU.
     for a in Tensor(2, 2).forms():
         assert "cpu" in str(B.device(a)).lower()
         approx(B.to_active_device(a), a)
+
+    # Check that numbers remain unchanged.
+    a = 1
+    assert B.to_active_device(a) is a
 
 
 @pytest.mark.parametrize("t", [tf.float32, torch.float32, jnp.float32])
