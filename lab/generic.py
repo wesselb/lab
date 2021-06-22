@@ -295,6 +295,7 @@ def to_active_device(a: Numeric):  # pragma: no cover
     """
 
 
+@dispatch
 def to_active_device(a: Number):
     return a
 

@@ -1,3 +1,4 @@
+import jax
 import jax.numpy as jnp
 import numpy as np
 import pytest
@@ -130,13 +131,18 @@ def test_to_active_device_jax(check_lazy_shapes):
     # No device specified: should do nothing.
     assert B.to_active_device(a) is a
 
+    # Move to JAX device.
+    with B.on_device(jax.devices("cpu")[0]):
+        assert B.to_active_device(a) is not a
+        approx(B.to_active_device(a), a)
+
     # Move to CPU without identifier.
-    with B.device("cpu"):
+    with B.on_device("cpu"):
         assert B.to_active_device(a) is not a
         approx(B.to_active_device(a), a)
 
     # Move to CPU with identifier. Also check that capitalisation does not matter.
-    with B.device("CPU:0"):
+    with B.on_device("CPU:0"):
         assert B.to_active_device(a) is not a
         approx(B.to_active_device(a), a)
 
