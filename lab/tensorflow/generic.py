@@ -49,7 +49,7 @@ def device(a: TFNumeric):
 
 
 @dispatch
-def move_to_active_device(a: TFNumeric):
+def to_active_device(a: TFNumeric):
     return a
 
 

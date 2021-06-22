@@ -78,10 +78,10 @@ def test_isnan(check_lazy_shapes):
     check_function(B.isnan, (NaNTensor(2, 3),), {}, assert_dtype=False)
 
 
-def test_device_and_move_to_active_device(check_lazy_shapes):
+def test_device_and_to_active_device(check_lazy_shapes):
     for a in Tensor(2, 2).forms():
         assert "cpu" in str(B.device(a)).lower()
-        approx(B.move_to_active_device(a), a)
+        approx(B.to_active_device(a), a)
 
 
 @pytest.mark.parametrize("t", [tf.float32, torch.float32, jnp.float32])
@@ -97,14 +97,14 @@ def test_device_and_move_to_active_device(check_lazy_shapes):
         lambda t: B.randn(t, 10),
     ],
 )
-def test_device_placement(f, t, check_lazy_shapes):
+def test_on_device(f, t, check_lazy_shapes):
     # Check that explicit allocation on CPU works.
-    with B.device("cpu"):
+    with B.on_device("cpu"):
         f(t)
 
     # Check that allocation on a non-existing device breaks.
     with pytest.raises(Exception):
-        with B.device("magic-device"):
+        with B.on_device("magic-device"):
             f(t)
 
     # Reset the active device. This is still set to "magic-device" due to the above
@@ -112,26 +112,33 @@ def test_device_placement(f, t, check_lazy_shapes):
     B.Device.active_name = None
 
 
-def test_move_to_active_device_jax(check_lazy_shapes):
+def test_set_global_device(check_lazy_shapes):
+    assert B.Device.active_name == None
+    B.set_global_device("gpu")
+    assert B.Device.active_name == "gpu"
+    B.Device.active_name = None
+
+
+def test_to_active_device_jax(check_lazy_shapes):
     a = jnp.ones(2)
 
     # No device specified: should do nothing.
-    assert B.move_to_active_device(a) is a
+    assert B.to_active_device(a) is a
 
     # Move to CPU without identifier.
     with B.device("cpu"):
-        assert B.move_to_active_device(a) is not a
-        approx(B.move_to_active_device(a), a)
+        assert B.to_active_device(a) is not a
+        approx(B.to_active_device(a), a)
 
     # Move to CPU with identifier. Also check that capitalisation does not matter.
     with B.device("CPU:0"):
-        assert B.move_to_active_device(a) is not a
-        approx(B.move_to_active_device(a), a)
+        assert B.to_active_device(a) is not a
+        approx(B.to_active_device(a), a)
 
     # Give invalid syntax.
     B.Device.active_name = "::"
     with pytest.raises(ValueError):
-        B.move_to_active_device(a)
+        B.to_active_device(a)
     B.Device.active_name = None
 
 

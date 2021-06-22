@@ -1,4 +1,5 @@
 from functools import wraps
+import warnings
 from types import FunctionType
 from typing import Callable
 
@@ -30,7 +31,9 @@ __all__ = [
     "isnan",
     "Device",
     "device",
-    "move_to_active_device",
+    "on_device",
+    "set_global_device",
+    "to_active_device",
     "zeros",
     "ones",
     "zero",
@@ -212,7 +215,7 @@ class Device:
         # Set active name.
         Device.active_name = self.name
 
-        # Active the TF device manager, if it is available.
+        # Activate the TF device manager, if it is available.
         if Device._tf_manager:
             self._active_tf_manager = Device._tf_manager(self.name)
             self._active_tf_manager.__enter__()
@@ -231,26 +234,57 @@ class Device:
 @dispatch
 @abstract()
 def device(a: Numeric):
-    """Get the device on which a tensor lives or change the active device.
+    """Get the device on which a tensor lives.
 
     Args:
-        a (tensor or str): Tensor to get device of or name of device to change the
-            active device to.
+        a (tensor): Tensor to get device of.
 
     Returns:
-        str or `None`: Device of `a` if a tensor was given. Otherwise, there is no
-            return value.
+        str: Device of `a`.
     """
 
 
 @dispatch
-def device(name: str):
-    return Device(name)
+def device(device: str):  # pragma: no cover
+    warnings.warn(
+        "The use of `device` to change the active device is deprecated. Please use "
+        "`on_device` instead.",
+        category=DeprecationWarning,
+    )
+    return on_device(device)
+
+
+@dispatch
+def on_device(device):
+    """Create a context to change the active device.
+
+    Args:
+        a (device): New active device.
+
+    Returns:
+        :class:`.Device`: Context to change the active device.
+    """
+    return on_device(str(device))
+
+
+@dispatch
+def on_device(device: str):
+    return Device(device)
+
+
+@dispatch
+def set_global_device(device):
+    """Change the active device globally.
+
+    Args:
+        a (device): New active device.
+    """
+    on_device(device).__enter__()
 
 
 @dispatch
 @abstract()
-def move_to_active_device(a: Numeric):  # pragma: no cover
+def to_active_device(a: Numeric):  # pragma: no cover
     """Move a tensor to the active device.
 
     Args:
@@ -923,6 +957,7 @@ def std(a: Numeric, axis=None, squeeze=True):  # pragma: no cover
     Returns:
         tensor: Reduced tensor.
     """
+
 
 @dispatch
 def nanstd(x, **kw_args):

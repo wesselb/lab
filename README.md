@@ -251,8 +251,9 @@ jit(f, **kw_args)
 isnan(a)
 
 device(a)
-device(name)
-move_to_active_device(a)
+on_device(device)
+set_global_device(device)
+to_active_device(a)
 
 zeros(dtype, *shape)
 zeros(*shape)
@@ -431,14 +432,20 @@ take(a, indices, axis=0)
 You can get the device of a tensor with `B.device(a)`.
 The device of a tensor is always returned as a string.
 
-You can execute a computation on a device by entering `B.device(name)` as a context:
+You can execute a computation on a device by entering `B.on_device(device)` as a
+context:
 
 ```python
-with B.device("gpu:0"):
+with B.on_device("gpu:0"):
     a = B.randn(tf.float32, 2, 2)
     b = B.randn(tf.float32, 2, 2)
     c = a @ b
 ```
+
+Within such a context, a tensor that is not on the active device can be moved to the
+active device with `B.to_active_device(a)`.
+
+You can also globally set the activate device with `B.set_global_device("gpu:0")`.
 
 ## Lazy Shapes
 If a function is evaluated abstractly, then elements of the shape of a tensor, e.g.

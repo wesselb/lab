@@ -39,7 +39,7 @@ def device(a: AGNumeric):
 
 
 @dispatch
-def move_to_active_device(a: AGNumeric):
+def to_active_device(a: AGNumeric):
     return a
 
 

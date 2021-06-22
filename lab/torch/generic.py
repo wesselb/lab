@@ -42,7 +42,7 @@ def device(a: TorchNumeric):
 
 
 @dispatch
-def move_to_active_device(a: TorchNumeric):
+def to_active_device(a: TorchNumeric):
     return a.to(B.Device.active_name)
 
 

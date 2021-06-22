@@ -46,7 +46,7 @@ def device(a: JAXNumeric):
 
 
 @dispatch
-def move_to_active_device(a: JAXNumeric):
+def to_active_device(a: JAXNumeric):
     if B.Device.active_name:
         parts = B.Device.active_name.lower().split(":")
         if len(parts) == 1:
@@ -63,27 +63,27 @@ def move_to_active_device(a: JAXNumeric):
 
 @dispatch
 def zeros(dtype: JAXDType, *shape: Int):
-    return move_to_active_device(jnp.zeros(shape, dtype=dtype))
+    return to_active_device(jnp.zeros(shape, dtype=dtype))
 
 
 @dispatch
 def ones(dtype: JAXDType, *shape: Int):
-    return move_to_active_device(jnp.ones(shape, dtype=dtype))
+    return to_active_device(jnp.ones(shape, dtype=dtype))
 
 
 @dispatch
 def _eye2(dtype: JAXDType, *shape: Int):
-    return move_to_active_device(jnp.eye(shape[0], shape[1], dtype=dtype))
+    return to_active_device(jnp.eye(shape[0], shape[1], dtype=dtype))
 
 
 @dispatch
 def linspace(dtype: JAXDType, a, b, num: Int):
-    return move_to_active_device(jnp.linspace(a, b, num, dtype=dtype))
+    return to_active_device(jnp.linspace(a, b, num, dtype=dtype))
 
 
 @dispatch
 def range(dtype: JAXDType, start, stop, step):
-    return move_to_active_device(jnp.arange(start, stop, step, dtype=dtype))
+    return to_active_device(jnp.arange(start, stop, step, dtype=dtype))
 
 
 @dispatch
@@ -93,7 +93,7 @@ def cast(dtype: JAXDType, a: JAXNumeric):
 
 @dispatch
 def cast(dtype: JAXDType, a: Union[Number, NPNumeric]):
-    return move_to_active_device(jnp.array(a, dtype=dtype))
+    return to_active_device(jnp.array(a, dtype=dtype))
 
 
 @dispatch

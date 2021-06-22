@@ -39,14 +39,14 @@ B.jax_rng = JAXRNG()
 
 @dispatch
 def rand(dtype: JAXDType, *shape: Int):
-    return B.move_to_active_device(
+    return B.to_active_device(
         jax.random.uniform(B.jax_rng.split_key(), shape, dtype=dtype)
     )
 
 
 @dispatch
 def randn(dtype: JAXDType, *shape: Int):
-    return B.move_to_active_device(
+    return B.to_active_device(
         jax.random.normal(B.jax_rng.split_key(), shape, dtype=dtype)
     )
 
