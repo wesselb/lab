@@ -22,6 +22,11 @@ def squeeze(a: Numeric):
 
 
 @dispatch
+def broadcast_to(a: Numeric, *shape: Int):
+    return anp.broadcast_to(a, shape)
+
+
+@dispatch
 def diag(a: Numeric):
     return anp.diag(a)
 

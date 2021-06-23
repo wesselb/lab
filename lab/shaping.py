@@ -1,5 +1,6 @@
 import math
 
+import warnings
 import numpy as np
 from plum import Union
 
@@ -14,10 +15,12 @@ __all__ = [
     "rank",
     "length",
     "size",
-    "isscalar",
+    "is_scalar",
+    "isscalar",  # Deprecated
     "expand_dims",
     "squeeze",
     "uprank",
+    "broadcast_to",
     "diag",
     "diag_extract",
     "diag_construct",
@@ -129,7 +132,7 @@ size = length  #: Alias for `length`.
 
 
 @dispatch
-def isscalar(a: Numeric):
+def is_scalar(a: Numeric):
     """Check whether a tensor is a scalar.
 
     Args:
@@ -139,6 +142,14 @@ def isscalar(a: Numeric):
         bool: `True` if `a` is a scalar, otherwise `False`.
     """
     return rank(a) == 0
+
+
+def isscalar(a):
+    warnings.warn(
+        "The use of `isscalar` is deprecated. Please use `is_scalar` instead.",
+        category=DeprecationWarning,
+    )
+    return is_scalar(a)
 
 
 @dispatch
@@ -192,6 +203,20 @@ def uprank(a: Numeric, rank=2):
         a = expand_dims(a, axis=-1)
         a_rank += 1
     return a
+
+
+@dispatch
+@abstract()
+def broadcast_to(a: Numeric, *shape: Int):
+    """Broadcast a tensor to a certain shape.
+
+    Args:
+        a (tensor): Tensor to broadcast.
+        *shape (shape): New shape.
+
+    Returns:
+        tensor: Broadcasted tensor.
+    """
 
 
 @dispatch

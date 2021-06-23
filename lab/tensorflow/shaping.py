@@ -23,6 +23,11 @@ def squeeze(a: Numeric):
 
 
 @dispatch
+def broadcast_to(a: Numeric, *shape: Int):
+    return tf.broadcast_to(a, shape)
+
+
+@dispatch
 def diag(a: Numeric):
     if B.rank(a) == 1:
         return tf.linalg.diag(a)

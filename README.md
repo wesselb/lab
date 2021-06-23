@@ -412,6 +412,7 @@ isscalar(a)
 expand_dims(a, axis=0)
 squeeze(a)
 uprank(a, rank=2)
+broadcast_to(a, *shape)
 
 diag(a)
 diag_extract(a)

@@ -120,6 +120,14 @@ def test_uprank(check_lazy_shapes):
     approx(B.uprank(np.array([[1.0, 2.0]]), rank=1), np.array([[1.0, 2.0]]))
 
 
+@pytest.mark.parametrize("source_shape", [(1, 1, 1), (1, 1, 4), (1, 3, 4), (2, 3, 4)])
+def test_broadcast_to(check_lazy_shapes, source_shape):
+    def f(x):
+        return B.broadcast_to(x, 2, 3, 4)
+
+    check_function(f, (Tensor(*source_shape),))
+
+
 def test_diag(check_lazy_shapes):
     check_function(B.diag, (Tensor(3),))
     check_function(B.diag, (Tensor(3, 3),))
