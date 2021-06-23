@@ -85,9 +85,9 @@ def test_lazy_shape():
         assert isinstance(B.shape(a), tuple)
 
 
-def test_isscalar(check_lazy_shapes):
-    assert B.isscalar(1.0)
-    assert not B.isscalar(np.array([1.0]))
+def test_is_scalar(check_lazy_shapes):
+    assert B.is_scalar(1.0)
+    assert not B.is_scalar(np.array([1.0]))
 
 
 def test_expand_dims(check_lazy_shapes):
