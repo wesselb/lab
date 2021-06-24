@@ -45,7 +45,7 @@ def isnan(a: Numeric):
 
 @dispatch
 def device(a: TFNumeric):
-    return str(a.device)
+    return a.device
 
 
 @dispatch

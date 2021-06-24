@@ -29,7 +29,7 @@ __all__ = [
     "isabstract",
     "jit",
     "isnan",
-    "Device",
+    "ActiveDevice",
     "device",
     "on_device",
     "set_global_device",
@@ -193,7 +193,7 @@ def isnan(a: Numeric):  # pragma: no cover
     """
 
 
-class Device:
+class ActiveDevice:
     """Context manager that tracks and changes the active device.
 
     Args:
@@ -213,18 +213,18 @@ class Device:
 
     def __enter__(self):
         # Set active name.
-        Device.active_name = self.name
+        ActiveDevice.active_name = self.name
 
         # Activate the TF device manager, if it is available.
-        if Device._tf_manager:
-            self._active_tf_manager = Device._tf_manager(self.name)
+        if ActiveDevice._tf_manager:
+            self._active_tf_manager = ActiveDevice._tf_manager(self.name)
             self._active_tf_manager.__enter__()
 
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         # Unset the active name.
-        Device.active_name = None
+        ActiveDevice.active_name = None
 
         # Exit the TF device manager, if it was entered.
         if self._active_tf_manager:
@@ -259,17 +259,17 @@ def on_device(device):
     """Create a context to change the active device.
 
     Args:
-        a (device): New active device.
+        device (device): New active device.
 
     Returns:
         :class:`.Device`: Context to change the active device.
     """
-    return on_device(str(device))
+    return ActiveDevice(convert(device, str))
 
 
 @dispatch
-def on_device(device: str):
-    return Device(device)
+def on_device(a: Numeric):
+    return B.on_device(device(a))
 
 
 @dispatch
@@ -277,7 +277,7 @@ def set_global_device(device):
     """Change the active device globally.
 
     Args:
-        a (device): New active device.
+        device (device): New active device.
     """
     on_device(device).__enter__()
 

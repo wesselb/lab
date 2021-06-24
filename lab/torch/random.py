@@ -8,12 +8,12 @@ __all__ = []
 
 @dispatch
 def rand(dtype: TorchDType, *shape: Int):
-    return torch.rand(shape, dtype=dtype, device=B.Device.active_name)
+    return torch.rand(shape, dtype=dtype, device=B.ActiveDevice.active_name)
 
 
 @dispatch
 def randn(dtype: TorchDType, *shape: Int):
-    return torch.randn(shape, dtype=dtype, device=B.Device.active_name)
+    return torch.randn(shape, dtype=dtype, device=B.ActiveDevice.active_name)
 
 
 @dispatch

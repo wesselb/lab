@@ -140,6 +140,7 @@ Number       # Numbers
 Numeric      # Numerical objects, including booleans
 DType        # Data type
 Framework    # Anything accepted by supported frameworks
+Device       # Any device type
 ```
 
 ### NumPy
@@ -165,6 +166,7 @@ AG           # Anything AutoGrad
 ```
 TFNumeric
 TFDType
+TFDevice
  
 TF           # Anything TensorFlow
 ```
@@ -175,6 +177,7 @@ TF           # Anything TensorFlow
 ```
 TorchNumeric
 TorchDType
+TorchDevice
  
 Torch        # Anything PyTorch
 ```
@@ -185,6 +188,7 @@ Torch        # Anything PyTorch
 ```
 JAXNumeric
 JAXDType
+JAXDevice
  
 JAX          # Anything JAX
 ```
@@ -252,6 +256,7 @@ isnan(a)
 
 device(a)
 on_device(device)
+on_device(a)
 set_global_device(device)
 to_active_device(a)
 
@@ -455,7 +460,7 @@ By entering `B.lazy_shapes`, shapes and elements of shapes will be wrapped in a 
 type to fix this issue.
 
 ```python
-with B.lazy_shapes:
+with B.lazy_shapes():
     a = B.eye(2)
     print(type(B.shape(a)))
     # <class 'lab.shape.Shape'>

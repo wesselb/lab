@@ -107,6 +107,9 @@ def test_on_device(f, t, check_lazy_shapes):
     # Check that explicit allocation on CPU works.
     with B.on_device("cpu"):
         f(t)
+    # Also test inferring the device from a tensor.
+    with B.on_device(f(t)):
+        f(t)
 
     # Check that allocation on a non-existing device breaks.
     with pytest.raises(Exception):
@@ -115,14 +118,14 @@ def test_on_device(f, t, check_lazy_shapes):
 
     # Reset the active device. This is still set to "magic-device" due to the above
     # test.
-    B.Device.active_name = None
+    B.ActiveDevice.active_name = None
 
 
 def test_set_global_device(check_lazy_shapes):
-    assert B.Device.active_name == None
+    assert B.ActiveDevice.active_name is None
     B.set_global_device("gpu")
-    assert B.Device.active_name == "gpu"
-    B.Device.active_name = None
+    assert B.ActiveDevice.active_name == "gpu"
+    B.ActiveDevice.active_name = None
 
 
 def test_to_active_device_jax(check_lazy_shapes):
@@ -147,10 +150,10 @@ def test_to_active_device_jax(check_lazy_shapes):
         approx(B.to_active_device(a), a)
 
     # Give invalid syntax.
-    B.Device.active_name = "::"
+    B.ActiveDevice.active_name = "::"
     with pytest.raises(ValueError):
         B.to_active_device(a)
-    B.Device.active_name = None
+    B.ActiveDevice.active_name = None
 
 
 @pytest.mark.parametrize("f", [B.zeros, B.ones, B.eye])

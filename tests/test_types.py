@@ -180,6 +180,23 @@ def test_dtype_float(check_lazy_shapes):
     assert B.dtype_float(1) is np.float64
 
 
+@pytest.mark.parametrize(
+    "t, FWDevice",
+    [
+        (tf.float64, B.TFDevice),
+        (torch.float64, B.TorchDevice),
+        (jnp.float64, B.JAXDevice),
+    ],
+)
+def test_device(t, FWDevice, check_lazy_shapes):
+    a = B.randn(t, 2, 2)
+    assert isinstance(B.device(a), FWDevice)
+    assert isinstance(B.device(a), B.Device)
+
+    # Test conversion to string.
+    assert isinstance(convert(B.device(a), str), str)
+
+
 @pytest.mark.parametrize("t", [B.NP, B.Framework])
 def test_framework_np(t, check_lazy_shapes):
     assert isinstance(np.array(1), t)

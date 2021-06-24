@@ -25,7 +25,7 @@ for retrievable in _tf_retrievables:
     retrievable.retrieve()
 
 # Set TF device manager.
-B.Device._tf_manager = tf.device
+B.ActiveDevice._tf_manager = tf.device
 
 # Alias to actual module.
 sys.modules[__name__] = B

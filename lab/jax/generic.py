@@ -42,20 +42,20 @@ def isnan(a: Numeric):
 
 @dispatch
 def device(a: JAXNumeric):
-    return str(a.device_buffer.device())
+    return a.device_buffer.device()
 
 
 @dispatch
 def to_active_device(a: JAXNumeric):
-    if B.Device.active_name:
-        parts = B.Device.active_name.lower().split(":")
+    if B.ActiveDevice.active_name:
+        parts = B.ActiveDevice.active_name.lower().split(":")
         if len(parts) == 1:
             return jax.device_put(a, jax.devices(parts[0])[0])
         elif len(parts) == 2:
             return jax.device_put(a, jax.devices(parts[0])[int(parts[1])])
         else:
             raise ValueError(
-                f'Cannot parse device specification "{B.Device.active_name}".'
+                f'Cannot parse device specification "{B.ActiveDevice.active_name}".'
             )
     else:
         return a

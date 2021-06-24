@@ -38,37 +38,37 @@ def isnan(a: Numeric):
 
 @dispatch
 def device(a: TorchNumeric):
-    return str(a.device)
+    return a.device
 
 
 @dispatch
 def to_active_device(a: TorchNumeric):
-    return a.to(B.Device.active_name)
+    return a.to(B.ActiveDevice.active_name)
 
 
 @dispatch
 def zeros(dtype: TorchDType, *shape: Int):
-    return torch.zeros(shape, dtype=dtype, device=B.Device.active_name)
+    return torch.zeros(shape, dtype=dtype, device=B.ActiveDevice.active_name)
 
 
 @dispatch
 def ones(dtype: TorchDType, *shape: Int):
-    return torch.ones(shape, dtype=dtype, device=B.Device.active_name)
+    return torch.ones(shape, dtype=dtype, device=B.ActiveDevice.active_name)
 
 
 @dispatch
 def _eye2(dtype: TorchDType, *shape: Int):
-    return torch.eye(shape[0], shape[1], dtype=dtype, device=B.Device.active_name)
+    return torch.eye(shape[0], shape[1], dtype=dtype, device=B.ActiveDevice.active_name)
 
 
 @dispatch
 def linspace(dtype: TorchDType, a, b, num: Int):
-    return torch.linspace(a, b, num, dtype=dtype, device=B.Device.active_name)
+    return torch.linspace(a, b, num, dtype=dtype, device=B.ActiveDevice.active_name)
 
 
 @dispatch
 def range(dtype: TorchDType, start, stop, step):
-    return torch.arange(start, stop, step, dtype=dtype, device=B.Device.active_name)
+    return torch.arange(start, stop, step, dtype=dtype, device=B.ActiveDevice.active_name)
 
 
 @dispatch
@@ -78,7 +78,7 @@ def cast(dtype: TorchDType, a: TorchNumeric):
 
 @dispatch
 def cast(dtype: TorchDType, a: Union[Number, NPNumeric]):
-    return torch.tensor(a, dtype=dtype, device=B.Device.active_name)
+    return torch.tensor(a, dtype=dtype, device=B.ActiveDevice.active_name)
 
 
 @dispatch

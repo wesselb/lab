@@ -31,6 +31,10 @@ __all__ = [
     "TorchDType",
     "JAXDType",
     "DType",
+    "TFDevice",
+    "TorchDevice",
+    "JAXDevice",
+    "Device",
     "default_dtype",
     "dtype",
     "issubdtype",
@@ -105,7 +109,8 @@ _tf_retrievables = [_tf_tensor, _tf_indexedslices, _tf_variable, _tf_dtype]
 # Define PyTorch module types.
 _torch_tensor = ModuleType("torch", "Tensor")
 _torch_dtype = ModuleType("torch", "dtype")
-_torch_retrievables = [_torch_tensor, _torch_dtype]
+_torch_device = ModuleType("torch", "device")
+_torch_retrievables = [_torch_tensor, _torch_dtype, _torch_device]
 
 # Define AutoGrad module types.
 _ag_tensor = ModuleType("autograd.tracer", "Box")
@@ -115,7 +120,8 @@ _ag_retrievables = [_ag_tensor]
 _jax_tensor = ModuleType("jax.interpreters.xla", "DeviceArray")
 _jax_tracer = ModuleType("jax.core", "Tracer")
 _jax_dtype = ModuleType("jax._src.numpy.lax_numpy", "_ScalarMeta")
-_jax_retrievables = [_jax_tensor, _jax_tracer, _jax_dtype]
+_jax_device = ModuleType("jaxlib.xla_extension", "Device")
+_jax_retrievables = [_jax_tensor, _jax_tracer, _jax_dtype, _jax_device]
 
 # Numeric types:
 Int = Union(*([int, Dimension] + np.sctypes["int"] + np.sctypes["uint"]), alias="Int")
@@ -321,6 +327,16 @@ def dtype_float(x):
     """
     return promote_dtypes(dtype(x), np.float16)
 
+
+# Device types:
+TFDevice = Union(str, alias="TFDevice")
+TorchDevice = Union(_torch_device, alias="TFDevice")
+JAXDevice = Union(_jax_device, alias="JAXDevice")
+Device = Union(TFDevice, TorchDevice, JAXDevice, alias="Device")
+
+# Add conversions from non-string device types to strings.
+add_conversion_method(TorchDevice, str, str)
+add_conversion_method(JAXDevice, str, lambda d: f"{d.platform}:{d.id}")
 
 # Framework types:
 NP = Union(NPNumeric, NPDType, alias="NP")
