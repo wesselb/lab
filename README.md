@@ -219,6 +219,9 @@ This section lists all available constants and methods.
         `axis` indicates an axis over which the function may perform its action.
         An axis is always given as a keyword argument.
     -
+        `device` refers to a device on which a tensor can placed, which can
+        either be a framework-specific type or a string, e.g. `"cpu"`.
+    -
         `ref` indicates a *reference tensor* from which properties, like its
         shape and data type, will be used. E.g., `zeros(tensor)` creates a 
         tensor full of zeros of the same shape and data type as `tensor`.

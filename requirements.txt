@@ -7,7 +7,7 @@ pytest-cov
 coveralls
 autograd>=1.3
 tensorflow>=2
-tensorflow_probability
+tensorflow-probability
 torch
 jax
 jaxlib
