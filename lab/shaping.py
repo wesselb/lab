@@ -144,7 +144,7 @@ def is_scalar(a: Numeric):
     return rank(a) == 0
 
 
-def isscalar(a):
+def isscalar(a):  # pragma: no cover
     warnings.warn(
         "The use of `isscalar` is deprecated. Please use `is_scalar` instead.",
         category=DeprecationWarning,
