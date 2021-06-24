@@ -445,8 +445,10 @@ def take(a: Numeric, indices_or_mask, axis=0):  # pragma: no cover
     """
     if B.rank(indices_or_mask) != 1:
         raise ValueError("Indices or mask must be rank 1.")
+    # JAX does not handle `tuple`s, so convert `tuples`s to lists.
+    if isinstance(indices_or_mask, tuple):
+        indices_or_mask = list(indices_or_mask)
     axis = resolve_axis(a, axis)
-    # Construct slices.
     slices = tuple(
         indices_or_mask if i == axis else slice(None, None, None)
         for i in range(B.rank(a))

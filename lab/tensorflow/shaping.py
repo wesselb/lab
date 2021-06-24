@@ -95,4 +95,9 @@ def _is_mask_and_convert(indices_or_mask: NPNumeric):
 
 @dispatch
 def _is_mask_and_convert(indices_or_mask: Union[tuple, list]):
-    return B.dtype(indices_or_mask[0]) == bool, indices_or_mask
+    if len(indices_or_mask) == 0:
+        # Treat an empty tuple or list as a list of no indices. The data type does not
+        # matter, except that it must be integer.
+        return False, tf.constant([], dtype=tf.int32)
+    else:
+        return B.dtype(indices_or_mask[0]) == bool, indices_or_mask

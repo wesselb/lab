@@ -245,9 +245,14 @@ def test_take_indices_rank(check_lazy_shapes):
             B.take(a, [[0], [1]])
 
 
-def test_take_empty_list(check_lazy_shapes):
-    # Check empty list.
-    check_function(B.take, (Matrix(3, 4), Value([])), {"axis": Value(0, 1)})
+@pytest.mark.parametrize(
+    "indices_or_mask",
+    [[], [0, 2], [True, False, True], (), (0, 2), (True, False, True)],
+)
+def test_take_list_tuple(check_lazy_shapes, indices_or_mask):
+    check_function(
+        B.take, (Matrix(3, 3, 3), Value(indices_or_mask)), {"axis": Value(0, 1, 2)}
+    )
 
 
 def test_take_tf(check_lazy_shapes):
