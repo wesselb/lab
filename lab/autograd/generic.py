@@ -93,8 +93,18 @@ def sin(a: Numeric):
 
 
 @dispatch
+def arcsin(a: Numeric):
+    return anp.arcsin(a)
+
+
+@dispatch
 def cos(a: Numeric):
     return anp.cos(a)
+
+
+@dispatch
+def arccos(a: Numeric):
+    return anp.arccos(a)
 
 
 @dispatch
@@ -103,8 +113,18 @@ def tan(a: Numeric):
 
 
 @dispatch
+def arctan(a: Numeric):
+    return anp.arctan(a)
+
+
+@dispatch
 def tanh(a: Numeric):
     return anp.tanh(a)
+
+
+@dispatch
+def arctanh(a: Numeric):
+    return anp.arctanh(a)
 
 
 @dispatch

@@ -50,9 +50,13 @@ __all__ = [
     "exp",
     "log",
     "sin",
+    "arcsin",
     "cos",
+    "arccos",
     "tan",
+    "arctan",
     "tanh",
+    "arctanh",
     "erf",
     "sigmoid",
     "softplus",
@@ -628,6 +632,19 @@ def sin(a: Numeric):  # pragma: no cover
 
 @dispatch
 @abstract()
+def arcsin(a: Numeric):  # pragma: no cover
+    """Inverse of sine function.
+
+    Args:
+        a (tensor): Tensor.
+
+    Returns:
+        tensor: Inverse of sine function evaluated at `a`.
+    """
+
+
+@dispatch
+@abstract()
 def cos(a: Numeric):  # pragma: no cover
     """Cosine function.
 
@@ -636,6 +653,19 @@ def cos(a: Numeric):  # pragma: no cover
 
     Returns:
         tensor: Cosine function evaluated at `a`.
+    """
+
+
+@dispatch
+@abstract()
+def arccos(a: Numeric):  # pragma: no cover
+    """Inverse of cosine function.
+
+    Args:
+        a (tensor): Tensor.
+
+    Returns:
+        tensor: Inverse of cosine function evaluated at `a`.
     """
 
 
@@ -654,6 +684,19 @@ def tan(a: Numeric):  # pragma: no cover
 
 @dispatch
 @abstract()
+def arctan(a: Numeric):  # pragma: no cover
+    """Inverse of tangent function.
+
+    Args:
+        a (tensor): Tensor.
+
+    Returns:
+        tensor: Inverse of tangent function evaluated at `a`.
+    """
+
+
+@dispatch
+@abstract()
 def tanh(a: Numeric):  # pragma: no cover
     """Tangent hyperbolic function.
 
@@ -662,6 +705,19 @@ def tanh(a: Numeric):  # pragma: no cover
 
     Returns:
         tensor: Tangent hyperbolic function evaluated at `a`.
+    """
+
+
+@dispatch
+@abstract()
+def arctanh(a: Numeric):  # pragma: no cover
+    """Inverse of tangent hyperbolic function.
+
+    Args:
+        a (tensor): Tensor.
+
+    Returns:
+        tensor: Inverse of tangent hyperbolic function evaluated at `a`.
     """
 
 

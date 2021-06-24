@@ -124,8 +124,18 @@ def sin(a: Numeric):
 
 
 @dispatch
+def arcsin(a: Numeric):
+    return tf.arcsin(a)
+
+
+@dispatch
 def cos(a: Numeric):
     return tf.cos(a)
+
+
+@dispatch
+def arccos(a: Numeric):
+    return tf.arccos(a)
 
 
 @dispatch
@@ -134,8 +144,18 @@ def tan(a: Numeric):
 
 
 @dispatch
+def arctan(a: Numeric):
+    return tf.arctan(a)
+
+
+@dispatch
 def tanh(a: Numeric):
     return tf.tanh(a)
+
+
+@dispatch
+def arctanh(a: Numeric):
+    return tf.arctanh(a)
 
 
 @dispatch

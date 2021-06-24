@@ -68,7 +68,9 @@ def linspace(dtype: TorchDType, a, b, num: Int):
 
 @dispatch
 def range(dtype: TorchDType, start, stop, step):
-    return torch.arange(start, stop, step, dtype=dtype, device=B.ActiveDevice.active_name)
+    return torch.arange(
+        start, stop, step, dtype=dtype, device=B.ActiveDevice.active_name
+    )
 
 
 @dispatch
@@ -128,8 +130,18 @@ def sin(a: Numeric):
 
 
 @dispatch
+def arcsin(a: Numeric):
+    return torch.arcsin(a)
+
+
+@dispatch
 def cos(a: Numeric):
     return torch.cos(a)
+
+
+@dispatch
+def arccos(a: Numeric):
+    return torch.arccos(a)
 
 
 @dispatch
@@ -138,8 +150,18 @@ def tan(a: Numeric):
 
 
 @dispatch
+def arctan(a: Numeric):
+    return torch.arctan(a)
+
+
+@dispatch
 def tanh(a: Numeric):
     return torch.tanh(a)
+
+
+@dispatch
+def arctanh(a: Numeric):
+    return torch.arctanh(a)
 
 
 @dispatch

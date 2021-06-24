@@ -138,8 +138,18 @@ def sin(a: Numeric):
 
 
 @dispatch
+def arcsin(a: Numeric):
+    return jnp.arcsin(a)
+
+
+@dispatch
 def cos(a: Numeric):
     return jnp.cos(a)
+
+
+@dispatch
+def arccos(a: Numeric):
+    return jnp.arccos(a)
 
 
 @dispatch
@@ -148,8 +158,18 @@ def tan(a: Numeric):
 
 
 @dispatch
+def arctan(a: Numeric):
+    return jnp.arctan(a)
+
+
+@dispatch
 def tanh(a: Numeric):
     return jnp.tanh(a)
+
+
+@dispatch
+def arctanh(a: Numeric):
+    return jnp.arctanh(a)
 
 
 @dispatch
