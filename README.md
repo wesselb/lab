@@ -333,6 +333,7 @@ all(a, axis=None, squeeze=True)
 any(a, axis=None, squeeze=True)
 
 nansum(a, axis=None, squeeze=True)
+nanprod(a, axis=None, squeeze=True)
 nanmean(a, axis=None, squeeze=True)
 nanstd(a, axis=None, squeeze=True)
 
