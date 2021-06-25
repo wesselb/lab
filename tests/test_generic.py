@@ -303,13 +303,10 @@ def test_cast_shape_element(dtype, check_lazy_shapes):
         B.sign,
         B.exp,
         B.sin,
-        B.arcsin,
         B.cos,
-        B.arccos,
         B.tan,
         B.arctan,
         B.tanh,
-        B.arctanh,
         B.erf,
         B.sigmoid,
         B.softplus,
@@ -327,6 +324,13 @@ def test_unary_positive(f, check_lazy_shapes):
     check_function(f, (PositiveTensor(),))
     check_function(f, (PositiveTensor(2),))
     check_function(f, (PositiveTensor(2, 3),))
+
+
+@pytest.mark.parametrize("f", [B.arcsin, B.arccos, B.arctanh])
+def test_unary_unit_interval(f, check_lazy_shapes):
+    check_function(f, (PositiveTensor(upper=1),))
+    check_function(f, (PositiveTensor(2, upper=1),))
+    check_function(f, (PositiveTensor(2, 3, upper=1),))
 
 
 @pytest.mark.parametrize("a", [0, -1, 1])

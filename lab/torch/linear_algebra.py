@@ -51,13 +51,13 @@ def kron(a: Numeric, b: Numeric):
 
 @dispatch
 def svd(a: Numeric, compute_uv=True):
-    u, s, v = torch.svd(a, compute_uv=compute_uv)
+    u, s, v = torch.linalg.svd(a, full_matrices=False)
     return (u, s, v) if compute_uv else s
 
 
 @dispatch
 def solve(a: Numeric, b: Numeric):
-    return torch.solve(b, a)[0]
+    return torch.linalg.solve(a, b)
 
 
 @dispatch
@@ -67,7 +67,7 @@ def inv(a: Numeric):
 
 @dispatch
 def det(a: Numeric):
-    return torch.det(a)
+    return torch.linalg.det(a)
 
 
 @dispatch
@@ -93,7 +93,7 @@ def logm(a: Numeric):
 
 @dispatch
 def cholesky(a: Numeric):
-    return torch.cholesky(a, upper=False)
+    return torch.linalg.cholesky(a)
 
 
 @dispatch
