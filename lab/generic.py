@@ -972,6 +972,7 @@ def sum(a: Numeric, axis=None, squeeze=True):  # pragma: no cover
     """
 
 
+@dispatch
 @abstract()
 def prod(a: Numeric, axis=None, squeeze=True):  # pragma: no cover
     """Product of all elements in a tensor, possibly along an axis.
