@@ -74,8 +74,9 @@ __all__ = [
     "max",
     "argmax",
     "sum",
-    "prod",
     "nansum",
+    "prod",
+    "nanprod",
     "mean",
     "nanmean",
     "std",
@@ -973,6 +974,14 @@ def sum(a: Numeric, axis=None, squeeze=True):  # pragma: no cover
 
 
 @dispatch
+def nansum(x, **kw_args):
+    """Like :func:`sum`, but ignores `NaN`s."""
+    available = ~B.isnan(x)
+    x = B.where(available, x, B.zero(x))
+    return B.sum(x, **kw_args)
+
+
+@dispatch
 @abstract()
 def prod(a: Numeric, axis=None, squeeze=True):  # pragma: no cover
     """Product of all elements in a tensor, possibly along an axis.
@@ -989,11 +998,11 @@ def prod(a: Numeric, axis=None, squeeze=True):  # pragma: no cover
 
 
 @dispatch
-def nansum(x, **kw_args):
-    """Like :func:`sum`, but ignores `NaN`s."""
+def nanprod(x, **kw_args):
+    """Like :func:`prod`, but ignores `NaN`s."""
     available = ~B.isnan(x)
-    x = B.where(available, x, B.zero(x))
-    return B.sum(x, **kw_args)
+    x = B.where(available, x, B.one(x))
+    return B.prod(x, **kw_args)
 
 
 @dispatch

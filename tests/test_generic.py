@@ -357,6 +357,7 @@ def test_binary_positive_first(f, check_lazy_shapes):
         (B.max, True),
         (B.sum, True),
         (B.prod, True),
+        (B.nanprod, True),
         (B.nansum, True),
         (B.mean, True),
         (B.nanmean, True),
@@ -388,7 +389,7 @@ def test_reductions(f, check_squeeze, check_lazy_shapes):
 
 @pytest.mark.parametrize(
     "f, f_ref",
-    [(B.nansum, B.sum), (B.nanmean, B.mean), (B.nanstd, B.std)],
+    [(B.nansum, B.sum), (B.nanprod, B.prod), (B.nanmean, B.mean), (B.nanstd, B.std)],
 )
 def test_nanreductions(f, f_ref, check_lazy_shapes):
     # Check consistency.
