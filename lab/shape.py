@@ -122,11 +122,14 @@ class Dimension:
     def __rmul__(self, other):
         return other * self.dim
 
-    def __neg__(self):
-        return -self.dim
-
     def __truediv__(self, other):
         return self.dim / other
+
+    def __rtruediv__(self, other):
+        return other / self.dim
+
+    def __neg__(self):
+        return -self.dim
 
     def __pow__(self, power, modulo=None):
         return self.dim.__pow__(power, modulo)
