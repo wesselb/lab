@@ -193,6 +193,11 @@ def sum(a: Numeric, axis=None, squeeze=True):
 
 
 @dispatch
+def prod(a: Numeric, axis=None, squeeze=True):
+    return anp.prod(a, axis=axis, keepdims=not squeeze)
+
+
+@dispatch
 def mean(a: Numeric, axis=None, squeeze=True):
     return anp.mean(a, axis=axis, keepdims=not squeeze)
 

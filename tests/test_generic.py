@@ -356,6 +356,7 @@ def test_binary_positive_first(f, check_lazy_shapes):
         (B.min, True),
         (B.max, True),
         (B.sum, True),
+        (B.prod, True),
         (B.nansum, True),
         (B.mean, True),
         (B.nanmean, True),

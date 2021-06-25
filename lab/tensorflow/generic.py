@@ -232,6 +232,11 @@ def sum(a: Numeric, axis=None, squeeze=True):
 
 
 @dispatch
+def prod(a: Numeric, axis=None, squeeze=True):
+    return tf.reduce_prod(a, axis=axis, keepdims=not squeeze)
+
+
+@dispatch
 def mean(a: Numeric, axis=None, squeeze=True):
     return tf.reduce_mean(a, axis=axis, keepdims=not squeeze)
 

@@ -217,6 +217,11 @@ def sum(a: Numeric, axis=None, squeeze=True):
 
 
 @dispatch
+def prod(a: Numeric, axis=None, squeeze=True):
+    return np.prod(a, axis=axis, keepdims=not squeeze)
+
+
+@dispatch
 def mean(a: Numeric, axis=None, squeeze=True):
     return np.mean(a, axis=axis, keepdims=not squeeze)
 

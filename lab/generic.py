@@ -74,6 +74,7 @@ __all__ = [
     "max",
     "argmax",
     "sum",
+    "prod",
     "nansum",
     "mean",
     "nanmean",
@@ -959,6 +960,21 @@ def argmax(a: Numeric, axis=None):  # pragma: no cover
 @abstract()
 def sum(a: Numeric, axis=None, squeeze=True):  # pragma: no cover
     """Sum a tensor, possibly along an axis.
+
+    Args:
+        a (tensor): Tensor.
+        axis (int, optional): Optional axis.
+        squeeze (bool, optional): Squeeze the dimension after the reduction. Defaults
+            to `True`.
+
+    Returns:
+        tensor: Reduced tensor.
+    """
+
+
+@abstract()
+def prod(a: Numeric, axis=None, squeeze=True):  # pragma: no cover
+    """Product of all elements in a tensor, possibly along an axis.
 
     Args:
         a (tensor): Tensor.

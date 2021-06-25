@@ -239,6 +239,14 @@ def sum(a: Numeric, axis=None, squeeze=True):
 
 
 @dispatch
+def prod(a: Numeric, axis=None, squeeze=True):
+    if axis is None:
+        return torch.prod(a)
+    else:
+        return torch.prod(a, dim=axis, keepdim=not squeeze)
+
+
+@dispatch
 def mean(a: Numeric, axis=None, squeeze=True):
     if axis is None:
         return torch.mean(a)
