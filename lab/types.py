@@ -74,7 +74,7 @@ class ModuleType(ResolvableType):
         self._type = None
 
         # Placeholder type to return whilst the type is unavailable.
-        self._placeholder = UnimportedType(module + "." + name)
+        self._placeholder = UnimportedType[module + "." + name]
 
     def retrieve(self):
         """Retrieve the type, assuming that the module has been imported.
