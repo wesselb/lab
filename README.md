@@ -465,7 +465,7 @@ You can also globally set the active device with `B.set_global_device("gpu:0")`.
 ## Lazy Shapes
 If a function is evaluated abstractly, then elements of the shape of a tensor, e.g.
 `B.shape(a)[0]`, may also be tensors, which can break dispatch.
-By entering `B.lazy_shapes`, shapes and elements of shapes will be wrapped in a custom 
+By entering `B.lazy_shapes()`, shapes and elements of shapes will be wrapped in a custom 
 type to fix this issue.
 
 ```python
