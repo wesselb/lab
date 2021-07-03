@@ -61,6 +61,9 @@ class Shape:
         else:
             return "(" + ", ".join(repr(x) for x in self) + ")"
 
+    def __hash__(self):
+        return hash(self.dims)
+
 
 @dispatch
 def to_numpy(shape: Shape):
@@ -139,6 +142,9 @@ class Dimension:
 
     def __str__(self):
         return str(self.dim)
+
+    def __hash__(self):
+        return hash(self.dim)
 
 
 @_dispatch

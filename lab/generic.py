@@ -96,6 +96,7 @@ __all__ = [
     "argsort",
     "quantile",
     "to_numpy",
+    "jit_to_numpy",
 ]
 
 _dispatch = Dispatcher()
@@ -1359,3 +1360,22 @@ def to_numpy(a: tuple):
 @dispatch
 def to_numpy(a: dict):
     return {k: to_numpy(v) for k, v in a.items()}
+
+
+@dispatch
+def jit_to_numpy(*args):
+    """Convert an object to NumPy in a JIT-safe way.
+
+    Args:
+        a (object): Object to convert.
+
+    Returns:
+        `np.ndarray`: `a` as NumPy.
+    """
+    if B.control_flow.use_cache:
+        return B.control_flow.get_outcome("to_numpy")
+    else:
+        res = B.to_numpy(*args)
+        if B.control_flow.caching:
+            B.control_flow.set_outcome("to_numpy", res)
+        return res

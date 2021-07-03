@@ -47,6 +47,9 @@ def test_shape():
     assert str(Shape(1, 2)) == "(1, 2)"
     assert repr(Shape(1, 2)) == "Shape(1, 2)"
 
+    # Test hashing.
+    assert hash(Shape(1, 2)) == hash((1, 2))
+
     # Test conversion to NumPy.
     assert isinstance(B.to_numpy(Shape(1, 2)), tuple)
     assert B.to_numpy(Shape(1, 2)) == (1, 2)
@@ -85,3 +88,6 @@ def test_dimension():
 
     # Test representation.
     assert repr(d) == str(d) == "5"
+
+    # Test hashing.
+    assert hash(d) == hash(5)

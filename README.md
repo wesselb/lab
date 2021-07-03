@@ -356,6 +356,7 @@ argsort(a, axis=-1, descending=False)
 quantile(a, q, axis=None)
 
 to_numpy(a)
+jit_to_numpy(a)  # Plays nice with `B.jit`.
 ```
 
 ### Linear Algebra
@@ -400,6 +401,8 @@ ew_sums2(a, b)
 ew_sums2(a)
 ew_sums(a, b)
 ew_sums(a)
+
+block_diag(*elements)
 ```
 ### Random
 ```

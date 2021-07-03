@@ -594,3 +594,13 @@ def test_to_numpy_tuple(check_lazy_shapes):
 def test_to_numpy_dict(check_lazy_shapes):
     x = B.to_numpy({"a": tf.constant(1)})
     assert isinstance(x["a"], (B.Number, B.NPNumeric))
+
+
+def test_jit_to_numpy(check_lazy_shapes):
+    @B.jit
+    def f(x):
+        available = B.jit_to_numpy(~B.isnan(x))
+        return B.sum(x[available])
+
+    x = B.sqrt(B.randn(100))
+    approx(f(x), f(jnp.array(x)))

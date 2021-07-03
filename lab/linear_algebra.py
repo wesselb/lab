@@ -39,6 +39,7 @@ __all__ = [
     "pw_sums",
     "ew_sums2",
     "ew_sums",
+    "block_diag",
 ]
 
 log = logging.getLogger(__name__)
@@ -565,3 +566,33 @@ def ew_sums(a, b):
 @dispatch
 def ew_sums(a):
     return ew_sums(a, a)
+
+
+@dispatch
+def block_diag(element: Numeric, *elements: Numeric):
+    """Concatenate matrices into a block-diagonal matrix.
+
+    Args:
+        *elements (matrix): Matrices to concatenate
+
+    Returns:
+        matrix: Block-diagonal matrix.
+    """
+    elements = (element,) + elements
+    shapes = [B.shape(element) for element in elements]
+    dtype = B.dtype(elements[0])
+    rows = []
+    cols_built = 0
+    total_rows, total_cols = map(sum, zip(*shapes))
+    for element, shape in zip(elements, shapes):
+        rows.append(
+            B.concat(
+                B.zeros(dtype, shape[0], cols_built),
+                element,
+                B.zeros(dtype, shape[0], total_cols - cols_built - shape[1]),
+                axis=1
+            )
+        )
+        cols_built += shape[1]
+    return B.concat(*rows, axis=0)
+

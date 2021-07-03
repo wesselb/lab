@@ -9,6 +9,7 @@ import lab.tensorflow as B_tf
 import lab.torch as B_torch
 import lab.jax as B_jax
 from lab.util import (
+    resolve_axis,
     as_tuple,
     abstract,
     batch_computation,
@@ -18,6 +19,20 @@ from lab.util import (
 
 # noinspections PyUnresolvedReferences
 from .util import approx, check_lazy_shapes
+
+
+def test_resolve_axis(check_lazy_shapes):
+    a = B.randn(2, 2, 2)
+    with pytest.raises(ValueError):
+        resolve_axis(a, -4)
+    assert resolve_axis(a, -3) == 0
+    assert resolve_axis(a, -2) == 1
+    assert resolve_axis(a, -1) == 2
+    assert resolve_axis(a, 0) == 0
+    assert resolve_axis(a, 1) == 1
+    assert resolve_axis(a, 2) == 2
+    with pytest.raises(ValueError):
+        resolve_axis(a, 3)
 
 
 @pytest.mark.parametrize("other", [B_tf, B_torch, B_autograd, B_jax])

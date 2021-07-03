@@ -1,9 +1,8 @@
-from itertools import product
-
+import lab as B
 import numpy as np
 import pytest
-
-import lab as B
+import scipy as sp
+from plum import NotFoundLookupError
 
 # noinspection PyUnresolvedReferences
 from .util import (
@@ -207,8 +206,12 @@ def test_pw_2d(check_lazy_shapes, batch_shape):
             dists2_ab[..., i, j] = np.sum((a[..., i, :] - b[..., j, :]) ** 2, axis=-1)
             sums2_ab[..., i, j] = np.sum((a[..., i, :] + b[..., j, :]) ** 2, axis=-1)
             if j < 5:
-                dists2_aa[..., i, j] = np.sum((a[..., i, :] - a[..., j, :]) ** 2, axis=-1)
-                sums2_aa[..., i, j] = np.sum((a[..., i, :] + a[..., j, :]) ** 2, axis=-1)
+                dists2_aa[..., i, j] = np.sum(
+                    (a[..., i, :] - a[..., j, :]) ** 2, axis=-1
+                )
+                sums2_aa[..., i, j] = np.sum(
+                    (a[..., i, :] + a[..., j, :]) ** 2, axis=-1
+                )
 
     approx_allclose(B.pw_dists2(a, b), dists2_ab)
     approx_allclose(B.pw_dists2(a), dists2_aa)
@@ -315,3 +318,20 @@ def test_ew_1d(check_lazy_shapes, batch_shape):
             approx(B.ew_sums2(a1), np.abs(a + a) ** 2)
             approx(B.ew_sums(a2, b2), np.abs(a + b))
             approx(B.ew_sums(a1), np.abs(a + a))
+
+
+def test_block_diag(check_lazy_shapes):
+    # Check that arguments must be given.
+    with pytest.raises(NotFoundLookupError):
+        B.block_diag()
+
+    elements = [
+        B.randn(1, 1),
+        B.randn(1, 2),
+        B.randn(2, 1),
+        B.randn(2, 2),
+        B.randn(2, 3),
+        B.randn(3, 2),
+    ]
+    for i in range(1, len(elements) + 1):
+        approx(B.block_diag(*elements[:i]), sp.linalg.block_diag(*elements[:i]))

@@ -23,9 +23,12 @@ def resolve_axis(a, axis):
         int: Resolved axis.
     """
     if axis < 0:
-        return B.rank(a) + axis
-    else:
-        return axis
+        axis = B.rank(a) + axis
+    if not (0 <= axis < B.rank(a)):
+        raise ValueError(
+            f"Axis {axis} cannot be resolved for tensor of shape {B.shape(a)}."
+        )
+    return axis
 
 
 @_dispatch
