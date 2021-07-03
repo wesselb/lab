@@ -81,7 +81,7 @@ def logm(a: Numeric):
 
 
 @dispatch
-def cholesky(a: Numeric):
+def _cholesky(a: Numeric):
     return np.linalg.cholesky(a)
 
 

@@ -226,9 +226,9 @@ def logm(a):  # pragma: no cover
 
 
 @dispatch
-@abstract()
-def cholesky(a: Numeric):  # pragma: no cover
-    """Compute the Cholesky decomposition.
+def cholesky(a: Numeric):
+    """Compute the Cholesky decomposition. The matrix will automatically be regularised
+    because computing the decomposition.
 
     Args:
         a (tensor): Matrix to decompose.
@@ -236,9 +236,16 @@ def cholesky(a: Numeric):  # pragma: no cover
     Returns:
         tensor: Cholesky decomposition.
     """
+    return _cholesky(reg(a))
 
 
 chol = cholesky  #: Shorthand for `cholesky`.
+
+
+@dispatch
+@abstract()
+def _cholesky(a: Numeric):  # pragma: no cover
+    pass
 
 
 @dispatch
@@ -590,9 +597,8 @@ def block_diag(element: Numeric, *elements: Numeric):
                 B.zeros(dtype, shape[0], cols_built),
                 element,
                 B.zeros(dtype, shape[0], total_cols - cols_built - shape[1]),
-                axis=1
+                axis=1,
             )
         )
         cols_built += shape[1]
     return B.concat(*rows, axis=0)
-
