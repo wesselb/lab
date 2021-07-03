@@ -114,6 +114,13 @@ def test_inv(check_lazy_shapes):
     check_function(B.inv, (Matrix(4, 3, 3),))
 
 
+def test_pinv(check_lazy_shapes):
+    a = Matrix(4, 6, 3).np()
+    assert B.shape(B.pinv(a)) == (4, 3, 6)
+    assert B.shape(B.pinv(B.pinv(a))) == (4, 6, 3)
+    approx(a, B.pinv(B.pinv(a)))
+
+
 def test_det(check_lazy_shapes):
     check_function(B.det, (Matrix(),))
     check_function(B.det, (Matrix(4, 3, 3),))

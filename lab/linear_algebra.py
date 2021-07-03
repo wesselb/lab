@@ -17,6 +17,7 @@ __all__ = [
     "svd",
     "solve",
     "inv",
+    "pinv",
     "det",
     "logdet",
     "expm",
@@ -171,6 +172,24 @@ def inv(a):  # pragma: no cover
     Returns:
         tensor: Inverse of `a`.
     """
+
+
+@dispatch
+def pinv(a):  # pragma: no cover
+    """Compute the pseudo-inverse of `a`.
+
+    Args:
+        a (tensor): Matrix to compute pseudo-inverse of.
+
+    Returns:
+        tensor: Pseudo-inverse of `a`.
+    """
+    if B.shape(a, -2) >= B.shape(a, -1):
+        chol = B.chol(B.matmul(a, a, tr_a=True))
+        return B.cholsolve(chol, B.transpose(a))
+    else:
+        chol = B.chol(B.matmul(a, a, tr_b=True))
+        return B.transpose(B.cholsolve(chol, a))
 
 
 @dispatch
