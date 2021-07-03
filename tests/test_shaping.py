@@ -261,3 +261,10 @@ def test_take_tf(check_lazy_shapes):
     ref = Tensor(3)
     approx(B.take(a.tf(), ref.tf() > 0), B.take(a.np(), ref.np() > 0))
     approx(B.take(a.tf(), B.range(tf.int64, 2)), B.take(a.np(), B.range(2)))
+
+
+def test_submatrix(check_lazy_shapes):
+    a = Matrix(4, 5).np()
+    approx(B.submatrix(a, [0, 1]), a[[0, 1], :][:, [0, 1]])
+    a = Matrix(3, 4, 5).np()
+    approx(B.submatrix(a, [0, 1]), a[:, [0, 1], :][:, :, [0, 1]])

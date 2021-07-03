@@ -443,7 +443,8 @@ reshape(a, *shape)
 concat(*elements, axis=0)
 concat2d(*rows)
 tile(a, *repeats)
-take(a, indices, axis=0)
+take(a, indices_or_mask, axis=0)
+submatrix(a, indices_or_mask)
 ```
 
 ## Devices

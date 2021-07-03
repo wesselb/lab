@@ -34,6 +34,7 @@ __all__ = [
     "concat2d",
     "tile",
     "take",
+    "submatrix"
 ]
 
 
@@ -454,3 +455,20 @@ def take(a: Numeric, indices_or_mask, axis=0):  # pragma: no cover
         for i in range(B.rank(a))
     )
     return a[slices]
+
+
+@dispatch
+def submatrix(a: Numeric, indices_or_mask):
+    """Take a  particular submatrix.
+
+    Args:
+        a (matrix): Matrix.
+        indices_or_mask (list): List of indices or boolean indicating which
+            rows and columns to take. Must be rank 1.
+
+    Returns:
+        matrix: Selected submatrix.
+    """
+    a = B.take(a, indices_or_mask, axis=resolve_axis(a, -1))
+    a = B.take(a, indices_or_mask, axis=resolve_axis(a, -2))
+    return a
