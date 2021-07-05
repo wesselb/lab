@@ -449,11 +449,9 @@ submatrix(a, indices_or_mask)
 ```
 
 ## Devices
-You can get the device of a tensor with `B.device(a)`.
-The device of a tensor is always returned as a string.
-
-You can execute a computation on a device by entering `B.on_device(device)` as a
-context:
+You can get the device of a tensor with `B.device(a)`,
+and you can execute a computation on a device by entering `B.on_device(device)`
+as a  context:
 
 ```python
 with B.on_device("gpu:0"):
