@@ -34,7 +34,7 @@ __all__ = [
     "concat2d",
     "tile",
     "take",
-    "submatrix"
+    "submatrix",
 ]
 
 
@@ -62,7 +62,7 @@ lazy_shapes = LazyShapes  #: Enable lazy shapes.
 
 
 @dispatch
-def shape(a: Numeric):  # pragma: no cover
+def shape(a: Numeric):
     """Get the shape of a tensor.
 
     Args:
@@ -72,11 +72,17 @@ def shape(a: Numeric):  # pragma: no cover
     Returns:
         object: Shape of `a`.
     """
+    shape = _shape(a)
+    if LazyShapes.enabled:
+        return Shape(*shape)
+    else:
+        return shape
+
+
+@dispatch
+def _shape(a: Numeric):
     try:
-        if LazyShapes.enabled:
-            return Shape(*a.shape)
-        else:
-            return a.shape
+        return a.shape
     except AttributeError:
         # `a` must be a number.
         return ()
@@ -469,6 +475,6 @@ def submatrix(a: Numeric, indices_or_mask):
     Returns:
         matrix: Selected submatrix.
     """
-    a = B.take(a, indices_or_mask, axis=resolve_axis(a, -1))
-    a = B.take(a, indices_or_mask, axis=resolve_axis(a, -2))
+    a = B.take(a, indices_or_mask, axis=-1)
+    a = B.take(a, indices_or_mask, axis=-2)
     return a

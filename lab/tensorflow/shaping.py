@@ -2,6 +2,7 @@ import tensorflow as tf
 from plum import Union
 
 from . import dispatch, B, Numeric
+from ..shape import unwrap_dimension
 from ..types import Int, TFNumeric, NPNumeric
 
 __all__ = []
@@ -76,28 +77,49 @@ def tile(a: Numeric, *repeats: Int):
 def take(a: TFNumeric, indices_or_mask, axis=0):
     if B.rank(indices_or_mask) != 1:
         raise ValueError("Indices or mask must be rank 1.")
-    is_mask, indices_or_mask = _is_mask_and_convert(indices_or_mask)
+    is_mask, indices_or_mask, shape_hint = _is_mask_convert_shape_hint(indices_or_mask)
+
+    # Perform taking operation.
     if is_mask:
-        return tf.boolean_mask(a, indices_or_mask, axis=axis)
+        result = tf.boolean_mask(a, indices_or_mask, axis=axis)
     else:
-        return tf.gather(a, indices_or_mask, axis=axis)
+        result = tf.gather(a, indices_or_mask, axis=axis)
+
+    # Apply the shape hint, if it is available.
+    if shape_hint is not None:
+        # Carefully unwrap to deal with lazy shapes.
+        shape = list(map(unwrap_dimension, B.shape(a)))
+        shape[axis] = shape_hint
+        result.set_shape(shape)
+
+    return result
 
 
 @dispatch
-def _is_mask_and_convert(indices_or_mask: TFNumeric):
-    return indices_or_mask.dtype == bool, indices_or_mask
+def _is_mask_convert_shape_hint(indices_or_mask: TFNumeric):
+    return indices_or_mask.dtype == bool, indices_or_mask, None
 
 
 @dispatch
-def _is_mask_and_convert(indices_or_mask: NPNumeric):
-    return indices_or_mask.dtype == bool, tf.constant(indices_or_mask)
+def _is_mask_convert_shape_hint(indices_or_mask: NPNumeric):
+    is_mask = indices_or_mask.dtype == bool
+    if is_mask:
+        shape_hint = sum(indices_or_mask)
+    else:
+        shape_hint = len(indices_or_mask)
+    return is_mask, tf.constant(indices_or_mask), shape_hint
 
 
 @dispatch
-def _is_mask_and_convert(indices_or_mask: Union[tuple, list]):
+def _is_mask_convert_shape_hint(indices_or_mask: Union[tuple, list]):
     if len(indices_or_mask) == 0:
         # Treat an empty tuple or list as a list of no indices. The data type does not
         # matter, except that it must be integer.
-        return False, tf.constant([], dtype=tf.int32)
+        return False, tf.constant([], dtype=tf.int32), 0
     else:
-        return B.dtype(indices_or_mask[0]) == bool, indices_or_mask
+        is_mask = B.dtype(indices_or_mask[0]) == bool
+        if is_mask:
+            shape_hint = sum(indices_or_mask)
+        else:
+            shape_hint = len(indices_or_mask)
+        return is_mask, indices_or_mask, shape_hint

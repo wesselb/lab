@@ -356,7 +356,7 @@ argsort(a, axis=-1, descending=False)
 quantile(a, q, axis=None)
 
 to_numpy(a)
-jit_to_numpy(a)  # Plays nice with `B.jit`.
+jit_to_numpy(a)  # Caches results for `B.jit`.
 ```
 
 ### Linear Algebra
