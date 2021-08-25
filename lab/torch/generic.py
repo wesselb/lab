@@ -205,7 +205,7 @@ def maximum(a: Numeric, b: Numeric):
 
 
 @dispatch
-def min(a: Numeric, axis=None, squeeze=True):
+def min(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     if axis is None:
         return torch.min(a)
     else:
@@ -213,12 +213,12 @@ def min(a: Numeric, axis=None, squeeze=True):
 
 
 @dispatch
-def argmin(a: Numeric, axis=None):
+def argmin(a: Numeric, axis: Union[Int, None] = None):
     return torch.argmin(a, dim=axis)
 
 
 @dispatch
-def max(a: Numeric, axis=None, squeeze=True):
+def max(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     if axis is None:
         return torch.max(a)
     else:
@@ -226,12 +226,12 @@ def max(a: Numeric, axis=None, squeeze=True):
 
 
 @dispatch
-def argmax(a: Numeric, axis=None):
+def argmax(a: Numeric, axis: Union[Int, None] = None):
     return torch.argmax(a, dim=axis)
 
 
 @dispatch
-def sum(a: Numeric, axis=None, squeeze=True):
+def sum(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     if axis is None:
         return torch.sum(a)
     else:
@@ -239,7 +239,7 @@ def sum(a: Numeric, axis=None, squeeze=True):
 
 
 @dispatch
-def prod(a: Numeric, axis=None, squeeze=True):
+def prod(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     if axis is None:
         return torch.prod(a)
     else:
@@ -247,7 +247,7 @@ def prod(a: Numeric, axis=None, squeeze=True):
 
 
 @dispatch
-def mean(a: Numeric, axis=None, squeeze=True):
+def mean(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     if axis is None:
         return torch.mean(a)
     else:
@@ -255,7 +255,7 @@ def mean(a: Numeric, axis=None, squeeze=True):
 
 
 @dispatch
-def std(a: Numeric, axis=None, squeeze=True):
+def std(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     if axis is None:
         return torch.std(a, unbiased=False)
     else:
@@ -263,7 +263,7 @@ def std(a: Numeric, axis=None, squeeze=True):
 
 
 @dispatch
-def all(a: Numeric, axis=None, squeeze=True):
+def all(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     if axis is None:
         return torch.all(a)
     else:
@@ -271,7 +271,7 @@ def all(a: Numeric, axis=None, squeeze=True):
 
 
 @dispatch
-def any(a: Numeric, axis=None, squeeze=True):
+def any(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     if axis is None:
         return torch.any(a)
     else:
@@ -312,15 +312,15 @@ def where(condition: Numeric, a: Numeric, b: Numeric):
 
 
 @dispatch
-def sort(a: Numeric, axis=-1, descending=False):
+def sort(a: Numeric, axis: Int = -1, descending: bool = False):
     return torch.sort(a, dim=axis, descending=descending)[0]
 
 
 @dispatch
-def argsort(a: Numeric, axis=-1, descending=False):
+def argsort(a: Numeric, axis: Int = -1, descending: bool = False):
     return torch.argsort(a, dim=axis, descending=descending)
 
 
 @dispatch
-def quantile(a: Numeric, q: Numeric, axis=None):
+def quantile(a: Numeric, q: Numeric, axis: Union[Int, None] = None):
     return torch.quantile(a, q, dim=axis)

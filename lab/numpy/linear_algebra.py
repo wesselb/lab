@@ -1,4 +1,5 @@
 import logging
+from typing import Union, Optional
 
 import numpy as np
 import scipy.linalg as sla
@@ -6,6 +7,7 @@ import scipy.linalg as sla
 from . import dispatch, B, Numeric
 from ..custom import toeplitz_solve as _toeplitz_solve, expm as _expm, logm as _logm
 from ..linear_algebra import _default_perm
+from ..types import Int
 from ..util import batch_computation
 
 __all__ = []
@@ -14,14 +16,14 @@ log = logging.getLogger(__name__)
 
 
 @dispatch
-def matmul(a: Numeric, b: Numeric, tr_a=False, tr_b=False):
+def matmul(a: Numeric, b: Numeric, tr_a: bool = False, tr_b: bool = False):
     a = transpose(a) if tr_a else a
     b = transpose(b) if tr_b else b
     return np.matmul(a, b)
 
 
 @dispatch
-def transpose(a: Numeric, perm=None):
+def transpose(a: Numeric, perm: Optional[Union[tuple, list]] = None):
     # Correctly handle special cases.
     rank_a = B.rank(a)
     if rank_a == 0:
@@ -35,7 +37,7 @@ def transpose(a: Numeric, perm=None):
 
 
 @dispatch
-def trace(a: Numeric, axis1=-2, axis2=-1):
+def trace(a: Numeric, axis1: Int = -2, axis2: Int = -1):
     return np.trace(a, axis1=axis1, axis2=axis2)
 
 
@@ -45,7 +47,7 @@ def kron(a: Numeric, b: Numeric):
 
 
 @dispatch
-def svd(a: Numeric, compute_uv=True):
+def svd(a: Numeric, compute_uv: bool = True):
     res = np.linalg.svd(a, full_matrices=False, compute_uv=compute_uv)
     return (res[0], res[1], np.conj(transpose(res[2]))) if compute_uv else res
 
@@ -91,7 +93,7 @@ def cholesky_solve(a: Numeric, b: Numeric):
 
 
 @dispatch
-def triangular_solve(a: Numeric, b: Numeric, lower_a=True):
+def triangular_solve(a: Numeric, b: Numeric, lower_a: bool = True):
     def _triangular_solve(a_, b_):
         return sla.solve_triangular(
             a_, b_, trans="N", lower=lower_a, check_finite=False

@@ -1,7 +1,8 @@
 import logging
+from typing import Optional, Union
 
 from . import dispatch, B
-from .types import Numeric
+from .types import Numeric, Int
 from .util import abstract
 
 __all__ = [
@@ -61,7 +62,9 @@ def _default_perm(a):
 
 @dispatch
 @abstract()
-def transpose(a: Numeric, perm=None):  # pragma: no cover
+def transpose(
+    a: Numeric, perm: Optional[Union[tuple, list]] = None
+):  # pragma: no cover
     """Transpose a matrix.
 
     Args:
@@ -80,7 +83,7 @@ T = transpose  #: Shorthand for `transpose`.
 
 @dispatch
 @abstract(promote=2)
-def matmul(a, b, tr_a=False, tr_b=False):  # pragma: no cover
+def matmul(a, b, tr_a: bool = False, tr_b: bool = False):  # pragma: no cover
     """Matrix multiplication.
 
     Args:
@@ -100,7 +103,7 @@ dot = matmul  #: Shorthand for `matmul`.
 
 @dispatch
 @abstract(promote=None)
-def trace(a: Numeric, axis1=0, axis2=1):  # pragma: no cover
+def trace(a: Numeric, axis1: Int = 0, axis2: Int = 1):  # pragma: no cover
     """Compute the trace of a tensor.
 
     Args:
@@ -131,7 +134,7 @@ def kron(a, b):  # pragma: no cover
 
 @dispatch
 @abstract()
-def svd(a: Numeric, compute_uv=True):  # pragma: no cover
+def svd(a: Numeric, compute_uv: bool = True):  # pragma: no cover
     """Compute the singular value decomposition.
 
     Note:
@@ -287,7 +290,7 @@ cholsolve = cholesky_solve  #: Shorthand for `cholesky_solve`.
 
 @dispatch
 @abstract(promote=2)
-def triangular_solve(a, b, lower_a=True):  # pragma: no cover
+def triangular_solve(a, b, lower_a: bool = True):  # pragma: no cover
     """Solve the linear system `a x = b` where `a` is triangular.
 
     Args:
@@ -361,7 +364,7 @@ def outer(a):
 
 
 @dispatch
-def reg(a, diag=None, clip=True):
+def reg(a, diag=None, clip: bool = True):
     """Add a diagonal to a matrix.
 
     Args:

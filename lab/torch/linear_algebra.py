@@ -1,3 +1,5 @@
+from typing import Optional, Union
+
 import torch
 
 from . import dispatch, B, Numeric
@@ -5,19 +7,20 @@ from .custom import torch_register
 from ..custom import toeplitz_solve, s_toeplitz_solve, expm, s_expm, logm, s_logm
 from ..linear_algebra import _default_perm
 from ..shape import unwrap_dimension
+from ..types import Int
 
 __all__ = []
 
 
 @dispatch
-def matmul(a: Numeric, b: Numeric, tr_a=False, tr_b=False):
+def matmul(a: Numeric, b: Numeric, tr_a: bool = False, tr_b: bool = False):
     a = transpose(a) if tr_a else a
     b = transpose(b) if tr_b else b
     return torch.matmul(a, b)
 
 
 @dispatch
-def transpose(a: Numeric, perm=None):
+def transpose(a: Numeric, perm: Optional[Union[tuple, list]] = None):
     # Correctly handle special cases.
     rank_a = B.rank(a)
     if rank_a == 0:
@@ -31,7 +34,7 @@ def transpose(a: Numeric, perm=None):
 
 
 @dispatch
-def trace(a: Numeric, axis1=-2, axis2=-1):
+def trace(a: Numeric, axis1: Int = -2, axis2: Int = -1):
     return torch.sum(torch.diagonal(a, dim1=axis1, dim2=axis2), dim=-1)
 
 
@@ -50,7 +53,7 @@ def kron(a: Numeric, b: Numeric):
 
 
 @dispatch
-def svd(a: Numeric, compute_uv=True):
+def svd(a: Numeric, compute_uv: bool = True):
     u, s, v = torch.linalg.svd(a, full_matrices=False)
     return (u, s, v) if compute_uv else s
 
@@ -102,7 +105,7 @@ def cholesky_solve(a: Numeric, b: Numeric):
 
 
 @dispatch
-def triangular_solve(a: Numeric, b: Numeric, lower_a=True):
+def triangular_solve(a: Numeric, b: Numeric, lower_a: bool = True):
     return torch.triangular_solve(b, a, upper=not lower_a)[0]
 
 

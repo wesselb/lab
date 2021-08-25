@@ -14,7 +14,7 @@ def length(a: Numeric):
 
 
 @dispatch
-def expand_dims(a: Numeric, axis=0):
+def expand_dims(a: Numeric, axis: Int = 0):
     return tf.expand_dims(a, axis=axis)
 
 
@@ -49,12 +49,12 @@ def diag_construct(a: TFNumeric):
 
 
 @dispatch
-def stack(*elements: Numeric, axis=0):
+def stack(*elements: Numeric, axis: Int = 0):
     return tf.stack(elements, axis=axis)
 
 
 @dispatch
-def unstack(a: Numeric, axis=0):
+def unstack(a: Numeric, axis: Int = 0):
     return tf.unstack(a, axis=axis)
 
 
@@ -64,7 +64,7 @@ def reshape(a: Numeric, *shape: Int):
 
 
 @dispatch
-def concat(*elements: Numeric, axis=0):
+def concat(*elements: Numeric, axis: Int = 0):
     return tf.concat(elements, axis=axis)
 
 
@@ -74,7 +74,7 @@ def tile(a: Numeric, *repeats: Int):
 
 
 @dispatch
-def take(a: TFNumeric, indices_or_mask, axis=0):
+def take(a: TFNumeric, indices_or_mask, axis: Int = 0):
     if B.rank(indices_or_mask) != 1:
         raise ValueError("Indices or mask must be rank 1.")
     is_mask, indices_or_mask, shape_hint = _is_mask_convert_shape_hint(indices_or_mask)

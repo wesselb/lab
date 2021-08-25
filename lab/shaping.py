@@ -89,7 +89,7 @@ def _shape(a: Numeric):
 
 
 @dispatch
-def shape(a: Union[list, tuple]):
+def shape(a: Union[tuple, list]):
     return np.array(a).shape
 
 
@@ -161,7 +161,7 @@ def isscalar(a):  # pragma: no cover
 
 @dispatch
 @abstract()
-def expand_dims(a: Numeric, axis=0):  # pragma: no cover
+def expand_dims(a: Numeric, axis: Int = 0):  # pragma: no cover
     """Insert an empty axis.
 
     Args:
@@ -195,7 +195,7 @@ def squeeze(a: Union[tuple, list]):
 
 
 @dispatch
-def uprank(a: Numeric, rank=2):
+def uprank(a: Numeric, rank: Int = 2):
     """Convert the input into a tensor of at least rank `rank`.
 
     Args:
@@ -291,7 +291,7 @@ def flatten(a: Numeric):  # pragma: no cover
     return reshape(a, -1)
 
 
-def _vec_to_tril_side_upper_perm(m, offset=0):
+def _vec_to_tril_side_upper_perm(m, offset: Int = 0):
     # Compute the length of a side of the square result.
     k = offset
     if k <= 0:
@@ -312,7 +312,7 @@ def _vec_to_tril_side_upper_perm(m, offset=0):
 
 
 @dispatch
-def vec_to_tril(a: Numeric, offset=0):
+def vec_to_tril(a: Numeric, offset: Int = 0):
     """Construct a lower triangular matrix from a vector.
 
     Args:
@@ -331,7 +331,7 @@ def vec_to_tril(a: Numeric, offset=0):
 
 
 @dispatch
-def tril_to_vec(a: Numeric, offset=0):
+def tril_to_vec(a: Numeric, offset: Int = 0):
     """Construct a vector from a lower triangular matrix.
 
     Args:
@@ -369,7 +369,7 @@ def stack(*elements, **kw_args):  # pragma: no cover
 
 @dispatch
 @abstract()
-def unstack(a: Numeric, axis=0):  # pragma: no cover
+def unstack(a: Numeric, axis: Int = 0):  # pragma: no cover
     """Unstack tensors along an axis.
 
     Args:
@@ -438,7 +438,7 @@ def tile(a: Numeric, *repeats: Int):  # pragma: no cover
 
 
 @dispatch
-def take(a: Numeric, indices_or_mask, axis=0):  # pragma: no cover
+def take(a: Numeric, indices_or_mask, axis: Int = 0):
     """Take particular elements along an axis.
 
     Args:

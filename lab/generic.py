@@ -898,7 +898,9 @@ def leaky_relu(a, alpha):  # pragma: no cover
 
 @dispatch
 @abstract()
-def min(a: Numeric, axis=None, squeeze=True):  # pragma: no cover
+def min(
+    a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True
+):  # pragma: no cover
     """Take the minimum of a tensor, possibly along an axis.
 
     Args:
@@ -914,7 +916,7 @@ def min(a: Numeric, axis=None, squeeze=True):  # pragma: no cover
 
 @dispatch
 @abstract()
-def argmin(a: Numeric, axis=None):  # pragma: no cover
+def argmin(a: Numeric, axis: Union[Int, None] = None):  # pragma: no cover
     """Take the indices corresponding to the minimum of a tensor, possibly along an
     axis.
 
@@ -929,7 +931,9 @@ def argmin(a: Numeric, axis=None):  # pragma: no cover
 
 @dispatch
 @abstract()
-def max(a: Numeric, axis=None, squeeze=True):  # pragma: no cover
+def max(
+    a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True
+):  # pragma: no cover
     """Take the maximum of a tensor, possibly along an axis.
 
     Args:
@@ -945,7 +949,7 @@ def max(a: Numeric, axis=None, squeeze=True):  # pragma: no cover
 
 @dispatch
 @abstract()
-def argmax(a: Numeric, axis=None):  # pragma: no cover
+def argmax(a: Numeric, axis: Union[Int, None] = None):  # pragma: no cover
     """Take the indices corresponding to the maximum of a tensor, possibly along an
     axis.
 
@@ -960,7 +964,9 @@ def argmax(a: Numeric, axis=None):  # pragma: no cover
 
 @dispatch
 @abstract()
-def sum(a: Numeric, axis=None, squeeze=True):  # pragma: no cover
+def sum(
+    a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True
+):  # pragma: no cover
     """Sum a tensor, possibly along an axis.
 
     Args:
@@ -984,7 +990,9 @@ def nansum(x, **kw_args):
 
 @dispatch
 @abstract()
-def prod(a: Numeric, axis=None, squeeze=True):  # pragma: no cover
+def prod(
+    a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True
+):  # pragma: no cover
     """Product of all elements in a tensor, possibly along an axis.
 
     Args:
@@ -1008,7 +1016,9 @@ def nanprod(x, **kw_args):
 
 @dispatch
 @abstract()
-def mean(a: Numeric, axis=None, squeeze=True):  # pragma: no cover
+def mean(
+    a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True
+):  # pragma: no cover
     """Take the mean of a tensor, possibly along an axis.
 
     Args:
@@ -1033,7 +1043,9 @@ def nanmean(x, **kw_args):
 
 @dispatch
 @abstract()
-def std(a: Numeric, axis=None, squeeze=True):  # pragma: no cover
+def std(
+    a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True
+):  # pragma: no cover
     """Compute the standard deviation of a tensor, possibly along an axis.
 
     Args:
@@ -1057,7 +1069,9 @@ def nanstd(x, **kw_args):
 
 
 @dispatch
-def logsumexp(a, axis=None, squeeze=True):  # pragma: no cover
+def logsumexp(
+    a, axis: Union[Int, None] = None, squeeze: bool = True
+):  # pragma: no cover
     """Exponentiate a tensor, sum it, and then take the logarithm, possibly
     along an axis.
 
@@ -1089,7 +1103,9 @@ def logsumexp(a, axis=None, squeeze=True):  # pragma: no cover
 
 @dispatch
 @abstract()
-def all(a: Numeric, axis=None, squeeze=True):  # pragma: no cover
+def all(
+    a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True
+):  # pragma: no cover
     """Logical all of a tensor, possibly along an axis.
 
     Args:
@@ -1105,7 +1121,9 @@ def all(a: Numeric, axis=None, squeeze=True):  # pragma: no cover
 
 @dispatch
 @abstract()
-def any(a: Numeric, axis=None, squeeze=True):  # pragma: no cover
+def any(
+    a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True
+):  # pragma: no cover
     """Logical any of a tensor, possibly along an axis.
 
     Args:
@@ -1277,7 +1295,7 @@ def scan(f: Callable, xs, *init_state):
 
 @dispatch
 @abstract()
-def sort(a: Numeric, axis=-1, descending=False):
+def sort(a: Numeric, axis: Int = -1, descending: bool = False):
     """Sort a tensor along an axis in ascending order.
 
     Args:
@@ -1293,7 +1311,7 @@ def sort(a: Numeric, axis=-1, descending=False):
 
 @dispatch
 @abstract()
-def argsort(a: Numeric, axis=-1, descending=False):
+def argsort(a: Numeric, axis: Int = -1, descending: bool = False):
     """Get the indices that would a tensor along an axis in ascending order.
 
     Args:
@@ -1309,7 +1327,7 @@ def argsort(a: Numeric, axis=-1, descending=False):
 
 @dispatch
 @abstract(promote=2)
-def quantile(a, q, axis=None):
+def quantile(a, q, axis: Union[Int, None] = None):
     """Compute quantiles.
 
     Args:

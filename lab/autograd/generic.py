@@ -2,11 +2,12 @@ from types import FunctionType
 
 import autograd.numpy as anp
 import autograd.scipy.special as asps
+from plum import Union
 
 from . import dispatch, Numeric
 from .custom import autograd_register
 from ..custom import bvn_cdf, s_bvn_cdf
-from ..types import AGDType, AGNumeric
+from ..types import AGDType, AGNumeric, Int
 
 __all__ = []
 
@@ -168,52 +169,52 @@ def maximum(a: Numeric, b: Numeric):
 
 
 @dispatch
-def min(a: Numeric, axis=None, squeeze=True):
+def min(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     return anp.min(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
-def argmin(a: Numeric, axis=None):
+def argmin(a: Numeric, axis: Union[Int, None] = None):
     return anp.argmin(a, axis=axis)
 
 
 @dispatch
-def max(a: Numeric, axis=None, squeeze=True):
+def max(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     return anp.max(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
-def argmax(a: Numeric, axis=None):
+def argmax(a: Numeric, axis: Union[Int, None] = None):
     return anp.argmax(a, axis=axis)
 
 
 @dispatch
-def sum(a: Numeric, axis=None, squeeze=True):
+def sum(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     return anp.sum(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
-def prod(a: Numeric, axis=None, squeeze=True):
+def prod(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     return anp.prod(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
-def mean(a: Numeric, axis=None, squeeze=True):
+def mean(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     return anp.mean(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
-def std(a: Numeric, axis=None, squeeze=True):
+def std(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     return anp.std(a, axis=axis, ddof=0, keepdims=not squeeze)
 
 
 @dispatch
-def all(a: Numeric, axis=None, squeeze=True):
+def all(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     return anp.all(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
-def any(a: Numeric, axis=None, squeeze=True):
+def any(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     return anp.any(a, axis=axis, keepdims=not squeeze)
 
 
@@ -251,7 +252,7 @@ def where(condition: Numeric, a: Numeric, b: Numeric):
 
 
 @dispatch
-def sort(a: Numeric, axis=-1, descending=False):
+def sort(a: Numeric, axis: Int = -1, descending: bool = False):
     if descending:
         return -anp.sort(-a, axis=axis)
     else:
@@ -259,7 +260,7 @@ def sort(a: Numeric, axis=-1, descending=False):
 
 
 @dispatch
-def argsort(a: Numeric, axis=-1, descending=False):
+def argsort(a: Numeric, axis: Int = -1, descending: bool = False):
     if descending:
         return anp.argsort(-a, axis=axis)
     else:
@@ -267,5 +268,5 @@ def argsort(a: Numeric, axis=-1, descending=False):
 
 
 @dispatch
-def quantile(a: Numeric, q: Numeric, axis=None):  # pragma: no cover
+def quantile(a: Numeric, q: Numeric, axis: Union[Int, None] = None):  # pragma: no cover
     raise NotImplementedError("Function `quantile` is not available for AutoGrad.")

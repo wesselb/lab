@@ -1,6 +1,8 @@
 from types import FunctionType
+
 import numpy as np
 import scipy.special as sps
+from plum import Union
 
 from . import B, dispatch, Numeric
 from ..custom import bvn_cdf as _bvn_cdf
@@ -192,52 +194,52 @@ def maximum(a: Numeric, b: Numeric):
 
 
 @dispatch
-def min(a: Numeric, axis=None, squeeze=True):
+def min(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     return np.min(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
-def argmin(a: Numeric, axis=None):
+def argmin(a: Numeric, axis: Union[Int, None] = None):
     return np.argmin(a, axis=axis)
 
 
 @dispatch
-def max(a: Numeric, axis=None, squeeze=True):
+def max(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     return np.max(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
-def argmax(a: Numeric, axis=None):
+def argmax(a: Numeric, axis: Union[Int, None] = None):
     return np.argmax(a, axis=axis)
 
 
 @dispatch
-def sum(a: Numeric, axis=None, squeeze=True):
+def sum(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     return np.sum(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
-def prod(a: Numeric, axis=None, squeeze=True):
+def prod(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     return np.prod(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
-def mean(a: Numeric, axis=None, squeeze=True):
+def mean(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     return np.mean(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
-def std(a: Numeric, axis=None, squeeze=True):
+def std(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     return np.std(a, axis=axis, ddof=0, keepdims=not squeeze)
 
 
 @dispatch
-def all(a: Numeric, axis=None, squeeze=True):
+def all(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     return np.all(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
-def any(a: Numeric, axis=None, squeeze=True):
+def any(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     return np.any(a, axis=axis, keepdims=not squeeze)
 
 
@@ -272,7 +274,7 @@ def where(condition: Numeric, a: Numeric, b: Numeric):
 
 
 @dispatch
-def sort(a: Numeric, axis=-1, descending=False):
+def sort(a: Numeric, axis: Int = -1, descending: bool = False):
     if descending:
         return -np.sort(-a, axis=axis)
     else:
@@ -280,7 +282,7 @@ def sort(a: Numeric, axis=-1, descending=False):
 
 
 @dispatch
-def argsort(a: Numeric, axis=-1, descending=False):
+def argsort(a: Numeric, axis: Int = -1, descending: bool = False):
     if descending:
         return np.argsort(-a, axis=axis)
     else:
@@ -288,5 +290,5 @@ def argsort(a: Numeric, axis=-1, descending=False):
 
 
 @dispatch
-def quantile(a: Numeric, q: Numeric, axis=None):
+def quantile(a: Numeric, q: Numeric, axis: Union[Int, None] = None):
     return np.quantile(a, q, axis=axis, interpolation="linear")

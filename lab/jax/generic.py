@@ -213,52 +213,52 @@ def maximum(a: Numeric, b: Numeric):
 
 
 @dispatch
-def min(a: Numeric, axis=None, squeeze=True):
+def min(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     return jnp.min(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
-def argmin(a: Numeric, axis=None):
+def argmin(a: Numeric, axis: Union[Int, None] = None):
     return jnp.argmin(a, axis=axis)
 
 
 @dispatch
-def max(a: Numeric, axis=None, squeeze=True):
+def max(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     return jnp.max(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
-def argmax(a: Numeric, axis=None):
+def argmax(a: Numeric, axis: Union[Int, None] = None):
     return jnp.argmax(a, axis=axis)
 
 
 @dispatch
-def sum(a: Numeric, axis=None, squeeze=True):
+def sum(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     return jnp.sum(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
-def prod(a: Numeric, axis=None, squeeze=True):
+def prod(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     return jnp.prod(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
-def mean(a: Numeric, axis=None, squeeze=True):
+def mean(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     return jnp.mean(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
-def std(a: Numeric, axis=None, squeeze=True):
+def std(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     return jnp.std(a, axis=axis, ddof=0, keepdims=not squeeze)
 
 
 @dispatch
-def all(a: Numeric, axis=None, squeeze=True):
+def all(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     return jnp.all(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
-def any(a: Numeric, axis=None, squeeze=True):
+def any(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     return jnp.any(a, axis=axis, keepdims=not squeeze)
 
 
@@ -306,7 +306,7 @@ def where(condition: Numeric, a: Numeric, b: Numeric):
 
 
 @dispatch
-def sort(a: Numeric, axis=-1, descending=False):
+def sort(a: Numeric, axis: Int = -1, descending: bool = False):
     if descending:
         return -jnp.sort(-a, axis=axis)
     else:
@@ -314,7 +314,7 @@ def sort(a: Numeric, axis=-1, descending=False):
 
 
 @dispatch
-def argsort(a: Numeric, axis=-1, descending=False):
+def argsort(a: Numeric, axis: Int = -1, descending: bool = False):
     if descending:
         return jnp.argsort(-a, axis=axis)
     else:
@@ -322,5 +322,5 @@ def argsort(a: Numeric, axis=-1, descending=False):
 
 
 @dispatch
-def quantile(a: Numeric, q: Numeric, axis=None):
+def quantile(a: Numeric, q: Numeric, axis: Union[Int, None] = None):
     return jnp.quantile(a, q, axis=axis, interpolation="linear")

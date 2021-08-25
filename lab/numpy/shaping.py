@@ -12,7 +12,7 @@ def length(a: Numeric):
 
 
 @dispatch
-def expand_dims(a: Numeric, axis=0):
+def expand_dims(a: Numeric, axis: Int = 0):
     return np.expand_dims(a, axis=axis)
 
 
@@ -37,12 +37,12 @@ def diag_extract(a: Numeric):
 
 
 @dispatch
-def stack(*elements: Numeric, axis=0):
+def stack(*elements: Numeric, axis: Int = 0):
     return np.stack(elements, axis=axis)
 
 
 @dispatch
-def unstack(a: Numeric, axis=0):
+def unstack(a: Numeric, axis: Int = 0):
     out = np.split(a, np.arange(1, a.shape[axis]), axis)
     return [x.squeeze(axis=axis) for x in out]
 
@@ -53,7 +53,7 @@ def reshape(a: Numeric, *shape: Int):
 
 
 @dispatch
-def concat(*elements: Numeric, axis=0):
+def concat(*elements: Numeric, axis: Int = 0):
     return np.concatenate(elements, axis=axis)
 
 

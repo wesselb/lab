@@ -12,7 +12,7 @@ def length(a: Numeric):
 
 
 @dispatch
-def expand_dims(a: Numeric, axis=0):
+def expand_dims(a: Numeric, axis: Int = 0):
     return torch.unsqueeze(a, dim=axis)
 
 
@@ -42,12 +42,12 @@ def diag_construct(a: Numeric):
 
 
 @dispatch
-def stack(*elements: Numeric, axis=0):
+def stack(*elements: Numeric, axis: Int = 0):
     return torch.stack(elements, dim=axis)
 
 
 @dispatch
-def unstack(a: Numeric, axis=0):
+def unstack(a: Numeric, axis: Int = 0):
     return torch.unbind(a, dim=axis)
 
 
@@ -57,7 +57,7 @@ def reshape(a: Numeric, *shape: Int):
 
 
 @dispatch
-def concat(*elements: Numeric, axis=0):
+def concat(*elements: Numeric, axis: Int = 0):
     return torch.cat(elements, dim=axis)
 
 

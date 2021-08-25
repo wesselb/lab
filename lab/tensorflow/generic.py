@@ -3,6 +3,7 @@ from typing import Callable
 
 import tensorflow as tf
 import tensorflow_probability as tfp
+from plum import Union
 
 from . import dispatch, B, Numeric, TFNumeric
 from .custom import tensorflow_register
@@ -199,12 +200,12 @@ def maximum(a: Numeric, b: Numeric):
 
 
 @dispatch
-def min(a: Numeric, axis=None, squeeze=True):
+def min(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     return tf.reduce_min(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
-def argmin(a: Numeric, axis=None):
+def argmin(a: Numeric, axis: Union[Int, None] = None):
     if axis is None:
         # The default `None` reduces over the last dimension.
         return tf.argmin(tf.reshape(a, -1), axis=0)
@@ -213,12 +214,12 @@ def argmin(a: Numeric, axis=None):
 
 
 @dispatch
-def max(a: Numeric, axis=None, squeeze=True):
+def max(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     return tf.reduce_max(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
-def argmax(a: Numeric, axis=None):
+def argmax(a: Numeric, axis: Union[Int, None] = None):
     if axis is None:
         # The default `None` reduces over the last dimension.
         return tf.argmax(tf.reshape(a, -1), axis=0)
@@ -227,22 +228,22 @@ def argmax(a: Numeric, axis=None):
 
 
 @dispatch
-def sum(a: Numeric, axis=None, squeeze=True):
+def sum(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     return tf.reduce_sum(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
-def prod(a: Numeric, axis=None, squeeze=True):
+def prod(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     return tf.reduce_prod(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
-def mean(a: Numeric, axis=None, squeeze=True):
+def mean(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     return tf.reduce_mean(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
-def std(a: Numeric, axis=None, squeeze=True):
+def std(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     if axis is None:
         axes = list(range(B.rank(a)))
     else:
@@ -252,12 +253,12 @@ def std(a: Numeric, axis=None, squeeze=True):
 
 
 @dispatch
-def all(a: Numeric, axis=None, squeeze=True):
+def all(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     return tf.reduce_all(a, axis=axis, keepdims=not squeeze)
 
 
 @dispatch
-def any(a: Numeric, axis=None, squeeze=True):
+def any(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
     return tf.reduce_any(a, axis=axis, keepdims=not squeeze)
 
 
@@ -307,7 +308,7 @@ def scan(f: Callable, xs: TFNumeric, *init_state: TFNumeric):
 
 
 @dispatch
-def sort(a: Numeric, axis=-1, descending=False):
+def sort(a: Numeric, axis: Int = -1, descending: bool = False):
     if descending:
         direction = "DESCENDING"
     else:
@@ -316,7 +317,7 @@ def sort(a: Numeric, axis=-1, descending=False):
 
 
 @dispatch
-def argsort(a: Numeric, axis=-1, descending=False):
+def argsort(a: Numeric, axis: Int = -1, descending: bool = False):
     if descending:
         direction = "DESCENDING"
     else:
@@ -325,5 +326,5 @@ def argsort(a: Numeric, axis=-1, descending=False):
 
 
 @dispatch
-def quantile(a: Numeric, q: Numeric, axis=None):
+def quantile(a: Numeric, q: Numeric, axis: Union[Int, None] = None):
     return tfp.stats.percentile(a, 100 * q, axis=axis, interpolation="linear")

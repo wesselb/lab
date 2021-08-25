@@ -11,7 +11,7 @@ _dispatch = Dispatcher()
 
 
 @_dispatch
-def as_torch(x: B.Numeric, grad=False):
+def as_torch(x: B.Numeric, grad: bool = False):
     """Convert object to PyTorch.
 
     Args:
@@ -26,7 +26,7 @@ def as_torch(x: B.Numeric, grad=False):
 
 
 @_dispatch
-def as_torch(xs: tuple, grad=False):
+def as_torch(xs: tuple, grad: bool = False):
     return tuple([as_torch(x, grad=grad) for x in xs])
 
 
