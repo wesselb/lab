@@ -14,6 +14,11 @@ def create_random_state(_: NPDType, seed: Int = 0):
     return np.random.RandomState(seed=seed)
 
 
+@dispatch
+def global_random_state(_: NPDType):
+    return np.random.random.__self__
+
+
 def _warn_dtype(dtype):
     if B.issubdtype(dtype, np.integer):
         warnings.warn("Casting random number of type float to type integer.")
@@ -27,7 +32,7 @@ def rand(state: NPRandomState, dtype: NPDType, *shape: Int):
 
 @dispatch
 def rand(dtype: NPDType, *shape: Int):
-    return rand(np.random.random.__self__, dtype, *shape)[1]
+    return rand(global_random_state(dtype), dtype, *shape)[1]
 
 
 @dispatch
@@ -38,7 +43,7 @@ def randn(state: NPRandomState, dtype: NPDType, *shape: Int):
 
 @dispatch
 def randn(dtype: NPDType, *shape: Int):
-    return randn(np.random.random.__self__, dtype, *shape)[1]
+    return randn(global_random_state(dtype), dtype, *shape)[1]
 
 
 @dispatch
@@ -50,4 +55,4 @@ def choice(state: NPRandomState, a: Numeric, n: Int):
 
 @dispatch
 def choice(a: Numeric, n: Int):
-    return choice(np.random.random.__self__, a, n)[1]
+    return choice(global_random_state(a), a, n)[1]

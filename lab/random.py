@@ -7,7 +7,14 @@ from . import dispatch, B
 from .types import DType, Int, Numeric, RandomState
 from .util import abstract
 
-__all__ = ["set_random_seed", "create_random_state", "rand", "randn", "choice"]
+__all__ = [
+    "set_random_seed",
+    "create_random_state",
+    "global_random_state",
+    "rand",
+    "randn",
+    "choice",
+]
 
 
 @dispatch
@@ -33,10 +40,10 @@ def set_random_seed(seed: Int):
         torch.manual_seed(seed)
 
     # Set seed for JAX, if it is loaded.
-    if hasattr(B, "jax_global_randomstate"):
+    if hasattr(B, "jax_global_random_state"):
         import jax
 
-        B.jax_global_randomstate = jax.random.PRNGKey(seed=seed)
+        B.jax_global_random_state = jax.random.PRNGKey(seed=seed)
 
 
 @dispatch
@@ -57,6 +64,25 @@ def create_random_state(dtype: DType, seed: Int = 0):
 
 @dispatch
 @abstract()
+def global_random_state(dtype: DType):
+    """Get the global random state.
+
+    Args:
+        dtype (dtype): Data type of the desired framework for which to get the global
+            random state.
+
+    Returns:
+        random state: Global random state.
+    """
+
+
+@dispatch
+def global_random_state(a):
+    return global_random_state(B.dtype(a))
+
+
+@dispatch
+@abstract()
 def rand(dtype: DType, *shape: Int):  # pragma: no cover
     """Construct a U[0, 1] random tensor.
 
@@ -65,9 +91,7 @@ def rand(dtype: DType, *shape: Int):  # pragma: no cover
         *shape (shape, optional): Shape of the tensor. Defaults to `()`.
 
     Returns:
-        tensor or tuple[random state, tensor]: Random tensor if no random state was
-            given or a tuple containing the updated random state and the random tensor
-            otherwise.
+        tensor: Random tensor.
     """
 
 
@@ -97,9 +121,7 @@ def randn(state: RandomState, dtype: DType, *shape: Int):  # pragma: no cover
         *shape (shape, optional): Shape of the tensor. Defaults to `()`.
 
     Returns:
-        tensor or tuple[random state, tensor]: Random tensor if no random state was
-            given or a tuple containing the updated random state and the random tensor
-            otherwise.
+        tensor: Random tensor.
     """
 
 
@@ -129,8 +151,7 @@ def choice(state: RandomState, a: Numeric, n: Int):  # pragma: no cover
         n (int, optional): Number of samples. Defaults to `1`.
 
     Returns:
-        tensor or tuple[random state, tensor]: Samples if no random state was given or
-            a tuple containing the updated random state and the samples otherwise.
+        tensor: Choices.
     """
 
 

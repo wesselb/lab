@@ -14,6 +14,11 @@ def create_random_state(_: TorchDType, seed: Int = 0):
 
 
 @dispatch
+def global_random_state(_: TorchDType):
+    return torch.random.default_generator
+
+
+@dispatch
 def rand(state: TorchRandomState, dtype: TorchDType, *shape: Int):
     return state, torch.rand(
         shape, dtype=dtype, device=B.ActiveDevice.active_name, generator=state
@@ -22,7 +27,7 @@ def rand(state: TorchRandomState, dtype: TorchDType, *shape: Int):
 
 @dispatch
 def rand(dtype: TorchDType, *shape: Int):
-    return rand(torch.random.default_generator, dtype, *shape)[1]
+    return rand(global_random_state(dtype), dtype, *shape)[1]
 
 
 @dispatch
@@ -34,7 +39,7 @@ def randn(state: TorchRandomState, dtype: TorchDType, *shape: Int):
 
 @dispatch
 def randn(dtype: TorchDType, *shape: Int):
-    return randn(torch.random.default_generator, dtype, *shape)[1]
+    return randn(global_random_state(dtype), dtype, *shape)[1]
 
 
 @dispatch
@@ -45,4 +50,4 @@ def choice(state: TorchRandomState, a: TorchNumeric, n: Int):
 
 @dispatch
 def choice(a: TorchNumeric, n: Int):
-    return choice(torch.random.default_generator, a, n)[1]
+    return choice(global_random_state(a), a, n)[1]

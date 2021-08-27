@@ -1,0 +1,2 @@
+[run]
+omit = lab/_version.py

@@ -419,6 +419,8 @@ block_diag(*elements)
 ```
 set_random_seed(seed) 
 create_random_state(dtype, seed=0)
+global_random_state(dtype)
+global_random_state(a)
 
 rand(state, dtype, *shape)
 rand(dtype, *shape)
@@ -501,7 +503,7 @@ If you call a random number generator without providing a random state, e.g.
 `B.randn(np.float32, 2)`, the global random state from the corresponding
 backend is used.
 For JAX, since there is no global random state, LAB provides a JAX global
-random state accessible through `B.jax_global_randomstate` once `lab.jax`
+random state accessible through `B.jax_global_random_state` once `lab.jax`
 is loaded.
 
 If you do not want to use a global random state but rather explicitly maintain

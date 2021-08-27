@@ -1,5 +1,3 @@
-from typing import Union
-
 import jax
 from plum import Dispatcher
 
@@ -16,7 +14,12 @@ def create_random_state(_: JAXDType, seed: Int = 0):
     return jax.random.PRNGKey(seed=seed)
 
 
-B.jax_global_randomstate = jax.random.PRNGKey(seed=0)
+B.jax_global_random_state = jax.random.PRNGKey(seed=0)
+
+
+@dispatch
+def global_random_state(_: JAXDType):
+    return B.jax_global_random_state
 
 
 @dispatch
@@ -27,8 +30,8 @@ def rand(state: JAXRandomState, dtype: JAXDType, *shape: Int):
 
 @dispatch
 def rand(dtype: JAXDType, *shape: Int):
-    state, res = rand(B.jax_global_randomstate, dtype, *shape)
-    B.jax_global_randomstate = state
+    state, res = rand(global_random_state(dtype), dtype, *shape)
+    B.jax_global_random_state = state
     return res
 
 
@@ -40,8 +43,8 @@ def randn(state: JAXRandomState, dtype: JAXDType, *shape: Int):
 
 @dispatch
 def randn(dtype: JAXDType, *shape: Int):
-    state, res = randn(B.jax_global_randomstate, dtype, *shape)
-    B.jax_global_randomstate = state
+    state, res = randn(global_random_state(dtype), dtype, *shape)
+    B.jax_global_random_state = state
     return res
 
 
@@ -55,6 +58,6 @@ def choice(state: JAXRandomState, a: JAXNumeric, n: Int):
 
 @dispatch
 def choice(a: JAXNumeric, n: Int):
-    state, res = choice(B.jax_global_randomstate, a, n)
-    B.jax_global_randomstate = state
+    state, res = choice(global_random_state(a), a, n)
+    B.jax_global_random_state = state
     return res
