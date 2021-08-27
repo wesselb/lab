@@ -25,6 +25,7 @@ backend
     - [Shaping](#shaping)
 * [Devices](#devices)
 * [Lazy Shapes](#lazy-shapes)
+* [Random Numbers](#random-numbers)
 * [Control Flow Cache](#control-flow-cache)
 
 ## Requirements and Installation
