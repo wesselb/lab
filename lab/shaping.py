@@ -20,6 +20,7 @@ __all__ = [
     "expand_dims",
     "squeeze",
     "uprank",
+    "downrank",
     "broadcast_to",
     "diag",
     "diag_extract",
@@ -175,11 +176,12 @@ def expand_dims(a: Numeric, axis: Int = 0):  # pragma: no cover
 
 @dispatch
 @abstract()
-def squeeze(a: Numeric):  # pragma: no cover
+def squeeze(a: Numeric, axis: Union[Int, None] = None):  # pragma: no cover
     """Remove all axes containing only a single element.
 
     Args:
         a (tensor): Tensor.
+        axis (int, optional): Index of axis to squeeze. Defaults to squeezing all axes.
 
     Returns:
         tensor: `a` without axes containing only a single element.
@@ -209,6 +211,35 @@ def uprank(a: Numeric, rank: Int = 2):
     while a_rank < rank:
         a = expand_dims(a, axis=-1)
         a_rank += 1
+    return a
+
+
+@dispatch
+def downrank(a: Numeric, rank: Int = 2, preserve: bool = False):
+    """Attempt to convert the input into a tensor of at most rank `rank` by squeezing
+    the last dimensions one by one.
+
+    Args:
+        a (tensor): Tensor.
+        rank (int, optional): Rank. Defaults to `2`.
+        preserve (bool, optional): Stop squeezing dimensions once a dimension of size
+            not equal to one is encountered. For example, if `rank = 2`, this squeezes
+            `(2, 1, 2, 1)` to `(2, 1, 2)` rather than `(2, 2)`.
+
+
+    Returns:
+        tensor: `a`, but, if possible, of rank two.
+    """
+    a_rank = B.rank(a)
+    if a_rank > rank:
+        for axis in range(a_rank - 1, -1, -1):
+            if B.shape(a, axis) == 1:
+                a = squeeze(a, axis=axis)
+                if B.rank(a) == rank:
+                    break
+            else:
+                if preserve:
+                    break
     return a
 
 

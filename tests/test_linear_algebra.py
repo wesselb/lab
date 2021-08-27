@@ -101,7 +101,44 @@ def test_svd(check_lazy_shapes):
             return B.svd(a, compute_uv=False)
 
     check_function(svd, (Tensor(3, 2),), {"compute_uv": Bool()})
-    # Torch does not allow batch computation.
+    check_function(svd, (Tensor(4, 3, 2),), {"compute_uv": Bool()})
+
+
+def test_eig(check_lazy_shapes):
+    # Order of eigenvalues and signs of eigenvectors may be different.
+    def compute_order(vals):
+        key = B.imag(vals) + B.real(vals)
+        return B.argsort(key)
+
+    def eig(a, compute_eigvecs=True):
+        if compute_eigvecs:
+            vals, vecs = B.eig(a, compute_eigvecs=True)
+            vals = B.flatten(vals)
+            if B.rank(vecs) == 3:
+                vecs = B.transpose(vecs, perm=(1, 0, 2))
+                vecs = B.reshape(vecs, 3, -1)
+            order = compute_order(vals)
+            return B.take(vals, order), B.abs(B.take(vecs, order, axis=1))
+        else:
+            vals = B.flatten(B.eig(a, compute_eigvecs=False))
+            return B.take(vals, compute_order(vals))
+
+    # Some frameworks convert eigenvalues to real if the imaginary parts are all zero
+    # exactly.
+    check_function(
+        eig,
+        (Tensor(3, 3),),
+        {"compute_eigvecs": Bool()},
+        assert_dtype=False,
+        skip=[B.AGNumeric],
+    )
+    check_function(
+        eig,
+        (Tensor(4, 3, 3),),
+        {"compute_eigvecs": Bool()},
+        assert_dtype=False,
+        skip=[B.AGNumeric],
+    )
 
 
 def test_solve(check_lazy_shapes):

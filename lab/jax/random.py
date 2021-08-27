@@ -1,58 +1,60 @@
+from typing import Union
+
 import jax
+from plum import Dispatcher
 
 from . import B, dispatch
-from ..types import Int, JAXDType, JAXNumeric
+from ..types import Int, JAXDType, JAXNumeric, JAXRandomState
 
 __all__ = []
 
-
-class JAXRNG:
-    """An RNG for JAX.
-
-    Attributes:
-        key (:class:`jax.DeviceArray`): Current key.
-    """
-
-    def __init__(self):
-        self.set_seed(0)
-
-    def set_seed(self, seed):
-        """Set the RNG according to a seed.
-
-        Args:
-            seed (int): Seed.
-        """
-        self.key = jax.random.PRNGKey(seed)
-
-    def split_key(self):
-        """Get a key to generate a random number.
-
-        Returns:
-            :class:`jax.DeviceArray`: Key.
-        """
-        self.key, subkey = jax.random.split(self.key)
-        return subkey
+_dispatch = Dispatcher()
 
 
-B.jax_rng = JAXRNG()
+@dispatch
+def create_random_state(_: JAXDType, seed: Int = 0):
+    return jax.random.PRNGKey(seed=seed)
+
+
+B.jax_global_randomstate = jax.random.PRNGKey(seed=0)
+
+
+@dispatch
+def rand(state: JAXRandomState, dtype: JAXDType, *shape: Int):
+    state, key = jax.random.split(state)
+    return state, B.to_active_device(jax.random.uniform(key, shape, dtype=dtype))
 
 
 @dispatch
 def rand(dtype: JAXDType, *shape: Int):
-    return B.to_active_device(
-        jax.random.uniform(B.jax_rng.split_key(), shape, dtype=dtype)
-    )
+    state, res = rand(B.jax_global_randomstate, dtype, *shape)
+    B.jax_global_randomstate = state
+    return res
+
+
+@dispatch
+def randn(state: JAXRandomState, dtype: JAXDType, *shape: Int):
+    state, key = jax.random.split(state)
+    return state, B.to_active_device(jax.random.normal(key, shape, dtype=dtype))
 
 
 @dispatch
 def randn(dtype: JAXDType, *shape: Int):
-    return B.to_active_device(
-        jax.random.normal(B.jax_rng.split_key(), shape, dtype=dtype)
-    )
+    state, res = randn(B.jax_global_randomstate, dtype, *shape)
+    B.jax_global_randomstate = state
+    return res
+
+
+@dispatch
+def choice(state: JAXRandomState, a: JAXNumeric, n: Int):
+    state, key = jax.random.split(state)
+    inds = jax.random.choice(key, a.shape[0], (n,), replace=True)
+    choices = a[inds]
+    return state, choices[0] if n == 1 else choices
 
 
 @dispatch
 def choice(a: JAXNumeric, n: Int):
-    inds = jax.random.choice(B.jax_rng.split_key(), a.shape[0], (n,), replace=True)
-    choices = a[inds]
-    return choices[0] if n == 1 else choices
+    state, res = choice(B.jax_global_randomstate, a, n)
+    B.jax_global_randomstate = state
+    return res

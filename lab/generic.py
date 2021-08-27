@@ -29,6 +29,8 @@ __all__ = [
     "isabstract",
     "jit",
     "isnan",
+    "real",
+    "imag",
     "ActiveDevice",
     "device",
     "on_device",
@@ -197,6 +199,32 @@ def isnan(a: Numeric):  # pragma: no cover
 
     Returns:
         tensor[bool]: `a` is NaN.
+    """
+
+
+@dispatch
+@abstract()
+def real(a: Numeric):  # pragma: no cover
+    """Get the real part of a tensor.
+
+    Args:
+        a (tensor): Tensor.
+
+    Returns:
+        tensor: Real part of `a`.
+    """
+
+
+@dispatch
+@abstract()
+def imag(a: Numeric):  # pragma: no cover
+    """Get the imaginary part of a tensor.
+
+    Args:
+        a (tensor): Tensor.
+
+    Returns:
+        tensor: Imaginary part of `a`.
     """
 
 

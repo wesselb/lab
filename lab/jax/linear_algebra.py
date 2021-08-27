@@ -53,6 +53,12 @@ def svd(a: Numeric, compute_uv: bool = True):
 
 
 @dispatch
+def eig(a: Numeric, compute_eigvecs: bool = True):
+    vals, vecs = jnp.linalg.eig(a)
+    return (vals, vecs) if compute_eigvecs else vals
+
+
+@dispatch
 def solve(a: Numeric, b: Numeric):
     return jnp.linalg.solve(a, b)
 

@@ -19,8 +19,8 @@ def expand_dims(a: Numeric, axis: Int = 0):
 
 
 @dispatch
-def squeeze(a: Numeric):
-    return tf.squeeze(a)
+def squeeze(a: Numeric, axis: Union[Int, None] = None):
+    return tf.squeeze(a, axis=axis)
 
 
 @dispatch

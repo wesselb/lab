@@ -97,8 +97,11 @@ def test_expand_dims(check_lazy_shapes):
 def test_squeeze(check_lazy_shapes):
     check_function(B.squeeze, (Tensor(3, 4, 5),))
     check_function(B.squeeze, (Tensor(1, 4, 5),))
+    check_function(B.squeeze, (Tensor(1, 4, 5),), {"axis": Value(None, 0)})
     check_function(B.squeeze, (Tensor(3, 1, 5),))
+    check_function(B.squeeze, (Tensor(3, 1, 5),), {"axis": Value(None, 1)})
     check_function(B.squeeze, (Tensor(1, 4, 1),))
+    check_function(B.squeeze, (Tensor(1, 4, 1),), {"axis": Value(None, 0, 2)})
 
     # Test squeezing lists and tuples
     assert B.squeeze((1,)) == 1
@@ -107,17 +110,66 @@ def test_squeeze(check_lazy_shapes):
     assert B.squeeze([1, 2]) == [1, 2]
 
 
-def test_uprank(check_lazy_shapes):
-    # `rank=2`, the default:
-    approx(B.uprank(1.0), np.array([[1.0]]))
-    approx(B.uprank(np.array([1.0, 2.0])), np.array([[1.0], [2.0]]))
-    approx(B.uprank(np.array([[1.0, 2.0]])), np.array([[1.0, 2.0]]))
-    approx(B.uprank(np.array([[[1.0]]])), np.array([[[1.0]]]))
+@pytest.mark.parametrize(
+    "rank, shape, expected_shape",
+    [
+        # `rank=2`, the default:
+        (None, (), (1, 1)),
+        (None, (2,), (2, 1)),
+        (None, (2, 3), (2, 3)),
+        (None, (2, 3, 4), (2, 3, 4)),
+        # `rank=1`:
+        (1, (), (1,)),
+        (1, (2,), (2,)),
+        (1, (2, 3), (2, 3)),
+    ],
+)
+def test_uprank(rank, shape, expected_shape, check_lazy_shapes):
+    kw_args = {}
+    if rank is not None:
+        kw_args["rank"] = rank
+    approx(B.uprank(B.ones(*shape), **kw_args), B.ones(*expected_shape))
 
-    # `rank=1`:
-    approx(B.uprank(1.0, rank=1), np.array([1.0]))
-    approx(B.uprank(np.array([1.0, 2.0]), rank=1), np.array([1.0, 2.0]))
-    approx(B.uprank(np.array([[1.0, 2.0]]), rank=1), np.array([[1.0, 2.0]]))
+
+@pytest.mark.parametrize(
+    "rank, preserve, shape, expected_shape",
+    [
+        # `rank = 2`, the default:
+        (None, None, (), ()),
+        (None, None, (2,), (2,)),
+        (None, None, (2, 1), (2, 1)),
+        (None, None, (2, 3, 4), (2, 3, 4)),
+        (None, None, (2, 3, 1), (2, 3)),
+        (None, None, (2, 1, 3), (2, 3)),
+        (None, None, (1, 2, 3), (2, 3)),
+        (None, False, (2, 3, 1), (2, 3)),
+        (None, False, (2, 1, 3), (2, 3)),
+        (None, False, (1, 2, 3), (2, 3)),
+        (None, True, (2, 3, 1), (2, 3)),
+        (None, True, (2, 1, 3), (2, 1, 3)),
+        (None, True, (1, 2, 3), (1, 2, 3)),
+        # `rank = 1`:
+        (1, None, (), ()),
+        (1, None, (2,), (2,)),
+        (1, None, (2, 2), (2, 2)),
+        (1, None, (2, 1), (2,)),
+        (1, None, (1, 2), (2,)),
+        (1, False, (2, 1), (2,)),
+        (1, False, (1, 2), (2,)),
+        (1, True, (2, 1), (2,)),
+        (1, True, (1, 2), (1, 2)),
+    ],
+)
+def test_downrank(rank, preserve, shape, expected_shape, check_lazy_shapes):
+    kw_args = {}
+    if rank is not None:
+        kw_args["rank"] = rank
+    if preserve is not None:
+        kw_args["preserve"] = preserve
+    approx(
+        B.downrank(B.ones(*shape), **kw_args),
+        B.ones(*expected_shape),
+    )
 
 
 @pytest.mark.parametrize("source_shape", [(1, 1, 1), (1, 1, 4), (1, 3, 4), (2, 3, 4)])

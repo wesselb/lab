@@ -37,6 +37,16 @@ def isnan(a: Numeric):
 
 
 @dispatch
+def real(a: Numeric):
+    return torch.real(a)
+
+
+@dispatch
+def imag(a: Numeric):
+    return torch.imag(a)
+
+
+@dispatch
 def device(a: TorchNumeric):
     return a.device
 

@@ -22,6 +22,7 @@ __all__ = [
     "check_function",
     "Tensor",
     "PositiveTensor",
+    "ComplexTensor",
     "BoolTensor",
     "NaNTensor",
     "Matrix",
@@ -97,7 +98,12 @@ def approx(x, y, assert_dtype: bool = False, **kw_args):
 
     # Assert that data types are equal if required.
     if assert_dtype:
-        assert np.array(x).dtype == np.array(y).dtype
+        dtype_x = np.array(x).dtype
+        dtype_y = np.array(y).dtype
+        if dtype_x != dtype_y:
+            raise AssertionError(
+                f"Data types not equal: `{dtype_x}` versus `{dtype_y}`."
+            )
 
     np.testing.assert_allclose(x, y, **kw_args)
 
@@ -218,6 +224,17 @@ class PositiveTensor(Tensor):
     def __init__(self, *dims, upper=1, **kw_args):
         if "mat" not in kw_args or kw_args["mat"] is None:
             mat = np.array(upper * np.random.rand(*dims))
+        else:
+            mat = kw_args["mat"]
+        Tensor.__init__(self, mat=mat)
+
+
+class ComplexTensor(Tensor):
+    """Complex tensor placeholder."""
+
+    def __init__(self, *dims, **kw_args):
+        if "mat" not in kw_args or kw_args["mat"] is None:
+            mat = np.array(np.random.randn(*dims), dtype=np.complex128)
         else:
             mat = kw_args["mat"]
         Tensor.__init__(self, mat=mat)

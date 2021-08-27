@@ -34,6 +34,16 @@ def isnan(a: Numeric):
 
 
 @dispatch
+def real(a: Numeric):
+    return np.real(a)
+
+
+@dispatch
+def imag(a: Numeric):
+    return np.imag(a)
+
+
+@dispatch
 def device(a: NPNumeric):
     return "cpu"
 

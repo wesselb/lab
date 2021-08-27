@@ -1,4 +1,5 @@
 import torch
+from plum import Union
 
 from . import dispatch, Numeric
 from ..types import Int
@@ -17,8 +18,11 @@ def expand_dims(a: Numeric, axis: Int = 0):
 
 
 @dispatch
-def squeeze(a: Numeric):
-    return torch.squeeze(a)
+def squeeze(a: Numeric, axis: Union[Int, None] = None):
+    if axis is None:
+        return torch.squeeze(a)
+    else:
+        return torch.squeeze(a, dim=axis)
 
 
 @dispatch

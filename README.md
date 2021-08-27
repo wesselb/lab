@@ -148,8 +148,9 @@ Device       # Any device type
 ```
 NPNumeric
 NPDType
+NPRandomState
  
-NP           # Anything NumPy
+NP  # Anything NumPy
 ```
 
 ### AutoGrad
@@ -157,8 +158,9 @@ NP           # Anything NumPy
 ```
 AGNumeric
 AGDType
+AGRandomState
  
-AG           # Anything AutoGrad
+AG  # Anything AutoGrad
 ```
 
 ### TensorFlow
@@ -166,9 +168,10 @@ AG           # Anything AutoGrad
 ```
 TFNumeric
 TFDType
+TFRandomState
 TFDevice
  
-TF           # Anything TensorFlow
+TF  # Anything TensorFlow
 ```
 
 
@@ -178,8 +181,9 @@ TF           # Anything TensorFlow
 TorchNumeric
 TorchDType
 TorchDevice
+TorchRandomState
  
-Torch        # Anything PyTorch
+Torch  # Anything PyTorch
 ```
 
 
@@ -189,8 +193,9 @@ Torch        # Anything PyTorch
 JAXNumeric
 JAXDType
 JAXDevice
+JAXRandomState
  
-JAX          # Anything JAX
+JAX  # Anything JAX
 ```
 
 
@@ -256,6 +261,8 @@ isabstract(a)
 jit(f, **kw_args)
 
 isnan(a)
+real(a)
+imag(a)
 
 device(a)
 on_device(device)
@@ -366,6 +373,7 @@ matmul(a, b, tr_a=False, tr_b=False) (alias: mm, dot)
 trace(a, axis1=0, axis2=1)
 kron(a, b)
 svd(a, compute_uv=True)
+eig(a, compute_eigvecs=True)
 solve(a, b)
 inv(a)
 pinv(a)
@@ -405,16 +413,22 @@ ew_sums(a)
 
 block_diag(*elements)
 ```
+
 ### Random
 ```
 set_random_seed(seed) 
+create_random_state(dtype, seed=0)
 
+rand(state, dtype, *shape)
 rand(dtype, *shape)
 rand(*shape)
+rand(state, ref)
 rand(ref)
 
+randn(state, dtype, *shape)
 randn(dtype, *shape)
 randn(*shape)
+randn(state, ref)
 randn(ref)
 
 choice(a, n)
@@ -428,8 +442,9 @@ rank(a)
 length(a) (alias: size)
 is_scalar(a)
 expand_dims(a, axis=0)
-squeeze(a)
+squeeze(a, axis=None)
 uprank(a, rank=2)
+downrank(a, rank=2, preserve=False)
 broadcast_to(a, *shape)
 
 diag(a)
@@ -479,6 +494,30 @@ with B.lazy_shapes():
     print(type(B.shape(a)[0]))
     # <class 'lab.shape.Dimension'>
 ```
+
+## Random Numbers
+If you call a random number generator without providing a random state, e.g.
+`B.randn(np.float32, 2)`, the global random state from the corresponding
+backend is used.
+For JAX, since there is no global random state, LAB provides a JAX global
+random state accessible through `B.jax_global_randomstate` once `lab.jax`
+is loaded.
+
+If you do not want to use a global random state but rather explicitly maintain
+one, you can create a random state with `B.create_random_state` and then
+pass this as the first argument to the random number generators.
+The random number generators will then return a tuple containing the updated
+random state and the random result.
+
+```python
+# Create random state.
+state = B.create_random_state(tf.float32, seed=0)
+
+# Generate two random arrays.
+state, x = B.randn(state, tf.float32, 2)
+state, y = B.randn(state, tf.float32, 2)
+```
+
 
 ## Control Flow Cache
 Coming soon!

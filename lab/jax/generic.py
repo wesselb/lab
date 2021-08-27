@@ -41,6 +41,16 @@ def isnan(a: Numeric):
 
 
 @dispatch
+def real(a: Numeric):
+    return jnp.real(a)
+
+
+@dispatch
+def imag(a: Numeric):
+    return jnp.imag(a)
+
+
+@dispatch
 def device(a: JAXNumeric):
     return a.device_buffer.device()
 

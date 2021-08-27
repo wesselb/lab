@@ -71,6 +71,11 @@ def svd(a: Numeric, compute_uv: bool = True):
 
 
 @dispatch
+def eig(a: Numeric, compute_eigvecs: bool = True):  # pragma: no cover
+    raise NotImplementedError("Function `quantile` is not available for AutoGrad.")
+
+
+@dispatch
 def solve(a: Numeric, b: Numeric):
     return anp.linalg.solve(a, b)
 

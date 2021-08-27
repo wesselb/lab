@@ -45,6 +45,17 @@ def isnan(a: Numeric):
 
 
 @dispatch
+def real(a: Numeric):
+    return tf.math.real(a)
+
+
+@dispatch
+def imag(a: Numeric):
+    return tf.math.imag(a)
+
+
+
+@dispatch
 def device(a: TFNumeric):
     return a.device
 

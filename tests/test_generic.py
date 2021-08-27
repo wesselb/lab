@@ -16,6 +16,7 @@ from .util import (
     Tensor,
     Value,
     PositiveTensor,
+    ComplexTensor,
     BoolTensor,
     NaNTensor,
     Bool,
@@ -292,6 +293,13 @@ def test_cast_own_dtype(x, check_lazy_shapes):
 @pytest.mark.parametrize("dtype", [np.float64, tf.float64, torch.float64, jnp.float64])
 def test_cast_shape_element(dtype, check_lazy_shapes):
     assert B.dtype(B.cast(dtype, B.shape(B.ones(dtype, 1))[0])) is dtype
+
+
+@pytest.mark.parametrize("f", [B.real, B.imag])
+def test_unary_complex(f, check_lazy_shapes):
+    check_function(f, (ComplexTensor(),))
+    check_function(f, (ComplexTensor(2),))
+    check_function(f, (ComplexTensor(2, 3),))
 
 
 @pytest.mark.parametrize(

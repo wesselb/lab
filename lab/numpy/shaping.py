@@ -1,4 +1,5 @@
 import numpy as np
+from plum import Union
 
 from . import dispatch, Numeric
 from ..types import Int
@@ -17,8 +18,8 @@ def expand_dims(a: Numeric, axis: Int = 0):
 
 
 @dispatch
-def squeeze(a: Numeric):
-    return np.squeeze(a)
+def squeeze(a: Numeric, axis: Union[Int, None] = None):
+    return np.squeeze(a, axis=axis)
 
 
 @dispatch

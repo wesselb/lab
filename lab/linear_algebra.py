@@ -16,6 +16,7 @@ __all__ = [
     "kron",
     "trace",
     "svd",
+    "eig",
     "solve",
     "inv",
     "pinv",
@@ -137,13 +138,23 @@ def kron(a, b):  # pragma: no cover
 def svd(a: Numeric, compute_uv: bool = True):  # pragma: no cover
     """Compute the singular value decomposition.
 
-    Note:
-        PyTorch does not allow batch computation.
-
     Args:
         a (tensor): Matrix to decompose.
         compute_uv (bool, optional): Also compute `U` and `V`. Defaults to
             `True`.
+
+    Returns:
+        tuple: `(U, S, V)` is `compute_uv` is `True` and just `S` otherwise.
+    """
+
+@dispatch
+@abstract()
+def eig(a: Numeric, compute_eigvecs: bool = True):  # pragma: no cover
+    """Compute the eigenvalue decomposition.
+
+    Args:
+        a (tensor): Matrix to decompose.
+        compute_eigvecs (bool, optional): Also compute eigenvectors. Defaults to `True`.
 
     Returns:
         tuple: `(U, S, V)` is `compute_uv` is `True` and just `S` otherwise.

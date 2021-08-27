@@ -31,6 +31,12 @@ __all__ = [
     "TorchDType",
     "JAXDType",
     "DType",
+    "NPRandomState",
+    "AGRandomState",
+    "TFRandomState",
+    "TorchRandomState",
+    "JAXRandomState",
+    "RandomState",
     "TFDevice",
     "TorchDevice",
     "JAXDevice",
@@ -81,7 +87,10 @@ class ModuleType(ResolvableType):
 
         Clears all cache after retrieval.
         """
-        self._type = ptype(getattr(sys.modules[self.module], self.name))
+        target = sys.modules[self.module]
+        for part in self.name.split("."):
+            target = getattr(target, part)
+        self._type = ptype(target)
         clear_all_cache()
 
     def resolve(self):
@@ -104,13 +113,21 @@ _tf_tensor = ModuleType("tensorflow", "Tensor")
 _tf_indexedslices = ModuleType("tensorflow", "IndexedSlices")
 _tf_variable = ModuleType("tensorflow", "Variable")
 _tf_dtype = ModuleType("tensorflow", "DType")
-_tf_retrievables = [_tf_tensor, _tf_indexedslices, _tf_variable, _tf_dtype]
+_tf_randomstate = ModuleType("tensorflow", "random.Generator")
+_tf_retrievables = [
+    _tf_tensor,
+    _tf_indexedslices,
+    _tf_variable,
+    _tf_dtype,
+    _tf_randomstate,
+]
 
 # Define PyTorch module types.
 _torch_tensor = ModuleType("torch", "Tensor")
 _torch_dtype = ModuleType("torch", "dtype")
 _torch_device = ModuleType("torch", "device")
-_torch_retrievables = [_torch_tensor, _torch_dtype, _torch_device]
+_torch_randomstate = ModuleType("torch", "Generator")
+_torch_retrievables = [_torch_tensor, _torch_dtype, _torch_device, _torch_randomstate]
 
 # Define AutoGrad module types.
 _ag_tensor = ModuleType("autograd.tracer", "Box")
@@ -328,6 +345,21 @@ def dtype_float(x):
     return promote_dtypes(dtype(x), np.float16)
 
 
+# Random state types:
+NPRandomState = Union(np.random.RandomState, alias="NPRandomState")
+AGRandomState = Union(NPRandomState, alias="AGRandomState")
+TFRandomState = Union(_tf_randomstate, alias="TFRandomState")
+TorchRandomState = Union(_torch_randomstate, alias="TorchRandomState")
+JAXRandomState = Union(JAXNumeric, np.ndarray, alias="JAXRandomState")
+RandomState = Union(
+    NPRandomState,
+    AGRandomState,
+    TFRandomState,
+    TorchRandomState,
+    JAXRandomState,
+    alias="RandomState",
+)
+
 # Device types:
 TFDevice = Union(str, alias="TFDevice")
 TorchDevice = Union(_torch_device, alias="TFDevice")
@@ -339,9 +371,9 @@ add_conversion_method(TorchDevice, str, str)
 add_conversion_method(JAXDevice, str, lambda d: f"{d.platform}:{d.id}")
 
 # Framework types:
-NP = Union(NPNumeric, NPDType, alias="NP")
-AG = Union(AGNumeric, AGDType, alias="AG")
-TF = Union(TFNumeric, TFDType, alias="TF")
-Torch = Union(TorchNumeric, TorchDType, alias="Torch")
-JAX = Union(JAXNumeric, JAXDType, alias="JAX")
-Framework = Union(NP, TF, Torch, JAX, alias="Framework")
+NP = Union(NPNumeric, NPDType, NPRandomState, alias="NP")
+AG = Union(AGNumeric, AGDType, AGRandomState, alias="AG")
+TF = Union(TFNumeric, TFDType, TFRandomState, TFDevice, alias="TF")
+Torch = Union(TorchNumeric, TorchDType, TorchRandomState, TorchDevice, alias="Torch")
+JAX = Union(JAXNumeric, JAXDType, JAXRandomState, JAXDevice, alias="JAX")
+Framework = Union(NP, AG, TF, Torch, JAX, alias="Framework")

@@ -10,7 +10,7 @@ from plum.promotion import _promotion_rule, convert
 import lab as B
 
 # noinspection PyUnresolvedReferences
-from .util import check_lazy_shapes
+from .util import check_lazy_shapes, autograd_box
 
 
 def test_numeric(check_lazy_shapes):
@@ -181,6 +181,24 @@ def test_dtype_float(check_lazy_shapes):
 
 
 @pytest.mark.parametrize(
+    "t, FWRandomState",
+    [
+        (np.float64, B.NPRandomState),
+        (tf.float64, B.TFRandomState),
+        (torch.float64, B.TorchRandomState),
+        (jnp.float64, B.JAXRandomState),
+    ],
+)
+def test_random_state(t, FWRandomState, check_lazy_shapes):
+    assert isinstance(B.create_random_state(t), FWRandomState)
+
+
+def test_random_state_jax(check_lazy_shapes):
+    # Splitting a JAX random state gives a NumPy array.
+    assert isinstance(np.array(1), B.JAXRandomState)
+
+
+@pytest.mark.parametrize(
     "t, FWDevice",
     [
         (tf.float64, B.TFDevice),
@@ -201,20 +219,35 @@ def test_device(t, FWDevice, check_lazy_shapes):
 def test_framework_np(t, check_lazy_shapes):
     assert isinstance(np.array(1), t)
     assert isinstance(np.float32, t)
+    assert isinstance(B.create_random_state(np.float32), t)
+
+
+@pytest.mark.parametrize("t", [B.AG, B.Framework])
+def test_framework_ag(t, check_lazy_shapes):
+    assert isinstance(autograd_box(np.array(1)), t)
+    assert isinstance(np.float32, t)
+    assert isinstance(B.create_random_state(np.float32), t)
 
 
 @pytest.mark.parametrize("t", [B.TF, B.Framework])
 def test_framework_tf(t, check_lazy_shapes):
     assert isinstance(tf.constant(1), t)
     assert isinstance(tf.float32, t)
+    assert isinstance(B.create_random_state(tf.float32), t)
+    assert isinstance(B.device(tf.constant(1)), t)
 
 
 @pytest.mark.parametrize("t", [B.Torch, B.Framework])
 def test_framework_torch(t, check_lazy_shapes):
     assert isinstance(torch.tensor(1), t)
     assert isinstance(torch.float32, t)
+    assert isinstance(B.create_random_state(torch.float32), t)
+    assert isinstance(B.device(torch.tensor(1)), t)
 
 
 @pytest.mark.parametrize("t", [B.JAX, B.Framework])
 def test_framework_jax(t, check_lazy_shapes):
     assert isinstance(jnp.asarray(1), t)
+    assert isinstance(jnp.float32, t)
+    assert isinstance(B.create_random_state(jnp.float32), t)
+    assert isinstance(B.device(jnp.asarray(1)), t)
