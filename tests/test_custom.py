@@ -113,7 +113,7 @@ def test_bvn_cdf(check_lazy_shapes):
         B.bvn_cdf(B.cast(np.float32, a), B.cast(np.float32, b), B.cast(np.float32, c)),
     )
 
-    # Check that, in JAX, the function check its shape.
+    # Check that, in JAX, the function check the shape of the inputs.
     with pytest.raises(ValueError):
         B.bvn_cdf(
             B.rand(jnp.float32, 2), B.rand(jnp.float32, 3), B.rand(jnp.float32, 3)
