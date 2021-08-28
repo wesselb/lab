@@ -85,9 +85,9 @@ def check_grad(f, args, kw_args=None, rtol=1e-8):
         approx(numerical_grad, arg.grad, rtol=rtol)
 
         # Check JAX gradient.
-        torch_args = tuple([jax.device_put(arg) for arg in args])
-        f_i = create_f_i(i, torch_args)
-        jax_grad = jax.jit(jax.grad(f_i))(args[i])
+        jax_args = tuple([jax.device_put(arg) for arg in args])
+        f_i = create_f_i(i, jax_args)
+        jax_grad = jax.grad(jax.jit(f_i))(args[i])
         approx(numerical_grad, jax_grad, rtol=rtol)
 
 
