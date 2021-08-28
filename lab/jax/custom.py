@@ -1,12 +1,9 @@
+import jax.experimental.host_callback as hcb
+from jax import custom_vjp, ShapeDtypeStruct
+from plum import Dispatcher, convert
 from functools import wraps
 
-import jax.numpy as jnp
-from jax import custom_vjp
-from jax.core import Primitive
-from plum import Dispatcher
-
-from . import B
-from ..util import as_tuple
+from ..custom import TensorDescription
 
 __all__ = ["jax_register"]
 
@@ -14,51 +11,51 @@ _dispatch = Dispatcher()
 
 
 @_dispatch
-def as_jax(x: B.Numeric):
-    """Convert object to JAX.
+def parse_inference_result(x: TensorDescription):
+    """Parse the result inference functions to a PyTree (JAX terminology) of
+    :class:`jax.ShapeDtypeStruct`s.
 
     Args:
-        x (object): Object to convert.
+        x (PyTree): Input to parse.
 
     Returns:
-        object: `x` as a JAX object.
+        PyTree: Parsed input.
     """
-    return jnp.asarray(x)
+    return ShapeDtypeStruct(x.shape, x.dtype)
 
 
 @_dispatch
-def as_jax(xs: tuple):
-    return tuple([as_jax(x) for x in xs])
+def parse_inference_result(xs: tuple):
+    return tuple(parse_inference_result(x) for x in xs)
 
 
-def _as_primitive(f):
-    def f_wrapped(*args, **kw_args):
-        return as_jax(f(*B.to_numpy(args), **kw_args))
-
-    primitive = Primitive(f.__name__)
-    primitive.def_impl(f_wrapped)
-
-    # Wrap `primitive.bind` to preserve the metadata of `f`.
-
+def _wrap_hcb(f, i_f):
     @wraps(f)
-    def bind_wrapped(*args, **kw_args):
-        return primitive.bind(*args, **kw_args)
+    def f_wrapped(*args, **kw_args):
+        return hcb.call(
+            lambda x: f(*x[0], **x[1]),
+            arg=(args, kw_args),
+            result_shape=parse_inference_result(i_f(*args, **kw_args)),
+        )
 
-    return bind_wrapped
+    return f_wrapped
 
 
-def jax_register(f, s_f):
+def jax_register(f, i_f, s_f, i_s_f):
     """Register a function and its sensitivity for JAX.
 
     Args:
         f (function): Function to register.
+        i_f (function): Function that infers the shape of the output.
         s_f (function): Sensitivity of `f`.
+        i_s_f (function): Function that infers the shape of the output of the
+            sensitivity of `f`.
 
     Returns:
         function: JAX function.
     """
-    f = _as_primitive(f)
-    s_f = _as_primitive(s_f)
+    f = _wrap_hcb(f, i_f)
+    s_f = _wrap_hcb(s_f, i_s_f)
 
     f = custom_vjp(f)
 
@@ -70,7 +67,7 @@ def jax_register(f, s_f):
 
     def backward(res, s_y):
         y, args, kw_args = res
-        return as_tuple(s_f(s_y, y, *args, **kw_args))
+        return convert(s_f(s_y, y, *args, **kw_args), tuple)
 
     f.defvjp(forward, backward)
 

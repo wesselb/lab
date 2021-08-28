@@ -1,6 +1,9 @@
 import jax
+import jax.numpy as jnp
+import numpy as np
 import pytest
 import tensorflow as tf
+import torch
 from autograd import grad
 from fdm import check_sensitivity, gradient
 
@@ -17,10 +20,9 @@ from lab.custom import (
 )
 from lab.tensorflow.custom import as_tf
 from lab.torch.custom import as_torch
-from lab.jax.custom import as_jax
 
 # noinspection PyUnresolvedReferences
-from .util import approx, check_lazy_shapes
+from .util import approx, check_lazy_shapes, check_function, PSD
 
 
 def test_as_tf(check_lazy_shapes):
@@ -31,11 +33,6 @@ def test_as_tf(check_lazy_shapes):
 def test_as_torch(check_lazy_shapes):
     assert isinstance(as_torch(B.randn()), B.TorchNumeric)
     assert isinstance(as_torch((B.randn(),))[0], B.TorchNumeric)
-
-
-def test_as_jax(check_lazy_shapes):
-    assert isinstance(as_jax(B.randn()), B.JAXNumeric)
-    assert isinstance(as_jax((B.randn(),))[0], B.JAXNumeric)
 
 
 def check_grad(f, args, kw_args=None, rtol=1e-8):
@@ -74,22 +71,23 @@ def check_grad(f, args, kw_args=None, rtol=1e-8):
 
         # Check TensorFlow gradient.
         tf_args = tuple([as_tf(arg) for arg in args])
-        f_i = create_f_i(i, tf_args)
+        f_i = tf.function(create_f_i(i, tf_args), autograph=False)
         with tf.GradientTape() as t:
             t.watch(tf_args[i])
             tf_grad = t.gradient(f_i(tf_args[i]), tf_args[i]).numpy()
         approx(numerical_grad, tf_grad, rtol=rtol)
 
         # Check PyTorch gradient.
-        torch_args = tuple([as_torch(arg, grad=True) for arg in args])
-        f_i = create_f_i(i, torch_args)
-        f_i(torch_args[i]).backward()
-        approx(numerical_grad, torch_args[i].grad, rtol=rtol)
+        torch_args = tuple([as_torch(arg, grad=False) for arg in args])
+        f_i = torch.jit.trace(create_f_i(i, torch_args), torch_args[i])
+        arg = torch_args[i].requires_grad_(True)
+        f_i(arg).backward()
+        approx(numerical_grad, arg.grad, rtol=rtol)
 
         # Check JAX gradient.
         torch_args = tuple([jax.device_put(arg) for arg in args])
         f_i = create_f_i(i, torch_args)
-        jax_grad = jax.grad(f_i)(args[i])
+        jax_grad = jax.jit(jax.grad(f_i))(args[i])
         approx(numerical_grad, jax_grad, rtol=rtol)
 
 
@@ -108,10 +106,37 @@ def test_bvn_cdf(check_lazy_shapes):
     check_sensitivity(bvn_cdf, s_bvn_cdf, (B.rand(3), B.rand(3), B.rand(3)))
     check_grad(bvn_cdf, (B.rand(3), B.rand(3), B.rand(3)))
 
+    # Check that function runs on both `float32`s and `float64`s.
+    a, b, c = B.rand(3), B.rand(3), B.rand(3)
+    approx(
+        B.bvn_cdf(a, b, c),
+        B.bvn_cdf(B.cast(np.float32, a), B.cast(np.float32, b), B.cast(np.float32, c)),
+    )
+
+    # Check that, in JAX, the function check its shape.
+    with pytest.raises(ValueError):
+        B.bvn_cdf(
+            B.rand(jnp.float32, 2), B.rand(jnp.float32, 3), B.rand(jnp.float32, 3)
+        )
+    with pytest.raises(ValueError):
+        B.bvn_cdf(
+            B.rand(jnp.float32, 3), B.rand(jnp.float32, 2), B.rand(jnp.float32, 3)
+        )
+    with pytest.raises(ValueError):
+        B.bvn_cdf(
+            B.rand(jnp.float32, 3), B.rand(jnp.float32, 3), B.rand(jnp.float32, 2)
+        )
+
 
 def test_expm(check_lazy_shapes):
     check_sensitivity(expm, s_expm, (B.randn(3, 3),))
     check_grad(expm, (B.randn(3, 3),))
+
+
+def test_logm_forward(check_lazy_shapes):
+    # This test can be removed once the gradient is implemented and the below test
+    # passes.
+    check_function(B.logm, (PSD(3),))
 
 
 @pytest.mark.xfail

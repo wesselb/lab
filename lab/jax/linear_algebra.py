@@ -6,7 +6,20 @@ import jax.scipy.linalg as jsla
 
 from . import dispatch, B, Numeric
 from .custom import jax_register
-from ..custom import toeplitz_solve, s_toeplitz_solve, expm, s_expm, logm, s_logm
+from ..custom import (
+    toeplitz_solve,
+    i_toeplitz_solve,
+    s_toeplitz_solve,
+    i_s_toeplitz_solve,
+    expm,
+    i_expm,
+    s_expm,
+    i_s_expm,
+    logm,
+    i_logm,
+    s_logm,
+    i_s_logm,
+)
 from ..linear_algebra import _default_perm
 from ..types import Int
 from ..util import batch_computation
@@ -78,7 +91,7 @@ def logdet(a: Numeric):
     return jnp.linalg.slogdet(a)[1]
 
 
-_expm = jax_register(expm, s_expm)
+_expm = jax_register(expm, i_expm, s_expm, i_s_expm)
 
 
 @dispatch
@@ -86,7 +99,7 @@ def expm(a: Numeric):
     return _expm(a)
 
 
-_logm = jax_register(logm, s_logm)
+_logm = jax_register(logm, i_logm, s_logm, i_s_logm)
 
 
 @dispatch
@@ -114,7 +127,9 @@ def triangular_solve(a: Numeric, b: Numeric, lower_a: bool = True):
     return batch_computation(_triangular_solve, (a, b), (2, 2))
 
 
-_toeplitz_solve = jax_register(toeplitz_solve, s_toeplitz_solve)
+_toeplitz_solve = jax_register(
+    toeplitz_solve, i_toeplitz_solve, s_toeplitz_solve, i_s_toeplitz_solve
+)
 
 
 @dispatch

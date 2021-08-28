@@ -1,14 +1,53 @@
 import logging
+from collections import namedtuple
+from functools import reduce
 
 import numpy as np
 import scipy.linalg as sla
 
-# noinspection PyUnresolvedReferences
+TensorDescription = namedtuple("TensorDescription", "shape dtype")
+"""namedtuple: Description of a tensor in terms of the tensor's shape and data type."""
+
+
+def promote_dtype_of_tensors(*xs):
+    """Promote the data types of a number of tensors.
+
+    Args:
+        *xs (tensor): Tensors to take data types of and then promote those data types.
+
+    Returns:
+        dtype: Promoted data type.
+    """
+    return reduce(np.promote_types, [x.dtype for x in xs])
+
+
 try:
-    from .bvn_cdf import bvn_cdf as bvn_cdf_, s_bvn_cdf
+    # noinspection PyUnresolvedReferences
+    from .bvn_cdf import bvn_cdf as bvn_cdf_, s_bvn_cdf as s_bvn_cdf_
+
+    def i_bvn_cdf(a, b, c):
+        if a.shape != b.shape or a.shape != c.shape:
+            raise ValueError("Shapes of the inputs to `bvn_cdf` must all be equal.")
+        return TensorDescription(a.shape, promote_dtype_of_tensors(a, b, c))
+
+    def i_s_bvn_cdf(s_y, y, a, b, c):
+        dtype = promote_dtype_of_tensors(s_y, y, a, b, c)
+        return (
+            TensorDescription(a.shape, dtype),
+            TensorDescription(b.shape, dtype),
+            TensorDescription(c.shape, dtype),
+        )
+
+
 except ImportError:  # pragma: no cover
 
     def bvn_cdf_(*args, **kw_args):
+        raise RuntimeError(
+            "bvn_cdf was not compiled. Please try to reinstall LAB with `gfortran` "
+            "available."
+        )
+
+    def i_bvn_cdf_(*args, **kw_args):
         raise RuntimeError(
             "bvn_cdf was not compiled. Please try to reinstall LAB with `gfortran` "
             "available."
@@ -20,16 +59,30 @@ except ImportError:  # pragma: no cover
             "available."
         )
 
+    def i_s_bvn_cdf(*args, **kw_args):
+        raise RuntimeError(
+            "bvn_cdf was not compiled. Please try to reinstall LAB with `gfortran` "
+            "available."
+        )
+
 
 __all__ = [
     "toeplitz_solve",
+    "i_toeplitz_solve",
     "s_toeplitz_solve",
+    "i_s_toeplitz_solve",
     "bvn_cdf",
+    "i_bvn_cdf",
     "s_bvn_cdf",
+    "i_s_bvn_cdf",
     "expm",
+    "i_expm",
     "s_expm",
+    "i_s_expm",
     "logm",
+    "i_logm",
     "s_logm",
+    "i_s_logm",
 ]
 
 log = logging.getLogger(__name__)
@@ -81,8 +134,12 @@ def _uprank(a):
 
 
 def toeplitz_solve(a, b, c):
-    row = np.concatenate((a[:1], b))  # First row of the Toeplitz matrix.
+    row = np.concatenate((a[:1], b))  # First row of the Toeplitz matrix
     return sla.solve_toeplitz((a, row), c)
+
+
+def i_toeplitz_solve(a, b, c):
+    return TensorDescription(c.shape, promote_dtype_of_tensors(a, b, c))
 
 
 def s_toeplitz_solve(s_y, y, a, b, c):
@@ -105,25 +162,67 @@ def s_toeplitz_solve(s_y, y, a, b, c):
     return s_a, s_b, s_c
 
 
+def i_s_toeplitz_solve(s_y, y, a, b, c):
+    dtype = promote_dtype_of_tensors(s_y, y, a, b, c)
+    return (
+        TensorDescription(a.shape, dtype),
+        TensorDescription(b.shape, dtype),
+        TensorDescription(c.shape, dtype),
+    )
+
+
 def bvn_cdf(a, b, c):
     # We do not directly use `bvn_cdf_` to not have `inspect.signature` fail, which
-    # does not work for `bvn_cdf_`.
-    return bvn_cdf_(a, b, c)
+    # does not work for `bvn_cdf_`. Moreover, we need to ensure that the function
+    # runs on `float64s`.
+    res_dtype = reduce(np.promote_types, [x.dtype for x in (a, b, c)])
+    res = bvn_cdf_(a.astype(np.float64), b.astype(np.float64), c.astype(np.float64))
+    return res.astype(res_dtype)
+
+
+def s_bvn_cdf(s_y, y, a, b, c):
+    res_dtype = reduce(np.promote_types, [x.dtype for x in (s_y, y, a, b, c)])
+    res = s_bvn_cdf_(
+        s_y.astype(np.float64),
+        y.astype(np.float64),
+        a.astype(np.float64),
+        b.astype(np.float64),
+        c.astype(np.float64),
+    )
+    return tuple(x.astype(res_dtype) for x in res)
 
 
 def expm(a):
     return sla.expm(a)
 
 
+def i_expm(a):
+    return TensorDescription(a.shape, a.dtype)
+
+
 def s_expm(s_y, y, a):
     return sla.expm_frechet(a, s_y.T, compute_expm=False).T
+
+
+def i_s_expm(s_y, y, a):
+    return TensorDescription(a.shape, promote_dtype_of_tensors(s_y, y, a))
 
 
 def logm(a):
     return sla.logm(a)
 
 
+def i_logm(a):
+    return TensorDescription(a.shape, a.dtype)
+
+
 def s_logm(a):  # pragma: no cover
+    raise NotImplementedError(
+        "The derivative for the matrix logarithm is current not implemented."
+    )
+
+
+def i_s_logm(s_y, y, a):  # pragma: no cover
     raise NotImplementedError(
         "The derivative for the matrix logarithm is current not implemented."
     )

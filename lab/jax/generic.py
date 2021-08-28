@@ -7,7 +7,7 @@ from plum import Union
 
 from . import B, dispatch, Numeric
 from .custom import jax_register
-from ..custom import bvn_cdf, s_bvn_cdf
+from ..custom import bvn_cdf, i_bvn_cdf, s_bvn_cdf, i_s_bvn_cdf
 from ..types import JAXDType, JAXNumeric, NPNumeric, Number, Int, _jax_tracer
 
 __all__ = []
@@ -292,7 +292,7 @@ def ge(a: Numeric, b: Numeric):
     return jnp.greater_equal(a, b)
 
 
-_bvn_cdf = jax_register(bvn_cdf, s_bvn_cdf)
+_bvn_cdf = jax_register(bvn_cdf, i_bvn_cdf, s_bvn_cdf, i_s_bvn_cdf)
 
 
 @dispatch
