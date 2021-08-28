@@ -134,8 +134,16 @@ def _uprank(a):
 
 
 def toeplitz_solve(a, b, c):
+    # For some reason, `sla.solve_toeplitz` sometimes fails with a `ValueError`, saying
+    # that the buffer source array is read-only. We resolve this issue by copying the
+    # inputs....
+    # TODO: Resolve this properly.
+    a = np.copy(a)
+    b = np.copy(b)
+    c = np.copy(c)
+    res_dtype = promote_dtype_of_tensors(a, b, c)
     row = np.concatenate((a[:1], b))  # First row of the Toeplitz matrix
-    return sla.solve_toeplitz((a, row), c)
+    return sla.solve_toeplitz((a, row), c).astype(res_dtype)
 
 
 def i_toeplitz_solve(a, b, c):
