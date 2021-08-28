@@ -11,6 +11,7 @@ __all__ = [
     "set_random_seed",
     "create_random_state",
     "global_random_state",
+    "set_global_random_state",
     "rand",
     "randn",
     "choice",
@@ -29,9 +30,10 @@ def set_random_seed(seed: Int):
 
     # Set seed for TensorFlow, if it is loaded.
     if "tensorflow" in sys.modules:
-        import tensorflow
+        import tensorflow as tf
 
-        tensorflow.random.set_seed(seed)
+        tf.random.set_seed(seed)
+        tf.random.set_global_generator(tf.random.Generator.from_seed(seed))
 
     # Set seed for PyTorch, if it is loaded.
     if "torch" in sys.modules:
@@ -73,6 +75,20 @@ def global_random_state(dtype: DType):
 
     Returns:
         random state: Global random state.
+    """
+
+
+@dispatch
+@abstract()
+def set_global_random_state(state: RandomState):
+    """Set the global random state.
+
+    NOTE:
+        In TensorFlow, setting the global random state does NOT fix the randomness
+        for non-LAB random calls, like `tf.random.normal`. Use `B.set_seed` instead!
+
+    Args:
+        state (random state): Random state to set.
     """
 
 

@@ -362,7 +362,7 @@ def vec_to_tril(a: Numeric, offset: Int = 0):
 
 
 @dispatch
-def tril_to_vec(a: Numeric, offset: Int = 0):
+def tril_to_vec(a, offset: Int = 0):
     """Construct a vector from a lower triangular matrix.
 
     Args:

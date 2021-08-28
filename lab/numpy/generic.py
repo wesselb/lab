@@ -6,7 +6,7 @@ from plum import Union
 
 from . import B, dispatch, Numeric
 from ..custom import bvn_cdf as _bvn_cdf
-from ..types import NPNumeric, NPDType, Int
+from ..types import NPNumeric, NPDType, Int, NPRandomState
 
 __all__ = []
 
@@ -21,7 +21,7 @@ def _jit_run(
     f: FunctionType,
     compilation_cache: dict,
     jit_kw_args: dict,
-    *args: Numeric,
+    *args: Union[Numeric, NPRandomState],
     **kw_args,
 ):
     # There is no JIT for NumPy, so just run the function.

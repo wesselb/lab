@@ -189,7 +189,7 @@ def inv(a):  # pragma: no cover
 
 
 @dispatch
-def pinv(a):  # pragma: no cover
+def pinv(a):
     """Compute the pseudo-inverse of `a`.
 
     Args:

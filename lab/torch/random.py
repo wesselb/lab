@@ -19,6 +19,11 @@ def global_random_state(_: TorchDType):
 
 
 @dispatch
+def set_global_random_state(state: TorchRandomState):
+    torch.random.default_generator.set_state(state.get_state())
+
+
+@dispatch
 def rand(state: TorchRandomState, dtype: TorchDType, *shape: Int):
     return state, torch.rand(
         shape, dtype=dtype, device=B.ActiveDevice.active_name, generator=state

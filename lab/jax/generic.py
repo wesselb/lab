@@ -8,7 +8,7 @@ from plum import Union
 from . import B, dispatch, Numeric
 from .custom import jax_register
 from ..custom import bvn_cdf, i_bvn_cdf, s_bvn_cdf, i_s_bvn_cdf
-from ..types import JAXDType, JAXNumeric, NPNumeric, Number, Int, _jax_tracer
+from ..types import JAXDType, JAXNumeric, NPNumeric, Number, Int, _jax_tracer, JAXRandomState
 
 __all__ = []
 
@@ -23,7 +23,7 @@ def _jit_run(
     f: FunctionType,
     compilation_cache: dict,
     jit_kw_args: dict,
-    *args: Numeric,
+    *args: Union[Numeric, JAXRandomState],
     **kw_args,
 ):
     if "jax" not in compilation_cache:

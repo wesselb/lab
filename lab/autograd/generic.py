@@ -7,7 +7,7 @@ from plum import Union
 from . import dispatch, Numeric
 from .custom import autograd_register
 from ..custom import bvn_cdf, s_bvn_cdf
-from ..types import AGDType, AGNumeric, Int
+from ..types import AGDType, AGNumeric, Int, AGRandomState
 
 __all__ = []
 
@@ -22,7 +22,7 @@ def _jit_run(
     f: FunctionType,
     compilation_cache: dict,
     jit_kw_args: dict,
-    *args: Numeric,
+    *args: Union[Numeric, AGRandomState],
     **kw_args
 ):
     # There is no JIT for AutoGrad, so just run the function.

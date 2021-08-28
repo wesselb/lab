@@ -8,7 +8,7 @@ from plum import Union
 from . import dispatch, B, Numeric, TFNumeric
 from .custom import tensorflow_register
 from ..custom import bvn_cdf, s_bvn_cdf
-from ..types import TFDType, Int
+from ..types import TFDType, Int, TFRandomState
 
 __all__ = []
 
@@ -23,7 +23,7 @@ def _jit_run(
     f: FunctionType,
     compilation_cache: dict,
     jit_kw_args: dict,
-    *args: Numeric,
+    *args: Union[Numeric, TFRandomState],
     **kw_args,
 ):
     if "tensorflow" not in compilation_cache:
@@ -52,7 +52,6 @@ def real(a: Numeric):
 @dispatch
 def imag(a: Numeric):
     return tf.math.imag(a)
-
 
 
 @dispatch

@@ -19,6 +19,7 @@ from .types import (
     TFNumeric,
     TorchNumeric,
     JAXNumeric,
+    RandomState,
 )
 from .util import abstract
 
@@ -183,7 +184,7 @@ def _jit_run(
     f: FunctionType,
     compilation_cache: dict,
     jit_kw_args: dict,
-    *args: Numeric,
+    *args: Union[Numeric, RandomState],
     **kw_args
 ):  # pragma: no cover
     pass

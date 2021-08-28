@@ -421,6 +421,7 @@ set_random_seed(seed)
 create_random_state(dtype, seed=0)
 global_random_state(dtype)
 global_random_state(a)
+set_global_random_state(state)
 
 rand(state, dtype, *shape)
 rand(dtype, *shape)

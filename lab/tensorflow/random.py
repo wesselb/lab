@@ -1,7 +1,6 @@
 import logging
 
 import tensorflow as tf
-from plum import Union, Val
 
 from . import dispatch
 from ..types import TFDType, TFNumeric, Int, TFRandomState
@@ -11,17 +10,6 @@ __all__ = []
 log = logging.getLogger(__name__)
 
 
-class _GlobalTFRandomStateProxy(tf.random.Generator):
-    def __init__(self):
-        pass
-
-    def __getattribute__(self, name):
-        return getattr(tf.random, name)
-
-
-_tf_global_random_state = _GlobalTFRandomStateProxy()
-
-
 @dispatch
 def create_random_state(_: TFDType, seed: Int = 0):
     return tf.random.Generator.from_seed(seed)
@@ -29,7 +17,12 @@ def create_random_state(_: TFDType, seed: Int = 0):
 
 @dispatch
 def global_random_state(_: TFDType):
-    return _tf_global_random_state
+    return tf.random.get_global_generator()
+
+
+@dispatch
+def set_global_random_state(state: TFRandomState):
+    tf.random.set_global_generator(state)
 
 
 @dispatch

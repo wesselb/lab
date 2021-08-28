@@ -23,6 +23,11 @@ def global_random_state(_: JAXDType):
 
 
 @dispatch
+def set_global_random_state(state: JAXRandomState):
+    B.jax_global_random_state = state
+
+
+@dispatch
 def rand(state: JAXRandomState, dtype: JAXDType, *shape: Int):
     state, key = jax.random.split(state)
     return state, B.to_active_device(jax.random.uniform(key, shape, dtype=dtype))

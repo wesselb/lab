@@ -19,6 +19,11 @@ def global_random_state(_: NPDType):
     return np.random.random.__self__
 
 
+@dispatch
+def set_global_random_state(state: NPRandomState):
+    np.random.random.__self__.set_state(state.get_state())
+
+
 def _warn_dtype(dtype):
     if B.issubdtype(dtype, np.integer):
         warnings.warn("Casting random number of type float to type integer.")

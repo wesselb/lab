@@ -8,7 +8,7 @@ from . import B, dispatch, Numeric
 from .custom import torch_register
 from ..custom import bvn_cdf, s_bvn_cdf
 from ..shape import Dimension
-from ..types import TorchNumeric, NPNumeric, TorchDType, Number, Int
+from ..types import TorchNumeric, NPNumeric, TorchDType, Number, Int, TorchRandomState
 
 __all__ = []
 
@@ -20,7 +20,10 @@ def isabstract(a: Numeric):
 
 @dispatch
 def _jit_run(
-    f: FunctionType, compilation_cache: dict, jit_kw_args: dict, *args: Numeric
+    f: FunctionType,
+    compilation_cache: dict,
+    jit_kw_args: dict,
+    *args: Union[Numeric, TorchRandomState],
 ):
     if "torch" not in compilation_cache:
         # Run once to populate the control flow cache.

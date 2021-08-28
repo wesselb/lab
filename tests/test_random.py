@@ -12,13 +12,35 @@ import lab as B
 from .util import Tensor, approx, to_np, check_lazy_shapes
 
 
-@pytest.mark.parametrize("dtype", [np.float32, tf.float32, torch.float32, jnp.float32])
-def test_set_seed(dtype, check_lazy_shapes):
+@pytest.mark.parametrize(
+    "dtype, f_plain",
+    [
+        (np.float32, np.random.randn),
+        (tf.float32, lambda: tf.random.normal(())),
+        (torch.float32, lambda: torch.randn(())),
+        (jnp.float32, lambda: 1),
+    ],
+)
+def test_set_seed_set_global_random_state(dtype, f_plain, check_lazy_shapes):
     B.set_random_seed(0)
-    x = to_np(B.rand(dtype))
+    x1 = to_np(B.rand(dtype))
+    x2 = to_np(f_plain())
     B.set_random_seed(0)
-    y = to_np(B.rand(dtype))
-    assert x == y
+    y1 = to_np(B.rand(dtype))
+    y2 = to_np(f_plain())
+    assert x1 == y1
+    assert x2 == y2
+
+    B.set_global_random_state(B.create_random_state(dtype, seed=0))
+    x1 = to_np(B.rand(dtype))
+    x2 = to_np(f_plain())
+    B.set_global_random_state(B.create_random_state(dtype, seed=0))
+    y1 = to_np(B.rand(dtype))
+    y2 = to_np(f_plain())
+    assert x1 == y1
+    # TODO: Make this work with TF!
+    if not isinstance(dtype, B.TFDType):
+        assert x2 == y2
 
 
 @pytest.mark.parametrize("dtype", [np.float32, tf.float32, torch.float32, jnp.float32])
