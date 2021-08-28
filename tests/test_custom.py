@@ -3,7 +3,6 @@ import jax.numpy as jnp
 import numpy as np
 import pytest
 import tensorflow as tf
-import torch
 from autograd import grad
 from fdm import check_sensitivity, gradient
 
@@ -20,7 +19,6 @@ from lab.custom import (
 )
 from lab.tensorflow.custom import as_tf
 from lab.torch.custom import as_torch
-
 # noinspection PyUnresolvedReferences
 from .util import approx, check_lazy_shapes, check_function, PSD
 
@@ -70,24 +68,24 @@ def check_grad(f, args, kw_args=None, rtol=1e-8):
         approx(numerical_grad, autograd_grad, rtol=rtol)
 
         # Check TensorFlow gradient.
-        tf_args = tuple([as_tf(arg) for arg in args])
-        f_i = tf.function(create_f_i(i, tf_args), autograph=False)
+        tf_args = as_tf(args)
+        f_i = create_f_i(i, tf_args)
         with tf.GradientTape() as t:
             t.watch(tf_args[i])
             tf_grad = t.gradient(f_i(tf_args[i]), tf_args[i]).numpy()
         approx(numerical_grad, tf_grad, rtol=rtol)
 
         # Check PyTorch gradient.
-        torch_args = tuple([as_torch(arg, grad=False) for arg in args])
-        f_i = torch.jit.trace(create_f_i(i, torch_args), torch_args[i])
+        torch_args = as_torch(args)
+        f_i = create_f_i(i, torch_args)
         arg = torch_args[i].requires_grad_(True)
         f_i(arg).backward()
         approx(numerical_grad, arg.grad, rtol=rtol)
 
         # Check JAX gradient.
-        torch_args = tuple([jax.device_put(arg) for arg in args])
-        f_i = create_f_i(i, torch_args)
-        jax_grad = jax.jit(jax.grad(f_i))(args[i])
+        jax_args = tuple([jnp.asarray(arg) for arg in args])
+        f_i = create_f_i(i, jax_args)
+        jax_grad = jax.grad(f_i)(args[i])
         approx(numerical_grad, jax_grad, rtol=rtol)
 
 
