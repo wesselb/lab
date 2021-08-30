@@ -90,7 +90,7 @@ if gfortran:
     if "LAB_LIBGFORTRAN" in os.environ and os.environ["LAB_LIBGFORTRAN"]:
         extra_objects += [os.environ["LAB_LIBGFORTRAN"]]
     else:
-        extra_link_args = ["-lgfortran"]
+        extra_link_args += ["-lgfortran"]
 
     ext_modules.append(
         Extension(
