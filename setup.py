@@ -35,9 +35,12 @@ if "CC" not in os.environ or not os.environ["CC"]:
 
 # Check whether `gfortran` is available.
 if subprocess.call("which gfortran", shell=True) != 0:
-    gfortran_available = False
+    if "LAB_GFORTRAN" in os.environ and os.environ["LAB_GFORTRAN"]:
+        gfortran = os.environ["LAB_GFORTRAN"]
+    else:
+        gfortran = False
 else:
-    gfortran_available = True
+    gfortran = "gfortran"
 
 # Ensure that `$CC` is not symlinked to `clang`, because the default shipped
 # one often does not support OpenMP, but `gcc` does.
@@ -63,10 +66,10 @@ if "clang" in out.decode("ascii"):
         )
 
 # Compile TVPACK if `gfortran` is available.
-if gfortran_available:
+if gfortran:
     if (
         subprocess.call(
-            "gfortran -fPIC -O2 -c lab/bvn_cdf/tvpack.f -o lab/bvn_cdf/tvpack.o",
+            f"{gfortran} -fPIC -O2 -c lab/bvn_cdf/tvpack.f -o lab/bvn_cdf/tvpack.o",
             shell=True,
         )
         != 0
@@ -79,15 +82,24 @@ requirements = ["numpy>=1.16", "scipy>=1.3", "fdm", "plum-dispatch>=1.5.3"]
 # Determine which external modules to compile.
 ext_modules = []
 
-if gfortran_available:
+if gfortran:
+    extra_objects = ["lab/bvn_cdf/tvpack.o"]
+    extra_link_args = ["-fopenmp"]
+
+    # Allow the libraries for `gfortran` to be explicitly linked.
+    if "LAB_LIBGFORTRAN" in os.environ and os.environ["LAB_LIBGFORTRAN"]:
+        extra_objects += [os.environ["LAB_LIBGFORTRAN"]]
+    else:
+        extra_link_args = ["-lgfortran"]
+
     ext_modules.append(
         Extension(
             "lab.bvn_cdf",
             sources=["lab/bvn_cdf/bvn_cdf.pyx"],
             include_dirs=[np.get_include()],
             extra_compile_args=["-fPIC", "-O2", "-fopenmp"],
-            extra_objects=["lab/bvn_cdf/tvpack.o"],
-            extra_link_args=["-lgfortran", "-fopenmp"],
+            extra_objects=extra_objects,
+            extra_link_args=extra_link_args
         )
     )
 
