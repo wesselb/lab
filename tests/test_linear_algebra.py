@@ -1,9 +1,7 @@
-import lab as B
 import numpy as np
 import pytest
-import scipy as sp
-from plum import NotFoundLookupError
 
+import lab as B
 # noinspection PyUnresolvedReferences
 from .util import (
     check_function,
@@ -82,13 +80,27 @@ def test_trace(check_lazy_shapes):
 
 
 def test_kron(check_lazy_shapes):
-    check_function(B.kron, (Tensor(2, 3), Tensor(4, 5)))
-    # Cannot test tensors of higher rank, because TensorFlows broadcasting
+    # Cannot test tensors of rank higher than two, because TensorFlows broadcasting
     # behaviour does not allow that.
+
+    # Test full Kronecker product.
+    check_function(B.kron, (Tensor(2, 3), Tensor(4, 5)))
+    check_function(lambda x, y: B.kron(x, y, 0, 1), (Tensor(2, 3), Tensor(4, 5)))
+    check_function(lambda x, y: B.kron(x, y, -2, -1), (Tensor(2, 3), Tensor(4, 5)))
+
+    # Test Kronecker product over dimension 0.
+    check_function(lambda x, y: B.kron(x, y, 0), (Tensor(2, 3), Tensor(4, 3)))
+    check_function(lambda x, y: B.kron(x, y, -2), (Tensor(2, 3), Tensor(4, 3)))
+
+    # Test Kronecker product over dimension 1.
+    check_function(lambda x, y: B.kron(x, y, 1), (Tensor(2, 3), Tensor(2, 5)))
+    check_function(lambda x, y: B.kron(x, y, -1), (Tensor(2, 3), Tensor(2, 5)))
+
+    # Test checking of shapes.
     with pytest.raises(ValueError):
-        B.kron(Tensor(2).tf(), Tensor(4, 5).tf())
+        B.kron(Tensor(2).np(), Tensor(4, 5).np())
     with pytest.raises(ValueError):
-        B.kron(Tensor(2).torch(), Tensor(4, 5).torch())
+        B.kron(Tensor(2, 3).np(), Tensor(4, 5).np(), 1)
 
 
 def test_svd(check_lazy_shapes):
@@ -362,20 +374,3 @@ def test_ew_1d(check_lazy_shapes, batch_shape):
             approx(B.ew_sums2(a1), np.abs(a + a) ** 2)
             approx(B.ew_sums(a2, b2), np.abs(a + b))
             approx(B.ew_sums(a1), np.abs(a + a))
-
-
-def test_block_diag(check_lazy_shapes):
-    # Check that arguments must be given.
-    with pytest.raises(NotFoundLookupError):
-        B.block_diag()
-
-    elements = [
-        B.randn(1, 1),
-        B.randn(1, 2),
-        B.randn(2, 1),
-        B.randn(2, 2),
-        B.randn(2, 3),
-        B.randn(3, 2),
-    ]
-    for i in range(1, len(elements) + 1):
-        approx(B.block_diag(*elements[:i]), sp.linalg.block_diag(*elements[:i]))

@@ -42,7 +42,6 @@ __all__ = [
     "pw_sums",
     "ew_sums2",
     "ew_sums",
-    "block_diag",
 ]
 
 log = logging.getLogger(__name__)
@@ -104,15 +103,15 @@ dot = matmul  #: Shorthand for `matmul`.
 
 @dispatch
 @abstract(promote=None)
-def trace(a: Numeric, axis1: Int = 0, axis2: Int = 1):  # pragma: no cover
+def trace(a: Numeric, axis1: Int = -2, axis2: Int = -1):  # pragma: no cover
     """Compute the trace of a tensor.
 
     Args:
         a (tensor): Tensor to compute trace of.
         axis1 (int, optional): First dimension to compute trace over. Defaults
-            to `0`.
+            to `-2`.
         axis2 (int, optional): Second dimension to compute trace over. Defaults
-            to `1`.
+            to `-1`.
 
     Returns:
         tensor: Trace.
@@ -120,17 +119,53 @@ def trace(a: Numeric, axis1: Int = 0, axis2: Int = 1):  # pragma: no cover
 
 
 @dispatch
-@abstract(promote=2)
-def kron(a, b):  # pragma: no cover
+def kron(a, b, *indices: Int):
     """Kronecker product.
 
     Args:
         a (tensor): First matrix.
         b (tensor): Second matrix.
+        *indices (int): Indices to compute the Kronecker product over. Defaults to all
+            indices.
+
 
     Returns:
         tensor: Kronecker product of `a` and `b`.
     """
+    a_shape = B.shape(a)
+    b_shape = B.shape(b)
+    if len(a_shape) != len(b_shape):
+        raise ValueError(
+            "Can only compute Kronecker products between tensors of equal ranks."
+        )
+
+    # Default to computing the Kronecker product over all indices.
+    if indices == ():
+        indices = range(len(a_shape))
+    else:
+        # Ensure that all indices are positive indices. Otherwise, the `i in indices`
+        # below will fail.
+        indices = [len(a_shape) + i if i < 0 else i for i in indices]
+
+    a_indices = ()
+    b_indices = ()
+    target_shape = ()
+    for i in range(len(a_shape)):
+        if i in indices:
+            a_indices += (slice(None), None)
+            b_indices += (None, slice(None))
+            target_shape += (a_shape[i] * b_shape[i],)
+        else:
+            a_indices += (slice(None),)
+            b_indices += (slice(None),)
+            if a_shape[i] == b_shape[i]:
+                target_shape += (a_shape[i],)
+            else:
+                raise ValueError(
+                    f"Shape of inputs differ at dimension {i}: "
+                    f"{a_shape[i]} versus {b_shape[i]}."
+                )
+    return B.reshape(B.multiply(a[a_indices], b[b_indices]), *target_shape)
 
 
 @dispatch
@@ -146,6 +181,7 @@ def svd(a: Numeric, compute_uv: bool = True):  # pragma: no cover
     Returns:
         tuple: `(U, S, V)` is `compute_uv` is `True` and just `S` otherwise.
     """
+
 
 @dispatch
 @abstract()
@@ -606,32 +642,3 @@ def ew_sums(a, b):
 @dispatch
 def ew_sums(a):
     return ew_sums(a, a)
-
-
-@dispatch
-def block_diag(element: Numeric, *elements: Numeric):
-    """Concatenate matrices into a block-diagonal matrix.
-
-    Args:
-        *elements (matrix): Matrices to concatenate
-
-    Returns:
-        matrix: Block-diagonal matrix.
-    """
-    elements = (element,) + elements
-    shapes = [B.shape(element) for element in elements]
-    dtype = B.dtype(elements[0])
-    rows = []
-    cols_built = 0
-    total_rows, total_cols = map(sum, zip(*shapes))
-    for element, shape in zip(elements, shapes):
-        rows.append(
-            B.concat(
-                B.zeros(dtype, shape[0], cols_built),
-                element,
-                B.zeros(dtype, shape[0], total_cols - cols_built - shape[1]),
-                axis=1,
-            )
-        )
-        cols_built += shape[1]
-    return B.concat(*rows, axis=0)

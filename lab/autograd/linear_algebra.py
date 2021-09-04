@@ -60,11 +60,6 @@ def trace(a: Numeric, axis1: Int = -2, axis2: Int = -1):
 
 
 @dispatch
-def kron(a: Numeric, b: Numeric):
-    return anp.kron(a, b)
-
-
-@dispatch
 def svd(a: Numeric, compute_uv: bool = True):
     res = anp.linalg.svd(a, full_matrices=False, compute_uv=compute_uv)
     return (res[0], res[1], anp.conj(transpose(res[2]))) if compute_uv else res

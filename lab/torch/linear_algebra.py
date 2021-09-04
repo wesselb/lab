@@ -39,20 +39,6 @@ def trace(a: Numeric, axis1: Int = -2, axis2: Int = -1):
 
 
 @dispatch
-def kron(a: Numeric, b: Numeric):
-    shape_a = B.shape(a)
-    shape_b = B.shape(b)
-
-    # Check that ranks are equal.
-    if len(shape_a) != len(shape_b):
-        raise ValueError("Inputs must have equal rank.")
-
-    a = a.view(*sum([[unwrap_dimension(i), 1] for i in shape_a], []))
-    b = b.view(*sum([[1, unwrap_dimension(i)] for i in shape_b], []))
-    return torch.reshape(a * b, tuple(x * y for x, y in zip(shape_a, shape_b)))
-
-
-@dispatch
 def svd(a: Numeric, compute_uv: bool = True):
     u, s, v = torch.linalg.svd(a, full_matrices=False)
     return (u, s, v) if compute_uv else s
