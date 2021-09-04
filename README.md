@@ -411,8 +411,6 @@ ew_sums2(a, b)
 ew_sums2(a)
 ew_sums(a, b)
 ew_sums(a)
-
-block_diag(*elements)
 ```
 
 ### Random
@@ -445,7 +443,7 @@ shape(a, *dims)
 rank(a)
 length(a) (alias: size)
 is_scalar(a)
-expand_dims(a, axis=0)
+expand_dims(a, axis=0, times=1)
 squeeze(a, axis=None)
 uprank(a, rank=2)
 downrank(a, rank=2, preserve=False)

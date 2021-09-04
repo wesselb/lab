@@ -1,6 +1,6 @@
 import math
-
 import warnings
+
 import numpy as np
 from plum import Union
 
@@ -161,17 +161,27 @@ def isscalar(a):  # pragma: no cover
 
 
 @dispatch
-@abstract()
-def expand_dims(a: Numeric, axis: Int = 0):  # pragma: no cover
+def expand_dims(a: Numeric, axis: Int = 0, times: Int = 1):
     """Insert an empty axis.
 
     Args:
         a (tensor): Tensor.
         axis (int, optional): Index of new axis. Defaults to `0`.
+        times (int, optional): Number of times to perform the operation. Defaults to
+            `1`.
 
     Returns:
         tensor: `a` with the new axis.
     """
+    for _ in range(times):
+        a = _expand_dims(a, axis=axis)
+    return a
+
+
+@dispatch
+@abstract()
+def _expand_dims(a, axis: Int = 0):  # pragma: no cover
+    pass
 
 
 @dispatch
@@ -451,7 +461,7 @@ def concat2d(*rows: Union[list]):
     Returns:
         tensor: Assembled matrix.
     """
-    return concat(*[concat(*row, axis=1) for row in rows], axis=0)
+    return concat(*[concat(*row, axis=-1) for row in rows], axis=-2)
 
 
 @dispatch

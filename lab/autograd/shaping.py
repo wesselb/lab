@@ -13,7 +13,7 @@ def length(a: Numeric):
 
 
 @dispatch
-def expand_dims(a: Numeric, axis: Int = 0):
+def _expand_dims(a: Numeric, axis: Int = 0):
     return anp.expand_dims(a, axis=axis)
 
 

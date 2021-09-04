@@ -12,22 +12,40 @@ __all__ = ["resolve_axis", "as_tuple", "batch_computation", "abstract"]
 _dispatch = plum.Dispatcher()
 
 
-def resolve_axis(a, axis):
+def resolve_axis(a, axis, negative=False):
     """Resolve axis for a tensor `a`.
 
     Args:
         a (tensor): Tensor of the axis.
-        axis (int): Axis to resolve.
+        axis (int or None): Axis to resolve.
+        negative (bool, optional): Resolve the axis to a negative integer rather than
+            a positive integer. Defaults to `False`.
 
     Return:
         int: Resolved axis.
     """
-    if axis < 0:
-        axis = B.rank(a) + axis
-    if not (0 <= axis < B.rank(a)):
-        raise ValueError(
-            f"Axis {axis} cannot be resolved for tensor of shape {B.shape(a)}."
-        )
+    # Let `None`s pass through.
+    if axis is None:
+        return None
+
+    # If it isn't a `None` we should resolve it.
+    a_rank = B.rank(a)
+    if not negative:
+        if axis < 0:
+            axis = axis + a_rank
+        if not (0 <= axis < a_rank):
+            raise ValueError(
+                f"Axis {axis - a_rank} cannot be resolved for tensor of shape "
+                f"{B.shape(a)}."
+            )
+    else:
+        if axis >= 0:
+            axis = axis - a_rank
+        if not (-a_rank <= axis < 0):
+            raise ValueError(
+                f"Axis {axis + a_rank} cannot be resolved for tensor of shape "
+                f"{B.shape(a)}."
+            )
     return axis
 
 

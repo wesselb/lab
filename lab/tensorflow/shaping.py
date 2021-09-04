@@ -14,7 +14,7 @@ def length(a: Numeric):
 
 
 @dispatch
-def expand_dims(a: Numeric, axis: Int = 0):
+def _expand_dims(a: Numeric, axis: Int = 0):
     return tf.expand_dims(a, axis=axis)
 
 

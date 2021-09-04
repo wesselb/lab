@@ -23,6 +23,11 @@ from .util import approx, check_lazy_shapes
 
 def test_resolve_axis(check_lazy_shapes):
     a = B.randn(2, 2, 2)
+
+    # `None`s should just pass through.
+    assert resolve_axis(a, None) is None
+
+    # Test `negative = False`.
     with pytest.raises(ValueError):
         resolve_axis(a, -4)
     assert resolve_axis(a, -3) == 0
@@ -33,6 +38,18 @@ def test_resolve_axis(check_lazy_shapes):
     assert resolve_axis(a, 2) == 2
     with pytest.raises(ValueError):
         resolve_axis(a, 3)
+
+    # Test `negative = True`.
+    with pytest.raises(ValueError):
+        resolve_axis(a, -4, negative=True)
+    assert resolve_axis(a, -3, negative=True) == -3
+    assert resolve_axis(a, -2, negative=True) == -2
+    assert resolve_axis(a, -1, negative=True) == -1
+    assert resolve_axis(a, 0, negative=True) == -3
+    assert resolve_axis(a, 1, negative=True) == -2
+    assert resolve_axis(a, 2, negative=True) == -1
+    with pytest.raises(ValueError):
+        resolve_axis(a, 3, negative=True)
 
 
 @pytest.mark.parametrize("other", [B_tf, B_torch, B_autograd, B_jax])

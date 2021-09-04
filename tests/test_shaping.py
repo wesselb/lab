@@ -93,6 +93,14 @@ def test_is_scalar(check_lazy_shapes):
 def test_expand_dims(check_lazy_shapes):
     check_function(B.expand_dims, (Tensor(3, 4, 5),), {"axis": Value(0, 1)})
 
+    # Test keyword `times`.
+    assert B.shape(B.expand_dims(B.ones(2), axis=-1, times=1)) == (2, 1)
+    assert B.shape(B.expand_dims(B.ones(2), axis=-1, times=2)) == (2, 1, 1)
+    assert B.shape(B.expand_dims(B.ones(2), axis=-1, times=3)) == (2, 1, 1, 1)
+    assert B.shape(B.expand_dims(B.ones(2), axis=0, times=1)) == (1, 2)
+    assert B.shape(B.expand_dims(B.ones(2), axis=0, times=2)) == (1, 1, 2)
+    assert B.shape(B.expand_dims(B.ones(2), axis=0, times=3)) == (1, 1, 1, 2)
+
 
 def test_squeeze(check_lazy_shapes):
     check_function(B.squeeze, (Tensor(3, 4, 5),))
