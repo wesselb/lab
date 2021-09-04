@@ -28,6 +28,8 @@ def resolve_axis(a, axis, negative=False):
     if axis is None:
         return None
 
+    given_axis = axis
+
     # If it isn't a `None` we should resolve it.
     a_rank = B.rank(a)
     if not negative:
@@ -35,7 +37,7 @@ def resolve_axis(a, axis, negative=False):
             axis = axis + a_rank
         if not (0 <= axis < a_rank):
             raise ValueError(
-                f"Axis {axis - a_rank} cannot be resolved for tensor of shape "
+                f"Axis {given_axis} cannot be resolved for tensor of shape "
                 f"{B.shape(a)}."
             )
     else:
@@ -43,7 +45,7 @@ def resolve_axis(a, axis, negative=False):
             axis = axis - a_rank
         if not (-a_rank <= axis < 0):
             raise ValueError(
-                f"Axis {axis + a_rank} cannot be resolved for tensor of shape "
+                f"Axis {given_axis} cannot be resolved for tensor of shape "
                 f"{B.shape(a)}."
             )
     return axis
