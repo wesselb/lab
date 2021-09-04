@@ -119,6 +119,7 @@ def trace(a: Numeric, axis1: Int = -2, axis2: Int = -1):  # pragma: no cover
 
 
 @dispatch
+@abstract(promote=2)
 def kron(a, b, *indices: Int):
     """Kronecker product.
 
@@ -132,6 +133,10 @@ def kron(a, b, *indices: Int):
     Returns:
         tensor: Kronecker product of `a` and `b`.
     """
+
+
+@dispatch
+def kron(a: Numeric, b: Numeric, *indices: Int):
     a_shape = B.shape(a)
     b_shape = B.shape(b)
     if len(a_shape) != len(b_shape):
