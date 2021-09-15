@@ -28,3 +28,6 @@ cover
 *.c
 *.so
 *.o
+
+# IDE
+.vscode

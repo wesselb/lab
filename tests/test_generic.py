@@ -464,7 +464,7 @@ def test_logical_reductions(f, check_lazy_shapes):
     check_function(f, (BoolTensor(2, 3),), {"axis": Value(0, 1)}, assert_dtype=False)
 
 
-@pytest.mark.parametrize("f", [B.lt, B.le, B.gt, B.ge])
+@pytest.mark.parametrize("f", [B.lt, B.le, B.gt, B.ge, B.eq, B.ne])
 def test_logical_comparisons(f, check_lazy_shapes):
     check_function(f, (Tensor(), Tensor()), {}, assert_dtype=False)
     check_function(f, (Tensor(2), Tensor(2)), {}, assert_dtype=False)

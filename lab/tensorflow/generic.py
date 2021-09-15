@@ -292,6 +292,16 @@ def ge(a: Numeric, b: Numeric):
     return tf.greater_equal(a, b)
 
 
+@dispatch
+def eq(a: Numeric, b: Numeric):
+    return tf.equal(a, b)
+
+
+@dispatch
+def ne(a: Numeric, b: Numeric):
+    return tf.not_equal(a, b)
+
+
 _bvn_cdf = tensorflow_register(bvn_cdf, s_bvn_cdf)
 
 

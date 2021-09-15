@@ -248,6 +248,16 @@ def ge(a: Numeric, b: Numeric):
     return anp.greater_equal(a, b)
 
 
+@dispatch
+def eq(a: Numeric, b: Numeric):
+    return anp.equal(a, b)
+
+
+@dispatch
+def ne(a: Numeric, b: Numeric):
+    return anp.not_equal(a, b)
+
+
 _bvn_cdf = autograd_register(bvn_cdf, s_bvn_cdf)
 
 
