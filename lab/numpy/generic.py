@@ -274,6 +274,16 @@ def ge(a: Numeric, b: Numeric):
 
 
 @dispatch
+def eq(a: Numeric, b: Numeric):
+    return np.equal(a, b)
+
+
+@dispatch
+def ne(a: Numeric, b: Numeric):
+    return np.not_equal(a, b)
+
+
+@dispatch
 def bvn_cdf(a: Numeric, b: Numeric, c: Numeric):
     return _bvn_cdf(a, b, c)
 

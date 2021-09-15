@@ -91,6 +91,8 @@ __all__ = [
     "le",
     "gt",
     "ge",
+    "eq",
+    "ne",
     "bvn_cdf",
     "cond",
     "where",
@@ -1222,6 +1224,34 @@ def ge(a, b):  # pragma: no cover
 
     Returns:
         tensor[bool]: `a` is greater than or equal to `b`.
+    """
+
+
+@dispatch
+@abstract(promote=2)
+def ne(a, b):  # pragma: no cover
+    """Check whether one tensor is not equal to another.
+
+    Args:
+        a (tensor): First tensor.
+        b (tensor): Second tensor.
+
+    Returns:
+        tensor[bool]: `a` is not equal to `b`.
+    """
+
+
+@dispatch
+@abstract(promote=2)
+def eq(a, b):  # pragma: no cover
+    """Check whether one tensor is equal to another.
+
+    Args:
+        a (tensor): First tensor.
+        b (tensor): Second tensor.
+
+    Returns:
+        tensor[bool]: `a` is equal to `b`.
     """
 
 
