@@ -279,11 +279,11 @@ ones(dtype, *shape)
 ones(*shape)
 ones(ref)
 
-one(dtype)
-one(ref)
-
 zero(dtype)
-zero(ref)
+zero(*refs)
+
+one(dtype)
+one(*refs)
 
 eye(dtype, *shape)
 eye(*shape)
