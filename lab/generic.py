@@ -404,8 +404,8 @@ def zero(dtype: DType):
 
 
 @dispatch
-def zero(ref: Numeric):
-    return zero(B.dtype(ref))
+def zero(*refs):
+    return zero(B.dtype(*refs))
 
 
 @dispatch
@@ -422,8 +422,8 @@ def one(dtype: DType):
 
 
 @dispatch
-def one(ref: Numeric):
-    return one(B.dtype(ref))
+def one(*refs):
+    return one(B.dtype(*refs))
 
 
 @dispatch

@@ -43,7 +43,7 @@ def stack(*elements: Numeric, axis: Int = 0):
 
 
 @dispatch
-def unstack(a: Numeric, axis: Int = 0):
+def _unstack(a: Numeric, axis: Int = 0):
     out = np.split(a, np.arange(1, a.shape[axis]), axis)
     return [x.squeeze(axis=axis) for x in out]
 

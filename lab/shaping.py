@@ -320,14 +320,14 @@ def diag_construct(a: Numeric):  # pragma: no cover
 
 
 @dispatch
-def flatten(a: Numeric):  # pragma: no cover
-    """Flatten a tensor.
+def flatten(a):
+    """Flatten an object that can be reshaped.
 
     Args:
-        a (tensor): Tensor.
+        a (object): Object.
 
     Returns:
-        tensor: Flattened tensor.
+        tensor: Flattened object.
     """
     return reshape(a, -1)
 
@@ -409,17 +409,26 @@ def stack(*elements, **kw_args):  # pragma: no cover
 
 
 @dispatch
-@abstract()
-def unstack(a: Numeric, axis: Int = 0):  # pragma: no cover
+def unstack(a: Numeric, axis: Int = 0, squeeze: bool = True):
     """Unstack tensors along an axis.
 
     Args:
         a (list): List of tensors.
         axis (int, optional): Index along which to unstack. Defaults to `0`.
+        squeeze (bool, optional): Squeeze the unstacked dimension. Defaults to `True`.
 
     Returns:
         list[tensor]: List of tensors.
     """
+    elements = _unstack(a, axis=axis)
+    if not squeeze:
+        elements = [B.expand_dims(x, axis=axis) for x in elements]
+    return elements
+
+
+@dispatch.abstract
+def _unstack():  # pragma: no cover
+    pass
 
 
 @dispatch

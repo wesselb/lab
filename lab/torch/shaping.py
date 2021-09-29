@@ -51,7 +51,7 @@ def stack(*elements: Numeric, axis: Int = 0):
 
 
 @dispatch
-def unstack(a: Numeric, axis: Int = 0):
+def _unstack(a: Numeric, axis: Int = 0):
     return torch.unbind(a, dim=axis)
 
 

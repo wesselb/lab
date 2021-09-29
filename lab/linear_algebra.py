@@ -398,16 +398,18 @@ def outer(a, b):
     a, b = _a_b_uprank(a, b)
 
     # Optimise the case that both are column vectors.
-    if B.shape(a)[-1] == 1 and B.shape(b)[-1] == 1:
+    if B.shape(a, -1) == 1 and B.shape(b, -1) == 1:
         return a * B.transpose(b)
 
     return B.matmul(a, b, tr_b=True)
 
 
 def _a_b_uprank(a, b):
-    # Needs to be at least rank two.
-    target_rank = max(B.rank(a), B.rank(b), 2)
-    return B.uprank(a, rank=target_rank), B.uprank(b, rank=target_rank)
+    # The last two dimensions are the matrix dimensions, and the rest are batch
+    # dimensions.
+    a = B.uprank(a, rank=2)
+    b = B.uprank(b, rank=2)
+    return a, b
 
 
 @dispatch
@@ -454,7 +456,7 @@ def pw_dists2(a, b):
     a, b = _a_b_uprank(a, b)
 
     # Optimise the one-dimensional case.
-    if B.shape(a)[-1] == 1 and B.shape(b)[-1] == 1:
+    if B.shape(a, -1) == 1 and B.shape(b, -1) == 1:
         return (a - B.transpose(b)) ** 2
 
     norms_a = B.sum(a ** 2, axis=-1)[..., :, None]
@@ -483,7 +485,7 @@ def pw_dists(a, b):
     a, b = _a_b_uprank(a, b)
 
     # Optimise the one-dimensional case.
-    if B.shape(a)[-1] == 1 and B.shape(b)[-1] == 1:
+    if B.shape(a, -1) == 1 and B.shape(b, -1) == 1:
         return B.abs(a - B.transpose(b))
 
     return B.sqrt(B.maximum(B.pw_dists2(a, b), B.cast(B.dtype(a), 1e-30)))
@@ -532,7 +534,7 @@ def ew_dists(a, b):
     a, b = _a_b_uprank(a, b)
 
     # Optimise the one-dimensional case.
-    if B.shape(a)[-1] == 1 and B.shape(b)[-1] == 1:
+    if B.shape(a, -1) == 1 and B.shape(b, -1) == 1:
         return B.abs(a - b)
 
     return B.sqrt(B.maximum(B.ew_dists2(a, b), B.cast(B.dtype(a), 1e-30)))
@@ -559,7 +561,7 @@ def pw_sums2(a, b):
     a, b = _a_b_uprank(a, b)
 
     # Optimise the one-dimensional case.
-    if B.shape(a)[-1] == 1 and B.shape(b)[-1] == 1:
+    if B.shape(a, -1) == 1 and B.shape(b, -1) == 1:
         return (a + B.transpose(b)) ** 2
 
     norms_a = B.sum(a ** 2, axis=-1)[..., :, None]
@@ -588,7 +590,7 @@ def pw_sums(a, b):
     a, b = _a_b_uprank(a, b)
 
     # Optimise the one-dimensional case.
-    if B.shape(a)[-1] == 1 and B.shape(b)[-1] == 1:
+    if B.shape(a, -1) == 1 and B.shape(b, -1) == 1:
         return B.abs(a + B.transpose(b))
 
     return B.sqrt(B.maximum(B.pw_sums2(a, b), B.cast(B.dtype(a), 1e-30)))
@@ -638,7 +640,7 @@ def ew_sums(a, b):
     a, b = _a_b_uprank(a, b)
 
     # Optimise the one-dimensional case.
-    if B.shape(a)[-1] == 1 and B.shape(b)[-1] == 1:
+    if B.shape(a, -1) == 1 and B.shape(b, -1) == 1:
         return B.abs(a + b)
 
     return B.sqrt(B.maximum(B.ew_sums2(a, b), B.cast(B.dtype(a), 1e-30)))

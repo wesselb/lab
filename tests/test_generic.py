@@ -204,8 +204,15 @@ def test_zero_one(f, check_lazy_shapes):
     check_function(f, (Value(np.float32, tf.float32, torch.float32, jnp.float32),))
 
     # Check reference calls.
-    for t in [np.float32, tf.float32, torch.float32, jnp.float32]:
-        assert B.dtype(f(B.randn(t))) is t
+    for t32, t63 in [
+        (np.float32, np.float64),
+        (tf.float32, tf.float64),
+        (torch.float32, torch.float64),
+        (jnp.float32, jnp.float64),
+    ]:
+        assert B.dtype(f(B.randn(t32))) is t32
+        assert B.dtype(f(B.randn(t64))) is t64
+        assert B.dtype(f(B.randn(t32), B.randn(t64))) is t64
 
 
 def test_linspace(check_lazy_shapes):

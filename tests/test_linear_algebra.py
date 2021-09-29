@@ -2,6 +2,7 @@ import numpy as np
 import pytest
 
 import lab as B
+
 # noinspection PyUnresolvedReferences
 from .util import (
     check_function,
@@ -31,7 +32,13 @@ def test_transpose(f, check_lazy_shapes):
         (Tensor(2, 3, 4),),
         {
             "perm": Value(
-                None, (0, 1, 2), (0, 2, 1), (1, 0, 2), (1, 2, 0), (2, 1, 0), (2, 0, 1)
+                None,
+                (0, 1, 2),
+                (0, 2, 1),
+                (1, 0, 2),
+                (1, 2, 0),
+                (2, 1, 0),
+                (2, 0, 1),
             )
         },
     )
@@ -245,18 +252,21 @@ def test_reg(check_lazy_shapes):
     B.epsilon = old_epsilon
 
 
-@pytest.mark.parametrize("batch_shape", [(), (3,)])
-def test_pw_2d(check_lazy_shapes, batch_shape):
+@pytest.mark.parametrize("batch_a", [False, True])
+@pytest.mark.parametrize("batch_b", [False, True])
+def test_pw_2d(check_lazy_shapes, batch_a, batch_b):
+    a = Tensor(*((3,) if batch_a else ()), 5, 2).np()
+    b = Tensor(*((3,) if batch_b else ()), 10, 2).np()
+
     # In this case, allow for 1e-7 absolute error, because the computation is
     # approximate.
-    def approx_allclose(a, b):
+    def _approx(a, b):
         approx(a, b, atol=1e-7)
 
-    a, b = Tensor(*batch_shape, 5, 2).np(), Tensor(*batch_shape, 10, 2).np()
-    dists2_ab = np.zeros((*batch_shape, 5, 10))
-    dists2_aa = np.zeros((*batch_shape, 5, 5))
-    sums2_ab = np.zeros((*batch_shape, 5, 10))
-    sums2_aa = np.zeros((*batch_shape, 5, 5))
+    dists2_ab = np.zeros((*((3,) if batch_a or batch_b else ()), 5, 10))
+    dists2_aa = np.zeros((*((3,) if batch_a else ()), 5, 5))
+    sums2_ab = np.zeros((*((3,) if batch_a or batch_b else ()), 5, 10))
+    sums2_aa = np.zeros((*((3,) if batch_a else ()), 5, 5))
     for i in range(5):
         for j in range(10):
             dists2_ab[..., i, j] = np.sum((a[..., i, :] - b[..., j, :]) ** 2, axis=-1)
@@ -269,60 +279,54 @@ def test_pw_2d(check_lazy_shapes, batch_shape):
                     (a[..., i, :] + a[..., j, :]) ** 2, axis=-1
                 )
 
-    approx_allclose(B.pw_dists2(a, b), dists2_ab)
-    approx_allclose(B.pw_dists2(a), dists2_aa)
-    approx_allclose(B.pw_dists(a, b), np.maximum(dists2_ab, 1e-30) ** 0.5)
-    approx_allclose(B.pw_dists(a), np.maximum(dists2_aa, 1e-30) ** 0.5)
-    approx_allclose(B.pw_sums2(a, b), sums2_ab)
-    approx_allclose(B.pw_sums2(a), sums2_aa)
-    approx_allclose(B.pw_sums(a, b), np.maximum(sums2_ab, 1e-30) ** 0.5)
-    approx_allclose(B.pw_sums(a), np.maximum(sums2_aa, 1e-30) ** 0.5)
+    _approx(B.pw_dists2(a, b), dists2_ab)
+    _approx(B.pw_dists2(a), dists2_aa)
+    _approx(B.pw_dists(a, b), np.maximum(dists2_ab, 1e-30) ** 0.5)
+    _approx(B.pw_dists(a), np.maximum(dists2_aa, 1e-30) ** 0.5)
+    _approx(B.pw_sums2(a, b), sums2_ab)
+    _approx(B.pw_sums2(a), sums2_aa)
+    _approx(B.pw_sums(a, b), np.maximum(sums2_ab, 1e-30) ** 0.5)
+    _approx(B.pw_sums(a), np.maximum(sums2_aa, 1e-30) ** 0.5)
 
 
-@pytest.mark.parametrize("batch_shape", [(), (3,)])
-def test_pw_1d(check_lazy_shapes, batch_shape):
-    a, b = Tensor(*batch_shape, 5, 1).np(), Tensor(*batch_shape, 10, 1).np()
+@pytest.mark.parametrize("batch_a", [False, True])
+@pytest.mark.parametrize("batch_b", [False, True])
+def test_pw_1d(check_lazy_shapes, batch_a, batch_b):
+    a = Tensor(*((3,) if batch_a else ()), 5, 1).np()
+    b = Tensor(*((3,) if batch_b else ()), 10, 1).np()
 
     # Check that we can feed both rank 1 and rank 2 tensors.
     for squeeze_a in [True, False]:
         for squeeze_b in [True, False]:
-            # One-argument case:
-            if B.rank(a) == 2 and squeeze_a:
-                a1 = a[..., 0]
+            if squeeze_a and B.rank(a) == 2:
+                a2 = a[..., 0]
             else:
-                a1 = a
-
-            # Two-argument case:
-            if squeeze_a and squeeze_b:
-                if max(B.rank(a), B.rank(b)) > 2:
-                    # Don't squeeze in this case. That will compute the wrong thing.
-                    a2, b2 = a, b
-                else:
-                    a2, b2 = a[..., 0], b[..., 0]
-            elif squeeze_a:
-                a2, b2 = a[..., 0], b
-            elif squeeze_b:
-                a2, b2 = a, b[..., 0]
+                a2 = a
+            if squeeze_b and B.rank(b) == 2:
+                b2 = b[..., 0]
             else:
-                a2, b2 = a, b
+                b2 = b
 
             approx(B.pw_dists2(a2, b2), np.abs(a - B.t(b)) ** 2)
-            approx(B.pw_dists2(a1), np.abs(a - B.t(a)) ** 2)
+            approx(B.pw_dists2(a2), np.abs(a - B.t(a)) ** 2)
             approx(B.pw_dists(a2, b2), np.abs(a - B.t(b)))
-            approx(B.pw_dists(a1), np.abs(a - B.t(a)))
+            approx(B.pw_dists(a2), np.abs(a - B.t(a)))
             approx(B.pw_sums2(a2, b2), np.abs(a + B.t(b)) ** 2)
-            approx(B.pw_sums2(a1), np.abs(a + B.t(a)) ** 2)
+            approx(B.pw_sums2(a2), np.abs(a + B.t(a)) ** 2)
             approx(B.pw_sums(a2, b2), np.abs(a + B.t(b)))
-            approx(B.pw_sums(a1), np.abs(a + B.t(a)))
+            approx(B.pw_sums(a2), np.abs(a + B.t(a)))
 
 
-@pytest.mark.parametrize("batch_shape", [(), (3,)])
-def test_ew_2d(check_lazy_shapes, batch_shape):
-    a, b = Tensor(*batch_shape, 10, 2).np(), Tensor(*batch_shape, 10, 2).np()
-    dists2_ab = np.zeros((*batch_shape, 10, 1))
-    dists2_aa = np.zeros((*batch_shape, 10, 1))
-    sums2_ab = np.zeros((*batch_shape, 10, 1))
-    sums2_aa = np.zeros((*batch_shape, 10, 1))
+@pytest.mark.parametrize("batch_a", [False, True])
+@pytest.mark.parametrize("batch_b", [False, True])
+def test_ew_2d(check_lazy_shapes, batch_a, batch_b):
+    a = Tensor(*((3,) if batch_a else ()), 10, 2).np()
+    b = Tensor(*((3,) if batch_b else ()), 10, 2).np()
+
+    dists2_ab = np.zeros((*((3,) if batch_a or batch_b else ()), 10, 1))
+    dists2_aa = np.zeros((*((3,) if batch_a else ()), 10, 1))
+    sums2_ab = np.zeros((*((3,) if batch_a or batch_b else ()), 10, 1))
+    sums2_aa = np.zeros((*((3,) if batch_a else ()), 10, 1))
     for i in range(10):
         dists2_ab[..., i, 0] = np.sum((a[..., i, :] - b[..., i, :]) ** 2, axis=-1)
         dists2_aa[..., i, 0] = np.sum((a[..., i, :] - a[..., i, :]) ** 2, axis=-1)
@@ -339,38 +343,29 @@ def test_ew_2d(check_lazy_shapes, batch_shape):
     approx(B.ew_sums(a), np.maximum(sums2_aa, 1e-30) ** 0.5)
 
 
-@pytest.mark.parametrize("batch_shape", [(), (3,)])
-def test_ew_1d(check_lazy_shapes, batch_shape):
-    a, b = Tensor(*batch_shape, 10, 1).np(), Tensor(*batch_shape, 10, 1).np()
+@pytest.mark.parametrize("batch_a", [False, True])
+@pytest.mark.parametrize("batch_b", [False, True])
+def test_ew_1d(check_lazy_shapes, batch_a, batch_b):
+    a = Tensor(*((3,) if batch_a else ()), 10, 1).np()
+    b = Tensor(*((3,) if batch_b else ()), 10, 1).np()
 
     # Check that we can feed both rank 1 and rank 2 tensors.
     for squeeze_a in [True, False]:
         for squeeze_b in [True, False]:
-            # One-argument case:
-            if B.rank(a) == 2 and squeeze_a:
-                a1 = a[..., 0]
+            if squeeze_a and B.rank(a) == 2:
+                a2 = a[..., 0]
             else:
-                a1 = a
-
-            # Two-argument case:
-            if squeeze_a and squeeze_b:
-                if max(B.rank(a), B.rank(b)) > 2:
-                    # Don't squeeze in this case. That will compute the wrong thing.
-                    a2, b2 = a, b
-                else:
-                    a2, b2 = a[..., 0], b[..., 0]
-            elif squeeze_a:
-                a2, b2 = a[..., 0], b
-            elif squeeze_b:
-                a2, b2 = a, b[..., 0]
+                a2 = a
+            if squeeze_b and B.rank(b) == 2:
+                b2 = b[..., 0]
             else:
-                a2, b2 = a, b
+                b2 = b
 
             approx(B.ew_dists2(a2, b2), np.abs(a - b) ** 2)
-            approx(B.ew_dists2(a1), np.zeros((*batch_shape, 10, 1)))
+            approx(B.ew_dists2(a2), np.zeros((*((3,) if batch_a else ()), 10, 1)))
             approx(B.ew_dists(a2, b2), np.abs(a - b))
-            approx(B.ew_dists(a1), np.zeros((*batch_shape, 10, 1)))
+            approx(B.ew_dists(a2), np.zeros((*((3,) if batch_a else ()), 10, 1)))
             approx(B.ew_sums2(a2, b2), np.abs(a + b) ** 2)
-            approx(B.ew_sums2(a1), np.abs(a + a) ** 2)
+            approx(B.ew_sums2(a2), np.abs(a + a) ** 2)
             approx(B.ew_sums(a2, b2), np.abs(a + b))
-            approx(B.ew_sums(a1), np.abs(a + a))
+            approx(B.ew_sums(a2), np.abs(a + a))

@@ -262,7 +262,11 @@ def test_stack(check_lazy_shapes):
 
 
 def test_unstack(check_lazy_shapes):
-    check_function(B.unstack, (Tensor(3, 4, 5),), {"axis": Value(0, 1, 2)})
+    check_function(
+        B.unstack,
+        (Tensor(3, 4, 5),),
+        {"axis": Value(0, 1, 2), "squeeze": Value(True, False)},
+    )
 
 
 def test_reshape(check_lazy_shapes):
