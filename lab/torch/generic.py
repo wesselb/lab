@@ -311,6 +311,16 @@ def ge(a: Numeric, b: Numeric):
     return torch.ge(a, b)
 
 
+@dispatch
+def eq(a: Numeric, b: Numeric):
+    return torch.eq(a, b)
+
+
+@dispatch
+def ne(a: Numeric, b: Numeric):
+    return torch.ne(a, b)
+
+
 _bvn_cdf = torch_register(bvn_cdf, s_bvn_cdf)
 
 
