@@ -204,7 +204,7 @@ def test_zero_one(f, check_lazy_shapes):
     check_function(f, (Value(np.float32, tf.float32, torch.float32, jnp.float32),))
 
     # Check reference calls.
-    for t32, t63 in [
+    for t32, t64 in [
         (np.float32, np.float64),
         (tf.float32, tf.float64),
         (torch.float32, torch.float64),
