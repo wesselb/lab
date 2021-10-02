@@ -47,13 +47,13 @@ except ImportError:  # pragma: no cover
             "available."
         )
 
-    def i_bvn_cdf_(*args, **kw_args):
+    def i_bvn_cdf(*args, **kw_args):
         raise RuntimeError(
             "bvn_cdf was not compiled. Please try to reinstall LAB with `gfortran` "
             "available."
         )
 
-    def s_bvn_cdf(*args, **kw_args):
+    def s_bvn_cdf_(*args, **kw_args):
         raise RuntimeError(
             "bvn_cdf was not compiled. Please try to reinstall LAB with `gfortran` "
             "available."
