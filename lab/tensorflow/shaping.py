@@ -1,9 +1,11 @@
-import tensorflow as tf
 from plum import Union
 
-from . import dispatch, B, Numeric
+import tensorflow as tf
+
 from ..shape import unwrap_dimension
-from ..types import Int, TFNumeric, NPNumeric
+from ..types import Int, NPNumeric, TFNumeric
+from ..util import resolve_axis
+from . import B, Numeric, dispatch
 
 __all__ = []
 
@@ -81,7 +83,8 @@ def take(a: TFNumeric, indices_or_mask, axis: Int = 0):
 
     # Perform taking operation.
     if is_mask:
-        result = tf.boolean_mask(a, indices_or_mask, axis=axis)
+        # `tf.boolean_mask` isn't happy with negative axes.
+        result = tf.boolean_mask(a, indices_or_mask, axis=resolve_axis(a, axis))
     else:
         result = tf.gather(a, indices_or_mask, axis=axis)
 

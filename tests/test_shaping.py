@@ -1,20 +1,19 @@
+import lab as B
 import numpy as np
 import pytest
 import tensorflow as tf
-from plum import NotFoundLookupError
-
-import lab as B
 from lab.shape import Shape
+from plum import NotFoundLookupError
 
 # noinspection PyUnresolvedReferences
 from .util import (
-    check_function,
-    Tensor,
-    Matrix,
-    Value,
     List,
+    Matrix,
+    Tensor,
     Tuple,
+    Value,
     approx,
+    check_function,
     check_lazy_shapes,
 )
 
@@ -293,13 +292,13 @@ def test_take_consistency(check_lazy_shapes):
     check_function(
         B.take,
         (Matrix(3, 3), Value([0, 1], [True, True, False])),
-        {"axis": Value(0, 1)},
+        {"axis": Value(0, 1, -1)},
     )
 
 
 def test_take_consistency_order(check_lazy_shapes):
     # Check order of indices.
-    check_function(B.take, (Matrix(3, 4), Value([2, 1])), {"axis": Value(0, 1)})
+    check_function(B.take, (Matrix(3, 4), Value([2, 1])), {"axis": Value(0, 1, -1)})
 
 
 def test_take_indices_rank(check_lazy_shapes):
@@ -315,7 +314,7 @@ def test_take_indices_rank(check_lazy_shapes):
 )
 def test_take_list_tuple(check_lazy_shapes, indices_or_mask):
     check_function(
-        B.take, (Matrix(3, 3, 3), Value(indices_or_mask)), {"axis": Value(0, 1, 2)}
+        B.take, (Matrix(3, 3, 3), Value(indices_or_mask)), {"axis": Value(0, 1, 2, -1)}
     )
 
 
