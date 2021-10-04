@@ -384,6 +384,12 @@ def toeplitz_solve(a, c):
 toepsolve = toeplitz_solve  #: Shorthand for `toeplitz_solve`.
 
 
+def _a_b_uprank(a, b):
+    a = B.uprank(a)
+    b = B.uprank(b)
+    return a, b
+
+
 @dispatch
 def outer(a, b):
     """Compute the outer product between two vectors or matrices.
@@ -402,14 +408,6 @@ def outer(a, b):
         return a * B.transpose(b)
 
     return B.matmul(a, b, tr_b=True)
-
-
-def _a_b_uprank(a, b):
-    # The last two dimensions are the matrix dimensions, and the rest are batch
-    # dimensions.
-    a = B.uprank(a, rank=2)
-    b = B.uprank(b, rank=2)
-    return a, b
 
 
 @dispatch
