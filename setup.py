@@ -6,7 +6,7 @@ from Cython.Build import build_ext
 from setuptools import find_packages, setup, Extension
 
 
-if os.name != "nt":
+if os.name == "nt":
     # On Windows, don't compile the extra modules.
     ext_modules = []
 else:
