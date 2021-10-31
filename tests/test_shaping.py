@@ -100,6 +100,10 @@ def test_expand_dims(check_lazy_shapes):
     assert B.shape(B.expand_dims(B.ones(2), axis=0, times=2)) == (1, 1, 2)
     assert B.shape(B.expand_dims(B.ones(2), axis=0, times=3)) == (1, 1, 1, 2)
 
+    # Test keyword `ignore_scalar`.
+    assert B.expand_dims(1, axis=-1, ignore_scalar=False) is not 1
+    assert B.expand_dims(1, axis=-1, ignore_scalar=True) is 1
+
 
 def test_squeeze(check_lazy_shapes):
     check_function(B.squeeze, (Tensor(3, 4, 5),))

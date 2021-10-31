@@ -161,7 +161,7 @@ def isscalar(a):  # pragma: no cover
 
 
 @dispatch
-def expand_dims(a: Numeric, axis: Int = 0, times: Int = 1):
+def expand_dims(a: Numeric, axis: Int = 0, times: Int = 1, ignore_scalar: bool = False):
     """Insert an empty axis.
 
     Args:
@@ -169,10 +169,13 @@ def expand_dims(a: Numeric, axis: Int = 0, times: Int = 1):
         axis (int, optional): Index of new axis. Defaults to `0`.
         times (int, optional): Number of times to perform the operation. Defaults to
             `1`.
+        ignore_scalar (bool, optional): Just return `a` if `a` is a scalar.
 
     Returns:
         tensor: `a` with the new axis.
     """
+    if ignore_scalar and B.is_scalar(a):
+        return a
     for _ in range(times):
         a = _expand_dims(a, axis=axis)
     return a
