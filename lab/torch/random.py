@@ -8,7 +8,7 @@ __all__ = []
 
 @dispatch
 def create_random_state(_: TorchDType, seed: Int = 0):
-    state = torch.Generator()
+    state = torch.Generator(device=B.ActiveDevice.active_name)
     state.manual_seed(seed)
     return state
 
@@ -20,7 +20,7 @@ def global_random_state(_: TorchDType):
 
 @dispatch
 def set_global_random_state(state: TorchRandomState):
-    torch.random.default_generator.set_state(state.get_state())
+    torch.random.default_generator = state
 
 
 @dispatch

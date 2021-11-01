@@ -39,7 +39,9 @@ def set_random_seed(seed: Int):
     if "torch" in sys.modules:
         import torch
 
-        torch.manual_seed(seed)
+        gen = torch.Generator(device=B.ActiveDevice.active_name)
+        gen.manual_seed(seed)
+        torch.random.default_generator = gen
 
     # Set seed for JAX, if it is loaded.
     if hasattr(B, "jax_global_random_state"):
