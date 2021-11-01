@@ -118,7 +118,7 @@ def test_torch_global_random_state(mocker):
     B.ActiveDevice.active_name = "cpu"
     assert B.global_random_state(torch.float32) is torch.random.default_generator
 
-    # Test that `cuda.seed()` is called to initialise the default generators.
+    # Test that `cuda.seed` is called to initialise the default generators.
     torch_cuda_seed = mocker.patch("torch.cuda.seed")
     B.ActiveDevice.active_name = "cuda"
     # The call is allowed to fail, because `torch.cuda.seed` is mocked, so it won't
