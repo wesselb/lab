@@ -4,6 +4,7 @@ sphinx
 sphinx-rtd-theme
 pytest
 pytest-cov
+pytest-mock
 coveralls
 autograd>=1.3
 tensorflow>=2

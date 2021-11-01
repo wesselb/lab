@@ -111,6 +111,40 @@ def test_random_generators(f, check_lazy_shapes):
         assert B.shape(f(state, f(t, 2, 3))[1]) == (2, 3)
 
 
+def test_torch_global_random_state(mocker):
+    # Check CPU specifications.
+    B.ActiveDevice.active_name = None
+    assert B.global_random_state(torch.float32) is torch.random.default_generator
+    B.ActiveDevice.active_name = "cpu"
+    assert B.global_random_state(torch.float32) is torch.random.default_generator
+
+    # Test that `cuda.seed()` is called to initialise the default generators.
+    torch_cuda_seed = mocker.patch("torch.cuda.seed")
+    B.ActiveDevice.active_name = "cuda"
+    # The call is allowed to fail, because `torch.cuda.seed` is mocked, so it won't
+    # actually populate `torch.cuda.default_generators`.
+    with pytest.raises(IndexError):
+        B.global_random_state(torch.float32)
+    assert torch_cuda_seed.called_once()
+
+    # Now set some fake default generators.
+    torch.cuda.default_generators = (0, 1)
+
+    # Check GPU specifications.
+    B.ActiveDevice.active_name = "cuda"
+    assert B.global_random_state(torch.float32) == 0
+    B.ActiveDevice.active_name = "gpu"
+    assert B.global_random_state(torch.float32) == 0
+    B.ActiveDevice.active_name = "gpu:0"
+    assert B.global_random_state(torch.float32) == 0
+    B.ActiveDevice.active_name = "gpu:1"
+    assert B.global_random_state(torch.float32) == 1
+
+    # Reset back to defaults.
+    torch.cuda.default_generators = ()
+    B.ActiveDevice.active_name = None
+
+
 @pytest.mark.parametrize("f", [B.rand, B.randn])
 def test_conversion_warnings(f, check_lazy_shapes):
     with warnings.catch_warnings(record=True) as w:
