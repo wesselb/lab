@@ -15,7 +15,22 @@ def create_random_state(_: TorchDType, seed: Int = 0):
 
 @dispatch
 def global_random_state(_: TorchDType):
-    return torch.random.default_generator
+    if B.ActiveDevice.active_name in {None, "cpu"}:
+        return torch.random.default_generator
+    else:
+        parts = B.ActiveDevice.active_name.lower().split(":")
+
+        if len(parts) == 0 or parts[0] not in {"cuda", "gpu"}:
+            raise RuntimeError(f'Unknown active device "{B.ActiveDevice.active_name}".')
+
+        # Ensure that the generators are available.
+        if len(torch.cuda.default_generators) == 0:
+            torch.seed()
+
+        if len(parts) == 1:
+            return torch.cuda.default_generators[0]
+        else:
+            return torch.cuda.default_generators[int(parts[1])]
 
 
 @dispatch
