@@ -139,6 +139,9 @@ def test_torch_global_random_state(mocker):
     assert B.global_random_state(torch.float32) == 0
     B.ActiveDevice.active_name = "gpu:1"
     assert B.global_random_state(torch.float32) == 1
+    with pytest.raises(RuntimeError):
+        B.ActiveDevice.active_name = "weird-device"
+        assert B.global_random_state(torch.float32) == 1
 
     # Reset back to defaults.
     torch.cuda.default_generators = ()
