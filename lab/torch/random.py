@@ -20,7 +20,7 @@ def global_random_state(_: TorchDType):
 
 @dispatch
 def set_global_random_state(state: TorchRandomState):
-    torch.random.default_generator = state
+    torch.random.default_generator.set_state(state.get_state())
 
 
 @dispatch
