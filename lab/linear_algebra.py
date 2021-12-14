@@ -184,7 +184,7 @@ def svd(a: Numeric, compute_uv: bool = True):  # pragma: no cover
             `True`.
 
     Returns:
-        tuple: `(U, S, V)` is `compute_uv` is `True` and just `S` otherwise.
+        tuple: `(U, S, V)` if `compute_uv` is `True` and just `S` otherwise.
     """
 
 
@@ -198,7 +198,7 @@ def eig(a: Numeric, compute_eigvecs: bool = True):  # pragma: no cover
         compute_eigvecs (bool, optional): Also compute eigenvectors. Defaults to `True`.
 
     Returns:
-        tuple: `(U, S, V)` is `compute_uv` is `True` and just `S` otherwise.
+        tuple: `(S, V)` if `compute_eigvecs` is `True` and just `S` otherwise.
     """
 
 

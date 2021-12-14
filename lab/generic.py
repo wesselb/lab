@@ -46,6 +46,9 @@ __all__ = [
     "range",
     "cast",
     "identity",
+    "round",
+    "floor",
+    "ceil",
     "negative",
     "abs",
     "sign",
@@ -563,13 +566,52 @@ def cast(dtype: Numeric, a: DType):  # pragma: no cover
 @dispatch
 @abstract()
 def identity(a: Numeric):  # pragma: no cover
-    """Identity function
+    """Identity function.
 
     Args:
         a (tensor): Tensor.
 
     Returns:
         tensor: `a` exactly.
+    """
+
+
+@dispatch
+@abstract()
+def round(a: Numeric):  # pragma: no cover
+    """Round a tensor to whole numbers.
+
+    Args:
+        a (tensor): Tensor.
+
+    Returns:
+        tensor: `a` rounded to whole numbers.
+    """
+
+
+@dispatch
+@abstract()
+def floor(a: Numeric):  # pragma: no cover
+    """Round a tensor down to whole numbers.
+
+    Args:
+        a (tensor): Tensor.
+
+    Returns:
+        tensor: `a` rounded down to whole numbers.
+    """
+
+
+@dispatch
+@abstract()
+def ceil(a: Numeric):  # pragma: no cover
+    """Round a tensor up to whole numbers.
+
+    Args:
+        a (tensor): Tensor.
+
+    Returns:
+        tensor: `a` rounded up to whole numbers.
     """
 
 

@@ -108,6 +108,21 @@ def identity(a: Numeric):
 
 
 @dispatch
+def round(a: Numeric):
+    return torch.round(a)
+
+
+@dispatch
+def floor(a: Numeric):
+    return torch.floor(a)
+
+
+@dispatch
+def ceil(a: Numeric):
+    return torch.ceil(a)
+
+
+@dispatch
 def negative(a: Numeric):
     return torch.neg(a)
 

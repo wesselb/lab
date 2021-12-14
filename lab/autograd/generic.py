@@ -69,6 +69,21 @@ def identity(a: Numeric):
 
 
 @dispatch
+def round(a: Numeric):
+    return anp.round(a)
+
+
+@dispatch
+def floor(a: Numeric):
+    return anp.floor(a)
+
+
+@dispatch
+def ceil(a: Numeric):
+    return anp.ceil(a)
+
+
+@dispatch
 def negative(a: Numeric):
     return anp.negative(a)
 

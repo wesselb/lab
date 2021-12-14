@@ -8,7 +8,15 @@ from plum import Union
 from . import B, dispatch, Numeric
 from .custom import jax_register
 from ..custom import bvn_cdf, i_bvn_cdf, s_bvn_cdf, i_s_bvn_cdf
-from ..types import JAXDType, JAXNumeric, NPNumeric, Number, Int, _jax_tracer, JAXRandomState
+from ..types import (
+    JAXDType,
+    JAXNumeric,
+    NPNumeric,
+    Number,
+    Int,
+    _jax_tracer,
+    JAXRandomState,
+)
 
 __all__ = []
 
@@ -110,6 +118,21 @@ def cast(dtype: JAXDType, a: Union[Number, NPNumeric]):
 def identity(a: Numeric):
     # Do not return `a` identically.
     return 1 * a
+
+
+@dispatch
+def round(a: Numeric):
+    return jnp.round(a)
+
+
+@dispatch
+def floor(a: Numeric):
+    return jnp.floor(a)
+
+
+@dispatch
+def ceil(a: Numeric):
+    return jnp.ceil(a)
 
 
 @dispatch

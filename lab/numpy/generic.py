@@ -94,6 +94,21 @@ def identity(a: Numeric):
 
 
 @dispatch
+def round(a: Numeric):
+    return np.round(a)
+
+
+@dispatch
+def floor(a: Numeric):
+    return np.floor(a)
+
+
+@dispatch
+def ceil(a: Numeric):
+    return np.ceil(a)
+
+
+@dispatch
 def negative(a: Numeric):
     return np.negative(a)
 

@@ -313,6 +313,9 @@ def test_unary_complex(f, check_lazy_shapes):
     "f",
     [
         B.identity,
+        B.round,
+        B.floor,
+        B.ceil,
         B.negative,
         B.abs,
         B.sign,

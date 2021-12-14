@@ -100,6 +100,21 @@ def identity(a: Numeric):
 
 
 @dispatch
+def round(a: Numeric):
+    return tf.math.round(a)
+
+
+@dispatch
+def floor(a: Numeric):
+    return tf.math.floor(a)
+
+
+@dispatch
+def ceil(a: Numeric):
+    return tf.math.ceil(a)
+
+
+@dispatch
 def negative(a: Numeric):
     return tf.negative(a)
 
