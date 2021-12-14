@@ -193,8 +193,8 @@ def test_dtype_int(check_lazy_shapes):
     assert B.dtype_int(1) is int
     # Test conversion back to right framework type. This conversion is thoroughly
     # tested for `B.promote_dtypes`.
-    assert B.dtype_float(tf.constant(1.0, dtype=tf.float32)) is tf.int32
-    assert B.dtype_float(tf.constant(1.0, dtype=tf.float64)) is tf.int64
+    assert B.dtype_int(tf.constant(1.0, dtype=tf.float32)) is tf.int32
+    assert B.dtype_int(tf.constant(1.0, dtype=tf.float64)) is tf.int64
 
 
 @pytest.mark.parametrize(
