@@ -18,12 +18,19 @@ def test_numeric(check_lazy_shapes):
     assert isinstance(1, B.Int)
     assert isinstance(np.int32(1), B.Int)
     assert isinstance(np.uint64(1), B.Int)
+
     assert isinstance(1.0, B.Float)
     assert isinstance(np.float32(1), B.Float)
+
+    assert isinstance(1 + 0j, B.Complex)
+    assert isinstance(np.complex64(1), B.Complex)
+
     assert isinstance(True, B.Bool)
     assert isinstance(np.bool_(True), B.Bool)
+
     assert isinstance(np.uint(1), B.Number)
     assert isinstance(np.float64(1), B.Number)
+    assert isinstance(np.complex64(1), B.Number)
 
     # Test NumPy.
     assert isinstance(np.array(1), B.NPNumeric)
@@ -178,6 +185,16 @@ def test_dtype_float(check_lazy_shapes):
     assert B.dtype_float(np.float32(1)) is np.float32
     assert B.dtype_float(np.float64(1)) is np.float64
     assert B.dtype_float(1) is np.float64
+
+
+def test_dtype_int(check_lazy_shapes):
+    assert B.dtype_int(np.float32(1)) is np.int32
+    assert B.dtype_int(np.float64(1)) is np.int64
+    assert B.dtype_int(1) is int
+    # Test conversion back to right framework type. This conversion is thoroughly
+    # tested for `B.promote_dtypes`.
+    assert B.dtype_float(tf.constant(1.0, dtype=tf.float32)) is tf.int32
+    assert B.dtype_float(tf.constant(1.0, dtype=tf.float64)) is tf.int64
 
 
 @pytest.mark.parametrize(

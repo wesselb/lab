@@ -17,6 +17,7 @@ from .shape import Dimension
 __all__ = [
     "Int",
     "Float",
+    "Complex",
     "Bool",
     "Number",
     "NPNumeric",
@@ -46,6 +47,7 @@ __all__ = [
     "issubdtype",
     "promote_dtypes",
     "dtype_float",
+    "dtype_int",
     "NP",
     "AG",
     "TF",
@@ -143,8 +145,9 @@ _jax_retrievables = [_jax_tensor, _jax_tracer, _jax_dtype, _jax_device]
 # Numeric types:
 Int = Union(*([int, Dimension] + np.sctypes["int"] + np.sctypes["uint"]), alias="Int")
 Float = Union(*([float] + np.sctypes["float"]), alias="Float")
+Complex = Union(*([complex] + np.sctypes["complex"]), alias="Complex")
 Bool = Union(bool, np.bool_, alias="Bool")
-Number = Union(Int, Bool, Float, alias="Number")
+Number = Union(Int, Bool, Float, Complex, alias="Number")
 NPNumeric = Union(np.ndarray, alias="NPNumeric")
 AGNumeric = Union(_ag_tensor, alias="AGNumeric")
 TFNumeric = Union(_tf_tensor, _tf_variable, _tf_indexedslices, alias="TFNumeric")
@@ -343,6 +346,23 @@ def dtype_float(x):
         dtype: Data type of `x`, but ensured to be floating.
     """
     return promote_dtypes(dtype(x), np.float16)
+
+
+@dispatch
+def dtype_int(x):
+    """Get the data type of an object and get the integer equivalent.
+
+    Args:
+        x (object): Object to get data type of.
+
+    Returns:
+        dtype: Data type of `x`, but ensured to be integer.
+    """
+    x_dtype = dtype(x)
+    name = list(convert(x_dtype, NPDType).__name__)
+    while name and name[0] not in set([str(i) for i in range(10)]):
+        name.pop(0)
+    return _convert_back(getattr(np, "int" + "".join(name)), x_dtype)
 
 
 # Random state types:

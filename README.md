@@ -136,6 +136,7 @@ True
 ```
 Int          # Integers
 Float        # Floating-point numbers
+Complex      # Complex numbers
 Bool         # Booleans
 Number       # Numbers
 Numeric      # Numerical objects, including booleans
@@ -251,6 +252,7 @@ log_2_pi
 ```
 dtype(a)
 dtype_float(a)
+dtype_int(a)
 
 promote_dtypes(*dtype)
 issubdtype(dtype1, dtype2)

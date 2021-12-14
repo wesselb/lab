@@ -4,7 +4,7 @@ from plum import Dispatcher
 
 from . import B, dispatch
 
-__all__ = ["Shape", "Dimension", "dispatch_unwrap_dimensions"]
+__all__ = ["Shape", "Dimension", "unwrap_dimension", "dispatch_unwrap_dimensions"]
 
 _dispatch = Dispatcher()
 
@@ -130,6 +130,12 @@ class Dimension:
 
     def __rtruediv__(self, other):
         return other / self.dim
+
+    def __floordiv__(self, other):
+        return self.dim // other
+
+    def __rfloordiv__(self, other):
+        return other // self.dim
 
     def __neg__(self):
         return -self.dim

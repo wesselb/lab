@@ -83,6 +83,8 @@ def test_dimension():
     assert isinstance(d / 5, float)
     assert d / 5 == 1
     assert 5 / d == 1
+    assert d // 2 == 2
+    assert 11 // d == 2
     assert -d is -5
     assert d ** 2 is 25
 
