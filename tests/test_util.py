@@ -120,6 +120,10 @@ def test_metadata(check_lazy_shapes):
 
 
 def test_abstract(check_lazy_shapes):
+    # Test that `promote` and `promote_from` cannot be specified at the same time.
+    with pytest.raises(ValueError):
+        abstract(promote=1, promote_from=1)(lambda: None)
+
     class General:
         pass
 
@@ -134,10 +138,11 @@ def test_abstract(check_lazy_shapes):
     plum.promote = lambda *args: (b,) * len(args)
 
     # Define some abstract functions.
+
     @B.dispatch
     @abstract()
     def f1(*args: General):
-        return args
+        pass
 
     @B.dispatch
     def f1(*args: Specific):
@@ -146,7 +151,7 @@ def test_abstract(check_lazy_shapes):
     @B.dispatch
     @abstract(promote=None)
     def f2(*args: General):
-        return args
+        pass
 
     @B.dispatch
     def f2(*args: Specific):
@@ -155,59 +160,111 @@ def test_abstract(check_lazy_shapes):
     @B.dispatch
     @abstract(promote=-1)
     def f3(*args: General):
-        return args
+        pass
 
     @B.dispatch
     def f3(*args: Specific):
         return args
 
     @B.dispatch
+    @abstract(promote_from=-1)
+    def f3_from(*args: General):
+        pass
+
+    @B.dispatch
+    def f3_from(*args: Specific):
+        return args
+
+    @B.dispatch
     @abstract(promote=0)
     def f4(*args: General):
-        return args
+        pass
 
     @B.dispatch
     def f4(*args: Specific):
         return args
 
     @B.dispatch
+    @abstract(promote_from=0)
+    def f4_from(*args: General):
+        pass
+
+    @B.dispatch
+    def f4_from(*args: Specific):
+        return args
+
+    @B.dispatch
     @abstract(promote=1)
     def f5(*args: General):
-        return args
+        pass
 
     @B.dispatch
     def f5(arg: Specific, *args: General):
         return (arg,) + args
 
     @B.dispatch
+    @abstract(promote_from=1)
+    def f5_from(*args: General):
+        pass
+
+    @B.dispatch
+    def f5_from(arg: General, *args: Specific):
+        return (arg,) + args
+
+    @B.dispatch
     @abstract(promote=2)
     def f6(*args: General):
-        return args
+        pass
 
     @B.dispatch
     def f6(arg1: Specific, arg2: Specific, *args: General):
+        return (arg1, arg2) + args
+
+    @B.dispatch
+    @abstract(promote_from=2)
+    def f6_from(*args: General):
+        pass
+
+    @B.dispatch
+    def f6_from(arg1: General, arg2: General, *args: Specific):
         return (arg1, arg2) + args
 
     # Register methods.
     B.f1 = f1
     B.f2 = f2
     B.f3 = f3
+    B.f3_from = f3_from
     B.f4 = f4
+    B.f4_from = f4_from
     B.f5 = f5
+    B.f5_from = f5_from
     B.f6 = f6
+    B.f6_from = f6_from
 
     # Test promotion.
     with pytest.raises(NotFoundLookupError):
         f1(a, a, a)
+
     with pytest.raises(NotFoundLookupError):
         f2(a, a, a)
+
     assert f3(a, a, a) == (b, b, b)
     with pytest.raises(NotFoundLookupError):
+        f3_from(a, a, a)
+
+    with pytest.raises(NotFoundLookupError):
         f4(a, a, a)
+    assert f4_from(a, a, a) == (b, b, b)
+
     assert f5(a, a, a) == (b, a, a)
     assert f5(a) == (b,)
+    assert f5_from(a, a, a) == (a, b, b)
+    assert f5_from(a, a) == (a, b)
+
     assert f6(a, a, a) == (b, b, a)
     assert f6(a, a) == (b, b)
+    assert f6_from(a, a, a, a) == (a, a, b, b)
+    assert f6_from(a, a, a) == (a, a, b)
 
     # Put back promotion function.
     plum.promote = plum_promote

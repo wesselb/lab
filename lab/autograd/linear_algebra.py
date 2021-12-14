@@ -23,6 +23,11 @@ def matmul(a: Numeric, b: Numeric, tr_a: bool = False, tr_b: bool = False):
 
 
 @dispatch
+def einsum(equation: str, *elements: Numeric):
+    return anp.einsum(equation, *elements)
+
+
+@dispatch
 def transpose(a: Numeric, perm: Optional[Union[tuple, list]] = None):
     # Correctly handle special cases.
     rank_a = B.rank(a)

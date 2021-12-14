@@ -65,6 +65,13 @@ def test_matmul(f, check_lazy_shapes):
     )
 
 
+def test_einsum(check_lazy_shapes):
+    for eq in ["ij,ij->", "ij,jk->ik", "ii,ii->"]:
+        check_function(B.einsum, (Value(eq), Tensor(3, 3), Tensor(3, 3)))
+    for eq in ["...ij,...ij->...", "...ij,...jk->...ik", "...ii,...ii->..."]:
+        check_function(B.einsum, (Value(eq), Tensor(4, 3, 3), Tensor(4, 3, 3)))
+
+
 def test_trace(check_lazy_shapes):
     # Check default call.
     check_function(

@@ -378,6 +378,7 @@ jit_to_numpy(a)  # Caches results for `B.jit`.
 ```
 transpose(a, perm=None) (alias: t, T)
 matmul(a, b, tr_a=False, tr_b=False) (alias: mm, dot)
+einsum(equation, *elements)
 trace(a, axis1=0, axis2=1)
 kron(a, b)
 svd(a, compute_uv=True)

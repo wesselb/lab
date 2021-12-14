@@ -13,6 +13,7 @@ __all__ = [
     "matmul",
     "mm",
     "dot",
+    "einsum",
     "kron",
     "trace",
     "svd",
@@ -102,7 +103,21 @@ dot = matmul  #: Shorthand for `matmul`.
 
 
 @dispatch
-@abstract(promote=None)
+@abstract(promote_from=1)
+def einsum(equation: str, *elements: Numeric):  # pragma: no cover
+    """Tensor contraction via Einstein summation.
+
+    Args:
+        equation (str): Equation.
+        *elements (tensor): Tensors to contract.
+
+    Returns:
+        tensor: Contraction.
+    """
+
+
+@dispatch
+@abstract()
 def trace(a: Numeric, axis1: Int = -2, axis2: Int = -1):  # pragma: no cover
     """Compute the trace of a tensor.
 

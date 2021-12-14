@@ -156,17 +156,28 @@ def batch_computation(f, xs, ranks):
     return B.reshape(res, *(batch_shape + B.shape(res)[1:]))
 
 
-def abstract(promote=None):
+def abstract(promote=None, promote_from=None):
     """Create a decorator for an abstract function.
 
     Args:
-        promote (int, optional): Number of arguments to promote. Set to `-1`
-            to promote all arguments, and set to `None` or `0` to promote no
-            arguments. Defaults to `None`.
+        promote (int, optional): Number of arguments to promote. Set to `-1` to promote
+            all arguments, and set to `None` or `0` to promote no arguments. Defaults to
+            `None`. Cannot be specified in conjunction with `promote_from`.
+        promote_from (int, optional): Index from which to promote argument. Set to `-1`
+            or `None` to promote no arguments, and set to `0` to promote all arguments.
+            Defaults to `None`. Cannot be specified in conjunction with `promote`.
 
     Returns:
         function: Decorator.
     """
+    if promote is not None and promote_from is not None:
+        raise ValueError("Specify either `promote` or `promote_from`.")
+
+    # If `promote` isn't given, we can safely give it the value of
+    # `promote_from`: either `promote_from` is given, which is fine; or
+    # `promote_from` isn't given, so `promote` remains at `None`.
+    if promote is None:
+        promote = promote_from
 
     def decorator(f):
         @wraps(f)
@@ -183,7 +194,10 @@ def abstract(promote=None):
             types_before = tuple(plum.type_of(arg) for arg in args)
 
             # Promote.
-            args = plum.promote(*args[:promote_index]) + args[promote_index:]
+            if promote_from is None:
+                args = plum.promote(*args[:promote_index]) + args[promote_index:]
+            else:
+                args = args[:promote_index] + plum.promote(*args[promote_index:])
 
             # Enforce a change in types. Otherwise, the call will recurse, which
             # means that an implementation is not available.
