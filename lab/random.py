@@ -15,6 +15,7 @@ __all__ = [
     "rand",
     "randn",
     "choice",
+    "randint",
 ]
 
 
@@ -179,3 +180,41 @@ def choice(state: RandomState, a: Numeric):
 @dispatch
 def choice(a: Numeric):
     return choice(a, 1)
+
+
+@dispatch
+@abstract()
+def randint(
+    state: RandomState,
+    dtype: DType,
+    *shape: Int,
+    lower: Int = 0,
+    upper: Int,
+):  # pragma: no cover
+    """Construct a tensor of random integers in [`lower`, `upper`).
+
+    Args:
+        state (random state, optional): Random state.
+        dtype (dtype, optional): Data type. Defaults to the default data type.
+        *shape (shape, optional): Shape of the tensor. Defaults to `()`.
+        lower (int, optional): Lower bound. Defaults to `0`.
+        upper (int): Upper bound. Must be given as a keyword argument.
+
+    Returns:
+        tensor: Random tensor.
+    """
+
+
+@dispatch.multi((Int,), (VarArgs(Int),))  # Single integer is a not a reference.
+def randint(*shape: Int, lower: Int = 0, upper: Int):
+    return randint(B.default_dtype, *shape, lower=lower, upper=upper)
+
+
+@dispatch
+def randint(state: RandomState, ref: Numeric, *, lower: Int = 0, upper: Int):
+    return randint(state, B.dtype(ref), *B.shape(ref), lower=lower, upper=upper)
+
+
+@dispatch
+def randint(ref: Numeric, *, lower: Int = 0, upper: Int):
+    return randint(B.dtype(ref), *B.shape(ref), lower=lower, upper=upper)

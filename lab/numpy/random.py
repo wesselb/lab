@@ -61,3 +61,15 @@ def choice(state: NPRandomState, a: Numeric, n: Int):
 @dispatch
 def choice(a: Numeric, n: Int):
     return choice(global_random_state(a), a, n)[1]
+
+
+@dispatch
+def randint(state: NPRandomState, dtype: NPDType, *shape: Int, lower: Int = 0, upper):
+    dtype = B.dtype_int(dtype)
+    return state, state.randint(lower, upper, shape, dtype=dtype)
+
+
+@dispatch
+def randint(dtype: NPDType, *shape: Int, lower: Int = 0, upper):
+    state = global_random_state(dtype)
+    return randint(state, dtype, *shape, lower=lower, upper=upper)[1]

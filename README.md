@@ -251,7 +251,9 @@ log_2_pi
 ### Data Types
 ```
 dtype(a)
+dtype_float(dtype)
 dtype_float(a)
+dtype_int(dtype)
 dtype_int(a)
 
 promote_dtypes(*dtype)
@@ -443,6 +445,12 @@ randn(ref)
 
 choice(a, n)
 choice(a)
+
+randint(state, dtype, *shape, lower=0, upper)
+randint(dtype, *shape, lower=0, upper)
+randint(*shape, lower=0, upper)
+randint(state, ref, lower=0, upper)
+randint(ref, lower=0, upper)
 ```
 
 ### Shaping

@@ -2,7 +2,7 @@ import logging
 
 import tensorflow as tf
 
-from . import dispatch
+from . import dispatch, B
 from ..types import TFDType, TFNumeric, Int, TFRandomState
 
 __all__ = []
@@ -55,3 +55,21 @@ def choice(state: TFRandomState, a: TFNumeric, n: Int):
 @dispatch
 def choice(a: TFNumeric, n: Int):
     return choice(global_random_state(a), a, n)[1]
+
+
+@dispatch
+def randint(
+    state: TFRandomState,
+    dtype: TFDType,
+    *shape: Int,
+    lower: Int = 0,
+    upper: Int,
+):
+    dtype = B.dtype_int(dtype)
+    return state, state.uniform(shape, lower, upper, dtype=dtype)
+
+
+@dispatch
+def randint(dtype: TFDType, *shape: Int, lower: Int = 0, upper: Int):
+    state = global_random_state(dtype)
+    return randint(state, dtype, *shape, lower=lower, upper=upper)[1]

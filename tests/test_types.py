@@ -182,18 +182,26 @@ def test_promote_dtypes(check_lazy_shapes):
 
 
 def test_dtype_float(check_lazy_shapes):
+    assert B.dtype_float(np.float32) is np.float32
     assert B.dtype_float(np.float32(1)) is np.float32
+    assert B.dtype_float(np.float64) is np.float64
     assert B.dtype_float(np.float64(1)) is np.float64
+    assert B.dtype_float(int) is np.float64
     assert B.dtype_float(1) is np.float64
 
 
 def test_dtype_int(check_lazy_shapes):
+    assert B.dtype_int(np.float32) is np.int32
     assert B.dtype_int(np.float32(1)) is np.int32
+    assert B.dtype_int(np.float64) is np.int64
     assert B.dtype_int(np.float64(1)) is np.int64
+    assert B.dtype_int(int) is int
     assert B.dtype_int(1) is int
     # Test conversion back to right framework type. This conversion is thoroughly
     # tested for `B.promote_dtypes`.
+    assert B.dtype_int(tf.float32) is tf.int32
     assert B.dtype_int(tf.constant(1.0, dtype=tf.float32)) is tf.int32
+    assert B.dtype_int(tf.float64) is tf.int64
     assert B.dtype_int(tf.constant(1.0, dtype=tf.float64)) is tf.int64
 
 

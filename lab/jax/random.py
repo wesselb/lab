@@ -1,7 +1,7 @@
 import jax
 from plum import Dispatcher
 
-from . import B, dispatch
+from . import dispatch, B
 from ..types import Int, JAXDType, JAXNumeric, JAXRandomState
 
 __all__ = []
@@ -64,5 +64,38 @@ def choice(state: JAXRandomState, a: JAXNumeric, n: Int):
 @dispatch
 def choice(a: JAXNumeric, n: Int):
     state, res = choice(global_random_state(a), a, n)
+    B.jax_global_random_state = state
+    return res
+
+
+@dispatch
+def randint(
+    state: JAXRandomState,
+    dtype: JAXDType,
+    *shape: Int,
+    lower: Int = 0,
+    upper: Int,
+):
+    dtype = B.dtype_int(dtype)
+    state, key = jax.random.split(state)
+    return state, B.to_active_device(
+        jax.random.randint(key, shape, lower, upper, dtype=dtype)
+    )
+
+
+@dispatch
+def randint(
+    dtype: JAXDType,
+    *shape: Int,
+    lower: Int = 0,
+    upper: Int,
+):
+    state, res = randint(
+        global_random_state(dtype),
+        dtype,
+        *shape,
+        lower=lower,
+        upper=upper,
+    )
     B.jax_global_random_state = state
     return res

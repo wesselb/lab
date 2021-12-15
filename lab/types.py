@@ -336,33 +336,43 @@ for target in [NPDType, AGDType, TFDType, TorchDType, JAXDType]:
 
 
 @dispatch
-def dtype_float(x):
+def dtype_float(dtype: DType):
     """Get the data type of an object and ensure that it is a floating type.
 
     Args:
-        x (object): Object to get data type of.
+        x (object): Data type or object to get data type of.
 
     Returns:
-        dtype: Data type of `x`, but ensured to be floating.
+        dtype: Data type, but ensured to be floating.
     """
-    return promote_dtypes(dtype(x), np.float16)
+    return promote_dtypes(dtype, np.float16)
+
+
+@dispatch
+def dtype_float(x):
+    return dtype_float(dtype(x))
+
+
+@dispatch
+def dtype_int(dtype: DType):
+    """Get the data type of an object and get the integer equivalent.
+
+    Args:
+        x (object): Data type or object to get data type of.
+
+    Returns:
+        dtype: Data type, but ensured to be integer.
+    """
+    # TODO: Is there a better way of doing this?
+    name = list(convert(dtype, NPDType).__name__)
+    while name and name[0] not in set([str(i) for i in range(10)]):
+        name.pop(0)
+    return _convert_back(getattr(np, "int" + "".join(name)), dtype)
 
 
 @dispatch
 def dtype_int(x):
-    """Get the data type of an object and get the integer equivalent.
-
-    Args:
-        x (object): Object to get data type of.
-
-    Returns:
-        dtype: Data type of `x`, but ensured to be integer.
-    """
-    x_dtype = dtype(x)
-    name = list(convert(x_dtype, NPDType).__name__)
-    while name and name[0] not in set([str(i) for i in range(10)]):
-        name.pop(0)
-    return _convert_back(getattr(np, "int" + "".join(name)), x_dtype)
+    return dtype_int(dtype(x))
 
 
 # Random state types:
