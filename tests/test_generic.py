@@ -105,15 +105,18 @@ def test_device_and_to_active_device(check_lazy_shapes):
     ],
 )
 def test_on_device(f, t, check_lazy_shapes):
-    # Reset the active device.
+    f_t = f(t)  # Contruct on current and existing device.
+
+    # Set the active device to something else.
     B.ActiveDevice.active_name = "previous"
 
     # Check that explicit allocation on CPU works.
     with B.on_device("cpu"):
-        f(t)
+        assert B.device(f(t)) == B.device(f_t)
+
     # Also test inferring the device from a tensor.
-    with B.on_device(f(t)):
-        f(t)
+    with B.on_device(f_t):
+        assert B.device(f(t)) == B.device(f_t)
 
     # Check that allocation on a non-existing device breaks.
     with pytest.raises(Exception):
