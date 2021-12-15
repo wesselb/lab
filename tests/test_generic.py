@@ -105,6 +105,9 @@ def test_device_and_to_active_device(check_lazy_shapes):
     ],
 )
 def test_on_device(f, t, check_lazy_shapes):
+    # Reset the active device.
+    B.ActiveDevice.active_name = "previous"
+
     # Check that explicit allocation on CPU works.
     with B.on_device("cpu"):
         f(t)
@@ -117,8 +120,8 @@ def test_on_device(f, t, check_lazy_shapes):
         with B.on_device("magic-device"):
             f(t)
 
-    # Reset the active device. This is still set to "magic-device" due to the above
-    # test.
+    # Check that the active device is reset again.
+    assert B.ActiveDevice.active_name == "previous"
     B.ActiveDevice.active_name = None
 
 

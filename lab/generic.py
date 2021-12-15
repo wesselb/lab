@@ -250,22 +250,25 @@ class ActiveDevice:
 
     def __init__(self, name):
         self.name = name
+        self._previous_active_name = None
         self._active_tf_manager = None
 
     def __enter__(self):
-        # Set active name.
-        ActiveDevice.active_name = self.name
-
-        # Activate the TF device manager, if it is available.
+        # Activate the TF device manager, if it is available. We do this first: if it
+        # errors, `active_name` remains unchanged.
         if ActiveDevice._tf_manager:
             self._active_tf_manager = ActiveDevice._tf_manager(self.name)
             self._active_tf_manager.__enter__()
+
+        # Set active name.
+        self._previous_active_name = ActiveDevice.active_name
+        ActiveDevice.active_name = self.name
 
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         # Unset the active name.
-        ActiveDevice.active_name = None
+        ActiveDevice.active_name = self._previous_active_name
 
         # Exit the TF device manager, if it was entered.
         if self._active_tf_manager:
