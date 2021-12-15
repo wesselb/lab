@@ -25,7 +25,7 @@ def global_random_state(_: TorchDType):
 
         # Ensure that the generators are available.
         if len(torch.cuda.default_generators) == 0:
-            torch.cuda.seed()
+            torch.cuda.init()
 
         if len(parts) == 1:
             return torch.cuda.default_generators[0]

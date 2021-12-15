@@ -119,13 +119,13 @@ def test_torch_global_random_state(mocker):
     assert B.global_random_state(torch.float32) is torch.random.default_generator
 
     # Test that `cuda.seed` is called to initialise the default generators.
-    torch_cuda_seed = mocker.patch("torch.cuda.seed")
+    torch_cuda_init = mocker.patch("torch.cuda.init")
     B.ActiveDevice.active_name = "cuda"
     # The call is allowed to fail, because `torch.cuda.seed` is mocked, so it won't
     # actually populate `torch.cuda.default_generators`.
     with pytest.raises(IndexError):
         B.global_random_state(torch.float32)
-    assert torch_cuda_seed.called_once()
+    assert torch_cuda_init.called_once()
 
     # Now set some fake default generators.
     torch.cuda.default_generators = (0, 1)
