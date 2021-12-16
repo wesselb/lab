@@ -9,8 +9,12 @@ from setuptools import find_packages, setup, Extension
 if os.name == "nt":
     # On Windows, don't compile the extra modules.
     ext_modules = []
-else:
 
+elif "LAB_NO_BUILD" in os.environ and os.environ["LAB_NO_BUILD"] == "1":
+    # Also don't build anything if `LAB_NO_BUILD` is set to `1`.
+    ext_modules = []
+
+else:
     # Include libraries from the OS X Command Line Tools. On OS X Big Sur, these
     # libraries are not automatically included anymore.
     osx_library_path = "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib"
