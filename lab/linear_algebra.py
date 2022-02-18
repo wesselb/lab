@@ -472,8 +472,8 @@ def pw_dists2(a, b):
     if B.shape(a, -1) == 1 and B.shape(b, -1) == 1:
         return (a - B.transpose(b)) ** 2
 
-    norms_a = B.sum(a ** 2, axis=-1)[..., :, None]
-    norms_b = B.sum(b ** 2, axis=-1)[..., None, :]
+    norms_a = B.sum(a**2, axis=-1)[..., :, None]
+    norms_b = B.sum(b**2, axis=-1)[..., None, :]
     return norms_a + norms_b - 2 * B.matmul(a, b, tr_b=True)
 
 
@@ -577,8 +577,8 @@ def pw_sums2(a, b):
     if B.shape(a, -1) == 1 and B.shape(b, -1) == 1:
         return (a + B.transpose(b)) ** 2
 
-    norms_a = B.sum(a ** 2, axis=-1)[..., :, None]
-    norms_b = B.sum(b ** 2, axis=-1)[..., None, :]
+    norms_a = B.sum(a**2, axis=-1)[..., :, None]
+    norms_b = B.sum(b**2, axis=-1)[..., None, :]
     return norms_a + norms_b + 2 * B.matmul(a, b, tr_b=True)
 
 

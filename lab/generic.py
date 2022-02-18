@@ -55,6 +55,7 @@ __all__ = [
     "sqrt",
     "exp",
     "log",
+    "log1p",
     "sin",
     "arcsin",
     "cos",
@@ -698,6 +699,19 @@ def log(a: Numeric):  # pragma: no cover
 
 @dispatch
 @abstract()
+def log1p(a: Numeric):  # pragma: no cover
+    """The function `log(1 + a)`.
+
+    Args:
+        a (tensor): Tensor.
+
+    Returns:
+        tensor: The function `log(1 + a)` function evaluated at `a`.
+    """
+
+
+@dispatch
+@abstract()
 def sin(a: Numeric):  # pragma: no cover
     """Sine function.
 
@@ -837,7 +851,7 @@ def softplus(a):
         tensor: Softplus function evaluated at `a`.
     """
     zero = B.cast(B.dtype(a), 0)
-    return log(1 + exp(-abs(a))) + maximum(a, zero)
+    return log1p(exp(-abs(a))) + maximum(a, zero)
 
 
 @dispatch

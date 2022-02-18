@@ -153,6 +153,11 @@ def log(a: Numeric):
 
 
 @dispatch
+def log1p(a: Numeric):
+    return torch.log1p(a)
+
+
+@dispatch
 def sin(a: Numeric):
     return torch.sin(a)
 
@@ -195,6 +200,11 @@ def arctanh(a: Numeric):
 @dispatch
 def erf(a: Numeric):
     return torch.erf(a)
+
+
+@dispatch
+def softplus(a: TorchNumeric):
+    return torch.nn.functional.softplus(a)
 
 
 @dispatch

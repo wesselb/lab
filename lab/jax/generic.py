@@ -3,6 +3,7 @@ from types import FunctionType
 import jax
 import jax.numpy as jnp
 import jax.scipy.special as jsps
+import jax.nn as jnn
 from plum import Union
 
 from . import B, dispatch, Numeric
@@ -166,6 +167,11 @@ def log(a: Numeric):
 
 
 @dispatch
+def log1p(a: Numeric):
+    return jnp.log1p(a)
+
+
+@dispatch
 def sin(a: Numeric):
     return jnp.sin(a)
 
@@ -208,6 +214,11 @@ def arctanh(a: Numeric):
 @dispatch
 def erf(a: Numeric):
     return jsps.erf(a)
+
+
+@dispatch
+def softplus(a: JAXNumeric):
+    return jnn.softplus(a)
 
 
 @dispatch

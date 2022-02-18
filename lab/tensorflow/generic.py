@@ -145,6 +145,11 @@ def log(a: Numeric):
 
 
 @dispatch
+def log1p(a: Numeric):
+    return tf.math.log1p(a)
+
+
+@dispatch
 def sin(a: Numeric):
     return tf.sin(a)
 
@@ -187,6 +192,11 @@ def arctanh(a: Numeric):
 @dispatch
 def erf(a: Numeric):
     return tf.math.erf(a)
+
+
+@dispatch
+def softplus(a: TFNumeric):
+    return tf.math.softplus(a)
 
 
 @dispatch

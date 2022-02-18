@@ -139,6 +139,11 @@ def log(a: Numeric):
 
 
 @dispatch
+def log1p(a: Numeric):
+    return np.log1p(a)
+
+
+@dispatch
 def sin(a: Numeric):
     return np.sin(a)
 

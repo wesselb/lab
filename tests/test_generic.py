@@ -343,7 +343,7 @@ def test_unary_signed(f, check_lazy_shapes):
     check_function(f, (Tensor(2, 3),))
 
 
-@pytest.mark.parametrize("f", [B.log, B.sqrt])
+@pytest.mark.parametrize("f", [B.log, lambda x: B.log1p(x - 1), B.sqrt])
 def test_unary_positive(f, check_lazy_shapes):
     check_function(f, (PositiveTensor(),))
     check_function(f, (PositiveTensor(2),))
@@ -498,7 +498,7 @@ def test_bvn_cdf(check_lazy_shapes):
 
 def test_cond(check_lazy_shapes):
     def f(v, x):
-        return B.cond(v > 0, lambda y: 2 * y, lambda y: y ** 2, x)
+        return B.cond(v > 0, lambda y: 2 * y, lambda y: y**2, x)
 
     for _ in range(10):
         check_function(f, (Tensor(), Tensor(4)))

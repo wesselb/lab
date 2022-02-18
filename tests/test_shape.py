@@ -86,7 +86,7 @@ def test_dimension():
     assert d // 2 == 2
     assert 11 // d == 2
     assert -d is -5
-    assert d ** 2 is 25
+    assert d**2 is 25
 
     # Test representation.
     assert repr(d) == str(d) == "5"
