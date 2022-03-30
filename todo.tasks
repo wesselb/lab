@@ -1,29 +1,21 @@
 TODO:
-    Support:
-        ☐ Jax
-            ☐ Design with AutoGrad as well?
-
+    ☐ Borrow global state so that you never can forget to set it. @high
+    ☐ Make `B.jit` work with Torch and TF generators to ensure uniform patterns. @high
+    ☐ Check optimality of `move_to_device`. @low
     ☐ Reuse Plum's error message.
-    ☐ Fix output data types of custom gradients in TensorFlow.
-    ☐ `bvn_cdf` and `toeplitz_solve` always output `float64`s. Issue?
 
-    ☐ Test and implement batched behaviour for linear algebra operations:
-        ☐ svd
-        ☐ toeplitz_solve
-        ☐ outer
-        ☐ reg
-        ☐ pw/ew
-
-    ☐ eig
+Functions:
     ☐ eigvals
-
-    ☐ Refactor tests to use PyTest: remove raises, fixtures, and parametrisation. @high
-
-Future:
-    ☐ Let `cholesky_solve` for PyTorch use `torch.cholesky_solve` once the derivative is implemented.
+    ☐ norm
+    ☐ dot
+    ☐ cos_sim
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✓ Let `cholesky_solve` for PyTorch use `torch.cholesky_solve` once the derivative is implemented. @done (22-03-30 19:33) @project(Future)
+ ✓ Jax @done (22-03-30 19:32) @project(TODO / Support)
+ ✓ Design with AutoGrad as well? @done (22-03-30 19:32) @project(TODO / Support)
+ x Refactor tests to use PyTest: remove raises, fixtures, and parametrisation. @high @cancelled (22-03-30 19:32) @project(Functions)
  x Refactor scan once TF2.0 is integrated. @cancelled (19-07-07 18:53) @project(TODO)
  ✓ Port bvn_cdf. @done (19-05-16 18:06) @project(TODO)
  ✓ Check Python 2 and Python 3 compatibility. @done (19-05-16 18:06) @project(TODO)
