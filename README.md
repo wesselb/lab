@@ -338,6 +338,8 @@ minimum(a, b)
 maximum(a, b)
 leaky_relu(a, alpha)
 
+softmax(a, axis=None)
+
 min(a, axis=None, squeeze=True)
 max(a, axis=None, squeeze=True)
 sum(a, axis=None, squeeze=True)

@@ -381,6 +381,7 @@ def test_binary_positive_first(f, check_lazy_shapes):
 @pytest.mark.parametrize(
     "f, check_squeeze",
     [
+        (B.softmax, False),
         (B.min, True),
         (B.max, True),
         (B.sum, True),
@@ -458,6 +459,16 @@ def test_nanreductions(f, f_ref, check_lazy_shapes):
                     f(x, axis=axis, squeeze=squeeze),
                     f_ref(x, axis=axis, squeeze=squeeze),
                 )
+
+
+def test_softmax_correctness(check_lazy_shapes):
+    mat = Tensor(3, 4).np()
+    approx(B.logsumexp(mat), scipy.special.logsumexp(mat))
+    for axis in [None, -1, 0, 1]:
+        approx(
+            B.softmax(mat, axis=axis),
+            scipy.special.softmax(mat, axis=axis),
+        )
 
 
 def test_logsumexp_correctness(check_lazy_shapes):

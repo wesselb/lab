@@ -76,6 +76,7 @@ __all__ = [
     "minimum",
     "maximum",
     "leaky_relu",
+    "softmax",
     "min",
     "argmin",
     "max",
@@ -981,6 +982,24 @@ def leaky_relu(a, alpha):  # pragma: no cover
         tensor: Activation value.
     """
     return maximum(multiply(a, alpha), a)
+
+
+# Axis-wise operation:
+
+
+@dispatch
+def softmax(a, axis: Union[Int, None] = None):  # pragma: no cover
+    """Exponentiate a tensor and divide by the sum, possibly along an axis.
+
+    Args:
+        a (tensor): Tensor.
+        axis (int, optional): Optional axis.
+
+    Returns:
+        tensor: Reduced tensor.
+    """
+    a_max = max(a, axis=axis, squeeze=False)
+    return exp(a - a_max) / sum(exp(a - a_max), axis=axis, squeeze=False)
 
 
 # Reductions:
