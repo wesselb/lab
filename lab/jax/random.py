@@ -99,3 +99,17 @@ def randint(
     )
     B.jax_global_random_state = state
     return res
+
+
+@dispatch
+def randperm(state: JAXRandomState, dtype: JAXDType, n: Int):
+    dtype = B.dtype_int(dtype)
+    state, key = jax.random.split(state)
+    return state, B.to_active_device(B.cast(dtype, jax.random.permutation(key, n)))
+
+
+@dispatch
+def randperm(dtype: JAXDType, n: Int):
+    state, res = randperm(global_random_state(dtype), dtype, n)
+    B.jax_global_random_state = state
+    return res

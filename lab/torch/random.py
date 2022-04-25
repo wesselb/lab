@@ -93,3 +93,14 @@ def randint(
 def randint(dtype: TorchDType, *shape: Int, lower: Int = 0, upper):
     state = global_random_state(dtype)
     return randint(state, dtype, *shape, lower=lower, upper=upper)[1]
+
+
+@dispatch
+def randperm(state: TorchRandomState, dtype: TorchDType, n: Int):
+    dtype = B.dtype_int(dtype)
+    return state, torch.randperm(n, dtype=dtype, generator=state)
+
+
+@dispatch
+def randperm(dtype: TorchDType, n: Int):
+    return randperm(global_random_state(dtype), dtype, n)[1]

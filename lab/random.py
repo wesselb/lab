@@ -16,6 +16,7 @@ __all__ = [
     "randn",
     "choice",
     "randint",
+    "randperm",
 ]
 
 
@@ -218,3 +219,23 @@ def randint(state: RandomState, ref: Numeric, *, lower: Int = 0, upper: Int):
 @dispatch
 def randint(ref: Numeric, *, lower: Int = 0, upper: Int):
     return randint(B.dtype(ref), *B.shape(ref), lower=lower, upper=upper)
+
+
+@dispatch
+@abstract()
+def randperm(state: RandomState, dtype: DType, n: Int):  # pragma: no cover
+    """Construct a random permutation counting to `n`.
+
+    Args:
+        state (random state, optional): Random state.
+        dtype (dtype, optional): Data type. Defaults to the default data type.
+        n (int): Length of the permutation.
+
+    Returns:
+        tensor: Random permutation.
+    """
+
+
+@dispatch
+def randperm(n: Int):
+    return randperm(B.default_dtype, n)

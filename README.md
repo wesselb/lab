@@ -454,6 +454,10 @@ randint(dtype, *shape, lower=0, upper)
 randint(*shape, lower=0, upper)
 randint(state, ref, lower=0, upper)
 randint(ref, lower=0, upper)
+
+randperm(state, dtype, n)
+randperm(dtype, n)
+randperm(n)
 ```
 
 ### Shaping

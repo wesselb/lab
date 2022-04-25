@@ -73,3 +73,14 @@ def randint(state: NPRandomState, dtype: NPDType, *shape: Int, lower: Int = 0, u
 def randint(dtype: NPDType, *shape: Int, lower: Int = 0, upper):
     state = global_random_state(dtype)
     return randint(state, dtype, *shape, lower=lower, upper=upper)[1]
+
+
+@dispatch
+def randperm(state: NPRandomState, dtype: NPDType, n: Int):
+    dtype = B.dtype_int(dtype)
+    return state, B.cast(dtype, state.permutation(n))
+
+
+@dispatch
+def randperm(dtype: NPDType, n: Int):
+    return randperm(global_random_state(dtype), dtype, n)[1]

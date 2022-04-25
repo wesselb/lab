@@ -73,3 +73,20 @@ def randint(
 def randint(dtype: TFDType, *shape: Int, lower: Int = 0, upper: Int):
     state = global_random_state(dtype)
     return randint(state, dtype, *shape, lower=lower, upper=upper)[1]
+
+
+@dispatch
+def randperm(state: TFRandomState, dtype: TFDType, n: Int):
+    dtype = B.dtype_int(dtype)
+    # TF does not have a function to generate a random permutation. One way to do it
+    # manually is to generate a range of length `n` and then shuffle it, but TF also
+    # does not have a stateless shuffle. Hence, to get a stateless random permutation,
+    # we generate random numbers and sort them...
+    # TODO: Do this in a better way.
+    perm = tf.argsort(state.uniform((n,), dtype=tf.float32))
+    return state, B.cast(dtype, perm)
+
+
+@dispatch
+def randperm(dtype: TFDType, n: Int):
+    return randperm(global_random_state(dtype), dtype, n)[1]
