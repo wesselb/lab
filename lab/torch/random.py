@@ -42,7 +42,10 @@ def set_global_random_state(state: TorchRandomState):
 @dispatch
 def rand(state: TorchRandomState, dtype: TorchDType, *shape: Int):
     return state, torch.rand(
-        shape, dtype=dtype, device=B.ActiveDevice.active_name, generator=state
+        shape,
+        dtype=dtype,
+        device=B.ActiveDevice.active_name,
+        generator=state,
     )
 
 
@@ -54,7 +57,10 @@ def rand(dtype: TorchDType, *shape: Int):
 @dispatch
 def randn(state: TorchRandomState, dtype: TorchDType, *shape: Int):
     return state, torch.randn(
-        shape, dtype=dtype, device=B.ActiveDevice.active_name, generator=state
+        shape,
+        dtype=dtype,
+        device=B.ActiveDevice.active_name,
+        generator=state,
     )
 
 
@@ -98,7 +104,12 @@ def randint(dtype: TorchDType, *shape: Int, lower: Int = 0, upper):
 @dispatch
 def randperm(state: TorchRandomState, dtype: TorchDType, n: Int):
     dtype = B.dtype_int(dtype)
-    return state, torch.randperm(n, dtype=dtype, generator=state)
+    return state, torch.randperm(
+        n,
+        dtype=dtype,
+        device=B.ActiveDevice.active_name,
+        generator=state,
+    )
 
 
 @dispatch
