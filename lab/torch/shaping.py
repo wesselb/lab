@@ -1,8 +1,9 @@
+import numpy as np
 import torch
-from plum import Union
+from plum import Union, convert
 
-from . import dispatch, Numeric
-from ..types import Int
+from . import dispatch, Numeric, TorchNumeric
+from ..types import Int, NPDType, issubdtype
 
 __all__ = []
 
@@ -68,3 +69,17 @@ def concat(*elements: Numeric, axis: Int = 0):
 @dispatch
 def tile(a: Numeric, *repeats: Int):
     return a.repeat(*repeats)
+
+
+@dispatch
+def _take_convert(indices_or_mask: Union[list, tuple]):
+    return indices_or_mask
+
+
+@dispatch
+def _take_convert(indices_or_mask: TorchNumeric):
+    if issubdtype(convert(indices_or_mask.dtype, NPDType), np.integer):
+        # Indices must be on the CPU and `int64`s!
+        return indices_or_mask.cpu().type(torch.int64)
+    else:
+        return indices_or_mask

@@ -1,7 +1,9 @@
+import jax.numpy as jnp
 import lab as B
 import numpy as np
 import pytest
 import tensorflow as tf
+import torch
 from lab.shape import Shape
 from plum import NotFoundLookupError
 
@@ -330,6 +332,28 @@ def test_take_tf(check_lazy_shapes):
     approx(B.take(a.tf(), ref.np() > 0), B.take(a.np(), ref.np() > 0))
     approx(B.take(a.tf(), B.range(tf.int64, 2)), B.take(a.np(), B.range(2)))
     approx(B.take(a.tf(), B.range(np.int64, 2)), B.take(a.np(), B.range(2)))
+
+
+@pytest.mark.parametrize(
+    "dtype",
+    [
+        np.float32,
+        np.float64,
+        jnp.float32,
+        jnp.float64,
+        tf.float32,
+        tf.float64,
+        torch.float32,
+        torch.float64,
+    ],
+)
+def test_take_perm(dtype, check_lazy_shapes):
+    a = B.range(dtype, 10)
+    perm = B.randperm(B.dtype_int(dtype), 10)
+    a2 = B.take(a, perm)
+    assert B.dtype(perm) == B.dtype_int(dtype)
+    assert B.shape(a) == B.shape(a2)
+    assert B.dtype(a) == B.dtype(a2)
 
 
 def test_submatrix(check_lazy_shapes):

@@ -188,7 +188,8 @@ def _torch_lookup(dtype):
     if not _torch_lookup_cache:
         # Cache is empty. Fill it.
 
-        for name in np.core.numerictypes.__all__:
+        # `bool` can occur but isn't in `__all__`.
+        for name in np.core.numerictypes.__all__ + ["bool"]:
             # Check that it is a type.
             if not isinstance(getattr(np, name), type):
                 continue

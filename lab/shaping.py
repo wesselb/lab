@@ -496,8 +496,8 @@ def take(a: Numeric, indices_or_mask, axis: Int = 0):
 
     Args:
         a (tensor): Tensor.
-        indices_or_mask (list): List of indices or boolean indicating which
-            elements to take. Must be rank 1.
+        indices_or_mask (object): List of indices or booleans indicating which elements
+            to take. Must be rank 1.
         axis (int, optional): Axis along which to take indices. Defaults to `0`.
 
     Returns:
@@ -509,11 +509,28 @@ def take(a: Numeric, indices_or_mask, axis: Int = 0):
     if isinstance(indices_or_mask, tuple):
         indices_or_mask = list(indices_or_mask)
     axis = resolve_axis(a, axis)
+    # Perform conversion.
+    indices_or_mask = _take_convert(indices_or_mask)
     slices = tuple(
         indices_or_mask if i == axis else slice(None, None, None)
         for i in range(B.rank(a))
     )
     return a[slices]
+
+
+@dispatch
+def _take_convert(indices_or_mask):
+    """Convert `indices_or_mask` in `take` before passing it to the index.
+
+    Args:
+        indices_or_mask (object): List of indices or booleans indicating which elements
+            to take.
+
+    Returns:
+        object: Converted version of `indices_or_mask`.
+    """
+    # By default, do nothing.
+    return indices_or_mask
 
 
 @dispatch

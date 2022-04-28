@@ -1,7 +1,9 @@
 TODO:
     ☐ Borrow global state so that you never can forget to set it. @high
     ☐ Make `B.jit` work with Torch and TF generators to ensure uniform patterns. @high
+
     ☐ Check optimality of `move_to_device`. @low
+
     ☐ Reuse Plum's error message.
 
 Functions:
@@ -12,6 +14,16 @@ Functions:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✓ Allow to index with `int32` for Torch @high @done (22-04-28 15:50) @project(TODO)
+ ✓ Add test like this: @high @done (22-04-28 15:50) @project(TODO)
+  import lab as B
+  import tensorflow as tf
+  import lab.tensorflow
+  import jax.numpy as jnp
+  import lab.jax
+  import torch
+  import lab.torch
+  for dtype in [np.float32, jnp.float32, tf.float32, torch.float64]
  ✓ Let `cholesky_solve` for PyTorch use `torch.cholesky_solve` once the derivative is implemented. @done (22-03-30 19:33) @project(Future)
  ✓ Jax @done (22-03-30 19:32) @project(TODO / Support)
  ✓ Design with AutoGrad as well? @done (22-03-30 19:32) @project(TODO / Support)
@@ -21,3 +33,6 @@ Archive:
  ✓ Check Python 2 and Python 3 compatibility. @done (19-05-16 18:06) @project(TODO)
  ✓ Documentation. @critical @done (19-05-02 13:29) @project(TODO)
  ✓ Add support for AutoGrad. @done (19-05-01 13:25) @project(TODO)
+ x = B.range(dtype, 10) @project(TODO)
+  perm = B.randperm(B.dtype_int(dtype), 10)
+  B.take(x, B.cast(B.promote_dtypes(B.dtype_int(dtype), int), perm))
