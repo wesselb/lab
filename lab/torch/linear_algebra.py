@@ -1,12 +1,12 @@
 from typing import Optional, Union
 
+import opt_einsum as oe
 import torch
 
 from . import dispatch, B, Numeric
 from .custom import torch_register
 from ..custom import toeplitz_solve, s_toeplitz_solve, expm, s_expm, logm, s_logm
 from ..linear_algebra import _default_perm
-from ..shape import unwrap_dimension
 from ..types import Int
 
 __all__ = []
@@ -21,7 +21,7 @@ def matmul(a: Numeric, b: Numeric, tr_a: bool = False, tr_b: bool = False):
 
 @dispatch
 def einsum(equation: str, *elements: Numeric):
-    return torch.einsum(equation, *elements)
+    return oe.contract(equation, *elements, backend="torch")
 
 
 @dispatch

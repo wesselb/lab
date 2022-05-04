@@ -3,6 +3,7 @@ from typing import Union, Optional
 
 import jax.numpy as jnp
 import jax.scipy.linalg as jsla
+import opt_einsum as oe
 
 from . import dispatch, B, Numeric
 from .custom import jax_register
@@ -37,7 +38,7 @@ def matmul(a: Numeric, b: Numeric, tr_a: bool = False, tr_b: bool = False):
 
 @dispatch
 def einsum(equation: str, *elements: Numeric):
-    return jnp.einsum(equation, *elements)
+    return oe.contract(equation, *elements, backend="jax")
 
 
 @dispatch

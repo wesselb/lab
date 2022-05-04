@@ -2,6 +2,7 @@ import logging
 from typing import Union, Optional
 
 import numpy as np
+import opt_einsum as oe
 import scipy.linalg as sla
 
 from . import dispatch, B, Numeric
@@ -24,7 +25,7 @@ def matmul(a: Numeric, b: Numeric, tr_a: bool = False, tr_b: bool = False):
 
 @dispatch
 def einsum(equation: str, *elements: Numeric):
-    return np.einsum(equation, *elements)
+    return oe.contract(equation, *elements, backend="numpy")
 
 
 @dispatch

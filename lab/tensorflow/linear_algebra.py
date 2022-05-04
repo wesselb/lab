@@ -1,5 +1,6 @@
 from typing import Union, Optional
 
+import opt_einsum as oe
 import tensorflow as tf
 
 from . import dispatch, B, Numeric
@@ -19,7 +20,7 @@ def matmul(a: Numeric, b: Numeric, tr_a: bool = False, tr_b: bool = False):
 
 @dispatch
 def einsum(equation: str, *elements: Numeric):
-    return tf.einsum(equation, *elements)
+    return oe.contract(equation, *elements, backend="tensorflow")
 
 
 @dispatch

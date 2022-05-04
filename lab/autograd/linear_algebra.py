@@ -3,6 +3,7 @@ from typing import Union, Optional
 
 import autograd.numpy as anp
 import autograd.scipy.linalg as asla
+import opt_einsum as oe
 
 from . import dispatch, B, Numeric
 from .custom import autograd_register
@@ -24,7 +25,7 @@ def matmul(a: Numeric, b: Numeric, tr_a: bool = False, tr_b: bool = False):
 
 @dispatch
 def einsum(equation: str, *elements: Numeric):
-    return anp.einsum(equation, *elements)
+    return oe.contract(equation, *elements, backend="autograd")
 
 
 @dispatch
