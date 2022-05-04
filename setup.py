@@ -109,7 +109,13 @@ else:
             )
         )
 
-requirements = ["numpy>=1.16", "scipy>=1.3", "fdm", "plum-dispatch>=1.5.3"]
+requirements = [
+    "numpy>=1.16",
+    "scipy>=1.3",
+    "fdm",
+    "plum-dispatch>=1.5.3",
+    "opt_einsum",
+]
 
 setup(
     packages=find_packages(exclude=["docs"]),
