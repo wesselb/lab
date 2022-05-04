@@ -114,7 +114,7 @@ requirements = [
     "scipy>=1.3",
     "fdm",
     "plum-dispatch>=1.5.3",
-    "opt_einsum",
+    "opt-einsum",
 ]
 
 setup(
