@@ -209,6 +209,35 @@ def test_cholesky(f, check_lazy_shapes):
     check_function(f, (PSD(4, 3, 3),))
 
 
+def test_cholesky_retry_factor(check_lazy_shapes):
+    # Try `cholesky_retry_factor = 1`.
+    B.cholesky_retry_factor = 1
+    B.cholesky(B.zeros(3, 3))
+    B.cholesky(B.zeros(3, 3) - 0.5 * B.eye(3) * B.epsilon)
+    with pytest.raises(np.linalg.LinAlgError):
+        B.cholesky(B.zeros(3, 3) - 0.5 * B.eye(3) * 10 * B.epsilon)
+    with pytest.raises(np.linalg.LinAlgError):
+        B.cholesky(B.zeros(3, 3) - 0.5 * B.eye(3) * 100 * B.epsilon)
+
+    # Try `cholesky_retry_factor = 10`.
+    B.cholesky_retry_factor = 10
+    B.cholesky(B.zeros(3, 3))
+    B.cholesky(B.zeros(3, 3) - 0.5 * B.eye(3) * B.epsilon)
+    B.cholesky(B.zeros(3, 3) - 0.5 * B.eye(3) * 10 * B.epsilon)
+    with pytest.raises(np.linalg.LinAlgError):
+        B.cholesky(B.zeros(3, 3) - 0.5 * B.eye(3) * 100 * B.epsilon)
+
+    # Try `cholesky_retry_factor = 100`.
+    B.cholesky_retry_factor = 100
+    B.cholesky(B.zeros(3, 3))
+    B.cholesky(B.zeros(3, 3) - 0.5 * B.eye(3) * B.epsilon)
+    B.cholesky(B.zeros(3, 3) - 0.5 * B.eye(3) * 10 * B.epsilon)
+    B.cholesky(B.zeros(3, 3) - 0.5 * B.eye(3) * 100 * B.epsilon)
+
+    # Reset the factor!
+    B.cholesky_retry_factor = 1
+
+
 @pytest.mark.parametrize("f", [B.cholesky_solve, B.cholsolve])
 def test_cholesky_solve(f, check_lazy_shapes):
     check_function(f, (PSDTriangular(3, 3), Matrix(3, 4)))

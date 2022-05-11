@@ -1,5 +1,7 @@
 import logging
 from typing import Optional, Union
+from wbml.warning import warn_upmodule
+import warnings
 
 from . import dispatch, B
 from .types import Numeric, Int
@@ -25,6 +27,7 @@ __all__ = [
     "logdet",
     "expm",
     "logm",
+    "cholesky_retry_factor",
     "cholesky",
     "chol",
     "cholesky_solve",
@@ -314,6 +317,11 @@ def logm(a):  # pragma: no cover
     """
 
 
+cholesky_retry_factor = 1
+"""float: If the Cholesky decomposition throws an exception, increase `B.epsilon` by
+this at most factor and try the Cholesky decomposition again."""
+
+
 @dispatch
 def cholesky(a: Numeric):
     """Compute the Cholesky decomposition. The matrix will automatically be regularised
@@ -325,7 +333,24 @@ def cholesky(a: Numeric):
     Returns:
         tensor: Cholesky decomposition.
     """
-    return _cholesky(reg(a))
+    factor = 1
+    while True:
+        try:
+            return _cholesky(reg(a, diag=factor * B.epsilon))
+        except Exception as e:
+            if factor < B.cholesky_retry_factor:
+                # If we can still increase the factor, increase it and retry the
+                # Cholesky.
+                factor *= 10
+                warn_upmodule(
+                    f"Cholesky decomposition failed. "
+                    f"Trying again with regularisation `{factor * B.epsilon}`."
+                )
+                continue
+            else:
+                # We have increased the factor as much as we're allowed to. Throw
+                # the original exception.
+                raise e
 
 
 chol = cholesky  #: Shorthand for `cholesky`.

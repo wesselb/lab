@@ -237,8 +237,9 @@ See the documentation for more detailed descriptions of each function.
 
 ### Special Variables
 ```
-default_dtype  # Default data type.
-epsilon        # Magnitude of diagonal to regularise matrices with.
+default_dtype          # Default data type.
+epsilon                # Magnitude of diagonal to regularise matrices with.
+cholesky_retry_factor  # Retry the Cholesky, increasing `epsilon` by a factor at most this.
 ```
 
 ### Constants
