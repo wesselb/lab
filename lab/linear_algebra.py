@@ -1,7 +1,6 @@
 import logging
-from typing import Optional, Union
-from wbml.warning import warn_upmodule
 import warnings
+from typing import Optional, Union
 
 from . import dispatch, B
 from .types import Numeric, Int
@@ -342,9 +341,10 @@ def cholesky(a: Numeric):
                 # If we can still increase the factor, increase it and retry the
                 # Cholesky.
                 factor *= 10
-                warn_upmodule(
+                warnings.warn(
                     f"Cholesky decomposition failed. "
-                    f"Trying again with regularisation `{factor * B.epsilon}`."
+                    f"Trying again with regularisation `{factor * B.epsilon}`.",
+                    stacklevel=2,
                 )
                 continue
             else:
