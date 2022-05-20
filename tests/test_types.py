@@ -132,7 +132,7 @@ def test_data_type(check_lazy_shapes):
     assert convert(jnp.float32, B.TorchDType) is torch.float32
 
     # `torch.bool` has a manual addition, so test it separately.
-    assert convert(torch.bool, B.NPDType) is np.bool
+    assert convert(torch.bool, B.NPDType) is bool
 
 
 def test_dtype(check_lazy_shapes):

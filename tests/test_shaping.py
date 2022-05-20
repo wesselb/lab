@@ -301,6 +301,16 @@ def test_take_consistency(check_lazy_shapes):
         {"axis": Value(0, 1, -1)},
     )
 
+    # Test PyTorch separately, because it has a separate implementation for framework
+    # masks or indices.
+    for indices_or_mask in [
+        torch.tensor([True, True, False], dtype=torch.bool),
+        torch.tensor([0, 1], dtype=torch.int32),
+        torch.tensor([0, 1], dtype=torch.int64),
+    ]:
+        a = B.randn(torch.float32, 3, 3)
+        approx(B.take(a, indices_or_mask), a[[0, 1]])
+
 
 def test_take_consistency_order(check_lazy_shapes):
     # Check order of indices.

@@ -103,7 +103,7 @@ def cholesky_solve(a: Numeric, b: Numeric):
 
 @dispatch
 def triangular_solve(a: Numeric, b: Numeric, lower_a: bool = True):
-    return torch.triangular_solve(b, a, upper=not lower_a)[0]
+    return torch.linalg.solve_triangular(a, b, upper=not lower_a)
 
 
 _toeplitz_solve = torch_register(toeplitz_solve, s_toeplitz_solve)

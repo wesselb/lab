@@ -188,15 +188,27 @@ def _torch_lookup(dtype):
     if not _torch_lookup_cache:
         # Cache is empty. Fill it.
 
+        def _from_np(name):
+            # We will want to get types from `np`, but the built-in types should be just
+            # those.
+            if name in {"int", "long"}:
+                return int
+            elif name == "bool":
+                return bool
+            elif name == "unicode":
+                return str
+            else:
+                return getattr(np, name)
+
         # `bool` can occur but isn't in `__all__`.
         for name in np.core.numerictypes.__all__ + ["bool"]:
             # Check that it is a type.
-            if not isinstance(getattr(np, name), type):
+            if not isinstance(_from_np(name), type):
                 continue
 
             # Attempt to get the PyTorch equivalent.
             try:
-                _torch_lookup_cache[_module_attr("torch", name)] = getattr(np, name)
+                _torch_lookup_cache[_module_attr("torch", name)] = _from_np(name)
             except AttributeError:
                 # Could not find the PyTorch equivalent. That's okay.
                 pass
