@@ -1,5 +1,5 @@
 import jax
-from plum import Dispatcher
+from plum import Dispatcher, Union
 
 from . import dispatch, B
 from ..types import Int, JAXDType, JAXNumeric, JAXRandomState
@@ -54,16 +54,23 @@ def randn(dtype: JAXDType, *shape: Int):
 
 
 @dispatch
-def choice(state: JAXRandomState, a: JAXNumeric, n: Int):
+def choice(
+    state: JAXRandomState,
+    a: JAXNumeric,
+    n: Int,
+    *,
+    p: Union[JAXNumeric, None] = None,
+):
     state, key = jax.random.split(state)
-    inds = jax.random.choice(key, a.shape[0], (n,), replace=True)
+    # Feeding `a` to `choice` will not work if `a` is higher-dimensional.
+    inds = jax.random.choice(key, a.shape[0], (n,), replace=True, p=p)
     choices = a[inds]
     return state, choices[0] if n == 1 else choices
 
 
 @dispatch
-def choice(a: JAXNumeric, n: Int):
-    state, res = choice(global_random_state(a), a, n)
+def choice(a: JAXNumeric, n: Int, *, p: Union[JAXNumeric, None] = None):
+    state, res = choice(global_random_state(a), a, n, p=p)
     B.jax_global_random_state = state
     return res
 

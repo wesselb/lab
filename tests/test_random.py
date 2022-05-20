@@ -73,7 +73,8 @@ def test_create_random_state(dtype):
         (B.randperm, B.dtype_int, True),
     ],
 )
-def test_random_generators(f, dtype_transform, just_single_arg, check_lazy_shapes):
+@pytest.mark.parametrize("t", [np.float32, tf.float32, torch.float32, jnp.float32])
+def test_random_generators(f, t, dtype_transform, just_single_arg, check_lazy_shapes):
     # Test without specifying data type.
     if not just_single_arg:
         assert B.dtype(f()) is dtype_transform(B.default_dtype)
@@ -85,56 +86,55 @@ def test_random_generators(f, dtype_transform, just_single_arg, check_lazy_shape
         assert B.shape(f(2, 3)) == (2, 3)
 
     # Test with specifying data type.
-    for t in [np.float32, tf.float32, torch.float32, jnp.float32]:
-        state = B.create_random_state(t, 0)
+    state = B.create_random_state(t, 0)
 
-        # Test direct specification.
-        if not just_single_arg:
-            assert B.dtype(f(t)) is dtype_transform(t)
-            assert B.shape(f(t)) == ()
-        assert B.dtype(f(t, 2)) is dtype_transform(t)
-        assert B.shape(f(t, 2)) == (2,)
-        if not just_single_arg:
-            assert B.dtype(f(t, 2, 3)) is dtype_transform(t)
-            assert B.shape(f(t, 2, 3)) == (2, 3)
+    # Test direct specification.
+    if not just_single_arg:
+        assert B.dtype(f(t)) is dtype_transform(t)
+        assert B.shape(f(t)) == ()
+    assert B.dtype(f(t, 2)) is dtype_transform(t)
+    assert B.shape(f(t, 2)) == (2,)
+    if not just_single_arg:
+        assert B.dtype(f(t, 2, 3)) is dtype_transform(t)
+        assert B.shape(f(t, 2, 3)) == (2, 3)
 
-        # Test state specification.
-        if not just_single_arg:
-            assert isinstance(f(state, t)[0], B.RandomState)
-            assert B.dtype(f(state, t)[1]) is dtype_transform(t)
-            assert B.shape(f(state, t)[1]) == ()
-        assert isinstance(f(state, t, 2)[0], B.RandomState)
-        assert B.dtype(f(state, t, 2)[1]) is dtype_transform(t)
-        assert B.shape(f(state, t, 2)[1]) == (2,)
-        if not just_single_arg:
-            assert isinstance(f(state, t, 2, 3)[0], B.RandomState)
-            assert B.dtype(f(state, t, 2, 3)[1]) is dtype_transform(t)
-            assert B.shape(f(state, t, 2, 3)[1]) == (2, 3)
+    # Test state specification.
+    if not just_single_arg:
+        assert isinstance(f(state, t)[0], B.RandomState)
+        assert B.dtype(f(state, t)[1]) is dtype_transform(t)
+        assert B.shape(f(state, t)[1]) == ()
+    assert isinstance(f(state, t, 2)[0], B.RandomState)
+    assert B.dtype(f(state, t, 2)[1]) is dtype_transform(t)
+    assert B.shape(f(state, t, 2)[1]) == (2,)
+    if not just_single_arg:
+        assert isinstance(f(state, t, 2, 3)[0], B.RandomState)
+        assert B.dtype(f(state, t, 2, 3)[1]) is dtype_transform(t)
+        assert B.shape(f(state, t, 2, 3)[1]) == (2, 3)
 
-        if not just_single_arg:
-            # Test reference specification.
-            assert B.dtype(f(f(t))) is dtype_transform(t)
-            assert B.shape(f(f())) == ()
-            assert B.dtype(f(f(t, 2))) is dtype_transform(t)
-            assert B.shape(f(f(t, 2))) == (2,)
-            assert B.dtype(f(f(t, 2, 3))) is dtype_transform(t)
-            assert B.shape(f(f(t, 2, 3))) == (2, 3)
+    if not just_single_arg:
+        # Test reference specification.
+        assert B.dtype(f(f(t))) is dtype_transform(t)
+        assert B.shape(f(f())) == ()
+        assert B.dtype(f(f(t, 2))) is dtype_transform(t)
+        assert B.shape(f(f(t, 2))) == (2,)
+        assert B.dtype(f(f(t, 2, 3))) is dtype_transform(t)
+        assert B.shape(f(f(t, 2, 3))) == (2, 3)
 
-            # Test state and reference specification.
-            assert isinstance(f(state, f(t))[0], B.RandomState)
-            assert B.dtype(f(state, f(t))[1]) is dtype_transform(t)
-            assert B.shape(f(state, f(t))[1]) == ()
-            assert isinstance(f(state, f(t, 2))[0], B.RandomState)
-            assert B.dtype(f(state, f(t, 2))[1]) is dtype_transform(t)
-            assert B.shape(f(state, f(t, 2))[1]) == (2,)
-            assert isinstance(f(state, f(t, 2, 3))[0], B.RandomState)
-            assert B.dtype(f(state, f(t, 2, 3))[1]) is dtype_transform(t)
-            assert B.shape(f(state, f(t, 2, 3))[1]) == (2, 3)
+        # Test state and reference specification.
+        assert isinstance(f(state, f(t))[0], B.RandomState)
+        assert B.dtype(f(state, f(t))[1]) is dtype_transform(t)
+        assert B.shape(f(state, f(t))[1]) == ()
+        assert isinstance(f(state, f(t, 2))[0], B.RandomState)
+        assert B.dtype(f(state, f(t, 2))[1]) is dtype_transform(t)
+        assert B.shape(f(state, f(t, 2))[1]) == (2,)
+        assert isinstance(f(state, f(t, 2, 3))[0], B.RandomState)
+        assert B.dtype(f(state, f(t, 2, 3))[1]) is dtype_transform(t)
+        assert B.shape(f(state, f(t, 2, 3))[1]) == (2, 3)
 
 
-def test_randint_bounds(check_lazy_shapes):
-    for t in [np.float32, tf.float32, torch.float32, jnp.float32]:
-        assert B.randint(t, lower=10, upper=11) == 10
+@pytest.mark.parametrize("t", [np.float32, tf.float32, torch.float32, jnp.float32])
+def test_randint_bounds(t, check_lazy_shapes):
+    assert B.randint(t, lower=10, upper=11) == 10
 
 
 def test_torch_global_random_state(mocker):
@@ -185,24 +185,40 @@ def test_conversion_warnings(f, check_lazy_shapes):
         assert len(w) == 1
 
 
-def test_choice(check_lazy_shapes):
-    # TODO: Can we use a parametrised test here?
-    for x in Tensor(2).forms() + Tensor(2, 3).forms() + Tensor(2, 3, 4).forms():
-        state = B.create_random_state(B.dtype(x))
+@pytest.mark.parametrize(
+    "x", Tensor(2).forms() + Tensor(2, 3).forms() + Tensor(2, 3, 4).forms()
+)
+@pytest.mark.parametrize(
+    "p",
+    [
+        None,
+        # Give unnormalised probabilities.
+        B.rand(2),
+    ],
+)
+def test_choice(x, p, check_lazy_shapes):
+    state = B.create_random_state(B.dtype(x))
 
-        # Check shape.
-        assert B.shape(B.choice(x)) == B.shape(x)[1:]
-        assert B.shape(B.choice(x, 1)) == B.shape(x)[1:]
-        assert B.shape(B.choice(x, 5))[0] == 5
-        assert B.shape(B.choice(x, 5))[1:] == B.shape(x)[1:]
+    # Make `p` a dictionary so that we can optionally give it.
+    if p is None:
+        p = {}
+    else:
+        # Cast weights to the right framework.
+        p = {"p": B.cast(B.dtype(x), p)}
 
-        assert isinstance(B.choice(state, x)[0], B.RandomState)
-        assert B.shape(B.choice(state, x)[1]) == B.shape(x)[1:]
-        assert B.shape(B.choice(state, x, 1)[1]) == B.shape(x)[1:]
-        assert B.shape(B.choice(state, x, 5)[1])[0] == 5
-        assert B.shape(B.choice(state, x, 5)[1])[1:] == B.shape(x)[1:]
+    # Check shape.
+    assert B.shape(B.choice(x, **p)) == B.shape(x)[1:]
+    assert B.shape(B.choice(x, 1, **p)) == B.shape(x)[1:]
+    assert B.shape(B.choice(x, 5, **p))[0] == 5
+    assert B.shape(B.choice(x, 5, **p))[1:] == B.shape(x)[1:]
 
-        # Check correctness.
-        dtype = B.dtype(x)
-        choices = set(to_np(B.choice(B.range(dtype, 5), 1000)))
-        assert choices == set(to_np(B.range(dtype, 5)))
+    assert isinstance(B.choice(state, x, **p)[0], B.RandomState)
+    assert B.shape(B.choice(state, x, **p)[1]) == B.shape(x)[1:]
+    assert B.shape(B.choice(state, x, 1, **p)[1]) == B.shape(x)[1:]
+    assert B.shape(B.choice(state, x, 5, **p)[1])[0] == 5
+    assert B.shape(B.choice(state, x, 5, **p)[1])[1:] == B.shape(x)[1:]
+
+    # Check correctness.
+    dtype = B.dtype(x)
+    choices = set(to_np(B.choice(B.range(dtype, 5), 1000)))
+    assert choices == set(to_np(B.range(dtype, 5)))

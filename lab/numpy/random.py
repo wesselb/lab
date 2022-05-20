@@ -1,6 +1,7 @@
 import warnings
 
 import numpy as np
+from plum import Union
 
 from . import dispatch, B, Numeric
 from ..shape import unwrap_dimension
@@ -52,15 +53,19 @@ def randn(dtype: NPDType, *shape: Int):
 
 
 @dispatch
-def choice(state: NPRandomState, a: Numeric, n: Int):
-    inds = state.choice(unwrap_dimension(B.shape(a)[0]), n, replace=True)
+def choice(state: NPRandomState, a: Numeric, n: Int, *, p: Union[Numeric, None] = None):
+    # Probabilities must sum to one.
+    if p is not None:
+        p = p / np.sum(p, axis=0, keepdims=True)
+    # Feeding `a` to `choice` will not work if `a` is higher-dimensional.
+    inds = state.choice(unwrap_dimension(B.shape(a)[0]), n, replace=True, p=p)
     choices = a[inds]
     return state, choices[0] if n == 1 else choices
 
 
 @dispatch
-def choice(a: Numeric, n: Int):
-    return choice(global_random_state(a), a, n)[1]
+def choice(a: Numeric, n: Int, *, p: Union[Numeric, None] = None):
+    return choice(global_random_state(a), a, n, p=p)[1]
 
 
 @dispatch

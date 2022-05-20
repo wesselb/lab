@@ -1,6 +1,7 @@
 import logging
 
 import tensorflow as tf
+from plum import Union
 
 from . import dispatch, B
 from ..types import TFDType, TFNumeric, Int, TFRandomState
@@ -46,15 +47,28 @@ def randn(dtype: TFDType, *shape: Int):
 
 
 @dispatch
-def choice(state: TFRandomState, a: TFNumeric, n: Int):
-    inds = state.uniform([n], minval=0, maxval=a.shape[0], dtype=tf.int64)
+def choice(
+    state: TFRandomState,
+    a: TFNumeric,
+    n: Int,
+    *,
+    p: Union[TFNumeric, None] = None,
+):
+    if p is None:
+        with B.on_device(a):
+            p = tf.ones(a.shape[0], dtype=B.dtype_float(a))
+    inds = tf.random.stateless_categorical(
+        B.log(p)[None, ...],
+        n,
+        state.make_seeds()[:, 0],
+    )[0, ...]
     choices = tf.gather(a, inds)
     return state, choices[0] if n == 1 else choices
 
 
 @dispatch
-def choice(a: TFNumeric, n: Int):
-    return choice(global_random_state(a), a, n)[1]
+def choice(a: TFNumeric, n: Int, *, p: Union[TFNumeric, None] = None):
+    return choice(global_random_state(a), a, n, p=p)[1]
 
 
 @dispatch

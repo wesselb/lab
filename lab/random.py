@@ -1,7 +1,7 @@
 import sys
 
 import numpy as np
-from plum.type import VarArgs
+from plum.type import VarArgs, Union
 
 from . import dispatch, B
 from .types import DType, Int, Numeric, RandomState
@@ -160,13 +160,20 @@ def randn(ref: Numeric):
 
 @dispatch
 @abstract()
-def choice(state: RandomState, a: Numeric, n: Int):  # pragma: no cover
+def choice(
+    state: RandomState,
+    a: Numeric,
+    n: Int,
+    *,
+    p: Union[Numeric, None] = None,
+):  # pragma: no cover
     """Randomly choose from a tensor *with* replacement.
 
     Args:
         state (random state, optional): Random state.
         a (tensor): Tensor to choose from.
         n (int, optional): Number of samples. Defaults to `1`.
+        p (tensor, optional): Probabilities to sample with.
 
     Returns:
         tensor: Choices.
@@ -174,13 +181,22 @@ def choice(state: RandomState, a: Numeric, n: Int):  # pragma: no cover
 
 
 @dispatch
-def choice(state: RandomState, a: Numeric):
-    return choice(state, a, 1)
+def choice(
+    state: RandomState,
+    a: Numeric,
+    *,
+    p: Union[Numeric, None] = None,
+):
+    return choice(state, a, 1, p=p)
 
 
 @dispatch
-def choice(a: Numeric):
-    return choice(a, 1)
+def choice(
+    a: Numeric,
+    *,
+    p: Union[Numeric, None] = None,
+):
+    return choice(a, 1, p=p)
 
 
 @dispatch
