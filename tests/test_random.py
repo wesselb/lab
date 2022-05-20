@@ -208,15 +208,13 @@ def test_choice(x, p, check_lazy_shapes):
 
     # Check shape.
     assert B.shape(B.choice(x, **p)) == B.shape(x)[1:]
-    assert B.shape(B.choice(x, 1, **p)) == B.shape(x)[1:]
-    assert B.shape(B.choice(x, 5, **p))[0] == 5
-    assert B.shape(B.choice(x, 5, **p))[1:] == B.shape(x)[1:]
+    assert B.shape(B.choice(x, 5, **p)) == (5,) + B.shape(x)[1:]
+    assert B.shape(B.choice(x, 5, 5, **p)) == (5, 5) + B.shape(x)[1:]
 
     assert isinstance(B.choice(state, x, **p)[0], B.RandomState)
     assert B.shape(B.choice(state, x, **p)[1]) == B.shape(x)[1:]
-    assert B.shape(B.choice(state, x, 1, **p)[1]) == B.shape(x)[1:]
-    assert B.shape(B.choice(state, x, 5, **p)[1])[0] == 5
-    assert B.shape(B.choice(state, x, 5, **p)[1])[1:] == B.shape(x)[1:]
+    assert B.shape(B.choice(state, x, 5, **p)[1]) == (5,) + B.shape(x)[1:]
+    assert B.shape(B.choice(state, x, 5, 5, **p)[1]) == (5, 5) + B.shape(x)[1:]
 
     # Check correctness.
     dtype = B.dtype(x)

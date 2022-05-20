@@ -1,4 +1,6 @@
 import sys
+from functools import reduce
+from operator import mul
 
 import numpy as np
 from plum.type import VarArgs, Union
@@ -87,7 +89,8 @@ def set_global_random_state(state: RandomState):
 
     NOTE:
         In TensorFlow, setting the global random state does NOT fix the randomness
-        for non-LAB random calls, like `tf.random.normal`. Use `B.set_seed` instead!
+        for non-LAB random calls, like `tf.random.normal`. Use `B.set_random_seed`
+        instead!
 
     Args:
         state (random state): Random state to set.
@@ -106,7 +109,7 @@ def rand(dtype: DType, *shape: Int):  # pragma: no cover
 
     Args:
         dtype (dtype, optional): Data type. Defaults to the default data type.
-        *shape (shape, optional): Shape of the tensor. Defaults to `()`.
+        *shape (shape, optional): Shape of the sample. Defaults to `()`.
 
     Returns:
         tensor: Random tensor.
@@ -136,7 +139,7 @@ def randn(state: RandomState, dtype: DType, *shape: Int):  # pragma: no cover
     Args:
         state (random state, optional): Random state.
         dtype (dtype, optional): Data type. Defaults to the default data type.
-        *shape (shape, optional): Shape of the tensor. Defaults to `()`.
+        *shape (shape, optional): Shape of the sample. Defaults to `()`.
 
     Returns:
         tensor: Random tensor.
@@ -159,44 +162,26 @@ def randn(ref: Numeric):
 
 
 @dispatch
-@abstract()
 def choice(
     state: RandomState,
     a: Numeric,
-    n: Int,
-    *,
+    *shape: Int,
     p: Union[Numeric, None] = None,
-):  # pragma: no cover
+):
     """Randomly choose from a tensor *with* replacement.
 
     Args:
         state (random state, optional): Random state.
         a (tensor): Tensor to choose from.
-        n (int, optional): Number of samples. Defaults to `1`.
-        p (tensor, optional): Probabilities to sample with.
+        *shape (int): Shape of the sample. Defaults to `()`.
+        p (vector, optional): Probabilities to sample with.
 
     Returns:
         tensor: Choices.
     """
-
-
-@dispatch
-def choice(
-    state: RandomState,
-    a: Numeric,
-    *,
-    p: Union[Numeric, None] = None,
-):
-    return choice(state, a, 1, p=p)
-
-
-@dispatch
-def choice(
-    a: Numeric,
-    *,
-    p: Union[Numeric, None] = None,
-):
-    return choice(a, 1, p=p)
+    n = reduce(mul, shape, 1)
+    state, choices = choice(state, a, n, p=p)
+    return state, B.reshape(choices, *shape, *B.shape(choices)[1:])
 
 
 @dispatch

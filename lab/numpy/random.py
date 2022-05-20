@@ -60,12 +60,12 @@ def choice(state: NPRandomState, a: Numeric, n: Int, *, p: Union[Numeric, None] 
     # Feeding `a` to `choice` will not work if `a` is higher-dimensional.
     inds = state.choice(unwrap_dimension(B.shape(a)[0]), n, replace=True, p=p)
     choices = a[inds]
-    return state, choices[0] if n == 1 else choices
+    return state, choices
 
 
 @dispatch
-def choice(a: Numeric, n: Int, *, p: Union[Numeric, None] = None):
-    return choice(global_random_state(a), a, n, p=p)[1]
+def choice(a: Numeric, *shape: Int, p: Union[Numeric, None] = None):
+    return choice(global_random_state(a), a, *shape, p=p)[1]
 
 
 @dispatch

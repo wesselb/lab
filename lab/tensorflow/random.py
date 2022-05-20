@@ -63,12 +63,12 @@ def choice(
         state.make_seeds()[:, 0],
     )[0, ...]
     choices = tf.gather(a, inds)
-    return state, choices[0] if n == 1 else choices
+    return state, choices
 
 
 @dispatch
-def choice(a: TFNumeric, n: Int, *, p: Union[TFNumeric, None] = None):
-    return choice(global_random_state(a), a, n, p=p)[1]
+def choice(a: TFNumeric, *shape: Int, p: Union[TFNumeric, None] = None):
+    return choice(global_random_state(a), a, *shape, p=p)[1]
 
 
 @dispatch

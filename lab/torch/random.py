@@ -81,12 +81,12 @@ def choice(
     if p is None:
         p = torch.ones(a.shape[0], dtype=B.dtype_float(a), device=a.device)
     choices = a[torch.multinomial(p, n, replacement=True, generator=state)]
-    return state, choices[0] if n == 1 else choices
+    return state, choices
 
 
 @dispatch
-def choice(a: TorchNumeric, n: Int, *, p: Union[TorchNumeric, None] = None):
-    return choice(global_random_state(a), a, n, p=p)[1]
+def choice(a: TorchNumeric, *shape: Int, p: Union[TorchNumeric, None] = None):
+    return choice(global_random_state(a), a, *shape, p=p)[1]
 
 
 @dispatch

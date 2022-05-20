@@ -447,10 +447,8 @@ randn(*shape)
 randn(state, ref)
 randn(ref)
 
-choice(state, a, n, p=None)
-choice(a, n, p=None)
-choice(state, a, p=None)
-choice(a, p=None)
+choice(state, a, *shape, p=None)
+choice(a, *shape, p=None)
 
 randint(state, dtype, *shape, lower=0, upper)
 randint(dtype, *shape, lower=0, upper)
