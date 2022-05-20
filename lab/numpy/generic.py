@@ -331,4 +331,8 @@ def argsort(a: Numeric, axis: Int = -1, descending: bool = False):
 
 @dispatch
 def quantile(a: Numeric, q: Numeric, axis: Union[Int, None] = None):
-    return np.quantile(a, q, axis=axis, method="linear")
+    if tuple(map(int, np.__version__.split("."))) >= (1, 22):  # pragma: no cover
+        method = {"method": "linear"}
+    else:  # pragma: no cover
+        method = {"interpolation": "linear"}
+    return np.quantile(a, q, axis=axis, **method)
