@@ -1,7 +1,7 @@
 import torch
 from plum import Union
 
-from . import B, dispatch
+from . import dispatch, B, Numeric
 from ..types import TorchNumeric, TorchDType, Int, TorchRandomState
 
 __all__ = []
@@ -128,3 +128,23 @@ def randperm(state: TorchRandomState, dtype: TorchDType, n: Int):
 @dispatch
 def randperm(dtype: TorchDType, n: Int):
     return randperm(global_random_state(dtype), dtype, n)[1]
+
+
+@dispatch
+def randgamma(
+    state: TorchRandomState,
+    dtype: TorchDType,
+    *shape: Int,
+    alpha: Numeric,
+    scale: Numeric,
+):
+    alpha = B.to_active_device(B.cast(dtype, alpha))
+    scale = B.to_active_device(B.cast(dtype, scale))
+    alpha = B.broadcast_to(alpha, *shape)
+    return state, torch._standard_gamma(alpha, generator=state) * scale
+
+
+@dispatch
+def randgamma(dtype: TorchDType, *shape: Int, alpha: Numeric, scale: Numeric):
+    state = global_random_state(dtype)
+    return randgamma(state, dtype, *shape, alpha=alpha, scale=scale)[1]

@@ -89,3 +89,21 @@ def randperm(state: NPRandomState, dtype: NPDType, n: Int):
 @dispatch
 def randperm(dtype: NPDType, n: Int):
     return randperm(global_random_state(dtype), dtype, n)[1]
+
+
+@dispatch
+def randgamma(
+    state: NPRandomState,
+    dtype: NPDType,
+    *shape: Int,
+    alpha: Numeric,
+    scale: Numeric,
+):
+    _warn_dtype(dtype)
+    return state, B.cast(dtype, state.gamma(alpha, scale=scale, size=shape))
+
+
+@dispatch
+def randgamma(dtype: NPDType, *shape: Int, alpha: Numeric, scale: Numeric):
+    state = global_random_state(dtype)
+    return randgamma(state, dtype, *shape, alpha=alpha, scale=scale)[1]

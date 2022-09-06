@@ -71,6 +71,8 @@ def test_create_random_state(dtype):
         (B.randn, lambda x: x, False),
         (lambda *args: B.randint(*args, lower=0, upper=10), B.dtype_int, False),
         (B.randperm, B.dtype_int, True),
+        (lambda *args: B.randgamma(*args, alpha=0.5, scale=0.5), lambda x: x, False),
+        (lambda *args: B.randbeta(*args, alpha=0.5, beta=0.5), lambda x: x, False),
     ],
 )
 @pytest.mark.parametrize("t", [np.float32, tf.float32, torch.float32, jnp.float32])

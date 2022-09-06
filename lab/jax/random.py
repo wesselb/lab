@@ -1,7 +1,7 @@
 import jax
 from plum import Dispatcher, Union
 
-from . import dispatch, B
+from . import dispatch, B, Numeric
 from ..types import Int, JAXDType, JAXNumeric, JAXRandomState
 
 __all__ = []
@@ -118,5 +118,27 @@ def randperm(state: JAXRandomState, dtype: JAXDType, n: Int):
 @dispatch
 def randperm(dtype: JAXDType, n: Int):
     state, res = randperm(global_random_state(dtype), dtype, n)
+    B.jax_global_random_state = state
+    return res
+
+
+@dispatch
+def randgamma(
+    state: JAXRandomState,
+    dtype: JAXDType,
+    *shape: Int,
+    alpha: Numeric,
+    scale: Numeric,
+):
+    state, key = jax.random.split(state)
+    sample = B.to_active_device(jax.random.gamma(key, alpha, shape, dtype=dtype))
+    sample = B.multiply(sample, B.to_active_device(B.cast(dtype, scale)))
+    return state, sample
+
+
+@dispatch
+def randgamma(dtype: JAXDType, *shape: Int, alpha: Numeric, scale: Numeric):
+    state = global_random_state(dtype)
+    state, res = randgamma(state, dtype, *shape, alpha=alpha, scale=scale)
     B.jax_global_random_state = state
     return res

@@ -19,6 +19,8 @@ __all__ = [
     "choice",
     "randint",
     "randperm",
+    "randgamma",
+    "randbeta",
 ]
 
 
@@ -104,14 +106,16 @@ def global_random_state(a):
 
 @dispatch
 @abstract()
-def rand(dtype: DType, *shape: Int):  # pragma: no cover
+def rand(state: RandomState, dtype: DType, *shape: Int):  # pragma: no cover
     """Construct a U[0, 1] random tensor.
 
     Args:
+        state (random state, optional): Random state.
         dtype (dtype, optional): Data type. Defaults to the default data type.
         *shape (shape, optional): Shape of the sample. Defaults to `()`.
 
     Returns:
+        state (random state, optional): Random state.
         tensor: Random tensor.
     """
 
@@ -142,6 +146,7 @@ def randn(state: RandomState, dtype: DType, *shape: Int):  # pragma: no cover
         *shape (shape, optional): Shape of the sample. Defaults to `()`.
 
     Returns:
+        state (random state, optional): Random state.
         tensor: Random tensor.
     """
 
@@ -177,6 +182,7 @@ def choice(
         p (vector, optional): Probabilities to sample with.
 
     Returns:
+        state (random state, optional): Random state.
         tensor: Choices.
     """
     n = reduce(mul, shape, 1)
@@ -203,6 +209,7 @@ def randint(
         upper (int): Upper bound. Must be given as a keyword argument.
 
     Returns:
+        state (random state, optional): Random state.
         tensor: Random tensor.
     """
 
@@ -233,6 +240,7 @@ def randperm(state: RandomState, dtype: DType, n: Int):  # pragma: no cover
         n (int): Length of the permutation.
 
     Returns:
+        state (random state, optional): Random state.
         tensor: Random permutation.
     """
 
@@ -240,3 +248,96 @@ def randperm(state: RandomState, dtype: DType, n: Int):  # pragma: no cover
 @dispatch
 def randperm(n: Int):
     return randperm(B.default_dtype, n)
+
+
+@dispatch
+@abstract()
+def randgamma(
+    state: RandomState,
+    dtype: DType,
+    *shape: Int,
+    alpha: Numeric,
+    scale: Numeric,
+):  # pragma: no cover
+    """Construct a tensor of gamma random variables with shape parameter `alpha` and
+        scale `scale`.
+
+    Args:
+        state (random state, optional): Random state.
+        dtype (dtype, optional): Data type. Defaults to the default data type.
+        *shape (shape, optional): Shape of the tensor. Defaults to `()`.
+        alpha (scalar): Shape parameter.
+        scale (scalar): Scale parameter.
+
+    Returns:
+        state (random state, optional): Random state.
+        tensor: Random tensor.
+    """
+
+
+@dispatch.multi((Int,), (VarArgs(Int),))  # Single integer is a not a reference.
+def randgamma(*shape: Int, alpha: Numeric, scale: Numeric):
+    return randgamma(B.default_dtype, *shape, alpha=alpha, scale=scale)
+
+
+@dispatch
+def randgamma(state: RandomState, ref: Numeric, *, alpha: Numeric, scale: Numeric):
+    return randgamma(state, B.dtype(ref), *B.shape(ref), alpha=alpha, scale=scale)
+
+
+@dispatch
+def randgamma(ref: Numeric, *, alpha: Numeric, scale: Numeric):
+    return randgamma(B.dtype(ref), *B.shape(ref), alpha=alpha, scale=scale)
+
+
+@dispatch
+def randbeta(
+    state: RandomState,
+    dtype: DType,
+    *shape: Int,
+    alpha: Numeric,
+    beta: Numeric,
+):
+    """Construct a tensor of beta random variables with shape parameters `alpha` and
+        `beta`.
+
+    Args:
+        state (random state, optional): Random state.
+        dtype (dtype, optional): Data type. Defaults to the default data type.
+        *shape (shape, optional): Shape of the tensor. Defaults to `()`.
+        alpha (scalar): Shape parameter `alpha`.
+        beta (scalar): Shape parameter `beta`.
+
+    Returns:
+        state (random state, optional): Random state.
+        tensor: Random tensor.
+    """
+    state, x = randgamma(state, dtype, *shape, alpha=alpha, scale=1)
+    state, y = randgamma(state, dtype, *shape, alpha=beta, scale=1)
+    return state, x / (x + y)
+
+
+@dispatch
+def randbeta(dtype: DType, *shape: Int, alpha: Numeric, beta: Numeric):
+    return randbeta(
+        B.global_random_state(dtype),
+        dtype,
+        *shape,
+        alpha=alpha,
+        beta=beta,
+    )[1]
+
+
+@dispatch.multi((Int,), (VarArgs(Int),))  # Single integer is a not a reference.
+def randbeta(*shape: Int, alpha: Numeric, beta: Numeric):
+    return randbeta(B.default_dtype, *shape, alpha=alpha, beta=beta)
+
+
+@dispatch
+def randbeta(state: RandomState, ref: Numeric, *, alpha: Numeric, beta: Numeric):
+    return randbeta(state, B.dtype(ref), *B.shape(ref), alpha=alpha, beta=beta)
+
+
+@dispatch
+def randbeta(ref: Numeric, *, alpha: Numeric, beta: Numeric):
+    return randbeta(B.dtype(ref), *B.shape(ref), alpha=alpha, beta=beta)

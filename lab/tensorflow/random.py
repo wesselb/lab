@@ -3,7 +3,7 @@ import logging
 import tensorflow as tf
 from plum import Union
 
-from . import dispatch, B
+from . import dispatch, B, Numeric
 from ..types import TFDType, TFNumeric, Int, TFRandomState
 
 __all__ = []
@@ -104,3 +104,26 @@ def randperm(state: TFRandomState, dtype: TFDType, n: Int):
 @dispatch
 def randperm(dtype: TFDType, n: Int):
     return randperm(global_random_state(dtype), dtype, n)[1]
+
+
+@dispatch
+def randgamma(
+    state: TFRandomState,
+    dtype: TFDType,
+    *shape: Int,
+    alpha: Numeric,
+    scale: Numeric,
+):
+    return state, tf.random.stateless_gamma(
+        shape,
+        alpha=alpha,
+        beta=B.divide(1, scale),
+        seed=state.make_seeds()[:, 0],
+        dtype=dtype,
+    )
+
+
+@dispatch
+def randgamma(dtype: TFDType, *shape: Int, alpha: Numeric, scale: Numeric):
+    state = global_random_state(dtype)
+    return randgamma(state, dtype, *shape, alpha=alpha, scale=scale)[1]
