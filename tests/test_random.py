@@ -139,6 +139,17 @@ def test_randint_bounds(t, check_lazy_shapes):
     assert B.randint(t, lower=10, upper=11) == 10
 
 
+@pytest.mark.parametrize("t", [np.float32, tf.float32, torch.float32, jnp.float32])
+def test_randgamma_parameters(t, check_lazy_shapes):
+    approx(B.randgamma(t, alpha=1, scale=0), 0, atol=1e-6)
+
+
+@pytest.mark.parametrize("t", [np.float32, tf.float32, torch.float32, jnp.float32])
+def test_randbeta_parameters(t, check_lazy_shapes):
+    approx(B.randbeta(t, alpha=1e-6, beta=1), 0, atol=1e-6)
+    approx(B.randbeta(t, alpha=1, beta=1e-6), 1, atol=1e-6)
+
+
 def test_torch_global_random_state(mocker):
     # Check CPU specifications.
     B.ActiveDevice.active_name = None
