@@ -377,4 +377,5 @@ def argsort(a: Numeric, axis: Int = -1, descending: bool = False):
 
 @dispatch
 def quantile(a: Numeric, q: Numeric, axis: Union[Int, None] = None):
+    q = B.cast(B.dtype_float(q), q)  # JAX requires this to be a float.
     return jnp.quantile(a, q, axis=axis, interpolation="linear")
