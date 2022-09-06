@@ -200,6 +200,10 @@ def s_bvn_cdf(s_y, y, a, b, c):
 
 
 def expm(a):
+    # This sometimes fails that the buffer source array is read-only. We resolve this
+    # issue by copying the inputs. See also `toeplitz_solve`.
+    # TODO: Resolve this properly.
+    a = np.copy(a)
     return sla.expm(a)
 
 
@@ -216,6 +220,10 @@ def i_s_expm(s_y, y, a):
 
 
 def logm(a):
+    # This sometimes fails that the buffer source array is read-only. We resolve this
+    # issue by copying the inputs. See also `toeplitz_solve`.
+    # TODO: Resolve this properly.
+    a = np.copy(a)
     return sla.logm(a)
 
 
