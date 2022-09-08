@@ -463,14 +463,14 @@ randperm(n)
 randgamma(state, dtype, *shape, alpha, rate)
 randgamma(dtype, *shape, alpha, rate)
 randgamma(*shape, alpha, rate)
-randgamma(state, ref, alpha, rate)
-randgamma(ref, alpha, rate)
+randgamma(state, ref, *, alpha, rate)
+randgamma(ref, *, alpha, rate)
 
 randbeta(state, dtype, *shape, alpha, beta)
 randbeta(dtype, *shape, alpha, beta)
 randbeta(*shape, alpha, beta)
-randbeta(state, ref, alpha, beta)
-randbeta(ref, alpha, beta)
+randbeta(state, ref, *, alpha, beta)
+randbeta(ref, *, alpha, beta)
 ```
 
 ### Shaping
