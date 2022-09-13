@@ -184,6 +184,11 @@ def arctanh(a: Numeric):
 
 
 @dispatch
+def loggamma(a: Numeric):
+    return sps.gammaln(a)
+
+
+@dispatch
 def erf(a: Numeric):
     return sps.erf(a)
 

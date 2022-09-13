@@ -198,6 +198,11 @@ def arctanh(a: Numeric):
 
 
 @dispatch
+def loggamma(a: Numeric):
+    return torch.lgamma(a)
+
+
+@dispatch
 def erf(a: Numeric):
     return torch.erf(a)
 
@@ -209,22 +214,22 @@ def softplus(a: TorchNumeric):
 
 @dispatch
 def add(a: Numeric, b: Numeric):
-    return a + b
+    return torch.add(a, b)
 
 
 @dispatch
 def subtract(a: Numeric, b: Numeric):
-    return a - b
+    return torch.subtract(a, b)
 
 
 @dispatch
 def multiply(a: Numeric, b: Numeric):
-    return a * b
+    return torch.multiply(a, b)
 
 
 @dispatch
 def divide(a: Numeric, b: Numeric):
-    return a / b
+    return torch.divide(a, b)
 
 
 @dispatch

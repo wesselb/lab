@@ -190,6 +190,11 @@ def arctanh(a: Numeric):
 
 
 @dispatch
+def loggamma(a: Numeric):
+    return tf.math.lgamma(a)
+
+
+@dispatch
 def erf(a: Numeric):
     return tf.math.erf(a)
 

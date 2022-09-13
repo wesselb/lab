@@ -159,6 +159,11 @@ def arctanh(a: Numeric):
 
 
 @dispatch
+def loggamma(a: Numeric):
+    return asps.gammaln(a)
+
+
+@dispatch
 def erf(a: Numeric):
     return asps.erf(a)
 

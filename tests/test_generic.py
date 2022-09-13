@@ -343,7 +343,7 @@ def test_unary_signed(f, check_lazy_shapes):
     check_function(f, (Tensor(2, 3),))
 
 
-@pytest.mark.parametrize("f", [B.log, lambda x: B.log1p(x - 1), B.sqrt])
+@pytest.mark.parametrize("f", [B.log, lambda x: B.log1p(x - 1), B.sqrt, B.loggamma])
 def test_unary_positive(f, check_lazy_shapes):
     check_function(f, (PositiveTensor(),))
     check_function(f, (PositiveTensor(2),))
@@ -369,6 +369,13 @@ def test_binary_signed(f, check_lazy_shapes):
     check_function(f, (Tensor(), Tensor()))
     check_function(f, (Tensor(2), Tensor(2)))
     check_function(f, (Tensor(2, 3), Tensor(2, 3)))
+
+
+@pytest.mark.parametrize("f", [B.logbeta])
+def test_binary_positive(f, check_lazy_shapes):
+    check_function(f, (PositiveTensor(), PositiveTensor()))
+    check_function(f, (PositiveTensor(2), PositiveTensor(2)))
+    check_function(f, (PositiveTensor(2, 3), PositiveTensor(2, 3)))
 
 
 @pytest.mark.parametrize("f", [B.power])

@@ -64,6 +64,8 @@ __all__ = [
     "arctan",
     "tanh",
     "arctanh",
+    "loggamma",
+    "logbeta",
     "erf",
     "sigmoid",
     "softplus",
@@ -817,6 +819,33 @@ def arctanh(a: Numeric):  # pragma: no cover
 
 @dispatch
 @abstract()
+def loggamma(a: Numeric):
+    """Log of the gamma function.
+
+    Args:
+        a (tensor): Tensor.
+
+    Returns:
+        tensor: Log of the gamma function evaluated at `a`.
+    """
+
+
+@dispatch
+def logbeta(a, b):
+    """Log of the beta function.
+
+    Args:
+        a (tensor): Shape parameter `alpha`.
+        b (tensor): Shape parameter `beta`.
+
+    Returns:
+        tensor: Log of the beta function evaluated at `a` and `b`.
+    """
+    return B.subtract(B.add(loggamma(a), loggamma(b)), loggamma(B.add(a, b)))
+
+
+@dispatch
+@abstract()
 def erf(a: Numeric):  # pragma: no cover
     """Error function.
 
@@ -1381,8 +1410,8 @@ def _cond(condition: Numeric, f_true: FunctionType, f_false: FunctionType, *args
 @dispatch
 @abstract(promote=3)
 def where(condition, a, b):  # pragma: no cover
-    """In a broadcasting fashion, take from `x` if `condition` is true; otherwise,
-    take from `y`.
+    """In a broadcasting fashion, take from `a` if `condition` is true; otherwise,
+    take from `b`.
 
     Args:
         condition (tensor): Condition.

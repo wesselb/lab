@@ -118,7 +118,7 @@ def cast(dtype: JAXDType, a: Union[Number, NPNumeric]):
 @dispatch
 def identity(a: Numeric):
     # Do not return `a` identically.
-    return 1 * a
+    return jnp.multiply(1, a)
 
 
 @dispatch
@@ -209,6 +209,11 @@ def tanh(a: Numeric):
 @dispatch
 def arctanh(a: Numeric):
     return jnp.arctanh(a)
+
+
+@dispatch
+def loggamma(a: Numeric):
+    return jsps.gammaln(a)
 
 
 @dispatch
