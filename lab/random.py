@@ -16,6 +16,7 @@ __all__ = [
     "set_global_random_state",
     "rand",
     "randn",
+    "randcat",
     "choice",
     "randint",
     "randperm",
@@ -167,6 +168,38 @@ def randn(ref: Numeric):
 
 
 @dispatch
+def randcat(state: RandomState, p: Union[Numeric, None], *shape: Int):
+    """Randomly draw from a categorical random variable.
+
+    Args:
+        state (random state, optional): Random state.
+        p (tensor): Probabilities. The last axis determines the probabilities and
+            any prior axes add to the shap of the sample.
+        *shape (int): Shape of the sample. Defaults to `()`.
+
+    Returns:
+        state (random state, optional): Random state.
+        tensor: Realisation.
+    """
+    n = reduce(mul, shape, 1)
+    state, sample = randcat(state, p, n)
+    return state, B.reshape(sample, *shape, *B.shape(sample)[1:])
+
+
+def _randcat_last_first(a):
+    """Put the last dimension first.
+
+    Args:
+        a (tensor): Tensor.
+
+    Returns:
+        tensor: `a`, but with last dimension first.
+    """
+    perm = list(range(B.rank(a)))
+    return B.transpose(a, perm=perm[-1:] + perm[:-1])
+
+
+@dispatch
 def choice(
     state: RandomState,
     a: Numeric,
@@ -177,17 +210,37 @@ def choice(
 
     Args:
         state (random state, optional): Random state.
-        a (tensor): Tensor to choose from.
+        a (tensor): Tensor to choose from. Choices will be made along the first
+            dimension.
         *shape (int): Shape of the sample. Defaults to `()`.
-        p (vector, optional): Probabilities to sample with.
+        p (tensor, optional): Probabilities to sample with.
 
     Returns:
         state (random state, optional): Random state.
         tensor: Choices.
     """
-    n = reduce(mul, shape, 1)
-    state, choices = choice(state, a, n, p=p)
-    return state, B.reshape(choices, *shape, *B.shape(choices)[1:])
+    if p is None:
+        with B.on_device(a):
+            p = B.ones(B.dtype_float(a), B.shape(a, 0))
+    state, inds = B.randcat(state, p, *shape)
+    choices = B.reshape(
+        B.take(a, B.flatten(inds), axis=0),
+        *B.shape(inds),
+        *B.shape(a)[1:],
+    )
+    return state, choices
+
+
+@dispatch
+def choice(
+    a: Numeric,
+    *shape: Int,
+    p: Union[Numeric, None] = None,
+):
+    state = B.global_random_state(a)
+    state, choices = choice(state, a, *shape, p=p)
+    B.set_global_random_state(state)
+    return choices
 
 
 @dispatch

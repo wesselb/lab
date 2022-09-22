@@ -104,7 +104,7 @@ def cast(dtype: TorchDType, a: Dimension):
 
 @dispatch
 def identity(a: Numeric):
-    return 1 * a
+    return torch.multiply(1, a)
 
 
 @dispatch

@@ -53,18 +53,25 @@ def randn(dtype: NPDType, *shape: Int):
 
 
 @dispatch
-def choice(state: NPRandomState, a: Numeric, n: Int, *, p: Union[Numeric, None] = None):
+def randcat(state: NPRandomState, p: Numeric, n: Int):
     # Probabilities must sum to one.
-    if p is not None:
-        p = p / np.sum(p, axis=0, keepdims=True)
-    # Feeding `a` to `choice` will not work if `a` is higher-dimensional.
-    inds = state.choice(unwrap_dimension(B.shape(a)[0]), n, replace=True, p=p)
-    choices = a[inds]
-    return state, choices
+    p = p / np.sum(p, axis=-1, keepdims=True)
+    # Perform sampling routine.
+    cdf = np.cumsum(p, axis=-1)
+    u = state.rand(n, *p.shape[:-1])
+    inds = np.sum(u[..., None] < cdf[None], axis=-1) - 1
+    # Be sure to return the right data type.
+    return state, B.cast(B.dtype_int(p), inds)
+
+
+@dispatch
+def randcat(p: Numeric, *shape: Int):
+    return randcat(global_random_state(p), p, *shape)[1]
 
 
 @dispatch
 def choice(a: Numeric, *shape: Int, p: Union[Numeric, None] = None):
+    # This method is necessary to break ambiguity.
     return choice(global_random_state(a), a, *shape, p=p)[1]
 
 

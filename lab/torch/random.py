@@ -3,6 +3,8 @@ from plum import Union
 
 from . import dispatch, B, Numeric
 from ..types import TorchNumeric, TorchDType, Int, TorchRandomState
+from ..util import compress_batch
+from ..random import _randcat_last_first
 
 __all__ = []
 
@@ -71,22 +73,17 @@ def randn(dtype: TorchDType, *shape: Int):
 
 
 @dispatch
-def choice(
-    state: TorchRandomState,
-    a: TorchNumeric,
-    n: Int,
-    *,
-    p: Union[TorchNumeric, None] = None,
-):
-    if p is None:
-        p = torch.ones(a.shape[0], dtype=B.dtype_float(a), device=a.device)
-    choices = a[torch.multinomial(p, n, replacement=True, generator=state)]
-    return state, choices
+def randcat(state: TorchRandomState, p: TorchNumeric, n: Int):
+    p, uncompress = compress_batch(p, 1)
+    inds = torch.multinomial(p, n, replacement=True, generator=state)
+    inds = uncompress(inds)
+    inds = _randcat_last_first(inds)
+    return state, inds
 
 
 @dispatch
-def choice(a: TorchNumeric, *shape: Int, p: Union[TorchNumeric, None] = None):
-    return choice(global_random_state(a), a, *shape, p=p)[1]
+def randcat(p: TorchNumeric, *shape: Int):
+    return randcat(B.global_random_state(p), p, *shape)[1]
 
 
 @dispatch

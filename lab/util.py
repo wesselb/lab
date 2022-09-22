@@ -7,7 +7,13 @@ import plum.type
 
 from . import B
 
-__all__ = ["resolve_axis", "as_tuple", "batch_computation", "abstract"]
+__all__ = [
+    "resolve_axis",
+    "as_tuple",
+    "batch_computation",
+    "abstract",
+    "compress_batch",
+]
 
 _dispatch = plum.Dispatcher()
 
@@ -216,3 +222,22 @@ def abstract(promote=None, promote_from=None):
         return wrapper
 
     return decorator
+
+
+def compress_batch(x, n):
+    """Compress batch dimensions.
+
+    Args:
+        x (tensor): Tensor to compress.
+        n (int): Number of non-batch dimensions.
+
+    Return:
+        tensor: Tensor with compressed batch dimensions.
+        function: Function to uncompress the batch dimensions.
+    """
+    shape = B.shape(x)
+
+    def uncompress(y):
+        return B.reshape(y, *shape[:-n], *B.shape(y)[1:])
+
+    return B.reshape(x, -1, *shape[-n:]), uncompress

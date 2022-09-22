@@ -1,4 +1,5 @@
 import jax
+import jax.numpy as jnp
 from plum import Dispatcher, Union
 
 from . import dispatch, B, Numeric
@@ -54,22 +55,28 @@ def randn(dtype: JAXDType, *shape: Int):
 
 
 @dispatch
-def choice(
-    state: JAXRandomState,
-    a: JAXNumeric,
-    n: Int,
-    *,
-    p: Union[JAXNumeric, None] = None,
-):
+def randcat(state: JAXRandomState, p: JAXNumeric, *shape: Int):
     state, key = jax.random.split(state)
-    # Feeding `a` to `choice` will not work if `a` is higher-dimensional.
-    inds = jax.random.choice(key, a.shape[0], (n,), replace=True, p=p)
-    choices = a[inds]
-    return state, choices
+    # We need to tile to make the batching work.
+    p = B.tile(
+        B.expand_dims(p, axis=0, times=len(shape)),
+        *shape,
+        *((1,) * len(p.shape)),
+    )
+    inds = jax.random.categorical(key, jnp.log(p))
+    return state, inds
 
 
 @dispatch
-def choice(a: JAXNumeric, *shape: Int, p: Union[JAXNumeric, None] = None):
+def randcat(p: JAXNumeric, *shape: Int):
+    state, res = randcat(global_random_state(p), p, *shape)
+    B.jax_global_random_state = state
+    return res
+
+
+@dispatch
+def choice(a: JAXNumeric, *shape: Int, p: Union[Numeric, None] = None):
+    # This method is necessary to break ambiguity.
     state, res = choice(global_random_state(a), a, *shape, p=p)
     B.jax_global_random_state = state
     return res

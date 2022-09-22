@@ -449,6 +449,9 @@ randn(*shape)
 randn(state, ref)
 randn(ref)
 
+randcat(state, p, *shape)
+randcat(p, *shape)
+
 choice(state, a, *shape, p=None)
 choice(a, *shape, p=None)
 

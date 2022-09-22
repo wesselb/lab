@@ -1,29 +1,24 @@
-from plum import Union
+import autograd.numpy as anp
 import numpy as np
 
-from . import dispatch
+from . import dispatch, B
 from ..types import Int, AGNumeric, AGRandomState
 
 __all__ = []
 
 
 @dispatch
-def choice(
-    state: AGRandomState,
-    a: AGNumeric,
-    n: Int,
-    *,
-    p: Union[AGNumeric, None] = None,
-):
+def randcat(state: AGRandomState, p: AGNumeric, n: Int):
     # Probabilities must sum to one.
-    if p is not None:
-        p = p / np.sum(p, axis=0, keepdims=True)
-    # Feeding `a` to `choice` will not work if `a` is higher-dimensional.
-    inds = state.choice(a.shape[0], n, replace=True, p=p)
-    choices = a[inds]
-    return state, choices
+    p = p / anp.sum(p, axis=-1, keepdims=True)
+    # Perform sampling routine.
+    cdf = anp.cumsum(p, axis=-1)
+    u = state.rand(n, *p.shape[:-1])
+    inds = anp.sum(u[..., None] < cdf[None], axis=-1) - 1
+    # Be sure to return the right data type.
+    return state, B.cast(B.dtype_int(p), inds)
 
 
 @dispatch
-def choice(a: AGNumeric, *shape: Int, p: Union[AGNumeric, None] = None):
-    return choice(np.random.random.__self__, a, *shape, p=p)[1]
+def randcat(p: AGNumeric, *shape: Int):
+    return randcat(np.random.random.__self__, p, *shape)[1]

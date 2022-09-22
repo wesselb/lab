@@ -5,6 +5,8 @@ from plum import Union
 
 from . import dispatch, B, Numeric
 from ..types import TFDType, TFNumeric, Int, TFRandomState
+from ..util import compress_batch
+from ..random import _randcat_last_first
 
 __all__ = []
 
@@ -47,28 +49,35 @@ def randn(dtype: TFDType, *shape: Int):
 
 
 @dispatch
-def choice(
-    state: TFRandomState,
-    a: TFNumeric,
-    n: Int,
-    *,
-    p: Union[TFNumeric, None] = None,
-):
-    if p is None:
-        with B.on_device(a):
-            p = tf.ones(a.shape[0], dtype=B.dtype_float(a))
+def randcat(state: TFRandomState, p: TFNumeric, n: Int):
+    # `p` must be at least rank two.
+    if B.rank(p) == 1:
+        p = B.expand_dims(p, axis=0)
+        extra_dim = True
+    else:
+        extra_dim = False
+
+    p, uncompress = compress_batch(p, 1)
     inds = tf.random.stateless_categorical(
-        B.log(p)[None, ...],
+        tf.math.log(p),
         n,
         state.make_seeds()[:, 0],
-    )[0, ...]
-    choices = tf.gather(a, inds)
-    return state, choices
+    )
+    inds = uncompress(inds)
+
+    # Possibly remove the extra dimension. Do this before moving the last dimension
+    # first!
+    if extra_dim:
+        inds = inds[0, :]
+
+    inds = _randcat_last_first(inds)
+
+    return state, inds
 
 
 @dispatch
-def choice(a: TFNumeric, *shape: Int, p: Union[TFNumeric, None] = None):
-    return choice(global_random_state(a), a, *shape, p=p)[1]
+def randcat(p: TFNumeric, *shape: Int):
+    return randcat(global_random_state(p), p, *shape)[1]
 
 
 @dispatch

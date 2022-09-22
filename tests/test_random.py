@@ -9,7 +9,7 @@ import torch
 import lab as B
 
 # noinspection PyUnresolvedReferences
-from .util import Tensor, approx, to_np, check_lazy_shapes
+from .util import Tensor, PositiveTensor, approx, to_np, check_lazy_shapes
 
 
 @pytest.mark.parametrize(
@@ -198,36 +198,68 @@ def test_conversion_warnings(f, check_lazy_shapes):
         assert len(w) == 1
 
 
+_test_randcat_ps = [PositiveTensor(2).forms(), PositiveTensor(3, 2).forms()]
+
+
+@pytest.mark.parametrize("p", sum(_test_randcat_ps, []))
+def test_randcat(p, check_lazy_shapes):
+    state = B.create_random_state(B.dtype(p))
+
+    # Determine the shape of a single sample.
+    if p is not None:
+        sample_shape = B.shape(p)[:-1]
+    else:
+        sample_shape = ()
+
+    # Check shape.
+    assert B.shape(B.randcat(p)) == sample_shape
+    assert B.shape(B.randcat(p, 5)) == (5,) + sample_shape
+    assert B.shape(B.randcat(p, 5, 5)) == (5, 5) + sample_shape
+
+    assert isinstance(B.randcat(state, p)[0], B.RandomState)
+    assert B.shape(B.randcat(state, p)[1]) == sample_shape
+    assert B.shape(B.randcat(state, p, 5)[1]) == (5,) + sample_shape
+    assert B.shape(B.randcat(state, p, 5, 5)[1]) == (5, 5) + sample_shape
+
+    # Check correctness.
+    dtype = B.dtype(p)
+    choices = set(to_np(B.randcat(B.ones(dtype, 5), 1000)))
+    assert choices == set(to_np(B.range(dtype, 5)))
+
+
+def _test_choice_with_p(forms):
+    pairs = [(form, None) for form in forms]
+    for alternate in _test_randcat_ps:
+        pairs += list(zip(forms, alternate))
+    return pairs
+
+
 @pytest.mark.parametrize(
-    "x", Tensor(2).forms() + Tensor(2, 3).forms() + Tensor(2, 3, 4).forms()
-)
-@pytest.mark.parametrize(
-    "p",
-    [
-        None,
-        # Give unnormalised probabilities.
-        B.rand(2),
-    ],
+    "x,p",
+    _test_choice_with_p(Tensor(2).forms())
+    + _test_choice_with_p(Tensor(2, 3).forms())
+    + _test_choice_with_p(Tensor(2, 3, 4).forms()),
 )
 def test_choice(x, p, check_lazy_shapes):
     state = B.create_random_state(B.dtype(x))
 
+    # Determine the shape of a single sample.
+    sample_shape = B.shape(x)[1:]
+    if p is not None:
+        sample_shape = B.shape(p)[:-1] + sample_shape
+
     # Make `p` a dictionary so that we can optionally give it.
-    if p is None:
-        p = {}
-    else:
-        # Cast weights to the right framework.
-        p = {"p": B.cast(B.dtype(x), p)}
+    p = {"p": p}
 
     # Check shape.
-    assert B.shape(B.choice(x, **p)) == B.shape(x)[1:]
-    assert B.shape(B.choice(x, 5, **p)) == (5,) + B.shape(x)[1:]
-    assert B.shape(B.choice(x, 5, 5, **p)) == (5, 5) + B.shape(x)[1:]
+    assert B.shape(B.choice(x, **p)) == sample_shape
+    assert B.shape(B.choice(x, 5, **p)) == (5,) + sample_shape
+    assert B.shape(B.choice(x, 5, 5, **p)) == (5, 5) + sample_shape
 
     assert isinstance(B.choice(state, x, **p)[0], B.RandomState)
-    assert B.shape(B.choice(state, x, **p)[1]) == B.shape(x)[1:]
-    assert B.shape(B.choice(state, x, 5, **p)[1]) == (5,) + B.shape(x)[1:]
-    assert B.shape(B.choice(state, x, 5, 5, **p)[1]) == (5, 5) + B.shape(x)[1:]
+    assert B.shape(B.choice(state, x, **p)[1]) == sample_shape
+    assert B.shape(B.choice(state, x, 5, **p)[1]) == (5,) + sample_shape
+    assert B.shape(B.choice(state, x, 5, 5, **p)[1]) == (5, 5) + sample_shape
 
     # Check correctness.
     dtype = B.dtype(x)
