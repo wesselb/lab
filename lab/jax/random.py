@@ -4,6 +4,7 @@ from plum import Dispatcher, Union
 
 from . import dispatch, B, Numeric
 from ..types import Int, JAXDType, JAXNumeric, JAXRandomState
+from ..util import broadcast_shapes
 
 __all__ = []
 
@@ -138,8 +139,9 @@ def randgamma(
     scale: Numeric,
 ):
     state, key = jax.random.split(state)
+    shape = shape + broadcast_shapes(B.shape(alpha), B.shape(scale))
     sample = B.to_active_device(jax.random.gamma(key, alpha, shape, dtype=dtype))
-    sample = B.multiply(sample, B.to_active_device(B.cast(dtype, scale)))
+    sample = sample * B.to_active_device(B.cast(dtype, scale))
     return state, sample
 
 

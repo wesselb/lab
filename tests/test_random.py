@@ -145,6 +145,17 @@ def test_randgamma_parameters(t, check_lazy_shapes):
 
 
 @pytest.mark.parametrize("t", [np.float32, tf.float32, torch.float32, jnp.float32])
+def test_randgamma_broadcasting(t, check_lazy_shapes):
+    assert B.shape(B.randgamma(t, alpha=1, scale=0)) == ()
+    assert B.shape(B.randgamma(t, alpha=B.rand(5), scale=0)) == (5,)
+    assert B.shape(B.randgamma(t, alpha=B.rand(5), scale=B.rand(5))) == (5,)
+    assert B.shape(B.randgamma(t, alpha=1, scale=B.rand(5))) == (5,)
+    assert B.shape(B.randgamma(t, 3, alpha=B.rand(5), scale=0)) == (3, 5)
+    assert B.shape(B.randgamma(t, 3, alpha=B.rand(5), scale=B.rand(5))) == (3, 5)
+    assert B.shape(B.randgamma(t, 3, alpha=1, scale=B.rand(5))) == (3, 5)
+
+
+@pytest.mark.parametrize("t", [np.float32, tf.float32, torch.float32, jnp.float32])
 def test_randbeta_parameters(t, check_lazy_shapes):
     approx(B.randbeta(t, alpha=1e-6, beta=1), 0, atol=1e-6)
     approx(B.randbeta(t, alpha=1, beta=1e-6), 1, atol=1e-6)

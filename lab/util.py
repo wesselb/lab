@@ -13,6 +13,7 @@ __all__ = [
     "batch_computation",
     "abstract",
     "compress_batch",
+    "broadcast_shapes",
 ]
 
 _dispatch = plum.Dispatcher()
@@ -241,3 +242,17 @@ def compress_batch(x, n):
         return B.reshape(y, *shape[:-n], *B.shape(y)[1:])
 
     return B.reshape(x, -1, *shape[-n:]), uncompress
+
+
+@_dispatch
+def broadcast_shapes(*shapes):
+    """Broadcast shapes.
+
+    Args:
+        *shapes (shape): Shapes to broadcast.
+
+    Return:
+        tuple[int]: Broadcasted shape.
+    """
+    shapes = [tuple(int(d) for d in shape) for shape in shapes]
+    return np.broadcast_shapes(*shapes)

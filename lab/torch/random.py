@@ -1,10 +1,9 @@
 import torch
-from plum import Union
 
 from . import dispatch, B, Numeric
+from ..random import _randcat_last_first
 from ..types import TorchNumeric, TorchDType, Int, TorchRandomState
 from ..util import compress_batch
-from ..random import _randcat_last_first
 
 __all__ = []
 
@@ -137,7 +136,9 @@ def randgamma(
 ):
     alpha = B.to_active_device(B.cast(dtype, alpha))
     scale = B.to_active_device(B.cast(dtype, scale))
-    alpha = B.broadcast_to(alpha, *shape)
+    alpha, scale = torch.broadcast_tensors(alpha, scale)
+    alpha = B.repeat(alpha, *shape)
+    scale = B.repeat(scale, *shape)
     return state, torch._standard_gamma(alpha, generator=state) * scale
 
 

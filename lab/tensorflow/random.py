@@ -1,12 +1,11 @@
 import logging
 
 import tensorflow as tf
-from plum import Union
 
 from . import dispatch, B, Numeric
-from ..types import TFDType, TFNumeric, Int, TFRandomState
-from ..util import compress_batch
 from ..random import _randcat_last_first
+from ..types import TFDType, TFNumeric, Int, TFRandomState
+from ..util import compress_batch, broadcast_shapes
 
 __all__ = []
 
@@ -123,13 +122,13 @@ def randgamma(
     alpha: Numeric,
     scale: Numeric,
 ):
-    return state, tf.random.stateless_gamma(
-        shape,
+    sample = tf.random.stateless_gamma(
+        shape + broadcast_shapes(B.shape(alpha), B.shape(scale)),
         alpha=alpha,
-        beta=B.divide(1, scale),
         seed=state.make_seeds()[:, 0],
         dtype=dtype,
     )
+    return state, sample * B.to_active_device(B.cast(dtype, scale))
 
 
 @dispatch

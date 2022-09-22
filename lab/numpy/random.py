@@ -4,8 +4,8 @@ import numpy as np
 from plum import Union
 
 from . import dispatch, B, Numeric
-from ..shape import unwrap_dimension
 from ..types import NPDType, NPRandomState, Int
+from ..util import broadcast_shapes
 
 __all__ = []
 
@@ -107,7 +107,8 @@ def randgamma(
     scale: Numeric,
 ):
     _warn_dtype(dtype)
-    return state, B.cast(dtype, state.gamma(alpha, scale=scale, size=shape))
+    shape = shape + broadcast_shapes(B.shape(alpha), B.shape(scale))
+    return state, B.cast(dtype, state.gamma(alpha, size=shape) * scale)
 
 
 @dispatch

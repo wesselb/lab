@@ -34,6 +34,7 @@ __all__ = [
     "concat",
     "concat2d",
     "tile",
+    "repeat",
     "take",
     "submatrix",
 ]
@@ -488,6 +489,26 @@ def tile(a: Numeric, *repeats: Int):  # pragma: no cover
     Returns:
         tensor: Tiled tensor.
     """
+
+
+@dispatch
+def repeat(x, *repeats: Int):
+    """Repeat a tensor a number of times, adding new dimensions to the beginning.
+
+    Args:
+        x (tensor): Tensor to repeat.
+        *repeats (int): Repetitions per dimension.
+
+    Returns:
+        x: Repeated tensor.
+    """
+    if repeats == ():
+        return x
+    return tile(
+        expand_dims(x, axis=0, times=len(repeats)),
+        *repeats,
+        *((1,) * rank(x)),
+    )
 
 
 @dispatch
