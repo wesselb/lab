@@ -136,7 +136,7 @@ _ag_tensor = ModuleType("autograd.tracer", "Box")
 _ag_retrievables = [_ag_tensor]
 
 # Define JAX module types.
-_jax_tensor = ModuleType("jax.interpreters.xla", "DeviceArray")
+_jax_tensor = ModuleType("jaxlib.xla_extension", "ArrayImpl")
 _jax_tracer = ModuleType("jax.core", "Tracer")
 _jax_dtype = ModuleType("jax._src.numpy.lax_numpy", "_ScalarMeta")
 _jax_device = ModuleType("jaxlib.xla_extension", "Device")
