@@ -10,7 +10,7 @@ autograd>=1.3
 tensorflow>=2
 tensorflow-probability
 torch
-jax
+jax>=0.4
 jaxlib
 setuptools_scm[toml]
 setuptools_scm_git_archive
