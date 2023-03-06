@@ -1,6 +1,8 @@
+from typing import Union
+
 import numpy as np
 import torch
-from plum import Union, convert
+from plum import convert
 
 from . import dispatch, Numeric, TorchNumeric
 from ..types import Int, NPDType, issubdtype

@@ -105,31 +105,9 @@ DeviceArray([[ 0.2525182, -1.26065  ],
 ```
 
 ## List of Types
+
 This section lists all available types, which can be used to check types of 
 objects or extend functions.
-
-Example:
-
-```python
->>> import lab as B
-
->>> from plum import List, Tuple
-
->>> import numpy as np
-
->>> isinstance([1., np.array([1., 2.])], List(B.NPNumeric))
-True
-
->>> isinstance([1., np.array([1., 2.])], List(B.TFNumeric))
-False
-
->>> import tensorflow as tf
-
->>> import lab.tensorflow
-
->>> isinstance((tf.constant(1.), tf.ones(5)), Tuple(B.TFNumeric))
-True
-```
 
 ### General
 

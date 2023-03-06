@@ -6,6 +6,7 @@ import tensorflow as tf
 import torch
 from autograd import grad
 from plum.promotion import _promotion_rule, convert
+from plum import isinstance
 
 import lab as B
 

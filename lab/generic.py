@@ -1,11 +1,10 @@
-from functools import wraps
 import warnings
+from functools import wraps
 from types import FunctionType
-from typing import Callable
+from typing import Callable, Union
 
 import numpy as np
 from plum import convert, add_conversion_method
-from plum.type import VarArgs, Union
 
 from . import dispatch, B, Dispatcher
 from .control_flow import control_flow
@@ -365,7 +364,7 @@ def zeros(dtype: DType, *shape: Int):  # pragma: no cover
     """
 
 
-@dispatch.multi((Int,), (VarArgs(Int),))  # Single integer is not a reference.
+@dispatch
 def zeros(*shape: Int):
     return zeros(B.default_dtype, *shape)
 
@@ -373,6 +372,12 @@ def zeros(*shape: Int):
 @dispatch
 def zeros(ref: Numeric):
     return zeros(B.dtype(ref), *B.shape(ref))
+
+
+@dispatch
+def zeros(shape: Int):
+    # Single integer is not a reference.
+    return zeros(B.default_dtype, shape)
 
 
 @dispatch
@@ -392,7 +397,7 @@ def ones(dtype: DType, *shape: Int):  # pragma: no cover
     """
 
 
-@dispatch.multi((Int,), (VarArgs(Int),))  # Single integer is not a reference.
+@dispatch
 def ones(*shape: Int):
     return ones(B.default_dtype, *shape)
 
@@ -400,6 +405,12 @@ def ones(*shape: Int):
 @dispatch
 def ones(ref: Numeric):
     return ones(B.dtype(ref), *B.shape(ref))
+
+
+@dispatch
+def ones(shape: Int):
+    # Single integer is not a reference.
+    return ones(B.default_dtype, shape)
 
 
 @dispatch

@@ -1,5 +1,5 @@
 import jax.numpy as jnp
-from plum import Union
+from typing import Union
 
 from . import dispatch, Numeric
 from ..types import Int

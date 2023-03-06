@@ -1,13 +1,12 @@
 import jax
 import jax.numpy as jnp
+import lab as B
 import numpy as np
 import pytest
 import tensorflow as tf
 import torch
 from autograd import grad
 from fdm import check_sensitivity, gradient
-
-import lab as B
 from lab.custom import (
     toeplitz_solve,
     s_toeplitz_solve,
@@ -20,6 +19,7 @@ from lab.custom import (
 )
 from lab.tensorflow.custom import as_tf
 from lab.torch.custom import as_torch
+from plum import isinstance
 
 # noinspection PyUnresolvedReferences
 from .util import approx, check_lazy_shapes, check_function, PSD

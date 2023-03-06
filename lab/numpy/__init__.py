@@ -9,7 +9,7 @@ dispatch_original = dispatch_original(precedence=1)
 
 dispatch = dispatch_unwrap_dimensions(dispatch_original)
 
-from plum import Union
+from typing import Union
 
 Numeric = Union[Number, NPNumeric]
 

@@ -1,12 +1,17 @@
 import warnings
 
+import lab.torch
+import lab.tensorflow
+import lab.jax
+import lab.autograd
+
 import jax.numpy as jnp
+import lab as B
 import numpy as np
 import pytest
 import tensorflow as tf
 import torch
-
-import lab as B
+from plum import isinstance
 
 # noinspection PyUnresolvedReferences
 from .util import Tensor, PositiveTensor, approx, to_np, check_lazy_shapes

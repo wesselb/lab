@@ -6,21 +6,20 @@ from ..types import Number, TorchNumeric
 
 dispatch = dispatch_unwrap_dimensions(dispatch_original)
 
-from plum import Union
+from typing import Union
 
 Numeric = Union[Number, TorchNumeric]
 
-from .generic import *
-from .shaping import *
-from .linear_algebra import *
-from .random import *
+from plum import clear_all_cache as _clear_all_cache
 
 # noinspection PyUnresolvedReferences
-from ..types import _torch_retrievables
+from .generic import *
+from .linear_algebra import *
+from .random import *
+from .shaping import *
 
-# Retrieve types.
-for retrievable in _torch_retrievables:
-    retrievable.retrieve()
+# Clear cache to make sure that all newly loaded types are available.
+_clear_all_cache()
 
 # Alias to actual module.
 sys.modules[__name__] = B

@@ -1,7 +1,7 @@
 from types import FunctionType
+from typing import Union
 
 import torch
-from plum import Union
 from torch.jit import is_tracing, trace
 
 from . import B, dispatch, Numeric

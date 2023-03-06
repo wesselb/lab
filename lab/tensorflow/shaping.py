@@ -1,4 +1,4 @@
-from plum import Union
+from typing import Union
 
 import tensorflow as tf
 

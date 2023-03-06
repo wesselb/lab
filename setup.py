@@ -113,7 +113,7 @@ requirements = [
     "numpy>=1.16",
     "scipy>=1.3",
     "fdm",
-    "plum-dispatch>=1.5.3",
+    "plum-dispatch>=2",
     "opt-einsum",
 ]
 

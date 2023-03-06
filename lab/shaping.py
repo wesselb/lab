@@ -1,12 +1,12 @@
 import math
 import warnings
+from typing import Union
 
 import numpy as np
-from plum import Union
 
 from . import B, dispatch
 from .shape import Shape
-from .types import Numeric, Int
+from .types import Int, Numeric
 from .util import abstract, resolve_axis
 
 __all__ = [

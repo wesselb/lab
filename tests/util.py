@@ -1,18 +1,18 @@
 import logging
+import typing
 from itertools import product
+from typing import Union
 
 import jax.numpy as jnp
+import lab as B
 import numpy as np
-import plum
 import pytest
 import tensorflow as tf
 import torch
 from autograd.core import VJPNode, getval
-from autograd.tracer import trace_stack, new_box
-from plum import Dispatcher, Union
-
-import lab as B
-from lab.shape import Shape, Dimension, unwrap_dimension
+from autograd.tracer import new_box, trace_stack
+from lab.shape import Dimension, Shape, unwrap_dimension
+from plum import Dispatcher, isinstance
 
 __all__ = [
     "check_lazy_shapes",
@@ -144,12 +144,16 @@ def check_function(
 
     # Construct framework types to skip mixes of.
     fw_types = [
-        plum.Union(t, plum.List(t), plum.Tuple(t))
+        Union[t, typing.List[t], typing.Tuple[t, ...]]
         for t in [B.AGNumeric, B.TorchNumeric, B.TFNumeric, B.JAXNumeric]
     ]
 
     # Construct other types to skip entirely.
-    skip_types = [plum.Union(t, plum.List(t), plum.Tuple(t)) for t in skip]
+    skip_types = [Union[t, typing.List[t], typing.Tuple[t, ...]] for t in skip]
+
+    def exempt(arg):
+        """Allow empty tuples and lists."""
+        return isinstance(arg, (tuple, list)) and len(arg) == 0
 
     # Check consistency of results.
     for kw_args in kw_args_prod:
@@ -162,11 +166,19 @@ def check_function(
 
         for args in args_prod:
             # Skip mixes of FW types.
-            fw_count = sum([any(isinstance(arg, t) for arg in args) for t in fw_types])
+            fw_count = sum(
+                [
+                    any(not exempt(arg) and isinstance(arg, t) for arg in args)
+                    for t in fw_types
+                ]
+            )
 
             # Skip all skips.
             skip_count = sum(
-                [any(isinstance(arg, t) for arg in args) for t in skip_types]
+                [
+                    any(not exempt(arg) and isinstance(arg, t) for arg in args)
+                    for t in skip_types
+                ]
             )
 
             if fw_count >= 2 or skip_count >= 1:

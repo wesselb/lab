@@ -3,7 +3,7 @@ from functools import reduce
 from operator import mul
 
 import numpy as np
-from plum.type import VarArgs, Union
+from typing import Union
 
 from . import dispatch, B
 from .types import DType, Int, Numeric, RandomState
@@ -121,7 +121,7 @@ def rand(state: RandomState, dtype: DType, *shape: Int):  # pragma: no cover
     """
 
 
-@dispatch.multi((Int,), (VarArgs(Int),))  # Single integer is a not a reference.
+@dispatch
 def rand(*shape: Int):
     return rand(B.default_dtype, *shape)
 
@@ -134,6 +134,12 @@ def rand(state: RandomState, ref: Numeric):
 @dispatch
 def rand(ref: Numeric):
     return rand(B.dtype(ref), *B.shape(ref))
+
+
+@dispatch
+def rand(shape: Int):
+    # Single integer is not a reference.
+    return rand(B.default_dtype, shape)
 
 
 @dispatch
@@ -152,7 +158,7 @@ def randn(state: RandomState, dtype: DType, *shape: Int):  # pragma: no cover
     """
 
 
-@dispatch.multi((Int,), (VarArgs(Int),))  # Single integer is a not a reference.
+@dispatch
 def randn(*shape: Int):
     return randn(B.default_dtype, *shape)
 
@@ -165,6 +171,11 @@ def randn(state: RandomState, ref: Numeric):
 @dispatch
 def randn(ref: Numeric):
     return randn(B.dtype(ref), *B.shape(ref))
+
+
+@dispatch
+def randn(shape: Int):
+    return randn(B.default_dtype, shape)
 
 
 @dispatch
@@ -267,7 +278,7 @@ def randint(
     """
 
 
-@dispatch.multi((Int,), (VarArgs(Int),))  # Single integer is a not a reference.
+@dispatch
 def randint(*shape: Int, lower: Int = 0, upper: Int):
     return randint(B.default_dtype, *shape, lower=lower, upper=upper)
 
@@ -280,6 +291,12 @@ def randint(state: RandomState, ref: Numeric, *, lower: Int = 0, upper: Int):
 @dispatch
 def randint(ref: Numeric, *, lower: Int = 0, upper: Int):
     return randint(B.dtype(ref), *B.shape(ref), lower=lower, upper=upper)
+
+
+@dispatch
+def randint(shape: Int, *, lower: Int = 0, upper: Int):
+    # Single integer is not a reference.
+    return randint(B.default_dtype, shape, lower=lower, upper=upper)
 
 
 @dispatch
@@ -328,7 +345,7 @@ def randgamma(
     """
 
 
-@dispatch.multi((Int,), (VarArgs(Int),))  # Single integer is a not a reference.
+@dispatch
 def randgamma(*shape: Int, alpha: Numeric, scale: Numeric):
     return randgamma(B.default_dtype, *shape, alpha=alpha, scale=scale)
 
@@ -341,6 +358,12 @@ def randgamma(state: RandomState, ref: Numeric, *, alpha: Numeric, scale: Numeri
 @dispatch
 def randgamma(ref: Numeric, *, alpha: Numeric, scale: Numeric):
     return randgamma(B.dtype(ref), *B.shape(ref), alpha=alpha, scale=scale)
+
+
+@dispatch
+def randgamma(shape: Int, *, alpha: Numeric, scale: Numeric):
+    # Single integer is a not a reference.
+    return randgamma(B.default_dtype, shape, alpha=alpha, scale=scale)
 
 
 @dispatch
@@ -381,7 +404,7 @@ def randbeta(dtype: DType, *shape: Int, alpha: Numeric, beta: Numeric):
     )[1]
 
 
-@dispatch.multi((Int,), (VarArgs(Int),))  # Single integer is a not a reference.
+@dispatch
 def randbeta(*shape: Int, alpha: Numeric, beta: Numeric):
     return randbeta(B.default_dtype, *shape, alpha=alpha, beta=beta)
 
@@ -394,3 +417,9 @@ def randbeta(state: RandomState, ref: Numeric, *, alpha: Numeric, beta: Numeric)
 @dispatch
 def randbeta(ref: Numeric, *, alpha: Numeric, beta: Numeric):
     return randbeta(B.dtype(ref), *B.shape(ref), alpha=alpha, beta=beta)
+
+
+@dispatch
+def randbeta(shape: Int, *, alpha: Numeric, beta: Numeric):
+    # Single integer is not a reference.
+    return randbeta(B.default_dtype, shape, alpha=alpha, beta=beta)

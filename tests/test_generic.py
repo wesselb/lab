@@ -1,12 +1,12 @@
 import jax
 import jax.numpy as jnp
+import lab as B
 import numpy as np
 import pytest
 import scipy.special
 import tensorflow as tf
 import torch
-
-import lab as B
+from plum import isinstance
 
 # noinspection PyUnresolvedReferences
 from .util import (

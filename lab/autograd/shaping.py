@@ -1,5 +1,6 @@
+from typing import Union
+
 import autograd.numpy as anp
-from plum import Union
 
 from . import dispatch, Numeric
 from ..types import Int

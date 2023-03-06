@@ -1,6 +1,8 @@
+from typing import Union
+
 import jax
 import jax.numpy as jnp
-from plum import Dispatcher, Union
+from plum import Dispatcher
 
 from . import dispatch, B, Numeric
 from ..types import Int, JAXDType, JAXNumeric, JAXRandomState

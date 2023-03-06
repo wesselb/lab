@@ -1,9 +1,10 @@
 from functools import wraps
 
-import numpy as np
 import plum
 import plum.signature
 import plum.type
+
+import numpy as np
 
 from . import B
 
@@ -198,7 +199,7 @@ def abstract(promote=None, promote_from=None):
                 promote_index = promote
 
             # Record types.
-            types_before = tuple(plum.type_of(arg) for arg in args)
+            types_before = tuple(type(arg) for arg in args)
 
             # Promote.
             if promote_from is None:
@@ -208,7 +209,7 @@ def abstract(promote=None, promote_from=None):
 
             # Enforce a change in types. Otherwise, the call will recurse, which
             # means that an implementation is not available.
-            types_after = tuple(plum.type_of(arg) for arg in args)
+            types_after = tuple(type(arg) for arg in args)
             if types_before == types_after:
                 signature = plum.signature.Signature(*types_after)
                 # TODO: Use the message from Plum directly here.

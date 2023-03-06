@@ -1,8 +1,8 @@
 from types import FunctionType
+from typing import Union
 
 import autograd.numpy as anp
 import autograd.scipy.special as asps
-from plum import Union
 
 from . import dispatch, Numeric
 from .custom import autograd_register

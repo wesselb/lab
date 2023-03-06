@@ -1,15 +1,16 @@
 import sys
+from typing import Union
+
+from plum import (
+    ModuleType,
+    activate_union_aliases,
+    add_conversion_method,
+    add_promotion_rule,
+    convert,
+    set_union_alias,
+)
 
 import numpy as np
-from plum import (
-    add_conversion_method,
-    convert,
-    add_promotion_rule,
-    parametric,
-    clear_all_cache,
-    Union,
-)
-from plum.type import ResolvableType, ptype
 
 from . import dispatch
 from .shape import Dimension
@@ -54,52 +55,10 @@ __all__ = [
     "Torch",
     "JAX",
     "Framework",
-    "_tf_retrievables",
-    "_torch_retrievables",
-    "_jax_retrievables",
 ]
 
-
-@parametric
-class UnimportedType:
-    """Parametric type that represents a type that yet has to be loaded."""
-
-
-class ModuleType(ResolvableType):
-    """A type from a module that will resolve once it has been told that the
-    module is imported.
-
-    Args:
-        module (str): Module.
-        name (str): Name of type in the module.
-    """
-
-    def __init__(self, module, name):
-        self.module = module
-        self.name = name
-
-        # Cache to hold the loaded type.
-        self._type = None
-
-        # Placeholder type to return whilst the type is unavailable.
-        self._placeholder = UnimportedType[module + "." + name]
-
-    def retrieve(self):
-        """Retrieve the type, assuming that the module has been imported.
-
-        Clears all cache after retrieval.
-        """
-        target = sys.modules[self.module]
-        for part in self.name.split("."):
-            target = getattr(target, part)
-        self._type = ptype(target)
-        clear_all_cache()
-
-    def resolve(self):
-        if self._type:
-            return self._type
-        else:
-            return self._placeholder
+# We will use union aliases, so activate them.
+activate_union_aliases()
 
 
 def _module_call(module, method, *args, **kw_args):
@@ -116,46 +75,52 @@ _tf_indexedslices = ModuleType("tensorflow", "IndexedSlices")
 _tf_variable = ModuleType("tensorflow", "Variable")
 _tf_dtype = ModuleType("tensorflow", "DType")
 _tf_randomstate = ModuleType("tensorflow", "random.Generator")
-_tf_retrievables = [
-    _tf_tensor,
-    _tf_indexedslices,
-    _tf_variable,
-    _tf_dtype,
-    _tf_randomstate,
-]
 
 # Define PyTorch module types.
 _torch_tensor = ModuleType("torch", "Tensor")
 _torch_dtype = ModuleType("torch", "dtype")
 _torch_device = ModuleType("torch", "device")
 _torch_randomstate = ModuleType("torch", "Generator")
-_torch_retrievables = [_torch_tensor, _torch_dtype, _torch_device, _torch_randomstate]
 
 # Define AutoGrad module types.
 _ag_tensor = ModuleType("autograd.tracer", "Box")
-_ag_retrievables = [_ag_tensor]
 
 # Define JAX module types.
 _jax_tensor = ModuleType("jax.interpreters.xla", "DeviceArray")
 _jax_tracer = ModuleType("jax.core", "Tracer")
 _jax_dtype = ModuleType("jax._src.numpy.lax_numpy", "_ScalarMeta")
 _jax_device = ModuleType("jaxlib.xla_extension", "Device")
-_jax_retrievables = [_jax_tensor, _jax_tracer, _jax_dtype, _jax_device]
 
 # Numeric types:
-Int = Union(*([int, Dimension] + np.sctypes["int"] + np.sctypes["uint"]), alias="Int")
-Float = Union(*([float] + np.sctypes["float"]), alias="Float")
-Complex = Union(*([complex] + np.sctypes["complex"]), alias="Complex")
-Bool = Union(bool, np.bool_, alias="Bool")
-Number = Union(Int, Bool, Float, Complex, alias="Number")
-NPNumeric = Union(np.ndarray, alias="NPNumeric")
-AGNumeric = Union(_ag_tensor, alias="AGNumeric")
-TFNumeric = Union(_tf_tensor, _tf_variable, _tf_indexedslices, alias="TFNumeric")
-TorchNumeric = Union(_torch_tensor, alias="TorchNumeric")
-JAXNumeric = Union(_jax_tensor, _jax_tracer, alias="JAXNumeric")
-Numeric = Union(
-    Number, NPNumeric, AGNumeric, TFNumeric, JAXNumeric, TorchNumeric, alias="Numeric"
-)
+Int = Union[tuple([int, Dimension] + np.sctypes["int"] + np.sctypes["uint"])]
+Int = set_union_alias(Int, "B.Int")
+Float = Union[tuple([float] + np.sctypes["float"])]
+Float = set_union_alias(Float, "B.Float")
+Complex = Union[tuple([complex] + np.sctypes["complex"])]
+Complex = set_union_alias(Complex, "B.Complex")
+Bool = Union[bool, np.bool_]
+Bool = set_union_alias(Bool, "B.Bool")
+Number = Union[Int, Bool, Float, Complex]
+Number = set_union_alias(Number, "B.Number")
+NPNumeric = Union[np.ndarray]
+NPNumeric = set_union_alias(NPNumeric, "B.NPNumeric")
+AGNumeric = Union[_ag_tensor]
+AGNumeric = set_union_alias(AGNumeric, "B.AGNumeric")
+TFNumeric = Union[_tf_tensor, _tf_variable, _tf_indexedslices]
+TFNumeric = set_union_alias(TFNumeric, "B.TFNumeric")
+TorchNumeric = Union[_torch_tensor]
+TorchNumeric = set_union_alias(TorchNumeric, "B.TorchNumeric")
+JAXNumeric = Union[_jax_tensor, _jax_tracer]
+JAXNumeric = set_union_alias(JAXNumeric, "B.JAXNumeric")
+Numeric = Union[
+    Number,
+    NPNumeric,
+    AGNumeric,
+    TFNumeric,
+    JAXNumeric,
+    TorchNumeric,
+]
+Numeric = set_union_alias(Numeric, "B.Numeric")
 
 # Define corresponding promotion rules and conversion methods.
 add_promotion_rule(NPNumeric, TFNumeric, TFNumeric)
@@ -173,12 +138,17 @@ add_conversion_method(
 )
 
 # Data types:
-NPDType = Union(type, np.dtype, alias="NPDType")
-AGDType = Union(NPDType, alias="AGDType")
-TFDType = Union(_tf_dtype, alias="TFDType")
-TorchDType = Union(_torch_dtype, alias="TorchDType")
-JAXDType = Union(_jax_dtype, alias="JAXDType")
-DType = Union(NPDType, TFDType, TorchDType, JAXDType, alias="DType")
+NPDType = Union[type, np.dtype]
+NPDType = set_union_alias(NPDType, "B.NPDType")
+AGDType = NPDType  # There is no specific data type for AutoGrad.
+TFDType = Union[_tf_dtype]
+TFDType = set_union_alias(TFDType, "B.TFDType")
+TorchDType = Union[_torch_dtype]
+TorchDType = set_union_alias(TorchDType, "B.TorchDType")
+JAXDType = Union[_jax_dtype]
+JAXDType = set_union_alias(JAXDType, "B.JAXDType")
+DType = Union[NPDType, TFDType, TorchDType, JAXDType]
+DType = set_union_alias(DType, "B.DType")
 
 # Create lookup for PyTorch data types that loads upon the first request.
 _torch_lookup_cache = {}
@@ -256,6 +226,9 @@ def dtype(a):
 
     Args:
         a (tensor): Object to determine data type of.
+
+    Returns:
+        dtype: Data type of `a`.
     """
     return a.dtype
 
@@ -389,34 +362,48 @@ def dtype_int(x):
 
 
 # Random state types:
-NPRandomState = Union(np.random.RandomState, alias="NPRandomState")
-AGRandomState = Union(NPRandomState, alias="AGRandomState")
-TFRandomState = Union(_tf_randomstate, alias="TFRandomState")
-TorchRandomState = Union(_torch_randomstate, alias="TorchRandomState")
-JAXRandomState = Union(JAXNumeric, np.ndarray, alias="JAXRandomState")
-RandomState = Union(
+NPRandomState = Union[np.random.RandomState]
+NPRandomState = set_union_alias(NPRandomState, "B.NPRandomState")
+AGRandomState = NPRandomState  # There is no specific random state for AutoGrad.
+TFRandomState = Union[_tf_randomstate]
+TFRandomState = set_union_alias(TFRandomState, "B.TFRandomState")
+TorchRandomState = Union[_torch_randomstate]
+TorchRandomState = set_union_alias(TorchRandomState, "B.TorchRandomState")
+JAXRandomState = Union[JAXNumeric, np.ndarray]
+JAXRandomState = set_union_alias(JAXRandomState, "B.JAXRandomState")
+RandomState = Union[
     NPRandomState,
     AGRandomState,
     TFRandomState,
     TorchRandomState,
     JAXRandomState,
-    alias="RandomState",
-)
+]
+RandomState = set_union_alias(RandomState, "B.RandomState")
 
 # Device types:
-TFDevice = Union(str, alias="TFDevice")
-TorchDevice = Union(_torch_device, alias="TFDevice")
-JAXDevice = Union(_jax_device, alias="JAXDevice")
-Device = Union(TFDevice, TorchDevice, JAXDevice, alias="Device")
+TFDevice = Union[str]
+TFDevice = set_union_alias(TFDevice, "B.TFDevice")
+TorchDevice = Union[_torch_device]
+TorchDevice = set_union_alias(TorchDevice, "B.TorchDevice")
+JAXDevice = Union[_jax_device]
+JAXDevice = set_union_alias(JAXDevice, "B.JAXDevice")
+Device = Union[TFDevice, TorchDevice, JAXDevice]
+Device = set_union_alias(Device, "B.Device")
 
 # Add conversions from non-string device types to strings.
 add_conversion_method(TorchDevice, str, str)
 add_conversion_method(JAXDevice, str, lambda d: f"{d.platform}:{d.id}")
 
 # Framework types:
-NP = Union(NPNumeric, NPDType, NPRandomState, alias="NP")
-AG = Union(AGNumeric, AGDType, AGRandomState, alias="AG")
-TF = Union(TFNumeric, TFDType, TFRandomState, TFDevice, alias="TF")
-Torch = Union(TorchNumeric, TorchDType, TorchRandomState, TorchDevice, alias="Torch")
-JAX = Union(JAXNumeric, JAXDType, JAXRandomState, JAXDevice, alias="JAX")
-Framework = Union(NP, AG, TF, Torch, JAX, alias="Framework")
+NP = Union[NPNumeric, NPDType, NPRandomState]
+NP = set_union_alias(NP, "B.NP")
+AG = Union[AGNumeric, AGDType, AGRandomState]
+AG = set_union_alias(AG, "B.AG")
+TF = Union[TFNumeric, TFDType, TFRandomState, TFDevice]
+TF = set_union_alias(TF, "B.TF")
+Torch = Union[TorchNumeric, TorchDType, TorchRandomState, TorchDevice]
+Torch = set_union_alias(Torch, "B.Torch")
+JAX = Union[JAXNumeric, JAXDType, JAXRandomState, JAXDevice]
+JAX = set_union_alias(JAX, "B.JAX")
+Framework = Union[NP, AG, TF, Torch, JAX]
+Framework = set_union_alias(Framework, "B.Framework")

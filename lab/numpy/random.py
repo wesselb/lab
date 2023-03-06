@@ -1,7 +1,7 @@
 import warnings
+from typing import Union
 
 import numpy as np
-from plum import Union
 
 from . import dispatch, B, Numeric
 from ..types import NPDType, NPRandomState, Int

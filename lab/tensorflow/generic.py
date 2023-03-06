@@ -1,9 +1,8 @@
 from types import FunctionType
-from typing import Callable
+from typing import Callable, Union
 
 import tensorflow as tf
 import tensorflow_probability as tfp
-from plum import Union
 
 from . import dispatch, B, Numeric, TFNumeric
 from .custom import tensorflow_register

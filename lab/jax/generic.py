@@ -1,10 +1,11 @@
 from types import FunctionType
+from typing import Union
 
 import jax
+import jax.nn as jnn
 import jax.numpy as jnp
 import jax.scipy.special as jsps
-import jax.nn as jnn
-from plum import Union
+from plum import isinstance
 
 from . import B, dispatch, Numeric
 from .custom import jax_register
