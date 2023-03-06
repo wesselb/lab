@@ -57,9 +57,6 @@ __all__ = [
     "Framework",
 ]
 
-# We will use union aliases, so activate them.
-activate_union_aliases()
-
 
 def _module_call(module, method, *args, **kw_args):
     return getattr(sys.modules[module], method)(*args, **kw_args)
@@ -86,7 +83,9 @@ _torch_randomstate = ModuleType("torch", "Generator")
 _ag_tensor = ModuleType("autograd.tracer", "Box")
 
 # Define JAX module types.
-if sys.version_info.minor > 7:  # jax>0.4 deprecated python-3.7 support, rely on older jax versions
+if (
+    sys.version_info.minor > 7
+):  # jax>0.4 deprecated python-3.7 support, rely on older jax versions
     _jax_tensor = ModuleType("jaxlib.xla_extension", "ArrayImpl")
 else:
     _jax_tensor = ModuleType("jax.interpreters.xla", "DeviceArray")
