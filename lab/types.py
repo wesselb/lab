@@ -86,7 +86,10 @@ _torch_randomstate = ModuleType("torch", "Generator")
 _ag_tensor = ModuleType("autograd.tracer", "Box")
 
 # Define JAX module types.
-_jax_tensor = ModuleType("jax.interpreters.xla", "DeviceArray")
+if sys.version_info.minor > 7:  # jax>0.4 deprecated python-3.7 support, rely on older jax versions
+    _jax_tensor = ModuleType("jaxlib.xla_extension", "ArrayImpl")
+else:
+    _jax_tensor = ModuleType("jax.interpreters.xla", "DeviceArray")
 _jax_tracer = ModuleType("jax.core", "Tracer")
 _jax_dtype = ModuleType("jax._src.numpy.lax_numpy", "_ScalarMeta")
 _jax_device = ModuleType("jaxlib.xla_extension", "Device")
