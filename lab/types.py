@@ -355,7 +355,12 @@ def dtype_int(dtype: DType):
     name = list(convert(dtype, NPDType).__name__)
     while name and name[0] not in set([str(i) for i in range(10)]):
         name.pop(0)
-    return _convert_back(getattr(np, "int" + "".join(name)), dtype)
+    name_int = "int" + "".join(name)
+    if name_int == "int":
+        dtype_int = int
+    else:
+        dtype_int = getattr(np, name_int)
+    return _convert_back(dtype_int, dtype)
 
 
 @dispatch
