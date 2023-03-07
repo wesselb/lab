@@ -12,6 +12,8 @@ Numeric = Union[Number, NPNumeric, JAXNumeric]
 
 from plum import clear_all_cache as _clear_all_cache
 
+import jax  # Load `jax` to load all new types.
+
 # noinspection PyUnresolvedReferences
 from .generic import *
 from .linear_algebra import *
