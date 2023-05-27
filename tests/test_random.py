@@ -1,12 +1,11 @@
 import warnings
 
-import lab.torch
-import lab.tensorflow
-import lab.jax
-import lab.autograd
-
 import jax.numpy as jnp
 import lab as B
+import lab.autograd
+import lab.jax
+import lab.tensorflow
+import lab.torch
 import numpy as np
 import pytest
 import tensorflow as tf
@@ -14,7 +13,7 @@ import torch
 from plum import isinstance
 
 # noinspection PyUnresolvedReferences
-from .util import Tensor, PositiveTensor, approx, to_np, check_lazy_shapes
+from .util import PositiveTensor, Tensor, approx, check_lazy_shapes, to_np
 
 
 @pytest.mark.parametrize(
@@ -137,6 +136,13 @@ def test_random_generators(f, t, dtype_transform, just_single_arg, check_lazy_sh
         assert isinstance(f(state, f(t, 2, 3))[0], B.RandomState)
         assert B.dtype(f(state, f(t, 2, 3))[1]) is dtype_transform(t)
         assert B.shape(f(state, f(t, 2, 3))[1]) == (2, 3)
+
+
+@pytest.mark.parametrize("t", [np.float32, tf.float32, torch.float32, jnp.float32])
+def test_randcat_correctness(t, check_lazy_shapes):
+    assert int(B.randcat(B.cast(t, np.array([1.0, 0.0, 0.0])))) == 0
+    assert int(B.randcat(B.cast(t, np.array([0.0, 1.0, 0.0])))) == 1
+    assert int(B.randcat(B.cast(t, np.array([0.0, 0.0, 1.0])))) == 2
 
 
 @pytest.mark.parametrize("t", [np.float32, tf.float32, torch.float32, jnp.float32])

@@ -3,9 +3,9 @@ from typing import Union
 
 import numpy as np
 
-from . import dispatch, B, Numeric
-from ..types import NPDType, NPRandomState, Int
+from ..types import Int, NPDType, NPRandomState
 from ..util import broadcast_shapes
+from . import B, Numeric, dispatch
 
 __all__ = []
 
@@ -59,7 +59,7 @@ def randcat(state: NPRandomState, p: Numeric, n: Int):
     # Perform sampling routine.
     cdf = np.cumsum(p, axis=-1)
     u = state.rand(n, *p.shape[:-1])
-    inds = np.sum(u[..., None] < cdf[None], axis=-1) - 1
+    inds = np.sum(u[..., None] >= cdf[None], axis=-1)
     # Be sure to return the right data type.
     return state, B.cast(B.dtype_int(p), inds)
 
