@@ -5,6 +5,13 @@ from ..random import _randcat_last_first
 from ..types import TorchNumeric, TorchDType, Int, TorchRandomState
 from ..util import compress_batch
 
+from torch.mps import _get_default_mps_generator
+
+# if parts[0] == "mps":
+#     if torch.mps._default_mps_generator:
+#         return torch.mps._default_mps_generator
+#     else:
+#         return torch.mps._get_default_mps_generator()
 __all__ = []
 
 
@@ -22,17 +29,25 @@ def global_random_state(_: TorchDType):
     else:
         parts = B.ActiveDevice.active_name.lower().split(":")
 
-        if len(parts) == 0 or parts[0] not in {"cuda", "gpu"}:
+        if len(parts) == 0 or parts[0] not in {"cuda", "gpu", "mps"}:
             raise RuntimeError(f'Unknown active device "{B.ActiveDevice.active_name}".')
 
-        # Ensure that the generators are available.
-        if len(torch.cuda.default_generators) == 0:
-            torch.cuda.init()
-
-        if len(parts) == 1:
-            return torch.cuda.default_generators[0]
+        if parts[0] == "mps":
+            import torch.mps
+            
+            if torch.mps._default_mps_generator:
+                return torch.mps._default_mps_generator
+            else:
+                return torch.mps._get_default_mps_generator()
         else:
-            return torch.cuda.default_generators[int(parts[1])]
+            # Ensure that the generators are available.
+            if len(torch.cuda.default_generators) == 0:
+                torch.cuda.init()
+
+            if len(parts) == 1:
+                return torch.cuda.default_generators[0]
+            else:
+                return torch.cuda.default_generators[int(parts[1])]
 
 
 @dispatch
