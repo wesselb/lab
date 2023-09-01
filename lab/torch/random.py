@@ -5,8 +5,6 @@ from ..random import _randcat_last_first
 from ..types import TorchNumeric, TorchDType, Int, TorchRandomState
 from ..util import compress_batch
 
-from torch.mps import _get_default_mps_generator
-
 __all__ = []
 
 
