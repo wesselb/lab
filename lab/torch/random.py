@@ -7,11 +7,6 @@ from ..util import compress_batch
 
 from torch.mps import _get_default_mps_generator
 
-# if parts[0] == "mps":
-#     if torch.mps._default_mps_generator:
-#         return torch.mps._default_mps_generator
-#     else:
-#         return torch.mps._get_default_mps_generator()
 __all__ = []
 
 
@@ -34,7 +29,7 @@ def global_random_state(_: TorchDType):
 
         if parts[0] == "mps":
             import torch.mps
-            
+
             if torch.mps._default_mps_generator:
                 return torch.mps._default_mps_generator
             else:
