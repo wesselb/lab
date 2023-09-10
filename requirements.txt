@@ -16,3 +16,4 @@ setuptools_scm[toml]
 setuptools_scm_git_archive
 isort
 black==23.7.0
+jupyter-book
