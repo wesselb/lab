@@ -1,2 +1,7 @@
 [run]
 omit = lab/_version.py
+
+[report]
+exclude_lines =
+    pragma: no cover
+    pragma: specific no cover.*${PRAGMA_VERSION}
