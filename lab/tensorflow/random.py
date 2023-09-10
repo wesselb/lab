@@ -2,10 +2,10 @@ import logging
 
 import tensorflow as tf
 
-from . import dispatch, B, Numeric
 from ..random import _randcat_last_first
-from ..types import TFDType, TFNumeric, Int, TFRandomState
-from ..util import compress_batch, broadcast_shapes
+from ..types import Int, TFDType, TFNumeric, TFRandomState
+from ..util import broadcast_shapes, compress_batch
+from . import B, Numeric, dispatch
 
 __all__ = []
 

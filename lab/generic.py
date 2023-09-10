@@ -4,21 +4,21 @@ from types import FunctionType
 from typing import Callable, Union
 
 import numpy as np
-from plum import convert, add_conversion_method
+from plum import add_conversion_method, convert
 
-from . import dispatch, B, Dispatcher
+from . import B, Dispatcher, dispatch
 from .control_flow import control_flow
 from .types import (
-    Number,
-    Numeric,
+    AGNumeric,
     DType,
     Int,
+    JAXNumeric,
     NPNumeric,
-    AGNumeric,
+    Number,
+    Numeric,
+    RandomState,
     TFNumeric,
     TorchNumeric,
-    JAXNumeric,
-    RandomState,
 )
 from .util import abstract
 
@@ -1449,7 +1449,6 @@ def scan(f: Callable, xs, *init_state):
 
     # Cannot simply iterate, because that breaks TensorFlow.
     for i in range(int(B.shape(xs)[0])):
-
         state = convert(f(B.squeeze(state), xs[i]), tuple)
         new_state_shape = [B.shape(s) for s in state]
 

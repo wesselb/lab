@@ -1,4 +1,5 @@
 import pytest
+
 import lab.jax as B
 
 # noinspection PyUnresolvedReferences

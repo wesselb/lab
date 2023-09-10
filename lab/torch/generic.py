@@ -4,11 +4,11 @@ from typing import Union
 import torch
 from torch.jit import is_tracing, trace
 
-from . import B, dispatch, Numeric
-from .custom import torch_register
 from ..custom import bvn_cdf, s_bvn_cdf
 from ..shape import Dimension
-from ..types import TorchNumeric, NPNumeric, TorchDType, Number, Int, TorchRandomState
+from ..types import Int, NPNumeric, Number, TorchDType, TorchNumeric, TorchRandomState
+from . import B, Numeric, dispatch
+from .custom import torch_register
 
 __all__ = []
 

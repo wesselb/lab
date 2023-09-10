@@ -1,16 +1,16 @@
 import logging
-from typing import Union, Optional
+from typing import Optional, Union
 
 import autograd.numpy as anp
 import autograd.scipy.linalg as asla
 import opt_einsum as oe
 
-from . import dispatch, B, Numeric
-from .custom import autograd_register
-from ..custom import toeplitz_solve, s_toeplitz_solve, expm, s_expm, logm, s_logm
+from ..custom import expm, logm, s_expm, s_logm, s_toeplitz_solve, toeplitz_solve
 from ..linear_algebra import _default_perm
 from ..types import Int
 from ..util import batch_computation, resolve_axis
+from . import B, Numeric, dispatch
+from .custom import autograd_register
 
 __all__ = []
 log = logging.getLogger(__name__)

@@ -3,11 +3,11 @@ from typing import Optional, Union
 import opt_einsum as oe
 import torch
 
-from . import dispatch, B, Numeric
-from .custom import torch_register
-from ..custom import toeplitz_solve, s_toeplitz_solve, expm, s_expm, logm, s_logm
+from ..custom import expm, logm, s_expm, s_logm, s_toeplitz_solve, toeplitz_solve
 from ..linear_algebra import _default_perm
 from ..types import Int
+from . import B, Numeric, dispatch
+from .custom import torch_register
 
 __all__ = []
 

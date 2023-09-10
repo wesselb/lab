@@ -10,9 +10,8 @@ from typing import Union
 
 Numeric = Union[Number, NPNumeric, AGNumeric]
 
-from plum import clear_all_cache as _clear_all_cache
-
 import autograd  # Load `autograd` to load all new types.
+from plum import clear_all_cache as _clear_all_cache
 
 # noinspection PyUnresolvedReferences
 from .generic import *

@@ -4,9 +4,9 @@ from typing import Union
 import numpy as np
 import scipy.special as sps
 
-from . import B, dispatch, Numeric
 from ..custom import bvn_cdf as _bvn_cdf
-from ..types import NPNumeric, NPDType, Int, NPRandomState
+from ..types import Int, NPDType, NPNumeric, NPRandomState
+from . import B, Numeric, dispatch
 
 __all__ = []
 

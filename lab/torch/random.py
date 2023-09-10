@@ -1,9 +1,9 @@
 import torch
 
-from . import dispatch, B, Numeric
 from ..random import _randcat_last_first
-from ..types import TorchNumeric, TorchDType, Int, TorchRandomState
+from ..types import Int, TorchDType, TorchNumeric, TorchRandomState
 from ..util import compress_batch
+from . import B, Numeric, dispatch
 
 __all__ = []
 

@@ -1,8 +1,9 @@
-import jax.numpy as jnp
 from typing import Union
 
-from . import dispatch, Numeric
+import jax.numpy as jnp
+
 from ..types import Int
+from . import Numeric, dispatch
 
 __all__ = []
 

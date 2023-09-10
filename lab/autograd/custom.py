@@ -1,4 +1,4 @@
-from autograd.extend import primitive, defvjp_argnums
+from autograd.extend import defvjp_argnums, primitive
 from plum import Dispatcher
 
 from ..util import as_tuple

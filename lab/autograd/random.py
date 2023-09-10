@@ -1,8 +1,8 @@
 import autograd.numpy as anp
 import numpy as np
 
-from . import dispatch, B
-from ..types import Int, AGNumeric, AGRandomState
+from ..types import AGNumeric, AGRandomState, Int
+from . import B, dispatch
 
 __all__ = []
 

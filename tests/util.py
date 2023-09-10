@@ -4,15 +4,16 @@ from itertools import product
 from typing import Union
 
 import jax.numpy as jnp
-import lab as B
 import numpy as np
 import pytest
 import tensorflow as tf
 import torch
 from autograd.core import VJPNode, getval
 from autograd.tracer import new_box, trace_stack
-from lab.shape import Dimension, Shape, unwrap_dimension
 from plum import Dispatcher, isinstance
+
+import lab as B
+from lab.shape import Dimension, Shape, unwrap_dimension
 
 __all__ = [
     "check_lazy_shapes",

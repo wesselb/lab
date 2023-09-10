@@ -1,28 +1,29 @@
 import jax
 import jax.numpy as jnp
-import lab as B
 import numpy as np
 import pytest
 import tensorflow as tf
 import torch
 from autograd import grad
 from fdm import check_sensitivity, gradient
+from plum import isinstance
+
+import lab as B
 from lab.custom import (
-    toeplitz_solve,
-    s_toeplitz_solve,
     bvn_cdf,
-    s_bvn_cdf,
     expm,
-    s_expm,
     logm,
+    s_bvn_cdf,
+    s_expm,
     s_logm,
+    s_toeplitz_solve,
+    toeplitz_solve,
 )
 from lab.tensorflow.custom import as_tf
 from lab.torch.custom import as_torch
-from plum import isinstance
 
 # noinspection PyUnresolvedReferences
-from .util import approx, check_lazy_shapes, check_function, PSD
+from .util import PSD, approx, check_function, check_lazy_shapes
 
 
 def test_as_tf(check_lazy_shapes):

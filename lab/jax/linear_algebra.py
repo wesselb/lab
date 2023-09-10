@@ -1,29 +1,29 @@
 import logging
-from typing import Union, Optional
+from typing import Optional, Union
 
 import jax.numpy as jnp
 import jax.scipy.linalg as jsla
 import opt_einsum as oe
 
-from . import dispatch, B, Numeric
-from .custom import jax_register
 from ..custom import (
-    toeplitz_solve,
-    i_toeplitz_solve,
-    s_toeplitz_solve,
-    i_s_toeplitz_solve,
     expm,
     i_expm,
-    s_expm,
-    i_s_expm,
-    logm,
     i_logm,
-    s_logm,
+    i_s_expm,
     i_s_logm,
+    i_s_toeplitz_solve,
+    i_toeplitz_solve,
+    logm,
+    s_expm,
+    s_logm,
+    s_toeplitz_solve,
+    toeplitz_solve,
 )
 from ..linear_algebra import _default_perm
 from ..types import Int
 from ..util import batch_computation
+from . import B, Numeric, dispatch
+from .custom import jax_register
 
 __all__ = []
 log = logging.getLogger(__name__)

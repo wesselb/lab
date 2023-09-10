@@ -5,14 +5,14 @@ import lab as B
 
 # noinspection PyUnresolvedReferences
 from .util import (
-    check_function,
-    Tensor,
-    Matrix,
     PSD,
-    PSDTriangular,
-    Value,
     Bool,
+    Matrix,
+    PSDTriangular,
+    Tensor,
+    Value,
     approx,
+    check_function,
     check_lazy_shapes,
 )
 

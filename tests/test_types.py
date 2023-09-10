@@ -5,13 +5,13 @@ import pytest
 import tensorflow as tf
 import torch
 from autograd import grad
-from plum.promotion import _promotion_rule, convert
 from plum import isinstance
+from plum.promotion import _promotion_rule, convert
 
 import lab as B
 
 # noinspection PyUnresolvedReferences
-from .util import check_lazy_shapes, autograd_box
+from .util import autograd_box, check_lazy_shapes
 
 
 def test_numeric(check_lazy_shapes):

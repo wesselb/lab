@@ -4,10 +4,10 @@ from typing import Union
 import autograd.numpy as anp
 import autograd.scipy.special as asps
 
-from . import dispatch, Numeric
-from .custom import autograd_register
 from ..custom import bvn_cdf, s_bvn_cdf
-from ..types import AGDType, AGNumeric, Int, AGRandomState
+from ..types import AGDType, AGNumeric, AGRandomState, Int
+from . import Numeric, dispatch
+from .custom import autograd_register
 
 __all__ = []
 

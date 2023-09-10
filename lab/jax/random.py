@@ -4,9 +4,9 @@ import jax
 import jax.numpy as jnp
 from plum import Dispatcher
 
-from . import dispatch, B, Numeric
 from ..types import Int, JAXDType, JAXNumeric, JAXRandomState
 from ..util import broadcast_shapes
+from . import B, Numeric, dispatch
 
 __all__ = []
 

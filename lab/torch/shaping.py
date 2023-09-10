@@ -4,8 +4,8 @@ import numpy as np
 import torch
 from plum import convert
 
-from . import dispatch, Numeric, TorchNumeric
 from ..types import Int, NPDType, issubdtype
+from . import Numeric, TorchNumeric, dispatch
 
 __all__ = []
 

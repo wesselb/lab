@@ -1,11 +1,11 @@
 import sys
 from functools import reduce
 from operator import mul
-
-import numpy as np
 from typing import Union
 
-from . import dispatch, B
+import numpy as np
+
+from . import B, dispatch
 from .types import DType, Int, Numeric, RandomState
 from .util import abstract
 

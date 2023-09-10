@@ -2,8 +2,8 @@ from typing import Union
 
 import autograd.numpy as anp
 
-from . import dispatch, Numeric
 from ..types import Int
+from . import Numeric, dispatch
 
 __all__ = []
 

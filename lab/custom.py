@@ -23,7 +23,8 @@ def promote_dtype_of_tensors(*xs):
 
 try:
     # noinspection PyUnresolvedReferences
-    from .bvn_cdf import bvn_cdf as bvn_cdf_, s_bvn_cdf as s_bvn_cdf_
+    from .bvn_cdf import bvn_cdf as bvn_cdf_
+    from .bvn_cdf import s_bvn_cdf as s_bvn_cdf_
 
     def i_bvn_cdf(a, b, c):
         if a.shape != b.shape or a.shape != c.shape:

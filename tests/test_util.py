@@ -5,16 +5,16 @@ from plum import NotFoundLookupError
 
 import lab as B
 import lab.autograd as B_autograd
+import lab.jax as B_jax
 import lab.tensorflow as B_tf
 import lab.torch as B_torch
-import lab.jax as B_jax
 from lab.util import (
-    resolve_axis,
-    as_tuple,
-    abstract,
-    batch_computation,
     _common_shape,
     _translate_index,
+    abstract,
+    as_tuple,
+    batch_computation,
+    resolve_axis,
 )
 
 # noinspections PyUnresolvedReferences

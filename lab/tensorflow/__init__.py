@@ -10,9 +10,8 @@ from typing import Union
 
 Numeric = Union[Number, NPNumeric, TFNumeric]
 
-from plum import clear_all_cache as _clear_all_cache
-
 import tensorflow as tf  # Load `tensorflow` to load all new types.
+from plum import clear_all_cache as _clear_all_cache
 
 # noinspection PyUnresolvedReferences
 from .generic import *

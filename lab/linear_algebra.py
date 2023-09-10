@@ -2,8 +2,8 @@ import logging
 import warnings
 from typing import Optional, Union
 
-from . import dispatch, B
-from .types import Numeric, Int
+from . import B, dispatch
+from .types import Int, Numeric
 from .util import abstract
 
 __all__ = [

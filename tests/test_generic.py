@@ -1,6 +1,5 @@
 import jax
 import jax.numpy as jnp
-import lab as B
 import numpy as np
 import pytest
 import scipy.special
@@ -8,19 +7,21 @@ import tensorflow as tf
 import torch
 from plum import isinstance
 
+import lab as B
+
 # noinspection PyUnresolvedReferences
 from .util import (
-    autograd_box,
-    check_function,
+    Bool,
+    BoolTensor,
+    ComplexTensor,
     Matrix,
+    NaNTensor,
+    PositiveTensor,
     Tensor,
     Value,
-    PositiveTensor,
-    ComplexTensor,
-    BoolTensor,
-    NaNTensor,
-    Bool,
     approx,
+    autograd_box,
+    check_function,
     check_lazy_shapes,
 )
 

@@ -1,7 +1,7 @@
 import pytest
 
 import lab as B
-from lab.shape import Shape, Dimension
+from lab.shape import Dimension, Shape
 
 
 def test_shape():

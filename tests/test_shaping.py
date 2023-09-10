@@ -1,11 +1,12 @@
 import jax.numpy as jnp
-import lab as B
 import numpy as np
 import pytest
 import tensorflow as tf
 import torch
-from lab.shape import Shape
 from plum import NotFoundLookupError
+
+import lab as B
+from lab.shape import Shape
 
 # noinspection PyUnresolvedReferences
 from .util import (

@@ -1,6 +1,7 @@
 import sys
 from typing import Union
 
+import numpy as np
 from plum import (
     ModuleType,
     activate_union_aliases,
@@ -9,8 +10,6 @@ from plum import (
     convert,
     set_union_alias,
 )
-
-import numpy as np
 
 from . import dispatch
 from .shape import Dimension

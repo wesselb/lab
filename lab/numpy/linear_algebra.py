@@ -1,15 +1,17 @@
 import logging
-from typing import Union, Optional
+from typing import Optional, Union
 
 import numpy as np
 import opt_einsum as oe
 import scipy.linalg as sla
 
-from . import dispatch, B, Numeric
-from ..custom import toeplitz_solve as _toeplitz_solve, expm as _expm, logm as _logm
+from ..custom import expm as _expm
+from ..custom import logm as _logm
+from ..custom import toeplitz_solve as _toeplitz_solve
 from ..linear_algebra import _default_perm
 from ..types import Int
 from ..util import batch_computation
+from . import B, Numeric, dispatch
 
 __all__ = []
 

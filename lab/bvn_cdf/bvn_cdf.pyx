@@ -2,10 +2,13 @@
 from __future__ import absolute_import
 
 cimport numpy as np
+
 import numpy as np
 
 cimport cython
+
 from cython.parallel import prange
+
 
 cdef extern from "math.h" nogil:
     double log(double x)

@@ -3,8 +3,7 @@ import subprocess
 
 import numpy as np
 from Cython.Build import build_ext
-from setuptools import find_packages, setup, Extension
-
+from setuptools import Extension, find_packages, setup
 
 if os.name == "nt":
     # On Windows, don't compile the extra modules.

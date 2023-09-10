@@ -7,18 +7,18 @@ import jax.numpy as jnp
 import jax.scipy.special as jsps
 from plum import isinstance
 
-from . import B, dispatch, Numeric
-from .custom import jax_register
-from ..custom import bvn_cdf, i_bvn_cdf, s_bvn_cdf, i_s_bvn_cdf
+from ..custom import bvn_cdf, i_bvn_cdf, i_s_bvn_cdf, s_bvn_cdf
 from ..types import (
+    Int,
     JAXDType,
     JAXNumeric,
+    JAXRandomState,
     NPNumeric,
     Number,
-    Int,
     _jax_tracer,
-    JAXRandomState,
 )
+from . import B, Numeric, dispatch
+from .custom import jax_register
 
 __all__ = []
 

@@ -1,10 +1,9 @@
 from functools import wraps
 
+import numpy as np
 import plum
 import plum.signature
 import plum.type
-
-import numpy as np
 
 from . import B
 

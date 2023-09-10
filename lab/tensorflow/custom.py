@@ -1,7 +1,7 @@
 from functools import wraps
 
 import tensorflow as tf
-from plum import convert, Dispatcher
+from plum import Dispatcher, convert
 
 from . import B
 

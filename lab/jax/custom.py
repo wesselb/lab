@@ -1,7 +1,8 @@
-import jax.experimental.host_callback as hcb
-from jax import custom_vjp, ShapeDtypeStruct
-from plum import Dispatcher, convert
 from functools import wraps
+
+import jax.experimental.host_callback as hcb
+from jax import ShapeDtypeStruct, custom_vjp
+from plum import Dispatcher, convert
 
 from ..custom import TensorDescription
 

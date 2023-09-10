@@ -4,10 +4,10 @@ from typing import Callable, Union
 import tensorflow as tf
 import tensorflow_probability as tfp
 
-from . import dispatch, B, Numeric, TFNumeric
-from .custom import tensorflow_register
 from ..custom import bvn_cdf, s_bvn_cdf
-from ..types import TFDType, Int, TFRandomState
+from ..types import Int, TFDType, TFRandomState
+from . import B, Numeric, TFNumeric, dispatch
+from .custom import tensorflow_register
 
 __all__ = []
 
