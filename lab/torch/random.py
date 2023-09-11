@@ -20,18 +20,20 @@ def global_random_state(_: TorchDType):
     if B.ActiveDevice.active_name in {None, "cpu"}:
         return torch.random.default_generator
     else:
-        parts = B.ActiveDevice.active_name.lower().split(":")
+        parts = B.ActiveDevice.active_name.lower().split(":", 1)
 
         if len(parts) == 0 or parts[0] not in {"cuda", "gpu", "mps"}:
-            raise RuntimeError(f'Unknown active device "{B.ActiveDevice.active_name}".')
+            raise RuntimeError(
+                f'Unknown active device "{B.ActiveDevice.active_name}".')
 
         if parts[0] == "mps":
-            import torch.mps
+            if parts[1] != "0":
+                raise ValueError(
+                    "Cannot specify a device number for PyTorch MPS.")
 
-            if torch.mps._default_mps_generator:
-                return torch.mps._default_mps_generator
-            else:
-                return torch.mps._get_default_mps_generator()
+            import torch.mps as mps
+
+            return mps._get_default_mps_generator()
         else:
             # Ensure that the generators are available.
             if len(torch.cuda.default_generators) == 0:
