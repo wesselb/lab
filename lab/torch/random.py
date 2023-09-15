@@ -23,13 +23,11 @@ def global_random_state(_: TorchDType):
         parts = B.ActiveDevice.active_name.lower().split(":", 1)
 
         if len(parts) == 0 or parts[0] not in {"cuda", "gpu", "mps"}:
-            raise RuntimeError(
-                f'Unknown active device "{B.ActiveDevice.active_name}".')
+            raise RuntimeError(f'Unknown active device "{B.ActiveDevice.active_name}".')
 
         if parts[0] == "mps":
-            if parts[1] != "0":
-                raise ValueError(
-                    "Cannot specify a device number for PyTorch MPS.")
+            if int(parts[1]) != 0:
+                raise ValueError("Cannot specify a device number for PyTorch MPS.")
 
             import torch.mps as mps
 
