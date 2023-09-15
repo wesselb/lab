@@ -13,8 +13,7 @@ import lab.jax
 import lab.tensorflow
 import lab.torch
 
-# noinspection PyUnresolvedReferences
-from .util import PositiveTensor, Tensor, approx, check_lazy_shapes, to_np
+from .util import PositiveTensor, Tensor, approx, check_lazy_shapes, to_np  # noqa
 
 
 @pytest.mark.parametrize(
@@ -173,7 +172,7 @@ def test_randbeta_parameters(t, check_lazy_shapes):
     approx(B.randbeta(t, alpha=1, beta=1e-6), 1, atol=1e-6)
 
 
-def test_torch_global_random_state(mocker):
+def test_torch_global_random_state(mocker, monkeypatch):
     # Check CPU specifications.
     B.ActiveDevice.active_name = None
     assert B.global_random_state(torch.float32) is torch.random.default_generator
@@ -190,23 +189,35 @@ def test_torch_global_random_state(mocker):
     assert torch_cuda_init.called_once()
 
     # Now set some fake default generators.
-    torch.cuda.default_generators = (0, 1)
+    monkeypatch.setattr("torch.cuda.default_generators", (33, 34))
+    monkeypatch.setattr("torch.mps._get_default_mps_generator", lambda: 35)
 
     # Check GPU specifications.
     B.ActiveDevice.active_name = "cuda"
-    assert B.global_random_state(torch.float32) == 0
+    assert B.global_random_state(torch.float32) == 33
     B.ActiveDevice.active_name = "gpu"
-    assert B.global_random_state(torch.float32) == 0
+    assert B.global_random_state(torch.float32) == 33
     B.ActiveDevice.active_name = "gpu:0"
-    assert B.global_random_state(torch.float32) == 0
+    assert B.global_random_state(torch.float32) == 33
     B.ActiveDevice.active_name = "gpu:1"
-    assert B.global_random_state(torch.float32) == 1
+    assert B.global_random_state(torch.float32) == 34
     with pytest.raises(RuntimeError):
         B.ActiveDevice.active_name = "weird-device"
-        assert B.global_random_state(torch.float32) == 1
+        B.global_random_state(torch.float32)
+
+    # Check MPS specification.
+    B.ActiveDevice.active_name = "mps"
+    assert B.global_random_state(torch.float32) == 35
+    B.ActiveDevice.active_name = "mps:0"
+    assert B.global_random_state(torch.float32) == 35
+    with pytest.raises(
+        ValueError,
+        match="(?i)cannot specify a device number for PyTorch MPS",
+    ):
+        B.ActiveDevice.active_name = "mps:1"
+        B.global_random_state(torch.float32)
 
     # Reset back to defaults.
-    torch.cuda.default_generators = ()
     B.ActiveDevice.active_name = None
 
 

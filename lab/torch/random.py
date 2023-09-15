@@ -26,7 +26,7 @@ def global_random_state(_: TorchDType):
             raise RuntimeError(f'Unknown active device "{B.ActiveDevice.active_name}".')
 
         if parts[0] == "mps":
-            if int(parts[1]) != 0:
+            if len(parts) == 2 and int(parts[1]) != 0:
                 raise ValueError("Cannot specify a device number for PyTorch MPS.")
 
             import torch.mps as mps
