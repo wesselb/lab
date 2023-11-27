@@ -566,7 +566,7 @@ def range(stop):
 
 @dispatch
 @abstract()
-def cast(dtype: Numeric, a: DType):  # pragma: no cover
+def cast(dtype: DType, a: Numeric):  # pragma: no cover
     """Cast an object to another data type.
 
     Args:
