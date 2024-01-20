@@ -5,12 +5,9 @@ import numpy as np
 from Cython.Build import build_ext
 from setuptools import Extension, find_packages, setup
 
-if os.name == "nt":
-    # On Windows, don't compile the extra modules.
-    ext_modules = []
+# Only compile if `LAB_BUILD=1`.
 
-elif "LAB_NO_BUILD" in os.environ and os.environ["LAB_NO_BUILD"] == "1":
-    # Also don't build anything if `LAB_NO_BUILD` is set to `1`.
+if os.environ.get("LAB_BUILD", "0") != "1":
     ext_modules = []
 
 else:
@@ -46,7 +43,11 @@ else:
         if "LAB_GFORTRAN" in os.environ and os.environ["LAB_GFORTRAN"]:
             gfortran = os.environ["LAB_GFORTRAN"]
         else:
-            gfortran = False
+            raise RuntimeError(
+                "`gfortran` cannot be found."
+                "Please install `gfortran` or specify a binary with `LAB_GFORTRAN`. "
+                "On OS X, this can be done with `brew install gcc`."
+            )
     else:
         gfortran = "gfortran"
 
@@ -68,9 +69,9 @@ else:
         # Ensure that one was found.
         if not found:
             raise RuntimeError(
-                "Your gcc runs clang, and no version of gcc could be found. "
-                "Please install gcc. "
-                'On OS X, this can be done with "brew install gcc".'
+                "Your `gcc` runs clang, and no version of `gcc` could be found. "
+                "Please install `gcc`. "
+                "On OS X, this can be done with `brew install gcc`."
             )
 
     # Compile TVPACK if `gfortran` is available.
@@ -102,7 +103,7 @@ else:
                 "lab.bvn_cdf",
                 sources=["lab/bvn_cdf/bvn_cdf.pyx"],
                 include_dirs=[np.get_include()],
-                extra_compile_args=["-fPIC", "-O2", "-fopenmp"],
+                extra_compile_args=["-fPIC", "-O2"],
                 extra_objects=extra_objects,
                 extra_link_args=extra_link_args,
             )
