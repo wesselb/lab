@@ -6,6 +6,9 @@ TODO:
 
     ☐ Reuse Plum's error message.
 
+Bugs:
+    ☐ Is broadcasting of shapes in `B.randgamma` safe with the JIT? @high
+
 Functions:
     ☐ eigvals
     ☐ norm
