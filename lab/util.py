@@ -211,11 +211,7 @@ def abstract(promote=None, promote_from=None):
             types_after = tuple(type(arg) for arg in args)
             if types_before == types_after:
                 signature = plum.signature.Signature(*types_after)
-                # TODO: Use the message from Plum directly here.
-                raise plum.NotFoundLookupError(
-                    f'For function "{f.__name__}", signature {signature} could not be '
-                    f"resolved."
-                )
+                raise plum.NotFoundLookupError(f.__name__, signature, [])
 
             # Retry call.
             return getattr(B, f.__name__)(*args, **kw_args)
