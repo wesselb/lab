@@ -30,9 +30,6 @@ backend
 
 ## Requirements and Installation
 
-See [the instructions here](https://gist.github.com/wesselb/4b44bf87f3789425f96e26c4308d0adc).
-Then simply
-
 ```
 pip install backends
 ```
