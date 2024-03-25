@@ -8,7 +8,7 @@ pytest-mock
 coveralls
 autograd>=1.3
 tensorflow>=2
-tensorflow-probability
+tensorflow-probability[tf]
 torch
 jax
 jaxlib
