@@ -68,9 +68,10 @@ def _module_attr(module, attr):
 # Define TensorFlow module types.
 _tf_tensor = ModuleType("tensorflow", "Tensor")
 _tf_indexedslices = ModuleType("tensorflow", "IndexedSlices")
-# On Python 3.9 and higher, we also need to support `keras.KerasTensor`.
-if sys.version_info >= (3, 9):
-    _tf_kerastensor = ModuleType("keras", "KerasTensor")
+# `keras.KerasTensor` is only available on newer versions of `keras`. Instead of
+# determining exactly when it is available, we simply allow the retrieval to fail.
+# TODO: Set `allow_fail=False` in the future.
+_tf_kerastensor = ModuleType("keras", "KerasTensor", allow_fail=True)
 _tf_variable = ModuleType("tensorflow", "Variable")
 _tf_dtype = ModuleType("tensorflow", "DType")
 _tf_randomstate = ModuleType("tensorflow", "random.Generator")
@@ -109,10 +110,7 @@ NPNumeric = Union[np.ndarray]
 NPNumeric = set_union_alias(NPNumeric, "B.NPNumeric")
 AGNumeric = Union[_ag_tensor]
 AGNumeric = set_union_alias(AGNumeric, "B.AGNumeric")
-if sys.version_info >= (3, 9):
-    TFNumeric = Union[_tf_tensor, _tf_variable, _tf_indexedslices, _tf_kerastensor]
-else:
-    TFNumeric = Union[_tf_tensor, _tf_variable, _tf_indexedslices]
+TFNumeric = Union[_tf_tensor, _tf_variable, _tf_indexedslices, _tf_kerastensor]
 TFNumeric = set_union_alias(TFNumeric, "B.TFNumeric")
 TorchNumeric = Union[_torch_tensor]
 TorchNumeric = set_union_alias(TorchNumeric, "B.TorchNumeric")
