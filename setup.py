@@ -112,7 +112,6 @@ else:
 requirements = [
     "numpy>=1.16",
     "scipy>=1.3",
-    "fdm",
     "plum-dispatch>=2.3.5",
     "opt-einsum",
 ]
