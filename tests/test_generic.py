@@ -10,6 +10,7 @@ from plum import isinstance
 import lab as B
 
 # noinspection PyUnresolvedReferences
+from .util import check_lazy_shapes  # noqa
 from .util import (
     Bool,
     BoolTensor,
@@ -22,7 +23,6 @@ from .util import (
     approx,
     autograd_box,
     check_function,
-    check_lazy_shapes,
 )
 
 
@@ -90,6 +90,16 @@ def test_device_and_to_active_device(check_lazy_shapes):
     # Check that numbers remain unchanged.
     a = 1
     assert B.to_active_device(a) is a
+
+
+def test_device_jax_exception(check_lazy_shapes):
+    a = Tensor(2, 2).jax()
+    a.devices = lambda: set()
+    with pytest.raises(
+        RuntimeError,
+        match="(?i)could not determine device of JAX array",
+    ):
+        B.device(a)
 
 
 @pytest.mark.parametrize("t", [tf.float32, torch.float32, jnp.float32])
