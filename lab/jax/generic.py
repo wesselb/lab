@@ -62,7 +62,10 @@ def imag(a: Numeric):
 
 @dispatch
 def device(a: JAXNumeric):
-    return a.device_buffer.device()
+    devices = list(a.devices())
+    if len(devices) != 1:
+        raise RuntimeError("Could not determine device of JAX array.")
+    return devices[0]
 
 
 @dispatch
