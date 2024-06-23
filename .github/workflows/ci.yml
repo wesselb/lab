@@ -21,10 +21,10 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get install gfortran
+          # JAX isn't yet NumPy 2 compatible.
           pip install --upgrade pip setuptools 'setuptools_scm[toml]' setuptools_scm_git_archive numpy Cython
           python setup.py --version
           LAB_BUILD=1 pip install --no-cache-dir -U -r requirements.txt | cat
-          pip install --upgrade numpy
       - name: Test
         run: |
           JAX_ENABLE_X64=1 pytest -v --cov=lab --cov-report term-missing
