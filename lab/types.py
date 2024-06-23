@@ -4,7 +4,6 @@ from typing import Union
 import numpy as np
 from plum import (
     ModuleType,
-    activate_union_aliases,
     add_conversion_method,
     add_promotion_rule,
     convert,
@@ -96,11 +95,11 @@ _jax_dtype = ModuleType("jax._src.numpy.lax_numpy", "_ScalarMeta")
 _jax_device = ModuleType("jaxlib.xla_extension", "Device")
 
 # Numeric types:
-Int = Union[tuple([int, Dimension] + np.sctypes["int"] + np.sctypes["uint"])]
+Int = Union[tuple([int, Dimension] + np.core.sctypes["int"] + np.core.sctypes["uint"])]
 Int = set_union_alias(Int, "B.Int")
-Float = Union[tuple([float] + np.sctypes["float"])]
+Float = Union[tuple([float] + np.core.sctypes["float"])]
 Float = set_union_alias(Float, "B.Float")
-Complex = Union[tuple([complex] + np.sctypes["complex"])]
+Complex = Union[tuple([complex] + np.core.sctypes["complex"])]
 Complex = set_union_alias(Complex, "B.Complex")
 Bool = Union[bool, np.bool_]
 Bool = set_union_alias(Bool, "B.Bool")
