@@ -91,7 +91,7 @@ if sys.version_info.minor <= 7:  # pragma: specific no cover 3.8 3.9 3.10 3.11
 else:  # pragma: specific no cover 3.7
     _jax_tensor = ModuleType("jaxlib.xla_extension", "ArrayImpl")
 _jax_tracer = ModuleType("jax.core", "Tracer")
-_jax_dtype = ModuleType("jax._src.numpy.lax_numpy", "_ScalarMeta")
+_jax_dtype = ModuleType("jax._src.numpy.scalar_types", "_ScalarMeta")
 _jax_device = ModuleType("jaxlib.xla_extension", "Device")
 
 # Numeric types:
