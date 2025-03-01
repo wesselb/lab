@@ -193,7 +193,7 @@ def _jit_run(
     compilation_cache: dict,
     jit_kw_args: dict,
     *args: Union[Numeric, RandomState],
-    **kw_args
+    **kw_args,
 ):  # pragma: no cover
     pass
 
@@ -1488,7 +1488,7 @@ def sort(a: Numeric, axis: Int = -1, descending: bool = False):
 @dispatch
 @abstract()
 def argsort(a: Numeric, axis: Int = -1, descending: bool = False):
-    """Get the indices that would a tensor along an axis in ascending order.
+    """Get the indices that would sort a tensor along an axis in ascending order.
 
     Args:
         a (tensor): Tensor to sort.
