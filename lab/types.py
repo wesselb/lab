@@ -194,9 +194,16 @@ def _torch_lookup(dtype):
 
 def _name(x):
     try:
-        return x.name
+        name = x.name
     except AttributeError:
-        return x.__name__
+        name = x.__name__
+
+    # `int`s are `int64`s. We need to do this conversion explicity, because `torch.int`
+    # is `torch.int32` in later versions.
+    if name == "int":
+        name = "int64"
+
+    return name
 
 
 # Add conversions between data types.
@@ -357,7 +364,7 @@ def dtype_int(dtype: DType):
     """
     # TODO: Is there a better way of doing this?
     name = list(convert(dtype, NPDType).__name__)
-    while name and name[0] not in set([str(i) for i in range(10)]):
+    while name and not name[0].isdigit():
         name.pop(0)
     return _convert_back(_name_to_numpy_dtype("int" + "".join(name)), dtype)
 

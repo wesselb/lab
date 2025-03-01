@@ -180,18 +180,24 @@ def bvn_cdf(a, b, c):
     # does not work for `bvn_cdf_`. Moreover, we need to ensure that the function
     # runs on `float64s`.
     res_dtype = reduce(np.promote_types, [x.dtype for x in (a, b, c)])
-    res = bvn_cdf_(a.astype(np.float64), b.astype(np.float64), c.astype(np.float64))
+    # The C interface requires NumPy objects of the right data type.
+    res = bvn_cdf_(
+        np.asarray(a).astype(np.float64),
+        np.asarray(b).astype(np.float64),
+        np.asarray(c).astype(np.float64),
+    )
     return res.astype(res_dtype)
 
 
 def s_bvn_cdf(s_y, y, a, b, c):
     res_dtype = reduce(np.promote_types, [x.dtype for x in (s_y, y, a, b, c)])
+    # The C interface requires NumPy objects of the right data type.
     res = s_bvn_cdf_(
-        s_y.astype(np.float64),
-        y.astype(np.float64),
-        a.astype(np.float64),
-        b.astype(np.float64),
-        c.astype(np.float64),
+        np.asarray(s_y).astype(np.float64),
+        np.asarray(y).astype(np.float64),
+        np.asarray(a).astype(np.float64),
+        np.asarray(b).astype(np.float64),
+        np.asarray(c).astype(np.float64),
     )
     return tuple(x.astype(res_dtype) for x in res)
 
