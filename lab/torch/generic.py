@@ -291,10 +291,8 @@ def prod(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
 
 @dispatch
 def mean(a: Numeric, axis: Union[Int, None] = None, squeeze: bool = True):
-    if axis is None:
-        return torch.mean(a)
-    else:
-        return torch.mean(a, dim=axis, keepdim=not squeeze)
+    # Only `torch.mean` allows `dim=None`. The other functions don't.
+    return torch.mean(a, dim=axis, keepdim=not squeeze)
 
 
 @dispatch
