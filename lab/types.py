@@ -89,10 +89,16 @@ if sys.version_info.minor <= 7:  # pragma: specific no cover 3.8 3.9 3.10 3.11
     # `jax` 0.4 deprecated Python 3.7 support. Rely on older JAX versions.
     _jax_tensor = ModuleType("jax.interpreters.xla", "DeviceArray")
 else:  # pragma: specific no cover 3.7
-    _jax_tensor = Union[ModuleType("jaxlib._jax", "ArrayImpl"), ModuleType("jaxlib.xla_extension", "ArrayImpl")]
+    _jax_tensor = Union[
+        ModuleType("jaxlib._jax", "ArrayImpl"),
+        ModuleType("jaxlib.xla_extension", "ArrayImpl"),
+    ]
 _jax_tracer = ModuleType("jax.core", "Tracer")
 _jax_dtype = ModuleType("jax._src.numpy.scalar_types", "_ScalarMeta")
-_jax_device = ModuleType("jaxlib.xla_extension", "Device")
+_jax_device = Union[
+    ModuleType("jaxlib._jax", "Device"),
+    ModuleType("jaxlib.xla_extension", "Device"),
+]
 
 # Numeric types:
 Int = Union[tuple([int, Dimension] + np.core.sctypes["int"] + np.core.sctypes["uint"])]
