@@ -63,6 +63,9 @@ def _module_call(module, method, *args, **kw_args):
 def _module_attr(module, attr):
     return getattr(sys.modules[module], attr)
 
+def _jax_version():
+    jax_version_string = sys.modules["jax.version"].__version__
+    return tuple(int(x) for x in version_string.split("."))
 
 # Define TensorFlow module types.
 _tf_tensor = ModuleType("tensorflow", "Tensor")
@@ -90,14 +93,22 @@ if sys.version_info.minor <= 7:  # pragma: specific no cover 3.8 3.9 3.10 3.11
     _jax_tensor = ModuleType("jax.interpreters.xla", "DeviceArray")
 else:  # pragma: specific no cover 3.7
     _jax_tensor = Union[
-        ModuleType("jaxlib._jax", "ArrayImpl"),
-        ModuleType("jaxlib.xla_extension", "ArrayImpl"),
+        ModuleType(
+            "jaxlib.xla_extension",
+            "ArrayImpl",
+            condition=lambda: _jax_version() < (0, 6, 0),
+        ),
+        ModuleType(
+            "jaxlib._jax",
+            "ArrayImpl",
+            condition=lambda: _jax_version() >= (0, 6, 0),
+        ),
     ]
 _jax_tracer = ModuleType("jax.core", "Tracer")
 _jax_dtype = ModuleType("jax._src.numpy.scalar_types", "_ScalarMeta")
 _jax_device = Union[
-    ModuleType("jaxlib._jax", "Device"),
-    ModuleType("jaxlib.xla_extension", "Device"),
+    ModuleType("jaxlib._jax", "Device", condition=lambda: _jax_version() >= (0, 6, 0),),
+    ModuleType("jaxlib.xla_extension", "Device", condition=lambda: _jax_version() < (0, 6, 0),),
 ]
 
 # Numeric types:
