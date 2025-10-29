@@ -45,6 +45,7 @@ def check_grad(f, args, kw_args=None, rtol=1e-8, atol=0):
         kw_args (tuple, optional): Keyword arguments to check `f` at. Defaults
             to no keyword arguments.
         rtol (float, optional): Relative tolerance. Defaults to `1e-8`.
+        atol (float, optional): Absolute tolerance. Defaults to `0`.
     """
     # Default to no keyword arguments.
     if kw_args is None:
