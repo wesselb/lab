@@ -190,6 +190,8 @@ def _name_to_numpy_dtype(name):
         return int
     elif name == "bool":
         return bool
+    elif name == "unicode":
+        return str
     else:
         return getattr(np, name)
 
