@@ -1,22 +1,7 @@
 from functools import wraps
 
-from jax import ShapeDtypeStruct
-from jax import __version__ as jax_version
-from jax import custom_vjp
-from packaging.version import Version
+from jax import ShapeDtypeStruct, custom_vjp, pure_callback
 from plum import Dispatcher, convert
-
-if Version(jax_version) >= Version("0.5"):
-    from jax.experimental import io_callback
-
-# IO callbacks do not support JVP in JAX before `0.5`, so we emulate the call with
-# `host_callback`.
-else:  # pragma: no cover
-    from jax.experimental import host_callback
-
-    def io_callback(f, shapes, x):
-        return host_callback.call(f, x, result_shape=shapes)
-
 
 from ..custom import TensorDescription
 
@@ -47,10 +32,11 @@ def parse_inference_result(xs: tuple):
 def _wrap_cb(f, i_f):
     @wraps(f)
     def f_wrapped(*args, **kw_args):
-        return io_callback(
-            lambda x: f(*x[0], **x[1]),
+        return pure_callback(
+            f,
             parse_inference_result(i_f(*args, **kw_args)),
-            (args, kw_args),
+            *args,
+            **kw_args,
         )
 
     return f_wrapped
