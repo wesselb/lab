@@ -1,6 +1,6 @@
 # [LAB](http://github.com/wesselb/lab)
 
-[![CI](https://github.com/wesselb/lab/workflows/CI/badge.svg?branch=master)](https://github.com/wesselb/lab/actions?query=workflow%3ACI)
+[![CI](https://github.com/wesselb/lab/actions/workflows/ci.yml/badge.svg)](https://github.com/wesselb/lab/actions/workflows/ci.yml)
 [![Coverage Status](https://coveralls.io/repos/github/wesselb/lab/badge.svg?branch=master&service=github)](https://coveralls.io/github/wesselb/lab?branch=master)
 [![Latest Docs](https://img.shields.io/badge/docs-latest-blue.svg)](https://wesselb.github.io/lab)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
