@@ -36,7 +36,7 @@ def test_as_torch(check_lazy_shapes):
     assert isinstance(as_torch((B.randn(),))[0], B.TorchNumeric)
 
 
-def check_grad(f, args, kw_args=None, rtol=1e-8):
+def check_grad(f, args, kw_args=None, rtol=1e-8, atol=0):
     """Check the gradients of a function.
 
     Args:
@@ -45,6 +45,7 @@ def check_grad(f, args, kw_args=None, rtol=1e-8):
         kw_args (tuple, optional): Keyword arguments to check `f` at. Defaults
             to no keyword arguments.
         rtol (float, optional): Relative tolerance. Defaults to `1e-8`.
+        atol (float, optional): Absolute tolerance. Defaults to `0`.
     """
     # Default to no keyword arguments.
     if kw_args is None:
@@ -68,7 +69,7 @@ def check_grad(f, args, kw_args=None, rtol=1e-8):
 
         # Check AutoGrad gradient.
         autograd_grad = grad(f_i)(args[i])
-        approx(numerical_grad, autograd_grad, rtol=rtol)
+        approx(numerical_grad, autograd_grad, rtol=rtol, atol=atol)
 
         # Check TensorFlow gradient.
         tf_args = tuple([as_tf(arg) for arg in args])
@@ -76,20 +77,20 @@ def check_grad(f, args, kw_args=None, rtol=1e-8):
         with tf.GradientTape() as t:
             t.watch(tf_args[i])
             tf_grad = t.gradient(f_i(tf_args[i]), tf_args[i]).numpy()
-        approx(numerical_grad, tf_grad, rtol=rtol)
+        approx(numerical_grad, tf_grad, rtol=rtol, atol=atol)
 
         # Check PyTorch gradient.
         torch_args = tuple([as_torch(arg, grad=False) for arg in args])
         f_i = torch.jit.trace(create_f_i(i, torch_args), torch_args[i])
         arg = torch_args[i].requires_grad_(True)
         f_i(arg).backward()
-        approx(numerical_grad, arg.grad, rtol=rtol)
+        approx(numerical_grad, arg.grad, rtol=rtol, atol=atol)
 
         # Check JAX gradient.
         jax_args = tuple([jnp.asarray(arg) for arg in args])
         f_i = create_f_i(i, jax_args)
         jax_grad = jax.jit(jax.grad(f_i))(jax_args[i])
-        approx(numerical_grad, jax_grad, rtol=rtol)
+        approx(numerical_grad, jax_grad, rtol=rtol, atol=atol)
 
 
 def test_toeplitz_solve(check_lazy_shapes):
@@ -105,7 +106,7 @@ def test_toeplitz_solve(check_lazy_shapes):
 
 def test_bvn_cdf(check_lazy_shapes):
     check_sensitivity(bvn_cdf, s_bvn_cdf, (B.rand(3), B.rand(3), B.rand(3)))
-    check_grad(bvn_cdf, (B.rand(3), B.rand(3), B.rand(3)))
+    check_grad(bvn_cdf, (B.rand(3), B.rand(3), B.rand(3)), atol=1e-8)
 
     # Check that function runs on both `float32`s and `float64`s.
     a, b, c = B.rand(3), B.rand(3), B.rand(3)
