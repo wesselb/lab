@@ -65,27 +65,32 @@ def to_active_device(a: TFNumeric):
 
 @dispatch
 def zeros(dtype: TFDType, *shape: Int):
-    return tf.zeros(shape, dtype=dtype)
+    with tf.device("cpu"):
+        return tf.zeros(shape, dtype=dtype)
 
 
 @dispatch
 def ones(dtype: TFDType, *shape: Int):
-    return tf.ones(shape, dtype=dtype)
+    with tf.device("cpu"):
+        return tf.ones(shape, dtype=dtype)
 
 
 @dispatch
 def _eye2(dtype: TFDType, *shape: Int):
-    return tf.eye(shape[0], shape[1], dtype=dtype)
+    with tf.device("cpu"):
+        return tf.eye(shape[0], shape[1], dtype=dtype)
 
 
 @dispatch
 def linspace(dtype: TFDType, a, b, num: Int):
-    return tf.linspace(cast(dtype, a), cast(dtype, b), num)
+    with tf.device("cpu"):
+        return tf.linspace(cast(dtype, a), cast(dtype, b), num)
 
 
 @dispatch
 def range(dtype: TFDType, start, stop, step):
-    return tf.range(start, stop, step, dtype=dtype)
+    with tf.device("cpu"):
+        return tf.range(start, stop, step, dtype=dtype)
 
 
 @dispatch
@@ -95,7 +100,8 @@ def cast(dtype: TFDType, a: Numeric):
 
 @dispatch
 def identity(a: Numeric):
-    return tf.identity(a)
+    with tf.device("cpu"):
+        return tf.identity(a)
 
 
 @dispatch

@@ -186,7 +186,7 @@ def test_torch_global_random_state(mocker, monkeypatch):
     # actually populate `torch.cuda.default_generators`.
     with pytest.raises(IndexError):
         B.global_random_state(torch.float32)
-    assert torch_cuda_init.called_once()
+    torch_cuda_init.assert_called_once()
 
     # Now set some fake default generators.
     monkeypatch.setattr("torch.cuda.default_generators", (33, 34))

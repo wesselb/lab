@@ -219,7 +219,8 @@ class Tensor:
         return self.mat
 
     def tf(self):
-        return tf.constant(self.mat)
+        with tf.device("cpu"):
+            return tf.constant(self.mat)
 
     def torch(self):
         return torch.tensor(self.mat)
