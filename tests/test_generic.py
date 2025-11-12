@@ -123,7 +123,7 @@ def test_on_device(f, t, check_lazy_shapes):
 
     # Check that explicit allocation on CPU works.
     with B.on_device("cpu"):
-        assert B.device(f(t)) == B.device(f_t)
+        assert "cpu" in str(B.device(f(t))).lower()
 
     # Also test inferring the device from a tensor.
     with B.on_device(f_t):

@@ -29,8 +29,7 @@ def set_global_random_state(state: TFRandomState):
 
 @dispatch
 def rand(state: TFRandomState, dtype: TFDType, *shape: Int):
-    with tf.device("cpu"):
-        return state, state.uniform(shape, dtype=dtype)
+    return state, state.uniform(shape, dtype=dtype)
 
 
 @dispatch
@@ -40,8 +39,7 @@ def rand(dtype: TFDType, *shape: Int):
 
 @dispatch
 def randn(state: TFRandomState, dtype: TFDType, *shape: Int):
-    with tf.device("cpu"):
-        return state, state.normal(shape, dtype=dtype)
+    return state, state.normal(shape, dtype=dtype)
 
 
 @dispatch
@@ -90,8 +88,7 @@ def randint(
     upper: Int,
 ):
     dtype = B.dtype_int(dtype)
-    with tf.device("cpu"):
-        return state, state.uniform(shape, lower, upper, dtype=dtype)
+    return state, state.uniform(shape, lower, upper, dtype=dtype)
 
 
 @dispatch
