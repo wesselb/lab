@@ -103,6 +103,7 @@ else:  # pragma: specific no cover 3.7
             "jaxlib._jax",
             "ArrayImpl",
             condition=lambda: _jax_version() >= (0, 6, 0),
+            faithful=True,
         ),
     ]
 _jax_tracer = ModuleType("jax.core", "Tracer")
