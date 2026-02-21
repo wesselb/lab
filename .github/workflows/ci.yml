@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.9, "3.10", "3.11", "3.12"]
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v2
         with:
@@ -21,7 +21,6 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get install gfortran
-          # JAX isn't yet NumPy 2 compatible.
           pip install --upgrade pip setuptools 'setuptools_scm[toml]' setuptools_scm_git_archive numpy Cython
           python setup.py --version
           LAB_BUILD=1 pip install --no-cache-dir -U -r requirements.txt | cat

@@ -2,8 +2,7 @@ from functools import wraps
 
 import numpy as np
 import plum
-import plum.signature
-import plum.type
+from plum._method import MethodList
 
 from . import B
 
@@ -210,8 +209,8 @@ def abstract(promote=None, promote_from=None):
             # means that an implementation is not available.
             types_after = tuple(type(arg) for arg in args)
             if types_before == types_after:
-                signature = plum.signature.Signature(*types_after)
-                raise plum.NotFoundLookupError(f.__name__, signature, [])
+                signature = plum.Signature(*types_after)
+                raise plum.NotFoundLookupError(f.__name__, signature, MethodList())
 
             # Retry call.
             return getattr(B, f.__name__)(*args, **kw_args)

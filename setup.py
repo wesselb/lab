@@ -112,13 +112,13 @@ else:
 requirements = [
     "numpy>=1.16",
     "scipy>=1.3",
-    "plum-dispatch>=2.6.0",
+    "plum-dispatch>=2.7.1",
     "opt-einsum",
 ]
 
 setup(
     packages=find_packages(exclude=["docs"]),
-    python_requires=">=3.9",
+    python_requires=">=3.10",
     install_requires=requirements,
     cmdclass={"build_ext": build_ext},
     ext_modules=ext_modules,
