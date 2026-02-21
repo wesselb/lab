@@ -118,7 +118,7 @@ requirements = [
 
 setup(
     packages=find_packages(exclude=["docs"]),
-    python_requires=">=3.9",
+    python_requires=">=3.10",
     install_requires=requirements,
     cmdclass={"build_ext": build_ext},
     ext_modules=ext_modules,
