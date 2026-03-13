@@ -16,5 +16,5 @@ jaxlib
 setuptools_scm[toml]
 setuptools_scm_git_archive
 isort
-black==24.3.0
+black==26.3.1
 jupyter-book
